@@ -1,6 +1,6 @@
 # Story 007: Combat core — hitboxes, damage, posture, telegraphs, parry, riposte
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Core · **Type**: Logic · **Estimate**: L
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Core · **Type**: Logic · **Estimate**: L
 
 ## Context
 
@@ -29,3 +29,9 @@ Telegraphing Standard. **Decision**: D-003.
 ## Dependencies
 
 - Depends on: 004, 006 · Unlocks: 008, 009, 010
+
+---
+
+## Completion
+
+Hit detection uses rects in the X/Y plane via CombatWorld, not Area3D (D-011). Telegraph icons are drawn into textures in code; tests check the three shapes differ. Hit sparks and damage numbers are pooled in src/vfx/fx_layer.gd.

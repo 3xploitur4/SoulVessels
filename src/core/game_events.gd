@@ -22,3 +22,13 @@ signal input_device_changed(kind: String)
 signal music_state_changed(state: String)
 ## A standard telegraph cue fired: kind is "parryable", "unblockable" or "magic".
 signal telegraph_fired(kind: String, source: Node)
+## Freeze the game for `duration` seconds of real time (hitstop on hits and parries).
+signal hitstop_requested(duration: float)
+## Add camera shake (0..1 trauma).
+signal camera_shake_requested(trauma: float)
+## A big effect: "final_stand", "dance_of_shadows", "slash"... at `where`, `size` metres.
+signal ultimate_fx_requested(kind: String, where: Vector3, size: float)
+## Vanishing Act started (true) or ended (false).
+signal stealth_changed(hidden: bool)
+## A hit landed somewhere: for sparks and damage numbers. `crit` and `blocked` style the effect.
+signal hit_fx_requested(where: Vector3, amount: float, crit: bool, blocked: bool)
