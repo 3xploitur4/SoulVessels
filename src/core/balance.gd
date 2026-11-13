@@ -28,6 +28,8 @@ func reload() -> void:
 	_vessels.clear()
 	for id in _list_json(ROOT + "/vessels"):
 		_vessels[id] = _load_json(ROOT + "/vessels/%s.json" % id)
+	# The bare Intruder is looked up like a Vessel but is not one (never in vessel_ids()).
+	_vessels["wisp"] = _load_json(ROOT + "/wisp.json")
 	_enemies.clear()
 	for id in _list_json(ROOT + "/enemies"):
 		_enemies[id] = _load_json(ROOT + "/enemies/%s.json" % id)
@@ -55,7 +57,9 @@ func vessel(id: String) -> Dictionary:
 ## Every Vessel id on disk, sorted.
 func vessel_ids() -> Array[String]:
 	var ids: Array[String] = []
-	ids.assign(_vessels.keys())
+	for k: String in _vessels.keys():
+		if k != "wisp":
+			ids.append(k)
 	ids.sort()
 	return ids
 

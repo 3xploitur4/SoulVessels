@@ -1,0 +1,16 @@
+{
+  "_source": "Story 024 / addendum Narrative 1: the Intruder wakes as a bodiless wisp before it enters Caelan. It can move and jump only. Not a Vessel: kept out of data/balance/vessels so Vessel lists never include it.",
+  "id": "wisp",
+  "name_key": "VESSEL_WISP",
+  "stats": {
+    "hp_bonus": 0,
+    "atk": 0,
+    "def": 10,
+    "move_speed": 5.0,
+    "attack_speed": 1.0,
+    "posture_multiplier": 0.0,
+    "crit_chance": 0.0,
+    "backstab_multiplier": 1.0
+  },
+  "silhouette": { "style": "wisp", "primary_color": "#bfe9ff", "secondary_color": "#6fb7ff", "height_m": 0.6 }
+}

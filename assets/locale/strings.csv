@@ -26,3 +26,106 @@ ENEMY_BRANDED_WARDEN,Branded Warden
 DEBUG_FPS,FPS
 UI_SOUL_LOST,Soul lost
 UI_WAVE,Wave
+TITLE_GAME,Soul Vessels
+TITLE_SUBTITLE,Chapter I: The Sunken Foundations
+TITLE_SLOT_EMPTY,Slot %d  -  New game
+TITLE_SLOT_USED,"Slot %d  -  %s
+%s   ·   %d Essence   ·   %s"
+TITLE_CHOOSE_DIFFICULTY,Choose your path
+TITLE_CONTINUE,Continue
+TITLE_DELETE,Delete save
+TITLE_DELETE_CONFIRM,Delete the save in slot %d? This cannot be undone.
+DIFFICULTY_STORY,Story
+DIFFICULTY_NORMAL,Normal
+DIFFICULTY_ABYSSAL,Abyssal
+DIFFICULTY_STORY_DESC,"Enemies deal half damage, parry and dodge windows are wider, and Essence is never lost."
+DIFFICULTY_NORMAL_DESC,The intended challenge. Die twice before recovering your Essence and it is gone.
+DIFFICULTY_ABYSSAL_LOCKED,Unlocks after Chapter I.
+UI_BACK,Back
+UI_NO,No
+UI_YES_DELETE,"Yes, delete"
+UI_MAP,Map
+UI_INVENTORY,Inventory
+UI_LORE,Lore
+UI_QUIT_TO_TITLE,Save and quit to title
+UI_INVENTORY_EMPTY,Nothing carried yet.
+UI_LORE_EMPTY,No lore found yet.
+UI_INTERACT,Use
+UI_INTERACT_BUTTON,Use
+HUD_ESSENCE,Soul Essence
+TOUCH_BUTTON,the %s button
+PAD_LEFT_STICK_UP,Left stick up
+PAD_LEFT_STICK_DOWN,Left stick down
+RARITY_COMMON,Common
+RARITY_RARE,Rare
+RARITY_EPIC,Epic
+RARITY_LEGENDARY,Legendary
+ZONE_1_TITLE,The Whispering Cavern
+ZONE_2_TITLE,The Luminous Mycelium Forest
+ROOM_Z1_01,Awakening Hollow
+ROOM_Z1_02,The Knight's Vigil
+ROOM_Z1_03,Aqueduct Steps
+ROOM_Z1_04,Altar of the Fallen Aqueduct
+ROOM_Z1_05,Broken Channel
+ROOM_Z1_06,Cistern Drop
+ROOM_Z1_07,Whisper Gallery
+ROOM_Z1_08,Ward of the First Gate
+ROOM_Z1_09,Sunken Colonnade
+ROOM_Z1_10,Altar of Quiet Water
+ROOM_Z1_11,Warden's Approach
+ROOM_Z1_12,Hall of the Branded
+ROOM_Z1_13,Collapsed Bridge
+ROOM_Z1_14,Mycelium Threshold
+ROOM_Z2_01,Spore Gate
+ROOM_Z2_02,Glowcap Path
+ROOM_Z2_03,Altar of Spores
+ROOM_Z2_04,Root Hollow
+ROOM_Z2_05,Mycelium Shaft
+ROOM_Z2_06,Canopy Ledge
+ROOM_Z2_07,Lantern Bridge
+ROOM_Z2_08,The Strangled Wanderer
+ROOM_Z2_09,Swap Grove
+ROOM_Z2_10,Altar of the Wanderer
+ROOM_Z2_11,Veil of Black Mist
+ROOM_Z2_12,Deep Spore Pit
+ROOM_Z2_13,Husk Gauntlet
+ROOM_Z2_14,Falling Gills
+ROOM_Z2_15,Rift-Scarred Hollow
+ROOM_Z2_16,Sunken Stair
+VESSEL_WISP,The Intruder
+ITEM_LESSER_SOUL_SHARD,Lesser Soul Shard
+ITEM_LESSER_SOUL_SHARD_DESC,A splinter of a bound soul. Feed it to the Soul Core at an altar.
+ITEM_CRUDE_STONE,Crude Stone
+ITEM_CRUDE_STONE_DESC,Rough-cut stone and iron. A smith could use it to reforge a weapon.
+ITEM_FADED_PARCHMENT,Faded Parchment
+ITEM_FADED_PARCHMENT_DESC,Words from before the Descent.
+ITEM_STANDARD_SOUL_SHARD,Standard Soul Shard
+ITEM_STANDARD_SOUL_SHARD_DESC,A whole memory of skill. Deepens one of a Vessel's abilities.
+ITEM_POLISHED_BASALT_CORE,Polished Basalt Core
+ITEM_POLISHED_BASALT_CORE_DESC,Dense stone from the Wardens' armour. Takes a fine edge.
+ITEM_LUMINOUS_ROOT_RESIN,Luminous Root Resin
+ITEM_LUMINOUS_ROOT_RESIN_DESC,Glowing sap of the mycelium. It hardens around metal like glass.
+ITEM_TARNISHED_CENSER_SHARD,Tarnished Censer Shard
+ITEM_TARNISHED_CENSER_SHARD_DESC,"Three of these, fused at an altar, make a Censer Core."
+ITEM_ECHOING_RELIC,Echoing Relic
+ITEM_ECHOING_RELIC_DESC,An object that still hums with the voice of its owner.
+ITEM_ELEMENTAL_COATING,Elemental Coating
+ITEM_ELEMENTAL_COATING_DESC,Oil that binds an element to a blade.
+ITEM_GREATER_SOUL_SHARD,Greater Soul Shard
+ITEM_GREATER_SOUL_SHARD_DESC,A shard that remembers trust. Awakens a Vessel's Sync passive.
+ITEM_CENSER_CORE,Censer Core
+ITEM_CENSER_CORE_DESC,A fused heart of holy smoke.
+ITEM_SOVEREIGNS_CROWN_FRAGMENT,Sovereign's Crown Fragment
+ITEM_SOVEREIGNS_CROWN_FRAGMENT_DESC,Still cold with grief.
+ITEM_DEEP_REALM_RUNE,Deep-Realm Rune
+ITEM_DEEP_REALM_RUNE_DESC,A rune that floats when released.
+ITEM_WEAPON_SCHEMATIC,Weapon Schematic
+ITEM_WEAPON_SCHEMATIC_DESC,Plans for a blade that drinks venom.
+ITEM_PURE_SOUL_MATRIX,Pure Soul Matrix
+ITEM_PURE_SOUL_MATRIX_DESC,Soul-light without a body.
+ITEM_HEART_OF_THE_GUARDIAN,Heart of the Guardian
+ITEM_HEART_OF_THE_GUARDIAN_DESC,It still beats.
+ITEM_ABYSSAL_SCALE,Abyssal Scale
+ITEM_ABYSSAL_SCALE_DESC,Black as the sea that shed it.
+ITEM_PRIMEVAL_TRUTH,Primeval Truth
+ITEM_PRIMEVAL_TRUTH_DESC,An Architect's own words.

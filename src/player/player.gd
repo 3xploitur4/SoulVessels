@@ -42,8 +42,13 @@ var world: CombatWorld
 var controls: InputRouter
 ## Parent for projectiles and effects (defaults to this node's parent).
 var fx_parent: Node
-## Equipped Vessels in slot order.
+## Equipped Vessels in slot order (empty = the bare wisp).
 var vessel_ids: Array[String] = ["caelan", "nyra"]
+## Vessel id -> Affinity level, read when equipping (empty: the sandbox's fixed level).
+var affinity_levels: Dictionary = {}
+## Soul Core and other progression bonuses (story 020): "max_hp", "gauge_cap",
+## "flask_charges", "stamina_regen" (a fraction, 0.05 = +5 %).
+var bonuses: Dictionary = {}
 ## Difficulty row in combat.json `difficulty`.
 var difficulty: String = "normal"
 ## Where the sandbox respawns the player.
@@ -118,17 +123,15 @@ func _ready() -> void:
 		fx_parent = get_parent()
 	_move = Balance.combat("movement")
 	gauge = SoulGauge.from_balance()
-	loadout = Loadout.from_balance()
-	var affinity: int = int(Balance.sandbox("affinity") if Balance.sandbox("affinity") != null else 0)
-	for vid in vessel_ids:
-		var slot := VesselSlot.create(vid, affinity)
-		slot.visual = VesselVisual.build(slot.data)
-		slot.visual.visible = false
-		_visual_root.add_child(slot.visual)
-		loadout.add(slot)
-	health = Health.new(Balance.combat_f("soul_hp_base") + loadout.hp_bonus_total())
-	flask_charges = int(Balance.combat_f("flask.charges"))
-	_show_active_visual()
+	health = Health.new(Balance.combat_f("soul_hp_base"))
+	var levels: Dictionary = affinity_levels
+	if levels.is_empty():
+		var sandbox_affinity: Variant = Balance.sandbox("affinity")
+		for vid in vessel_ids:
+			levels[vid] = int(sandbox_affinity) if sandbox_affinity != null else 0
+	equip(vessel_ids, levels)
+	health.reset(max_hp())
+	flask_charges = flask_max()
 	spawn_point = global_position
 	GameEvents.enemy_aggro_changed.connect(_on_enemy_aggro)
 	if world != null:
@@ -364,10 +367,65 @@ func try_flask() -> bool:
 	return true
 
 
-## Back to full at the spawn point (sandbox death, debug).
+## Equip `ids` (wheel order; empty = the wisp) with Affinity `levels`. The active Vessel stays
+## active when it is still equipped. Max HP follows the loadout; current HP keeps its share.
+func equip(ids: Array[String], levels: Dictionary = {}) -> void:
+	var prev := ""
+	if loadout != null and loadout.active() != null:
+		prev = loadout.active().id
+		for slot in loadout.slots:
+			if slot.visual != null:
+				slot.visual.queue_free()
+	var ratio := health.ratio() if health != null and health.max_value > 0.0 else 1.0
+	var list: Array[String] = ids.duplicate()
+	if list.is_empty():
+		list = ["wisp"]
+	vessel_ids = list
+	loadout = Loadout.from_balance()
+	for vid in list:
+		var slot := VesselSlot.create(vid, int(levels.get(vid, 0)))
+		slot.visual = VesselVisual.build(slot.data)
+		slot.visual.visible = false
+		_visual_root.add_child(slot.visual)
+		loadout.add(slot)
+	if prev != "" and loadout.index_of(prev) >= 0:
+		loadout.active_index = loadout.index_of(prev)
+	if health != null:
+		health.max_value = max_hp()
+		health.current = clampf(health.max_value * ratio, 1.0, health.max_value)
+		GameEvents.player_hp_changed.emit(health.current, health.max_value)
+	_combo_index = 0
+	stop_action()
+	_show_active_visual()
+	GameEvents.vessel_swapped.emit(loadout.active().id, loadout.active_index)
+
+
+## Update Affinity levels without re-equipping (a level-up mid-run).
+func set_affinity(vessel_id: String, level: int) -> void:
+	var i := loadout.index_of(vessel_id)
+	if i >= 0:
+		loadout.slots[i].affinity = level
+
+
+## True while the Intruder has no Vessel.
+func is_wisp() -> bool:
+	return loadout.active() != null and loadout.active().id == "wisp"
+
+
+## Soul HP: the base pool, every equipped Vessel's bonus and Soul Core nodes.
+func max_hp() -> float:
+	return Balance.combat_f("soul_hp_base") + loadout.hp_bonus_total() + float(bonuses.get("max_hp", 0.0))
+
+
+## Flask charges when full (3, up to 6 with Soul Core nodes).
+func flask_max() -> int:
+	return int(Balance.combat_f("flask.charges")) + int(bonuses.get("flask_charges", 0))
+
+
+## Back to full at the spawn point (sandbox death, debug, altar rest).
 func respawn() -> void:
-	health.reset(Balance.combat_f("soul_hp_base") + loadout.hp_bonus_total())
-	flask_charges = int(Balance.combat_f("flask.charges"))
+	health.reset(max_hp())
+	flask_charges = flask_max()
 	stop_action()
 	_dead_left = 0.0
 	state = "idle"

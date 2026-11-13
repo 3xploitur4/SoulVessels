@@ -405,7 +405,7 @@ def main():
     if not args.attach:
         env = dict(os.environ, BRIDGE_PORT=str(args.port), BRIDGE_IDLE_QUIT_S="120")
         log = open(os.path.join(ROOT, "builds", "logs", "drive-game.log"), "w") if os.path.isdir(os.path.join(ROOT, "builds", "logs")) else subprocess.DEVNULL
-        proc = subprocess.Popen([GODOT, "--path", ROOT, "--windowed", "--resolution", "1280x720", "--", "--no-waves"],
+        proc = subprocess.Popen([GODOT, "--path", ROOT, "--windowed", "--resolution", "1280x720", "res://src/sandbox/sandbox.tscn", "--", "--no-waves"],
                                 env=env, stdout=log, stderr=subprocess.STDOUT)
         ok, why = wait_ready(args.port, 120, alive=lambda: proc.poll() is None)
         if not ok:

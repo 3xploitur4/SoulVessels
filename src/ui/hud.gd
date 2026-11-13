@@ -24,6 +24,8 @@ const VESSEL_COLORS := {
 }
 
 var player: Player
+## The run's save state (Essence counter); null in the sandbox.
+var state: GameState
 var world: CombatWorld
 var camera: Camera3D
 
@@ -108,7 +110,7 @@ func _draw_vitals(origin: Vector2) -> void:
 	var hp_text := "%d / %d" % [int(ceilf(player.health.current)), int(player.health.max_value)]
 	_canvas.draw_string(_font, origin + Vector2(10, 19), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(1, 1, 1, 0.9))
 	# Flask pips: small vials.
-	for i in range(int(Balance.combat_f("flask.charges"))):
+	for i in range(player.flask_max()):
 		var p := origin + Vector2(hp_w - 70.0 + 24.0 * float(i), 32.0)
 		var full := i < player.flask_charges
 		_draw_vial(p, full)
@@ -124,6 +126,13 @@ func _draw_vitals(origin: Vector2) -> void:
 		_canvas.draw_rect(seg, COL_FRAME, false, 1.5)
 	_canvas.draw_string(_font, Vector2(origin.x, gy + 38), tr("HUD_SOUL_GAUGE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16,
 		Color(0.75, 0.9, 0.95, 0.85))
+	if state != null:
+		# Soul Essence: a small soul-light diamond and the carried amount.
+		var ep := Vector2(origin.x + 3.0 * (seg_w + gap) + 6.0, gy + 8.0)
+		var d := PackedVector2Array([ep + Vector2(0, -9), ep + Vector2(7, 0), ep + Vector2(0, 9), ep + Vector2(-7, 0)])
+		_canvas.draw_colored_polygon(d, COL_GAUGE_FULL)
+		_canvas.draw_string(_font, ep + Vector2(14, 8), str(state.essence), HORIZONTAL_ALIGNMENT_LEFT, -1, 22,
+			Color(0.85, 0.95, 1.0))
 
 
 func _draw_vial(p: Vector2, full: bool) -> void:

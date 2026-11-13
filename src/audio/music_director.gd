@@ -62,6 +62,11 @@ func _ready() -> void:
 	GameEvents.telegraph_fired.connect(func(_k: String, _s: Node) -> void: _duck_left = _num("telegraph_duck_s", 0.15))
 
 
+## True when music.json has a track for `zone_id`.
+func has_zone(zone_id: String) -> bool:
+	return (_cfg.get("zones", {}) as Dictionary).has(zone_id)
+
+
 ## Load a zone's stems and start playing in `explore`.
 func start_zone(zone_id: String) -> void:
 	var zones: Dictionary = _cfg.get("zones", {})

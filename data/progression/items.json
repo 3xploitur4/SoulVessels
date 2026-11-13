@@ -1,0 +1,23 @@
+{
+  "_source": "Story 019. Every Chapter I item from the addendum loot table (rarity column) and bible section 6. kind: shard (Soul Core / ability ranks / Sync passives), material (reforging, crafting), lore (turns into a lore entry when picked up), coating (weapon element, M3), key (unlocks: weapons, Overdrive). 'used_in' says which milestone spends it.",
+  "items": {
+    "lesser_soul_shard": { "rarity": "common", "kind": "shard", "used_in": "M2 Soul Core" },
+    "crude_stone": { "rarity": "common", "kind": "material", "used_in": "M3 reforging +1/+2" },
+    "faded_parchment": { "rarity": "common", "kind": "lore", "lore_kind": "parchment" },
+    "standard_soul_shard": { "rarity": "rare", "kind": "shard", "used_in": "M3 ability ranks" },
+    "polished_basalt_core": { "rarity": "rare", "kind": "material", "used_in": "M3 reforging +3/+4" },
+    "luminous_root_resin": { "rarity": "rare", "kind": "material", "used_in": "M3 reforging +3" },
+    "tarnished_censer_shard": { "rarity": "rare", "kind": "material", "used_in": "M3 Censer Core crafting" },
+    "echoing_relic": { "rarity": "rare", "kind": "lore", "lore_kind": "relic" },
+    "elemental_coating": { "rarity": "rare", "kind": "coating", "used_in": "M3 reforging +3 slot" },
+    "greater_soul_shard": { "rarity": "epic", "kind": "shard", "used_in": "M3 Sync passives" },
+    "censer_core": { "rarity": "epic", "kind": "material", "used_in": "M3 reforging +4" },
+    "sovereigns_crown_fragment": { "rarity": "epic", "kind": "material", "used_in": "M3 reforging +5" },
+    "deep_realm_rune": { "rarity": "epic", "kind": "key", "used_in": "Seris Floating Focus" },
+    "weapon_schematic": { "rarity": "epic", "kind": "key", "used_in": "Nyra short blades" },
+    "pure_soul_matrix": { "rarity": "legendary", "kind": "key", "used_in": "M4 Overdrive" },
+    "heart_of_the_guardian": { "rarity": "legendary", "kind": "material", "used_in": "M4 reforging +5" },
+    "abyssal_scale": { "rarity": "legendary", "kind": "material", "used_in": "M4" },
+    "primeval_truth": { "rarity": "legendary", "kind": "lore", "lore_kind": "truth" }
+  }
+}

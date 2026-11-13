@@ -20,6 +20,8 @@ static func create(vessel_id: String, vessel_data: Dictionary) -> VesselKit:
 			kit = CaelanKit.new()
 		"nyra":
 			kit = NyraKit.new()
+		"wisp":
+			kit = WispKit.new()
 		_:
 			kit = VesselKit.new()
 	kit.id = vessel_id

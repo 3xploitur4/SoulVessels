@@ -34,7 +34,13 @@ var sandbox: Node
 
 
 func run_command(cmd: String, args: Dictionary) -> Variant:
+	# Host-specific commands (the game scene's runs, rooms and menus): `bridge_<cmd>(args)`.
+	if sandbox.has_method("bridge_" + cmd):
+		return await sandbox.call("bridge_" + cmd, args)
 	var player: Player = sandbox.get("player")
+	if player == null and cmd not in ["ping", "get_state", "get_value", "set_value", "screenshot", "window_size", "debug_overlay",
+			"wait", "rng_sample", "quit", "press", "release", "touch", "drag", "joypad", "sim_input"]:
+		return {"error": "no player (title screen?)"}
 	match cmd:
 		"ping":
 			return {"pong": true, "frame": Engine.get_physics_frames()}
@@ -152,6 +158,11 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 			for i in range(int(args.get("n", 4))):
 				out.append(randf())
 			return {"values": out}
+		"debug_overlay":
+			var dh: Node = sandbox.get("debug_hud")
+			if dh != null:
+				(dh as CanvasLayer).visible = bool(args.get("on", false))
+			return {"ok": true}
 		"quit":
 			get_tree().quit.call_deferred()
 			return {"ok": true}
@@ -160,6 +171,9 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 
 func _state() -> Dictionary:
 	var player: Player = sandbox.get("player")
+	if player == null:
+		return {"frame": Engine.get_physics_frames(), "fps": Engine.get_frames_per_second(), "player": null,
+			"title": sandbox.get("title") != null, "music": {"state": MusicDirector.state, "zone": MusicDirector.zone}}
 	var list: Array = []
 	for e: EnemyBase in sandbox.call("enemies"):
 		list.append(e.snapshot())
@@ -169,7 +183,7 @@ func _state() -> Dictionary:
 		"fps": Engine.get_frames_per_second(),
 		"player": player.snapshot(),
 		"enemies": list,
-		"music": {"state": MusicDirector.state, "pending": MusicDirector.pending_state,
+		"music": {"zone": MusicDirector.zone, "state": MusicDirector.state, "pending": MusicDirector.pending_state,
 			"vessel": MusicDirector.vessel, "t": snappedf(MusicDirector.song_time(), 0.01),
 			"playing": MusicDirector.is_playing(), "history": MusicDirector.history,
 			"drift": snappedf(MusicDirector.clock_drift(), 0.001),
@@ -177,7 +191,7 @@ func _state() -> Dictionary:
 				"combat": MusicDirector.stem_db("combat"), "elite": MusicDirector.stem_db("elite"),
 				"lead_caelan": MusicDirector.stem_db("lead_caelan"), "lead_nyra": MusicDirector.stem_db("lead_nyra")}},
 		"wave": sandbox.get("wave_index"),
-		"touch_visible": (sandbox.get("touch") as CanvasLayer).visible,
+		"touch_visible": (sandbox.get("touch") as CanvasLayer).visible if sandbox.get("touch") != null else false,
 		"sfx": Sfx.play_counts,
 		"debug": debug_hud.text() if debug_hud != null else "",
 	}

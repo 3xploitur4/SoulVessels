@@ -26,6 +26,11 @@ const BUTTONS := [
 
 var router: InputRouter
 var player: Player
+## Verb of the contextual interact button ("Rest", "Possess"); "" hides it.
+var context_label: String = ""
+## Offset and radius of the contextual button (left of the arc).
+const CONTEXT_OFFSET := Vector2(-560, -130)
+const CONTEXT_RADIUS := 60.0
 ## Accessibility: scale and opacity of the whole layout.
 var ui_scale: float = 1.0
 var opacity: float = 0.75
@@ -86,6 +91,8 @@ func _input(event: InputEvent) -> void:
 ## Button centre in canvas coordinates (tests, the bridge).
 func button_centre(action: String) -> Vector2:
 	var corner := _corner()
+	if action == "interact":
+		return corner + CONTEXT_OFFSET * ui_scale
 	for b: Array in BUTTONS:
 		if b[0] == action:
 			return corner + (b[1] as Vector2) * ui_scale
@@ -93,7 +100,14 @@ func button_centre(action: String) -> Vector2:
 
 
 func _finger_down(index: int, pos: Vector2) -> void:
+	if context_label != "" and pos.distance_to(_corner() + CONTEXT_OFFSET * ui_scale) <= CONTEXT_RADIUS * ui_scale * 1.1:
+		_fingers[index] = "interact"
+		Input.action_press("interact")
+		get_viewport().set_input_as_handled()
+		return
 	for b: Array in BUTTONS:
+		if not _button_shown(str(b[0])):
+			continue
 		var centre := _corner() + (b[1] as Vector2) * ui_scale
 		if pos.distance_to(centre) <= float(b[2]) * ui_scale * 1.1:
 			_fingers[index] = str(b[0])
@@ -156,8 +170,18 @@ func _draw_controls() -> void:
 		# A faint hint where the stick lives.
 		var hint := Vector2(_canvas.size.x * 0.14, _canvas.size.y * 0.74)
 		_canvas.draw_arc(hint, JOY_RADIUS * ui_scale * 0.8, 0.0, TAU, 48, Color(1, 1, 1, 0.12 * a), 2.0)
+	if context_label != "":
+		var cc := _corner() + CONTEXT_OFFSET * ui_scale
+		var cr := CONTEXT_RADIUS * ui_scale
+		_canvas.draw_circle(cc, cr, Color(0.1, 0.12, 0.08, 0.6 * a))
+		_canvas.draw_arc(cc, cr, 0.0, TAU, 48, Color(0.95, 0.8, 0.35, 0.9 * a), 3.0)
+		var cw := _font.get_string_size(context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 22).x
+		_canvas.draw_string(_font, cc + Vector2(-cw * 0.5, 8.0), context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 22,
+			Color(1.0, 0.92, 0.7, a))
 	for b: Array in BUTTONS:
 		var action := str(b[0])
+		if not _button_shown(action):
+			continue
 		var centre := _corner() + (b[1] as Vector2) * ui_scale
 		var r := float(b[2]) * ui_scale
 		var pressed := Input.is_action_pressed(action)
@@ -176,6 +200,11 @@ func _draw_controls() -> void:
 		var tw := _font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15).x
 		_canvas.draw_string(_font, centre + Vector2(-tw * 0.5, r + 18.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15,
 			Color(0.9, 0.9, 0.85, 0.6 * a))
+
+
+## The bare wisp can only move and jump, so only Jump is drawn.
+func _button_shown(action: String) -> bool:
+	return player == null or not player.is_wisp() or action == "jump"
 
 
 ## 0..1 of the remaining cooldown (or 1 when the action cannot be used).

@@ -1,0 +1,22 @@
+{
+  "_source": "Stories 017/019/024/025. Addendum Narrative: 24 Faded Parchments, 10 Echoing Relics, 5 Vessel Memories, 1 Primeval Truth in Chapter I; Zones 1-2 hold the first 12 parchments, 3 relics and the Caelan and Nyra memories. Parchments are found in this order whatever drop or pickup gives them. kind: parchment | relic | memory | truth. A memory names its Vessel and is unlocked at Affinity 1.",
+  "entries": [
+    { "id": "parchment_01", "kind": "parchment" },
+    { "id": "parchment_02", "kind": "parchment" },
+    { "id": "parchment_03", "kind": "parchment" },
+    { "id": "parchment_04", "kind": "parchment" },
+    { "id": "parchment_05", "kind": "parchment" },
+    { "id": "parchment_06", "kind": "parchment" },
+    { "id": "parchment_07", "kind": "parchment" },
+    { "id": "parchment_08", "kind": "parchment" },
+    { "id": "parchment_09", "kind": "parchment" },
+    { "id": "parchment_10", "kind": "parchment" },
+    { "id": "parchment_11", "kind": "parchment" },
+    { "id": "parchment_12", "kind": "parchment" },
+    { "id": "relic_01", "kind": "relic" },
+    { "id": "relic_02", "kind": "relic" },
+    { "id": "relic_03", "kind": "relic" },
+    { "id": "memory_caelan", "kind": "memory", "vessel": "caelan" },
+    { "id": "memory_nyra", "kind": "memory", "vessel": "nyra" }
+  ]
+}
