@@ -1,0 +1,96 @@
+class_name SideCamera
+extends Camera3D
+## Side-on perspective follow camera (story 005, decision D-004). Follows `target`'s
+## interpolated transform with look-ahead along its facing and a vertical dead zone, clamps to
+## the arena, and shakes from a trauma value scaled by the accessibility setting.
+##
+##     var cam := SideCamera.new()
+##     cam.target = player
+##     cam.bounds = Vector2(-21, 21)
+##     add_child(cam)
+
+## The node to follow (needs `global_position`; `facing` is read when present).
+var target: Node3D
+## Arena x limits the view must not cross.
+var bounds: Vector2 = Vector2(-21.0, 21.0)
+## Distance from the play plane.
+var distance: float = 14.0
+## Height of the camera above the target's feet.
+var height: float = 2.9
+## Metres the view leads in the facing direction.
+var look_ahead: float = 2.0
+## Target may move this far up or down before the camera follows.
+var vertical_dead_zone: float = 1.0
+var follow_speed: float = 6.0
+## 0..1 accessibility setting, multiplies every shake.
+var shake_scale: float = 1.0
+## Extra zoom (0 = none, 1 = 40 % closer), for ultimates.
+var zoom_in: float = 0.0
+
+var _trauma: float = 0.0
+var _focus: Vector3 = Vector3.ZERO
+var _lead: float = 0.0
+var _rng := RandomNumberGenerator.new()
+var _time: float = 0.0
+
+
+func _ready() -> void:
+	fov = 35.0
+	near = 0.3
+	far = 120.0
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	_rng.seed = 4242
+	if target != null:
+		_focus = target.global_position
+	current = true
+
+
+## Add shake (0..1 trauma; it decays and is squared for the offset).
+func add_trauma(amount: float) -> void:
+	_trauma = clampf(_trauma + amount, 0.0, 1.0)
+
+
+## Jump straight to the target (after a teleport or a respawn).
+func snap() -> void:
+	if target != null:
+		_focus = target.global_transform.origin
+		_update_transform(0.0)
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	if target != null and is_instance_valid(target):
+		var t := target.get_global_transform_interpolated().origin
+		var facing: float = float(target.get("facing")) if target.get("facing") != null else 1.0
+		_lead = lerpf(_lead, look_ahead * facing, minf(delta * 2.5, 1.0))
+		_focus.x = lerpf(_focus.x, t.x, minf(delta * follow_speed, 1.0))
+		if absf(t.y - _focus.y) > vertical_dead_zone:
+			var goal := t.y - signf(t.y - _focus.y) * vertical_dead_zone
+			_focus.y = lerpf(_focus.y, goal, minf(delta * follow_speed, 1.0))
+	_trauma = maxf(_trauma - delta * 1.6, 0.0)
+	_update_transform(delta)
+
+
+func _update_transform(_delta: float) -> void:
+	var half_width := _half_view_width()
+	var x := _focus.x + _lead
+	if bounds.y - bounds.x > half_width * 2.0:
+		x = clampf(x, bounds.x + half_width, bounds.y - half_width)
+	var d := distance * (1.0 - 0.4 * zoom_in)
+	var pos := Vector3(x, maxf(_focus.y, 0.0) + height, d)
+	var shake := _trauma * _trauma * shake_scale
+	if shake > 0.0:
+		pos += Vector3(_rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0), 0.0) * 0.35 * shake
+	global_position = pos
+	look_at(Vector3(x, pos.y - 1.1, 0.0), Vector3.UP)
+
+
+func _half_view_width() -> float:
+	var vp := get_viewport()
+	var aspect := 16.0 / 9.0
+	if vp != null:
+		var size := vp.get_visible_rect().size
+		if size.y > 0.0:
+			aspect = size.x / size.y
+	var half_h := tan(deg_to_rad(fov) * 0.5) * distance
+	return half_h * aspect

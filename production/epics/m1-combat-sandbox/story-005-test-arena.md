@@ -1,6 +1,6 @@
 # Story 005: Test arena — 2.5D set, parallax, lights, camera
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Presentation · **Type**: Visual/Feel · **Estimate**: M
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Presentation · **Type**: Visual/Feel · **Estimate**: M
 
 ## Context
 
@@ -28,3 +28,9 @@ Visual/Feel: retained screenshot plus `production/qa/evidence/story-005-test-are
 ## Dependencies
 
 - Depends on: `../m0-setup/story-001-godot-project-scaffold.md` · Unlocks: 006, 013
+
+---
+
+## Completion
+
+Meshes are merged per material at load (draw calls 119 in the busiest wave). Evidence: production/qa/evidence/story-005-test-arena/evidence.md.
