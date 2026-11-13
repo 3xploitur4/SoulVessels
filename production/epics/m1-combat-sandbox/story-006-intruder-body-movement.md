@@ -1,6 +1,6 @@
 # Story 006: Intruder body — run, jump, air-dash, dodge i-frames, stamina
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Core · **Type**: Logic · **Estimate**: M
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Core · **Type**: Logic · **Estimate**: M
 
 ## Context
 
@@ -24,3 +24,9 @@
 ## Dependencies
 
 - Depends on: 004, 005, `../m0-setup/story-002-input-map.md` · Unlocks: 007, 008
+
+---
+
+## Completion
+
+Scenes are built in code (no .tscn per body), so tests can build any piece alone. Timed actions live in `src/combat/player_action.gd`. Integration: tests/integration/player/movement_test.gd (run, 2.2 m jump, 15-frame i-frames, Exhausted).
