@@ -1,6 +1,6 @@
 # Story 008: Vessel kits — Caelan and Nyra
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Feature · **Type**: Logic · **Estimate**: L
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Feature · **Type**: Logic · **Estimate**: L
 
 ## Context
 
@@ -25,3 +25,9 @@ bible section 3 appearance (silhouettes). **Decision**: D-008.
 ## Dependencies
 
 - Depends on: 006, 007 · Unlocks: 009
+
+---
+
+## Completion
+
+Weapon trail is not a mesh trail: the swing reads from the pose (sword continues the arm line). Kit tests: tests/unit/vessels/kit_test.gd.
