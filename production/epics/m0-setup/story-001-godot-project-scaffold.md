@@ -1,7 +1,7 @@
 # Story 001: Godot project scaffold at the repo root
 
 > **Epic**: M0 — Setup
-> **Status**: Ready
+> **Status**: Done (2026-11-13)
 > **Layer**: Foundation
 > **Type**: Config/Data
 > **Estimate**: S
@@ -46,3 +46,9 @@ stubs that later stories fill).
 
 - Depends on: None
 - Unlocks: `story-002-input-map.md`, `story-003-android-export.md`
+
+---
+
+## Completion
+
+Boot scene became the sandbox in story 013. Smoke: `bash tests/smoke.sh` passes (production/qa/smoke-2026-11-13.md).

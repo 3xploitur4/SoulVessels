@@ -1,7 +1,7 @@
 # Story 002: Input map and input router
 
 > **Epic**: M0 — Setup
-> **Status**: Ready
+> **Status**: Done (2026-11-13)
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: S
@@ -31,3 +31,9 @@ touch UI; touch brings it back"); bible §1 Controls. **Decision**: D-010 (keybo
 
 - Depends on: `story-001-godot-project-scaffold.md`
 - Unlocks: M1 stories 006, 011
+
+---
+
+## Completion
+
+InputRouter is a plain node created by the sandbox (no autoload). 6 tests in tests/unit/input/input_router_test.gd pass.

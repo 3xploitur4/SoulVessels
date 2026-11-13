@@ -1,7 +1,7 @@
 # Story 003: Android debug export preset and headless APK export
 
 > **Epic**: M0 — Setup
-> **Status**: Ready
+> **Status**: Done (2026-11-13)
 > **Layer**: Foundation
 > **Type**: Integration
 > **Estimate**: M
@@ -39,3 +39,9 @@ Gradle build stays off (no plugins yet), so the prebuilt `android_debug.apk` tem
 
 - Depends on: `story-001-godot-project-scaffold.md`
 - Unlocks: M1 story 013 (sandbox APK)
+
+---
+
+## Completion
+
+Debug preset also requests INTERNET for the playtest bridge (D-015) and packs `*.json`. APK boots on Android 16 (story 013 evidence).

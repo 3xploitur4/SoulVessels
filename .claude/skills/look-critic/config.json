@@ -38,5 +38,5 @@
   },
   "key_source": "The game's art bible, foundation/07-art-bible.md, section 'Key image'. A game can have 1 key per view. The repo override work/look/config.json names the key file per view.",
   "camera_mode_note": "The main view of the game. The repo override sets it (for example: follow at 2.6 m in a third-person game; chase in Crush Depth).",
-  "timeout_bin": "<path-to-gnu-timeout, e.g. /opt/homebrew/bin/timeout>"
+  "timeout_bin": "/usr/bin/timeout"
 }

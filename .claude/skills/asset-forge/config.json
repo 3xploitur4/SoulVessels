@@ -143,8 +143,8 @@
   "bakeoff_dir": "<path-to-your-bakeoff-notes-and-meshy-ledger>",
   "bakeoff_shared_dir": "<path-to-your-pipeline-scripts: meshy.py, clean_static.py, merge_meshy_humanoid.py, validate.py, render.sh>",
   "blender_bin": "/opt/homebrew/bin/blender",
-  "godot_bin": "/opt/homebrew/bin/godot",
-  "timeout_bin": "/opt/homebrew/bin/timeout",
+  "godot_bin": "engine/godot/Godot_v4.7.2-stable_win64_console.exe",
+  "timeout_bin": "/usr/bin/timeout",
   "banned_sources": [
     "kenney",
     "kaykit",

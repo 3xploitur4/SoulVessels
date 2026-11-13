@@ -9,7 +9,7 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 - **Language**: GDScript
 - **Version Control**: Git with trunk-based development
 - **Build System**: Godot export presets -> Android (ARM64) APK/AAB
-- **Asset Pipeline**: [SPECIFY after choosing engine]
+- **Asset Pipeline**: procedural placeholder meshes built in code (`src/arenas/arena_materials.gd`, `src/vessels/vessel_visual.gd`, `src/enemies/enemy_visual.gd`); placeholder audio synthesised by `tools/audio/synth_stems.py` (same file names as the final stems)
 
 > **Note**: Engine-specialist agents exist for Godot, Unity, and Unreal with
 > dedicated sub-specialists. Use the set matching your engine.

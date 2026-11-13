@@ -19,10 +19,15 @@
   "project_override_path": "work/playtest/playtest.config.json",
   "slot_file": "work/manager/godot-slots.tsv",
   "balance_dir": "data/balance/",
-  "editor_owned": ["data/placements.json", "data/hud_layout.json", "scripts/editor*", "tools/mcp/"],
-  "state_handler": "<file and function that answer the bridge get_state command, e.g. scripts/main.gd run_command>",
-  "godot_bin": "<path-to-godot-binary, e.g. /opt/homebrew/bin/godot>",
-  "timeout_bin": "<path-to-gnu-timeout, e.g. /opt/homebrew/bin/timeout>",
+  "editor_owned": [
+    "data/placements.json",
+    "data/hud_layout.json",
+    "scripts/editor*",
+    "tools/mcp/"
+  ],
+  "state_handler": "src/debug/debug_bridge.gd run_command",
+  "godot_bin": "engine/godot/Godot_v4.7.2-stable_win64_console.exe",
+  "timeout_bin": "/usr/bin/timeout",
   "runner_script": "scripts/run_seeds.sh",
   "bot_script": "tools/playtest_bot.py",
   "label_script": "<optional: tools/playtest/label_failures.py>",
@@ -30,7 +35,11 @@
   "dead_delta_eps": 0.01,
   "stuck_s": 10,
   "cliff_ratio": 2.0,
-  "soak_sizes": {"S": 4, "M": 16, "L": 64},
+  "soak_sizes": {
+    "S": 4,
+    "M": 16,
+    "L": 64
+  },
   "_sources": {
     "seeds_per_check": "A public dev report ran 16 games per strategy.",
     "min_valid_runs": "PROPOSED",

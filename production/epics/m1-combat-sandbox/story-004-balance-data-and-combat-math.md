@@ -1,6 +1,6 @@
 # Story 004: Balance data layer and combat math
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Foundation · **Type**: Logic · **Estimate**: M
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Foundation · **Type**: Logic · **Estimate**: M
 
 ## Context
 
@@ -31,3 +31,9 @@ Logic: the unit tests above pass under `tests/run_tests.sh`.
 ## Dependencies
 
 - Depends on: `../m0-setup/story-001-godot-project-scaffold.md` · Unlocks: 006, 007, 008, 009, 010
+
+---
+
+## Completion
+
+Runner discovers unit tests and, with `--integration`, tests/integration. Balance also has `get_value`/`set_value` for the bridge.
