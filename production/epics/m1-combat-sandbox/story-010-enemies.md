@@ -1,6 +1,6 @@
 # Story 010: Enemies — Echo Crawler, Subterranean Watcher, Branded Warden
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Feature · **Type**: Logic · **Estimate**: L
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Feature · **Type**: Logic · **Estimate**: L
 
 ## Context
 
@@ -27,3 +27,9 @@ halberd thrust parryable, crimson shield charge unblockable), "Resolved contradi
 ## Dependencies
 
 - Depends on: 007 · Unlocks: 012, 013
+
+---
+
+## Completion
+
+Enemies are built in code (no .tscn). Tuning decisions D-017 (beam ticks), D-018 (flinch), D-019 (Warden turn delay). Crawler dies in 3 hits (integration test and playtest).
