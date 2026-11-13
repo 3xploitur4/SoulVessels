@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "ai-game-dev": {
+      "type": "streamable-http",
+      "url": "https://ai-game.dev/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth",
+            "client": {
+              "mode": "dcr"
+            },
+            "authorizationUrl": "https://ai-game.dev/oauth/authorize",
+            "tokenUrl": "https://ai-game.dev/oauth/token",
+            "registrationUrl": "https://ai-game.dev/oauth/register",
+            "baseScopes": ["mcp:agent"]
+          }
+        }
+      }
+    }
+  }
+}

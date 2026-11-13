@@ -1,0 +1,56 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "name": "ai-game-dev-plugin",
+  "description": "Claude Code plugins for AI game development — Unreal, Unity & Godot.",
+  "owner": {
+    "name": "Ivan Murzak",
+    "url": "https://ai-game.dev"
+  },
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "unreal-mcp",
+      "source": "./plugins/unreal-mcp",
+      "description": "Drive Unreal Engine with Claude via unreal-mcp-cli: create a project, install the plugin, log in, and open the editor connected to ai-game.dev — automatically.",
+      "version": "0.4.0",
+      "category": "game-development",
+      "keywords": [
+        "unreal-engine",
+        "unreal",
+        "gamedev",
+        "mcp",
+        "ai"
+      ]
+    },
+    {
+      "name": "unity-mcp",
+      "source": "./plugins/unity-mcp",
+      "description": "Drive Unity with Claude via unity-mcp-cli: create a project, install the plugin, log in, and open the editor connected to ai-game.dev — automatically.",
+      "version": "0.4.0",
+      "category": "game-development",
+      "keywords": [
+        "unity",
+        "unity3d",
+        "gamedev",
+        "mcp",
+        "ai"
+      ]
+    },
+    {
+      "name": "godot-mcp",
+      "source": "./plugins/godot-mcp",
+      "description": "Drive Godot with Claude via godot-cli: create a project, install the plugin, log in, and open the editor connected to ai-game.dev — automatically.",
+      "version": "0.4.0",
+      "category": "game-development",
+      "keywords": [
+        "godot",
+        "godot-engine",
+        "gamedev",
+        "mcp",
+        "ai"
+      ]
+    }
+  ]
+}
