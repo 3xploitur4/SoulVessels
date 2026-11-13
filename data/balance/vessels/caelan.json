@@ -1,0 +1,76 @@
+{
+  "id": "caelan",
+  "name_key": "VESSEL_CAELAN",
+  "role": "Defense, parry",
+  "stats": {
+    "hp_bonus": 120,
+    "atk": 40,
+    "def": 30,
+    "move_speed": 6.0,
+    "attack_speed": 1.0,
+    "posture_multiplier": 1.2,
+    "crit_chance": 0.05,
+    "backstab_multiplier": 1.3
+  },
+  "dodge": { "kind": "roll", "stamina_cost": 20, "distance_m": 3.0 },
+  "primary": {
+    "name": "Longsword combo",
+    "element": "physical",
+    "hits": [
+      { "motion": 1.0, "windup_s": 0.14, "active_s": 0.10, "recover_s": 0.20, "range_m": 2.0, "posture": 12 },
+      { "motion": 1.0, "windup_s": 0.12, "active_s": 0.10, "recover_s": 0.20, "range_m": 2.0, "posture": 12 },
+      { "motion": 1.2, "windup_s": 0.16, "active_s": 0.12, "recover_s": 0.24, "range_m": 2.2, "posture": 16 },
+      { "motion": 1.6, "windup_s": 0.22, "active_s": 0.14, "recover_s": 0.34, "range_m": 2.4, "posture": 28, "heavy": true }
+    ],
+    "combo_reset_s": 0.6
+  },
+  "ability_1": {
+    "id": "royal_guard",
+    "kind": "hold_block",
+    "stamina_cost_per_hit": 10,
+    "frontal_arc_deg": 180,
+    "counterstrike": { "motion": 1.5, "posture": 35, "guard_break_s": 2.0, "range_m": 2.4 }
+  },
+  "ability_2": {
+    "id": "kings_judgment",
+    "cooldown_s": 6.0,
+    "stamina_cost": 15,
+    "range_m": 8.0,
+    "motion": 1.8,
+    "posture": 40,
+    "travel_speed_mps": 16.0,
+    "windup_s": 0.3
+  },
+  "passive": {
+    "id": "iron_resolve",
+    "damage_taken_multiplier": 0.85,
+    "blocking_damage_taken_multiplier": 0.70
+  },
+  "resonance": {
+    "id": "oathbreaker_lunge",
+    "dash_m": 4.0,
+    "dash_s": 0.18,
+    "motion": 1.2,
+    "posture": 60,
+    "echo": { "against": "frozen", "posture_multiplier": 3.0 }
+  },
+  "sync_guard": { "id": "intercept", "trigger": "lethal_blow" },
+  "ultimate": {
+    "id": "final_stand",
+    "radius_m": 6.0,
+    "duration_s": 4.0,
+    "damage_reduction": 0.5,
+    "motion": 2.0,
+    "posture": 80,
+    "knockdown_s": 1.5
+  },
+  "silhouette": {
+    "height_m": 1.88,
+    "build": "heavy",
+    "primary_color": "#1f2a44",
+    "secondary_color": "#6c7a89",
+    "accent_color": "#2f5fd0",
+    "props": ["shield", "cape", "pauldron_left"]
+  },
+  "leitmotif": "lead_caelan"
+}

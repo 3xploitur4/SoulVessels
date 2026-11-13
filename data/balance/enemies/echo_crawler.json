@@ -1,0 +1,41 @@
+{
+  "id": "echo_crawler",
+  "name_key": "ENEMY_ECHO_CRAWLER",
+  "tier": "common",
+  "hp": 90,
+  "atk": 18,
+  "def": 0,
+  "posture": 40,
+  "move_speed": 4.5,
+  "aggro_range_m": 9.0,
+  "leash_range_m": 20.0,
+  "preferred_range_m": 3.2,
+  "weaknesses": ["frost"],
+  "resists": [],
+  "aoe_multiplier": 1.5,
+  "group_size": 3,
+  "attacks": [
+    {
+      "id": "lunge",
+      "kind": "unblockable",
+      "telegraph_s": 0.6,
+      "tell": "spine_sac_flare",
+      "tell_color": "#4cff6a",
+      "range_m": 4.0,
+      "lunge_distance_m": 4.0,
+      "motion": 1.0,
+      "posture": 10,
+      "active_s": 0.25,
+      "recover_s": 0.8,
+      "cooldown_s": 1.5
+    }
+  ],
+  "drops": ["crude_stone", "lesser_soul_shard"],
+  "silhouette": {
+    "kind": "arachnid",
+    "height_m": 0.7,
+    "width_m": 1.6,
+    "primary_color": "#4b5058",
+    "accent_color": "#4cff6a"
+  }
+}

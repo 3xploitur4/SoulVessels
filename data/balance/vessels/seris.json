@@ -1,0 +1,39 @@
+{
+  "id": "seris",
+  "name_key": "VESSEL_SERIS",
+  "role": "Range, control",
+  "_status": "stats and resonance only in M1; kit arrives in M3",
+  "stats": {
+    "hp_bonus": 60,
+    "atk": 45,
+    "def": 15,
+    "move_speed": 5.8,
+    "attack_speed": 0.9,
+    "posture_multiplier": 0.5,
+    "crit_chance": 0.05,
+    "backstab_multiplier": 1.3,
+    "magic": true
+  },
+  "dodge": { "kind": "blink", "stamina_cost": 20, "distance_m": 5.0 },
+  "resonance": {
+    "id": "aether_burst",
+    "radius_m": 3.0,
+    "motion": 1.0,
+    "posture": 20,
+    "element": "aether",
+    "build_up": 40,
+    "knockback_m": 2.5,
+    "echo": { "against": "poisoned", "spread_status": "venom" }
+  },
+  "sync_guard": { "id": "aether_shield_auto", "trigger": "magic_hit_over_fraction", "fraction": 0.25 },
+  "ultimate": { "id": "cataclysm_fused", "duration_s": 5.0, "elements": ["aether", "frost"] },
+  "silhouette": {
+    "height_m": 1.73,
+    "build": "graceful",
+    "primary_color": "#e9e4d8",
+    "secondary_color": "#1b2a5e",
+    "accent_color": "#d4af37",
+    "props": ["staff", "runes_left_forearm"]
+  },
+  "leitmotif": "lead_seris"
+}

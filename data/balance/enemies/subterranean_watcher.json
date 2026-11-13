@@ -1,0 +1,43 @@
+{
+  "id": "subterranean_watcher",
+  "name_key": "ENEMY_SUBTERRANEAN_WATCHER",
+  "tier": "common",
+  "hp": 120,
+  "atk": 30,
+  "def": 5,
+  "posture": 50,
+  "move_speed": 3.0,
+  "hover_height_m": 4.0,
+  "aggro_range_m": 14.0,
+  "leash_range_m": 24.0,
+  "preferred_range_m": 7.0,
+  "weaknesses": ["aether"],
+  "resists": [],
+  "grounded_s_on_aether": 4.0,
+  "group_size": 1,
+  "attacks": [
+    {
+      "id": "sweeping_beam",
+      "kind": "magic",
+      "parry_reflects": true,
+      "telegraph_s": 1.2,
+      "tell": "cyan_charge",
+      "tell_color": "#39d7ff",
+      "range_m": 12.0,
+      "beam_sweep_deg": 40,
+      "motion": 1.0,
+      "posture": 8,
+      "active_s": 1.5,
+      "recover_s": 1.2,
+      "cooldown_s": 2.5,
+      "tick_s": 0.25
+    }
+  ],
+  "drops": ["faded_parchment", "lesser_soul_shard"],
+  "silhouette": {
+    "kind": "sphere",
+    "radius_m": 0.6,
+    "primary_color": "#efe9e1",
+    "accent_color": "#39d7ff"
+  }
+}

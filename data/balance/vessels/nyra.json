@@ -1,0 +1,83 @@
+{
+  "id": "nyra",
+  "name_key": "VESSEL_NYRA",
+  "role": "Burst, backstab",
+  "stats": {
+    "hp_bonus": 40,
+    "atk": 32,
+    "def": 12,
+    "move_speed": 7.5,
+    "attack_speed": 1.6,
+    "posture_multiplier": 0.6,
+    "crit_chance": 0.20,
+    "backstab_multiplier": 2.5
+  },
+  "dodge": { "kind": "flip", "stamina_cost": 15, "distance_m": 2.4 },
+  "primary": {
+    "name": "Dagger flurry",
+    "element": "physical",
+    "hits": [
+      { "motion": 0.6, "windup_s": 0.08, "active_s": 0.08, "recover_s": 0.10, "range_m": 1.6, "posture": 5 },
+      { "motion": 0.6, "windup_s": 0.07, "active_s": 0.08, "recover_s": 0.10, "range_m": 1.6, "posture": 5 },
+      { "motion": 0.6, "windup_s": 0.07, "active_s": 0.08, "recover_s": 0.10, "range_m": 1.6, "posture": 5 },
+      { "motion": 0.6, "windup_s": 0.08, "active_s": 0.08, "recover_s": 0.10, "range_m": 1.7, "posture": 5 },
+      { "motion": 0.6, "windup_s": 0.08, "active_s": 0.08, "recover_s": 0.12, "range_m": 1.7, "posture": 6 },
+      { "motion": 0.9, "windup_s": 0.12, "active_s": 0.10, "recover_s": 0.26, "range_m": 1.9, "posture": 12, "heavy": true }
+    ],
+    "combo_reset_s": 0.5
+  },
+  "ability_1": {
+    "id": "shadowstep",
+    "kind": "dash_or_hold",
+    "cooldown_s": 3.0,
+    "distance_m": 6.0,
+    "dash_s": 0.12,
+    "iframes": true,
+    "hold_s": 0.35,
+    "hold_ability": {
+      "id": "vanishing_act",
+      "cooldown_s": 12.0,
+      "duration_s": 2.0,
+      "next_hit_is_backstab": true
+    }
+  },
+  "ability_2": {
+    "id": "phantom_blades",
+    "cooldown_s": 5.0,
+    "stamina_cost": 0,
+    "knives": 5,
+    "spread_deg": 30,
+    "range_m": 10.0,
+    "speed_mps": 22.0,
+    "motion": 0.7,
+    "posture": 6
+  },
+  "passive": { "id": "backstab", "rear_arc_deg": 120, "multiplier": 2.5 },
+  "resonance": {
+    "id": "severing_arrival",
+    "target_range_m": 8.0,
+    "behind_offset_m": 1.2,
+    "motion": 1.4,
+    "posture": 20,
+    "guaranteed_backstab": true,
+    "echo": { "against": "staggered", "guaranteed_crit": true }
+  },
+  "sync_guard": { "id": "shadow_evade", "trigger": "unblockable_hit", "counter_motion": 1.2 },
+  "ultimate": {
+    "id": "dance_of_shadows",
+    "slashes": 12,
+    "duration_s": 3.0,
+    "motion": 0.8,
+    "posture": 8,
+    "target_range_m": 8.0
+  },
+  "silhouette": {
+    "height_m": 1.69,
+    "build": "slim",
+    "primary_color": "#26242b",
+    "secondary_color": "#5a3d8a",
+    "accent_color": "#d79b3a",
+    "props": ["hood", "dagger_left", "dagger_right"]
+  },
+  "leitmotif": "lead_nyra"
+}

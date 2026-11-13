@@ -1,0 +1,63 @@
+{
+  "id": "branded_warden",
+  "name_key": "ENEMY_BRANDED_WARDEN",
+  "tier": "elite",
+  "hp": 900,
+  "atk": 55,
+  "def": 25,
+  "posture": 220,
+  "move_speed": 3.2,
+  "aggro_range_m": 12.0,
+  "leash_range_m": 30.0,
+  "preferred_range_m": 3.0,
+  "weaknesses": [],
+  "resists": [],
+  "shield": {
+    "frontal_arc_deg": 120,
+    "block_fraction": 0.8,
+    "broken_by": ["crushing_blow"],
+    "guard_break_s": 2.0
+  },
+  "group_size": 1,
+  "attacks": [
+    {
+      "id": "halberd_thrust",
+      "kind": "parryable",
+      "telegraph_s": 0.8,
+      "tell": "halberd_raise",
+      "tell_color": "#f2c14e",
+      "range_m": 3.5,
+      "motion": 1.2,
+      "posture": 30,
+      "active_s": 0.2,
+      "recover_s": 1.0,
+      "cooldown_s": 2.0,
+      "heavy": true
+    },
+    {
+      "id": "shield_charge",
+      "kind": "unblockable",
+      "telegraph_s": 1.0,
+      "tell": "shield_lower",
+      "tell_color": "#c8202a",
+      "range_m": 6.0,
+      "charge_distance_m": 6.0,
+      "motion": 1.5,
+      "posture": 40,
+      "knockback_m": 3.0,
+      "active_s": 0.4,
+      "recover_s": 1.4,
+      "cooldown_s": 5.0,
+      "min_range_m": 3.5
+    }
+  ],
+  "drops": ["polished_basalt_core", "standard_soul_shard", "weapon_schematic"],
+  "silhouette": {
+    "kind": "humanoid_giant",
+    "height_m": 2.6,
+    "primary_color": "#3b3a37",
+    "secondary_color": "#7a5a2e",
+    "accent_color": "#d8a23a",
+    "props": ["tower_shield", "halberd"]
+  }
+}
