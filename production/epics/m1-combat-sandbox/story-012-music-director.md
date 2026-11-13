@@ -1,6 +1,6 @@
 # Story 012: Music director with placeholder stems and telegraph SFX
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Presentation · **Type**: Integration · **Estimate**: M
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Presentation · **Type**: Integration · **Estimate**: M
 
 ## Context
 
@@ -25,3 +25,9 @@ harmonic under 150 ms); bible section 4 leitmotif per Vessel. **Decision**: D-00
 ## Dependencies
 
 - Depends on: 010 (aggro signals) · Unlocks: 013
+
+---
+
+## Completion
+
+Measured, not just asserted: production/qa/evidence/story-012-music-director/evidence.md (probe vs control audio). Clock follows playback (D-014).

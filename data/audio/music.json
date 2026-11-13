@@ -1,0 +1,33 @@
+{
+  "_source": "docs/design/design-addendum-v1.md, Audio implementation. Stem names are the contract: real recordings drop in with the same file names (decision D-006).",
+  "silent_db": -60.0,
+  "lead_crossfade_beats": 1,
+  "intensity_fade_beats": 2,
+  "boundary_bars": 4,
+  "calm_down_s": 6.0,
+  "elite_range_m": 15.0,
+  "telegraph_duck_db": -3.0,
+  "telegraph_duck_s": 0.15,
+  "zones": {
+    "zone1": {
+      "title": "Track 01 - Beneath the Forgotten",
+      "bpm": 70,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/zone1/",
+      "stems": {
+        "bed": { "file": "bed.wav", "db": -4.0, "states": ["explore", "alert", "combat", "elite"] },
+        "pulse": { "file": "pulse.wav", "db": -6.0, "states": ["alert", "combat", "elite"] },
+        "combat": { "file": "combat.wav", "db": -5.0, "states": ["combat", "elite"] },
+        "elite": { "file": "elite.wav", "db": -5.0, "states": ["elite"] }
+      },
+      "leads": {
+        "caelan": { "file": "lead_caelan.wav", "db": -6.0 },
+        "nyra": { "file": "lead_nyra.wav", "db": -6.0 },
+        "seris": { "file": "lead_seris.wav", "db": -6.0 },
+        "darius": { "file": "lead_darius.wav", "db": -6.0 },
+        "ilyr": { "file": "lead_ilyr.wav", "db": -6.0 }
+      }
+    }
+  }
+}

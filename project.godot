@@ -23,6 +23,8 @@ config/icon="res://assets/ui/icon.svg"
 
 GameEvents="*res://src/core/game_events.gd"
 Balance="*res://src/core/balance.gd"
+Sfx="*res://src/audio/sfx.gd"
+MusicDirector="*res://src/audio/music_director.gd"
 
 [debug]
 
