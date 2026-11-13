@@ -1,6 +1,6 @@
 # Story 011: Touch UI, HUD and gamepad auto-hide
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Presentation · **Type**: UI · **Estimate**: M
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Presentation · **Type**: UI · **Estimate**: M
 
 ## Context
 
@@ -25,3 +25,9 @@ left 40 %, controller hides touch UI); bible section 1 Touch UI. Size/opacity sl
 ## Dependencies
 
 - Depends on: 009, `../m0-setup/story-002-input-map.md` · Unlocks: 013
+
+---
+
+## Completion
+
+Evidence: production/qa/evidence/story-011-touch-ui-hud/evidence.md. Size/opacity are variables, no settings screen yet.
