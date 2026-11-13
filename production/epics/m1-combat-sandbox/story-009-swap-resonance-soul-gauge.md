@@ -1,6 +1,6 @@
 # Story 009: Vessel swap, Resonance Strikes, Soul Gauge, Sync Guard, Sync Ultimate
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Feature · **Type**: Logic · **Estimate**: L
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Feature · **Type**: Logic · **Estimate**: L
 
 ## Context
 
@@ -25,3 +25,9 @@ Sync Guard rules, Sync Ultimates, Affinity gates), "Resolved contradictions" (Sy
 ## Dependencies
 
 - Depends on: 008 · Unlocks: 011, 013
+
+---
+
+## Completion
+
+Sync Guard order and the in-combat rule for the gauge are in the decision log (D-016, D-022). Both guards verified in the live playtest.

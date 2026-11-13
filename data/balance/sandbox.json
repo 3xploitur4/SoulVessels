@@ -1,0 +1,32 @@
+{
+  "_source": "M1 combat sandbox setup (story 009/013). Affinity 3 unlocks Sync Guard and Sync Ultimate so every system is testable; real Affinity comes from play in M2.",
+  "affinity": 3,
+  "loadout": ["caelan", "nyra"],
+  "player_spawn": [-4.0, 0.2],
+  "starting_gauge": 0,
+  "difficulty": "normal",
+  "wave_delay_s": 3.0,
+  "show_damage_numbers": true,
+  "waves": [
+    [
+      { "id": "echo_crawler", "x": 6.0 },
+      { "id": "echo_crawler", "x": 7.5 },
+      { "id": "echo_crawler", "x": 9.0 }
+    ],
+    [
+      { "id": "subterranean_watcher", "x": 7.0 },
+      { "id": "echo_crawler", "x": -10.0 },
+      { "id": "echo_crawler", "x": -11.5 }
+    ],
+    [
+      { "id": "branded_warden", "x": 9.0 }
+    ],
+    [
+      { "id": "branded_warden", "x": 12.0 },
+      { "id": "subterranean_watcher", "x": -6.0 },
+      { "id": "echo_crawler", "x": 5.0 },
+      { "id": "echo_crawler", "x": 6.5 },
+      { "id": "echo_crawler", "x": 8.0 }
+    ]
+  ]
+}
