@@ -22,6 +22,27 @@ const PALETTE := {
 	"torch_warm": {"albedo": Color(0.9, 0.5, 0.2), "emission": Color(1.0, 0.55, 0.2), "emission_energy": 4.0},
 	"water_dark": {"albedo": Color(0.03, 0.07, 0.1), "roughness": 0.1, "metallic": 0.3},
 	"foreground": {"albedo": Color(0.02, 0.02, 0.03), "roughness": 1.0},
+	"plank": {"albedo": Color(0.36, 0.3, 0.24), "roughness": 0.85},
+	# Luminous Mycelium Forest (bible section 5: bioluminescent fungal chasms).
+	"myc_rock": {"albedo": Color(0.27, 0.25, 0.33), "roughness": 0.85},
+	"myc_trim": {"albedo": Color(0.2, 0.42, 0.4), "emission": Color(0.25, 0.85, 0.7), "emission_energy": 0.6},
+	"myc_far": {"albedo": Color(0.1, 0.1, 0.15), "roughness": 0.95},
+	"myc_wall": {"albedo": Color(0.05, 0.05, 0.09), "roughness": 1.0},
+	"stalk": {"albedo": Color(0.46, 0.43, 0.42), "roughness": 0.8},
+	"stalk_far": {"albedo": Color(0.2, 0.19, 0.22), "roughness": 0.9},
+	"cap_glow": {"albedo": Color(0.25, 0.5, 0.75), "emission": Color(0.35, 0.75, 1.0), "emission_energy": 1.6},
+	"cap_violet": {"albedo": Color(0.45, 0.3, 0.65), "emission": Color(0.65, 0.4, 1.0), "emission_energy": 1.4},
+	"cap_dim": {"albedo": Color(0.16, 0.22, 0.3), "emission": Color(0.25, 0.45, 0.6), "emission_energy": 0.45},
+	"spore_glow": {"albedo": Color(0.6, 0.95, 0.7), "emission": Color(0.55, 1.0, 0.65), "emission_energy": 3.0},
+	"mushroom_cap": {"albedo": Color(0.85, 0.35, 0.55), "emission": Color(1.0, 0.45, 0.7), "emission_energy": 1.2},
+	# Gates (addendum gate table): each reads at a glance, colour plus shape.
+	"ward_gold": {"albedo": Color(0.85, 0.65, 0.2), "metallic": 0.7, "emission": Color(1.0, 0.75, 0.25), "emission_energy": 0.8},
+	"crystal": {"albedo": Color(0.4, 0.8, 1.0), "emission": Color(0.45, 0.9, 1.0), "emission_energy": 2.0},
+	"rune_dark": {"albedo": Color(0.1, 0.1, 0.16), "emission": Color(0.3, 0.3, 0.55), "emission_energy": 0.6},
+	"masonry": {"albedo": Color(0.35, 0.28, 0.24), "emission": Color(1.0, 0.45, 0.1), "emission_energy": 0.35},
+	"flood": {"albedo": Color(0.08, 0.2, 0.3), "roughness": 0.1, "metallic": 0.3},
+	"lock_bars": {"albedo": Color(0.3, 0.3, 0.34), "metallic": 0.6, "emission": Color(0.8, 0.2, 0.2), "emission_energy": 0.4},
+	"altar_stone": {"albedo": Color(0.55, 0.55, 0.6), "roughness": 0.6},
 }
 
 static var _cache: Dictionary[String, StandardMaterial3D] = {}

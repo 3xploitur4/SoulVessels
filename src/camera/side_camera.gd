@@ -13,6 +13,10 @@ extends Camera3D
 var target: Node3D
 ## Arena x limits the view must not cross.
 var bounds: Vector2 = Vector2(-21.0, 21.0)
+## Room y limits (bottom, top) the view must not cross; ignored while `use_v_bounds` is false
+## (the sandbox arena has no ceiling in view).
+var v_bounds: Vector2 = Vector2(0.0, 12.0)
+var use_v_bounds: bool = false
 ## Distance from the play plane.
 var distance: float = 14.0
 ## Height of the camera above the target's feet.
@@ -76,13 +80,31 @@ func _update_transform(_delta: float) -> void:
 	var x := _focus.x + _lead
 	if bounds.y - bounds.x > half_width * 2.0:
 		x = clampf(x, bounds.x + half_width, bounds.y - half_width)
+	elif use_v_bounds:
+		x = (bounds.x + bounds.y) * 0.5
 	var d := distance * (1.0 - 0.4 * zoom_in)
-	var pos := Vector3(x, maxf(_focus.y, 0.0) + height, d)
+	var cam_y := _focus.y + height
+	if use_v_bounds:
+		cam_y = _clamp_height(cam_y)
+	else:
+		cam_y = maxf(_focus.y, 0.0) + height
+	var pos := Vector3(x, cam_y, d)
 	var shake := _trauma * _trauma * shake_scale
 	if shake > 0.0:
 		pos += Vector3(_rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0), 0.0) * 0.35 * shake
 	global_position = pos
 	look_at(Vector3(x, pos.y - 1.1, 0.0), Vector3.UP)
+
+
+## Keep the visible band inside `v_bounds`. The camera looks 1.1 m below its own height, so the
+## view centre on the play plane is `cam_y - 1.1`, with `half_h` above and below it.
+func _clamp_height(cam_y: float) -> float:
+	var half_h := tan(deg_to_rad(fov) * 0.5) * distance
+	var lo := v_bounds.x + half_h + 1.1
+	var hi := v_bounds.y - half_h + 1.1
+	if hi < lo:
+		return (v_bounds.x + v_bounds.y) * 0.5 + 1.1
+	return clampf(cam_y, lo, hi)
 
 
 func _half_view_width() -> float:

@@ -27,6 +27,8 @@ const DISSOLVE_S := 0.4
 
 ## Data id in data/balance/enemies/.
 var enemy_id: String = ""
+## Stable id of the room spawn that made this enemy ("room:index"), "" outside rooms.
+var spawn_id: String = ""
 var data: Dictionary = {}
 var world: CombatWorld
 var rng_seed: int = 1

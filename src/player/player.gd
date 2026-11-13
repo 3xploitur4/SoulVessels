@@ -30,6 +30,11 @@ const CAPSULE_HEIGHT := 1.8
 const HURT_RECT := Vector2(0.8, 1.75)
 const FLINCH_S := 0.28
 const RESPAWN_S := 2.5
+## Collision layers (project.godot names): one-way platforms and shadow-veil curtains.
+const LAYER_ONEWAY := 1 << 8
+const LAYER_VEIL := 1 << 9
+## How long "down + jump" ignores one-way platforms.
+const DROP_THROUGH_S := 0.25
 
 ## Combat registry (injected).
 var world: CombatWorld
@@ -84,11 +89,15 @@ var _move: Dictionary = {}
 var _move_axis: Vector2 = Vector2.ZERO
 ## Enemies currently hunting the player: while any exist, the Soul Gauge counts as in combat.
 var _aggro_ids: Dictionary[int, bool] = {}
+## One-way platforms of the current room and whether each currently collides.
+var _platforms: Array[StaticBody3D] = []
+var _platform_solid: Dictionary[int, bool] = {}
+var _drop_left: float = 0.0
 
 
 func _ready() -> void:
 	collision_layer = 1 << 1
-	collision_mask = 1
+	collision_mask = 1 | LAYER_ONEWAY | LAYER_VEIL
 	axis_lock_linear_z = true
 	floor_snap_length = 0.3
 	var shape := CollisionShape3D.new()
@@ -369,6 +378,17 @@ func respawn() -> void:
 	respawned.emit()
 
 
+## The current room's one-way platforms (story 015). Each collides only while the feet are at or
+## above its top and the player is not dropping through.
+func set_room_platforms(bodies: Array[StaticBody3D]) -> void:
+	for b in _platforms:
+		if is_instance_valid(b):
+			remove_collision_exception_with(b)
+	_platforms = bodies.duplicate()
+	_platform_solid.clear()
+	_update_platforms(0.0)
+
+
 func on_floor() -> bool:
 	return is_on_floor()
 
@@ -419,6 +439,7 @@ func _physics_process(delta: float) -> void:
 		return
 	_move_axis = controls.move_axis() if input_enabled else Vector2.ZERO
 	_read_buttons(delta)
+	_update_platforms(delta)
 	if action != null:
 		_run_action(delta)
 	else:
@@ -543,13 +564,44 @@ func _free_move(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, target_vx, accel * delta)
 	if absf(_move_axis.x) > 0.2:
 		set_facing(int(signf(_move_axis.x)))
-	if _jump_buffer_left > 0.0 and (is_on_floor() or _coyote_left > 0.0):
+	if _jump_buffer_left > 0.0 and is_on_floor() and _move_axis.y > 0.5 and _standing_on_platform():
+		# Down + jump drops through a one-way platform.
+		_drop_left = DROP_THROUGH_S
+		_jump_buffer_left = 0.0
+		_update_platforms(0.0)
+	elif _jump_buffer_left > 0.0 and (is_on_floor() or _coyote_left > 0.0):
 		velocity.y = float(_move.get("jump_velocity", 11.5))
 		_jump_buffer_left = 0.0
 		_coyote_left = 0.0
 		Sfx.play("jump")
 	if input_enabled and controls.just_released("jump") and velocity.y > 0.0:
 		velocity.y *= 0.5
+
+
+func _update_platforms(delta: float) -> void:
+	_drop_left = maxf(_drop_left - delta, 0.0)
+	for b in _platforms:
+		if not is_instance_valid(b):
+			continue
+		var top := b.global_position.y + 0.125
+		var solid := _drop_left <= 0.0 and global_position.y >= top - 0.06 and velocity.y <= 0.5
+		var key := b.get_instance_id()
+		if _platform_solid.get(key, true) == solid and _platform_solid.has(key):
+			continue
+		_platform_solid[key] = solid
+		if solid:
+			remove_collision_exception_with(b)
+		else:
+			add_collision_exception_with(b)
+
+
+func _standing_on_platform() -> bool:
+	for b in _platforms:
+		if is_instance_valid(b) and absf(global_position.y - (b.global_position.y + 0.125)) < 0.08:
+			var half := (b.get_child(0) as CollisionShape3D).shape.get("size").x * 0.5 as float
+			if absf(global_position.x - b.global_position.x) <= half + CAPSULE_RADIUS:
+				return true
+	return false
 
 
 func _apply_gravity(delta: float) -> void:

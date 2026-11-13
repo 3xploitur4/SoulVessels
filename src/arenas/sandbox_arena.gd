@@ -167,37 +167,9 @@ func _build_foreground(z: float) -> void:
 		drip.rotation_degrees.z = 8.0 if x > 0.0 else -6.0
 
 
-## Merge every decorative mesh into one mesh per material and shadow setting (story 005: draw
-## calls). Only meshes near the play plane (|z| < 3) cast shadows: a column at z = -6 throws its
-## shadow behind the floor, where nobody sees it, and would cost a shadow draw anyway.
+## Merge decoration into one mesh per material (see MeshMerger).
 func _merge_static_meshes() -> void:
-	var groups: Dictionary = {}
-	var originals: Array[MeshInstance3D] = []
-	for node in find_children("*", "MeshInstance3D", true, false):
-		var mi := node as MeshInstance3D
-		if mi.mesh == null or mi.material_override == null or mi.has_meta("dynamic"):
-			continue
-		var casts := absf(mi.global_position.z) < 3.0
-		var key := "%d_%s" % [mi.material_override.get_instance_id(), casts]
-		if not groups.has(key):
-			var st := SurfaceTool.new()
-			st.begin(Mesh.PRIMITIVE_TRIANGLES)
-			groups[key] = {"st": st, "mat": mi.material_override, "casts": casts}
-		var g: Dictionary = groups[key]
-		var xform := global_transform.affine_inverse() * mi.global_transform
-		(g["st"] as SurfaceTool).append_from(mi.mesh, 0, xform)
-		originals.append(mi)
-	for key: String in groups.keys():
-		var g: Dictionary = groups[key]
-		var merged := MeshInstance3D.new()
-		merged.name = "Merged_%s" % key
-		merged.mesh = (g["st"] as SurfaceTool).commit()
-		merged.material_override = g["mat"]
-		merged.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if g["casts"] 			else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		add_child(merged)
-	for mi in originals:
-		mi.get_parent().remove_child(mi)
-		mi.queue_free()
+	MeshMerger.merge(self)
 
 
 func _static_box(pos: Vector3, size: Vector3, material: String) -> StaticBody3D:

@@ -105,17 +105,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Spawn enemy `enemy_id` at x on the floor. Returns the enemy, or null for an unknown id.
 func spawn(enemy_id: String, x: float) -> EnemyBase:
-	var e: EnemyBase
-	match enemy_id:
-		"echo_crawler":
-			e = EchoCrawler.new()
-		"subterranean_watcher":
-			e = SubterraneanWatcher.new()
-		"branded_warden":
-			e = BrandedWarden.new()
-		_:
-			push_error("sandbox: unknown enemy %s" % enemy_id)
-			return null
+	var e := EnemyFactory.create(enemy_id)
+	if e == null:
+		return null
 	_spawn_seed += 1
 	e.world = world
 	e.rng_seed = _spawn_seed
