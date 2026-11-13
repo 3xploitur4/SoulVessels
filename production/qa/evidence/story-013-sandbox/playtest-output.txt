@@ -1,0 +1,58 @@
+--- boot
+PASS  boot: player alive on the floor                hp=460.0 y=0.0
+PASS  boot: soul HP = 300 + loadout bonuses          hp_max=460.0
+PASS  boot: Caelan active                            
+PASS  boot: music playing                            state=explore
+--- movement
+PASS  move: Caelan runs right ~speed m/s             moved 5.83 m in 1 s (speed 6.0)
+PASS  jump: apex above 1.5 m                         y=1.56
+PASS  jump: lands again                              
+--- dodge
+PASS  dodge: i-frames during the roll                
+PASS  dodge: costs the data's stamina                spent 20.0 (data 20.0)
+PASS  air-dash: moves ~4 m horizontally              dx=4.00
+--- crawler_kill
+PASS  crawler: dies to Caelan's combo                presses=3 left=[]
+PASS  crawler: Soul Gauge gained from hits + kill    gauge=11.0
+--- crawler_telegraph
+PASS  crawler: telegraphs before the lunge           
+PASS  crawler: crimson boom cue played               sfx=4
+PASS  crawler: lunge damages a player who stands still hp 460.0 -> 448.4
+PASS  crawler: unblockable goes through Royal Guard  
+--- block_parry
+PASS  block: halberd thrust blocked, no HP lost      hp 460.0 -> 460.0
+PASS  block: stamina paid per blocked hit            stamina 100.0 -> 90.0
+PASS  parry: Counterstrike opens the Warden's guard  attempt 1, warden posture 35.0, state hurt
+PASS  parry: perfect parry fills Soul Gauge          gauge=10.0
+--- warden_shield
+PASS  warden: shield cuts frontal damage             front hit 6.7
+PASS  warden: Shadowstep puts Nyra behind it         player x 0.1 warden x -3.2 facing -1
+PASS  warden: backstab from behind lands hard        back hit 60.5 vs front 6.7
+--- swap
+PASS  swap: Nyra active                              
+PASS  swap: global cooldown running                  swap_cd=1.1
+PASS  swap: Severing Arrival strikes the nearest enemy dealt 90.0
+PASS  swap: music lead follows the Vessel            
+PASS  swap: blocked while on cooldown                
+--- nyra
+PASS  nyra: Shadowstep travels ~6 m                  dx=-5.83
+PASS  nyra: hold = Vanishing Act (hidden)            
+PASS  nyra: Phantom Blades hit at range              hp 90.0 -> 7.7
+PASS  nyra: Phantom Blades on cooldown               
+--- ultimates
+PASS  ultimate: Final Stand fires                    state=ultimate
+PASS  ultimate: costs 2 bars                         bars=1 gauge=121.0
+PASS  ultimate: 6 m AoE hits all nearby crawlers     left=[]
+PASS  ultimate: Dance of Shadows lands many slashes  warden hp 900.0 -> 495.7
+--- sync_guard
+PASS  sync guard: inactive Nyra swaps in and evades the lunge guard=nyra vessel=nyra hp=460.0/460.0
+PASS  sync guard: Caelan blocks a lethal blow (1 bar) guard=caelan hp=5.0 gauge=50.0
+--- watcher
+PASS  watcher: charges its beam                      
+PASS  watcher: beam hurts a player in its sweep      hp=401.8
+--- music
+PASS  music: director clock matches audio playback   drift 0.000 s
+PASS  music: an elite in range asks for the elite layer state=combat pending=elite
+PASS  music: change lands on a 4-bar boundary        at 54.858 s, 4 bars = 13.714 s, off 0.001
+PASS  music: elite stem audible, others per state    stems {'bed': -4.0, 'combat': -5.0, 'elite': -5.0, 'lead_caelan': -6.0, 'lead_nyra': -60.0, 'pulse': -6.0}
+SUMMARY: 44 passed, 0 failed

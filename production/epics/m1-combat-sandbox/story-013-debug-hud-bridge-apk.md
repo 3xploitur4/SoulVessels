@@ -1,6 +1,6 @@
 # Story 013: Debug HUD, playtest bridge, evidence and sandbox APK
 
-> **Epic**: M1 — Combat Sandbox · **Status**: Ready · **Layer**: Presentation · **Type**: Integration · **Estimate**: M
+> **Epic**: M1 — Combat Sandbox · **Status**: Done (2026-11-13) · **Layer**: Presentation · **Type**: Integration · **Estimate**: M
 
 ## Context
 
@@ -22,3 +22,9 @@ so you can test the game yourself". Milestone rule: ends with an installable And
 ## Dependencies
 
 - Depends on: 009, 010, 011, 012, `../m0-setup/story-003-android-export.md` · Unlocks: M2
+
+---
+
+## Completion
+
+44/44 scripted playtest checks; Android 16 emulator boot and bridge over adb. Evidence: production/qa/evidence/story-013-sandbox/evidence.md.

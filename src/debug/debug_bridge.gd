@@ -1,0 +1,194 @@
+class_name DebugBridge
+extends Node
+## Command handler behind the playtest bridge (story 013). The kit's `Bridge` node speaks
+## newline JSON over 127.0.0.1:9177 (or BRIDGE_PORT) and calls `run_command` here. Enabled in
+## debug builds or with `--bridge`. Drive it with `tools/mcp/bridge_client.py` or the kit's MCP
+## server.
+##
+## Commands:
+##   ping                          -> {"pong": true}
+##   get_state                     -> player, enemies, music, fps, wave
+##   get_value {key}               -> a Balance value by dotted path ("combat.stamina.dodge_cost")
+##   set_value {key, value}        -> live tuning (memory only)
+##   sim_input {action, seconds}   -> hold an input action for `seconds` (0 = one tap)
+##   press {action} / release {action}
+##   axis {x, y}                   -> set the touch-joystick axis (bots steer with it)
+##   touch {x, y, pressed, index} / drag {x, y, index}  -> real screen-touch events (window pixels)
+##   joypad {button}               -> a real gamepad button press + release
+##   screenshot {path}             -> PNG of the next frame, path relative to the project root
+##   window_size {size}            -> get or set [w, h]
+##   spawn {enemy_id, x}           -> spawn an enemy
+##   kill_all                      -> clear enemies (and stop waves)
+##   set_vessel {id}               -> free swap to a Vessel in the loadout
+##   swap {index}                  -> normal swap (cooldown + Resonance Strike)
+##   teleport {x, y}
+##   gauge {value}                 -> set the Soul Gauge
+##   heal                          -> full HP
+##   set_hp {hp} / set_stamina {value}
+##   music_state {state}           -> force a music state ("" = automatic)
+##   wait {seconds}                -> real-time wait (frames keep running)
+##   rng_sample {n, reseed}        -> sample the global RNG (determinism checks)
+##   quit
+
+var sandbox: Node
+
+
+func run_command(cmd: String, args: Dictionary) -> Variant:
+	var player: Player = sandbox.get("player")
+	match cmd:
+		"ping":
+			return {"pong": true, "frame": Engine.get_physics_frames()}
+		"get_state":
+			return _state()
+		"get_value":
+			return {"key": args.get("key", ""), "value": Balance.get_value(str(args.get("key", "")))}
+		"set_value":
+			var ok := Balance.set_value(str(args.get("key", "")), args.get("value"))
+			return {"ok": ok} if ok else {"error": "unknown key %s" % args.get("key", "")}
+		"sim_input":
+			var action := str(args.get("action", ""))
+			if not InputMap.has_action(action):
+				return {"error": "unknown action %s" % action}
+			Input.action_press(action)
+			var seconds := float(args.get("seconds", 0.0))
+			if seconds > 0.0:
+				await get_tree().create_timer(seconds, true, false, true).timeout
+			else:
+				await get_tree().physics_frame
+				await get_tree().physics_frame
+			Input.action_release(action)
+			await get_tree().physics_frame
+			return {"action": action, "seconds": seconds}
+		"press":
+			Input.action_press(str(args.get("action", "")))
+			return {"ok": true}
+		"release":
+			Input.action_release(str(args.get("action", "")))
+			return {"ok": true}
+		"touch":
+			# A real screen touch through the input pipeline (touch UI, device switching).
+			var t := InputEventScreenTouch.new()
+			t.index = int(args.get("index", 0))
+			t.position = Vector2(float(args.get("x", 0.0)), float(args.get("y", 0.0)))
+			t.pressed = bool(args.get("pressed", true))
+			Input.parse_input_event(t)
+			await get_tree().process_frame
+			return {"ok": true}
+		"drag":
+			var d := InputEventScreenDrag.new()
+			d.index = int(args.get("index", 0))
+			d.position = Vector2(float(args.get("x", 0.0)), float(args.get("y", 0.0)))
+			Input.parse_input_event(d)
+			await get_tree().process_frame
+			return {"ok": true}
+		"joypad":
+			# A real gamepad button press and release (hides the touch UI).
+			var j := InputEventJoypadButton.new()
+			j.button_index = int(args.get("button", JOY_BUTTON_A)) as JoyButton
+			j.pressed = true
+			Input.parse_input_event(j)
+			await get_tree().process_frame
+			j = j.duplicate() as InputEventJoypadButton
+			j.pressed = false
+			Input.parse_input_event(j)
+			await get_tree().process_frame
+			return {"device": (sandbox.get("input_router") as InputRouter).device}
+		"axis":
+			var router: InputRouter = sandbox.get("input_router")
+			router.touch_axis = Vector2(float(args.get("x", 0.0)), float(args.get("y", 0.0)))
+			return {"axis": [router.touch_axis.x, router.touch_axis.y]}
+		"screenshot":
+			return await _screenshot(str(args.get("path", "shots/screenshot.png")))
+		"window_size":
+			var size: Variant = args.get("size")
+			if size is Array and (size as Array).size() == 2:
+				DisplayServer.window_set_size(Vector2i(int(size[0]), int(size[1])))
+				await get_tree().process_frame
+			var s := DisplayServer.window_get_size()
+			return {"size": [s.x, s.y]}
+		"spawn":
+			var e: EnemyBase = sandbox.call("spawn", str(args.get("enemy_id", "echo_crawler")), float(args.get("x", 5.0)))
+			return {"error": "unknown enemy"} if e == null else {"name": e.name, "x": e.global_position.x}
+		"kill_all":
+			sandbox.set("waves_enabled", false)
+			sandbox.call("kill_all")
+			await get_tree().process_frame
+			return {"ok": true}
+		"set_vessel":
+			var idx := player.loadout.index_of(str(args.get("id", "")))
+			if idx < 0:
+				return {"error": "vessel not in loadout"}
+			player.try_swap(idx, true)
+			return {"vessel": player.loadout.active().id}
+		"swap":
+			return {"swapped": player.try_swap(int(args.get("index", 1))), "vessel": player.loadout.active().id}
+		"teleport":
+			player.teleport(float(args.get("x", 0.0)), float(args.get("y", 0.2)))
+			return {"ok": true}
+		"gauge":
+			player.gauge.value = 0.0
+			player.gauge.add(float(args.get("value", 300.0)))
+			return {"gauge": player.gauge.value}
+		"heal":
+			player.health.reset()
+			return {"hp": player.health.current}
+		"set_hp":
+			player.health.current = clampf(float(args.get("hp", 1.0)), 1.0, player.health.max_value)
+			GameEvents.player_hp_changed.emit(player.health.current, player.health.max_value)
+			return {"hp": player.health.current}
+		"set_stamina":
+			player.loadout.active().stamina.value = float(args.get("value", 100.0))
+			return {"stamina": player.loadout.active().stamina.value}
+		"music_state":
+			MusicDirector.force_state(str(args.get("state", "")))
+			return {"state": MusicDirector.state, "pending": MusicDirector.pending_state}
+		"wait":
+			await get_tree().create_timer(float(args.get("seconds", 1.0)), true, false, true).timeout
+			return {"frame": Engine.get_physics_frames()}
+		"rng_sample":
+			if bool(args.get("reseed", false)):
+				seed(12345)
+			var out: Array[float] = []
+			for i in range(int(args.get("n", 4))):
+				out.append(randf())
+			return {"values": out}
+		"quit":
+			get_tree().quit.call_deferred()
+			return {"ok": true}
+	return {"error": "unknown command %s" % cmd}
+
+
+func _state() -> Dictionary:
+	var player: Player = sandbox.get("player")
+	var list: Array = []
+	for e: EnemyBase in sandbox.call("enemies"):
+		list.append(e.snapshot())
+	var debug_hud: DebugHud = sandbox.get("debug_hud")
+	return {
+		"frame": Engine.get_physics_frames(),
+		"fps": Engine.get_frames_per_second(),
+		"player": player.snapshot(),
+		"enemies": list,
+		"music": {"state": MusicDirector.state, "pending": MusicDirector.pending_state,
+			"vessel": MusicDirector.vessel, "t": snappedf(MusicDirector.song_time(), 0.01),
+			"playing": MusicDirector.is_playing(), "history": MusicDirector.history,
+			"drift": snappedf(MusicDirector.clock_drift(), 0.001),
+			"stems": {"bed": MusicDirector.stem_db("bed"), "pulse": MusicDirector.stem_db("pulse"),
+				"combat": MusicDirector.stem_db("combat"), "elite": MusicDirector.stem_db("elite"),
+				"lead_caelan": MusicDirector.stem_db("lead_caelan"), "lead_nyra": MusicDirector.stem_db("lead_nyra")}},
+		"wave": sandbox.get("wave_index"),
+		"touch_visible": (sandbox.get("touch") as CanvasLayer).visible,
+		"sfx": Sfx.play_counts,
+		"debug": debug_hud.text() if debug_hud != null else "",
+	}
+
+
+func _screenshot(path: String) -> Dictionary:
+	var full := path if path.is_absolute_path() else ProjectSettings.globalize_path("res://").path_join(path)
+	DirAccess.make_dir_recursive_absolute(full.get_base_dir())
+	await RenderingServer.frame_post_draw
+	var img := get_viewport().get_texture().get_image()
+	var err := img.save_png(full)
+	if err != OK:
+		return {"error": "save failed %d" % err}
+	return {"path": full, "size": [img.get_width(), img.get_height()]}
