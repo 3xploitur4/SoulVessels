@@ -181,6 +181,17 @@ func _draw_wheel(top_right: Vector2) -> void:
 
 ## A tiny emblem per Vessel: shield for Caelan, crossed blades for Nyra, a gem for the rest.
 func _draw_portrait(c: Vector2, s: float, id: String, col: Color) -> void:
+	# The face from the Vessel's painting when there is one (story 027); the emblem otherwise.
+	var face: Array = SpriteArt.spec(id).get("portrait", []) if SpriteArt.has(id) else []
+	if face.size() == 4:
+		var tex := SpriteArt.texture(id)
+		var size := Vector2(tex.get_size())
+		var src := Rect2(Vector2(float(face[0]), float(face[1])) * size,
+			Vector2(float(face[2]) - float(face[0]), float(face[3]) - float(face[1])) * size)
+		# The square that fits inside the portrait circle.
+		var half := s * 0.86
+		_canvas.draw_texture_rect_region(tex, Rect2(c - Vector2(half, half), Vector2(half, half) * 2.0), src)
+		return
 	var light := col.lightened(0.45)
 	match id:
 		"caelan":

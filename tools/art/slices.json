@@ -1,0 +1,40 @@
+{
+  "_source": "Story 027. Which figures to cut from each concept sheet, in reading order. 'rows' are y bands (top, bottom) that hold one row of figures; 'names' lists the figures of each row left to right; 'erase' rectangles (x, y, w, h) are text labels to ignore. 'panels' cuts the zone paintings (x, y, w, h).",
+  "sheets": [
+    {
+      "file": "docs/design/concept-art/vessels.webp",
+      "out": "assets/art/sprites",
+      "min_area": 5000,
+      "attach_px": 34,
+      "upscale": 2,
+      "rows": [[0, 559]],
+      "names": [["caelan", "nyra", "seris", "darius", "ilyr"]],
+      "protect": [[19, 51, 262, 475]]
+    },
+    {
+      "file": "docs/design/concept-art/enemies.webp",
+      "out": "assets/art/sprites",
+      "min_area": 4000,
+      "attach_px": 22,
+      "upscale": 2,
+      "rows": [[0, 246], [290, 524]],
+      "names": [
+        ["echo_crawler", "subterranean_watcher", "calcified_husk", "branded_warden", "choir_prelate"],
+        ["weeping_sovereign", "guardian_below", "abyssal_leviathan"]
+      ],
+      "erase": [[0, 243, 1024, 50], [0, 523, 1024, 36]]
+    }
+  ],
+  "panels": [
+    {
+      "file": "docs/design/concept-art/zones.webp",
+      "out": "assets/art/backdrops",
+      "rects": {
+        "zone1": [3, 3, 506, 272],
+        "zone2": [516, 3, 505, 272],
+        "zone3": [3, 284, 506, 272],
+        "zone4": [516, 284, 505, 272]
+      }
+    }
+  ]
+}

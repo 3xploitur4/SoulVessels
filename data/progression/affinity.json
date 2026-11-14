@@ -1,0 +1,20 @@
+{
+  "_source": "Story 020. Addendum 'Affinity (trust), 0-5 per Vessel': XP from time active in combat, kills, perfect parries and dodges; reading that Vessel's lore at a Soul Altar gives +1 level each. Level 1 unlocks the Vessel memory (lore), 2 Sync Guard, 3 Sync Ultimate and +5% stats, 4 Echo Bonus +50%, 5 signature passive. Thresholds (decision D-028): a first pass of Zone 1 (about 40 kills, 5 minutes in combat) brings Caelan to 3; Nyra reaches 2-3 by the end of Zone 2, reading her memory gives the last level.",
+  "level_xp": [
+    0,
+    40,
+    120,
+    300,
+    650,
+    1100
+  ],
+  "max_level": 5,
+  "memory_level": 1,
+  "xp": {
+    "combat_s": 0.6,
+    "kill": 4,
+    "elite_kill": 40,
+    "perfect_parry": 6,
+    "perfect_dodge": 4
+  }
+}

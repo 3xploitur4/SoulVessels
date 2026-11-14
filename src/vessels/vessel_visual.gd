@@ -34,6 +34,9 @@ var _is_dagger_user: bool = false
 static func build(vessel_data: Dictionary) -> VesselVisual:
 	if str(vessel_data.get("silhouette", {}).get("style", "")) == "wisp":
 		return WispVisual.build_wisp(vessel_data)
+	# Painted art wins over the primitive placeholder whenever a sprite exists (story 027).
+	if SpriteArt.has(str(vessel_data.get("id", ""))):
+		return VesselSpriteVisual.build_sprite(vessel_data)
 	var v := VesselVisual.new()
 	v.name = "Vessel_%s" % str(vessel_data.get("id", "unknown"))
 	v._build(vessel_data.get("silhouette", {}))

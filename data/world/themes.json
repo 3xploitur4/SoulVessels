@@ -1,35 +1,51 @@
 {
-  "_source": "Story 015. Per-zone look: environment, key light, the materials rooms are built from, and the decor style. Material names are ArenaMaterials.PALETTE keys (swap point for final art).",
+  "_source": "Stories 015/028. Per-zone look: environment, key light, the materials rooms are built from (ArenaMaterials.PALETTE keys: rock = big masses touching the room edge, ledge = floating platforms, trim = the walkable top), the decor style and the backdrop painting cut from the zone concept sheet (decision D-033). backdrop_tint darkens the painting so the play plane stays the brightest thing on screen.",
   "cavern": {
     "background": "#04060a",
-    "ambient": "#5c6b8c",
-    "ambient_energy": 0.55,
-    "fog": "#0f1724",
-    "fog_begin": 15.0,
-    "fog_end": 46.0,
-    "key_color": "#9eb8f2",
-    "key_energy": 1.25,
-    "key_rotation": [-38.0, -28.0, 0.0],
-    "rock": "slate_floor",
-    "trim": "marble",
+    "ambient": "#8791a6",
+    "ambient_energy": 0.75,
+    "fog": "#0b131d",
+    "fog_begin": 14.0,
+    "fog_end": 48.0,
+    "key_color": "#cfdaf0",
+    "key_energy": 1.3,
+    "key_rotation": [
+      -38.0,
+      -28.0,
+      0.0
+    ],
+    "rock": "z1_rock",
+    "trim": "z1_top",
     "decor": "aqueduct",
     "warm_light": "#ff9447",
-    "cool_light": "#59d9ff"
+    "cool_light": "#59d9ff",
+    "ledge": "z1_ledge",
+    "backdrop": "res://assets/art/backdrops/zone1.png",
+    "backdrop_tint": "#8c9bb8",
+    "glow": 0.55
   },
   "mycelium": {
     "background": "#05040a",
-    "ambient": "#4f6e7a",
-    "ambient_energy": 0.8,
-    "fog": "#0a1418",
+    "ambient": "#5f8a96",
+    "ambient_energy": 0.85,
+    "fog": "#07201f",
     "fog_begin": 13.0,
-    "fog_end": 44.0,
-    "key_color": "#a8d8c8",
-    "key_energy": 1.1,
-    "key_rotation": [-42.0, 24.0, 0.0],
-    "rock": "myc_rock",
-    "trim": "myc_trim",
+    "fog_end": 46.0,
+    "key_color": "#a8e8d8",
+    "key_energy": 1.15,
+    "key_rotation": [
+      -42.0,
+      24.0,
+      0.0
+    ],
+    "rock": "z2_rock",
+    "trim": "z2_top",
     "decor": "mushrooms",
     "warm_light": "#ff7ab8",
-    "cool_light": "#5cf2c2"
+    "cool_light": "#5cf2c2",
+    "ledge": "z2_ledge",
+    "backdrop": "res://assets/art/backdrops/zone2.png",
+    "backdrop_tint": "#9aa6b4",
+    "glow": 0.75
   }
 }

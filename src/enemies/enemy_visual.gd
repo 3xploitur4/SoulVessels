@@ -30,6 +30,9 @@ var _phase: float = 0.0
 
 
 static func build(enemy_data: Dictionary) -> EnemyVisual:
+	# Painted art wins over the primitive placeholder whenever a sprite exists (story 027).
+	if SpriteArt.has(str(enemy_data.get("id", ""))):
+		return EnemySpriteVisual.build_sprite(enemy_data)
 	var v := EnemyVisual.new()
 	var sil: Dictionary = enemy_data.get("silhouette", {})
 	v.kind = str(sil.get("kind", "arachnid"))
@@ -97,6 +100,11 @@ func _build_watcher(sil: Dictionary) -> void:
 	weapon = ring
 	eye = _part(self, _sphere_mesh(r * 0.32), Vector3(r * 0.85, 0.0, 0.0), _tell_mat)
 	_tell_parts.append(eye)
+	_build_lines(cyan)
+
+
+## The Watcher's beam and aim line (thin boxes scaled along x by the enemy script).
+func _build_lines(cyan: Color) -> void:
 	var beam_mesh := BoxMesh.new()
 	beam_mesh.size = Vector3(1.0, 0.22, 0.22)
 	beam = MeshInstance3D.new()

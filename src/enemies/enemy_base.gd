@@ -67,7 +67,8 @@ func _ready() -> void:
 	rng.seed = rng_seed
 	tier = str(data.get("tier", "common"))
 	collision_layer = 1 << 2
-	collision_mask = 1
+	# World, one-way platforms, veil curtains and the room's enemy-only side walls.
+	collision_mask = 1 | (1 << 8) | (1 << 9) | (1 << 10)
 	axis_lock_linear_z = true
 	health = Health.new(float(data.get("hp", 100.0)))
 	posture = Posture.for_enemy(float(data.get("posture", 50.0)))

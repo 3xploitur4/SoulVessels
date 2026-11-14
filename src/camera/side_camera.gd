@@ -17,10 +17,11 @@ var bounds: Vector2 = Vector2(-21.0, 21.0)
 ## (the sandbox arena has no ceiling in view).
 var v_bounds: Vector2 = Vector2(0.0, 12.0)
 var use_v_bounds: bool = false
-## Distance from the play plane.
-var distance: float = 14.0
+## Distance from the play plane. 11.5 m shows 7.25 m of height: a Vessel fills about a quarter
+## of the screen, so the painted art reads on a phone (decision D-032).
+var distance: float = 11.5
 ## Height of the camera above the target's feet.
-var height: float = 2.9
+var height: float = 2.5
 ## Metres the view leads in the facing direction.
 var look_ahead: float = 2.0
 ## Target may move this far up or down before the camera follows.

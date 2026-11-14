@@ -43,7 +43,41 @@ const PALETTE := {
 	"flood": {"albedo": Color(0.08, 0.2, 0.3), "roughness": 0.1, "metallic": 0.3},
 	"lock_bars": {"albedo": Color(0.3, 0.3, 0.34), "metallic": 0.6, "emission": Color(0.8, 0.2, 0.2), "emission_energy": 0.4},
 	"altar_stone": {"albedo": Color(0.55, 0.55, 0.6), "roughness": 0.6},
+	# --- Art pass (story 028): textured, world-space (triplanar) surfaces after the zone paintings.
+	# "tex" is a file in assets/art/textures, "tile_m" the metres one tile covers.
+	# Zone 1, The Whispering Cavern: blue-grey rock, ashlar ruins, pale worn slabs, teal pools.
+	"z1_rock": {"albedo": Color(0.2, 0.23, 0.3), "roughness": 0.95, "tex": "cave_rock", "tile_m": 7.0},
+	"z1_ledge": {"albedo": Color(0.44, 0.47, 0.55), "roughness": 0.85, "tex": "stone_blocks", "tile_m": 3.0},
+	"z1_top": {"albedo": Color(0.62, 0.66, 0.74), "roughness": 0.6, "tex": "slab", "tile_m": 3.0},
+	"z1_ruin_mid": {"albedo": Color(0.2, 0.23, 0.29), "roughness": 0.9, "tex": "stone_blocks", "tile_m": 3.5},
+	"z1_ruin_far": {"albedo": Color(0.1, 0.12, 0.16), "roughness": 0.95, "tex": "stone_blocks", "tile_m": 4.5},
+	"z1_pool": {"albedo": Color(0.04, 0.3, 0.32), "emission": Color(0.2, 0.95, 0.88), "emission_energy": 1.5, "roughness": 0.1},
+	"silhouette": {"albedo": Color(0.008, 0.01, 0.018), "roughness": 1.0},
+	# Zone 2, The Luminous Mycelium Forest: violet-dark rock, glowing moss, teal and violet caps.
+	"z2_rock": {"albedo": Color(0.2, 0.17, 0.3), "roughness": 0.95, "tex": "cave_rock", "tile_m": 7.0},
+	"z2_ledge": {"albedo": Color(0.4, 0.34, 0.5), "roughness": 0.9, "tex": "myc_bark", "tile_m": 3.0},
+	"z2_top": {"albedo": Color(0.26, 0.62, 0.55), "roughness": 0.85, "tex": "moss", "tile_m": 3.0,
+		"emission": Color(0.15, 0.7, 0.6), "emission_energy": 0.32, "emission_tex": true},
+	"z2_stalk": {"albedo": Color(0.72, 0.86, 0.86), "roughness": 0.8, "tex": "myc_bark", "tile_m": 2.5,
+		"emission": Color(0.25, 0.55, 0.55), "emission_energy": 0.25},
+	"z2_stalk_far": {"albedo": Color(0.2, 0.3, 0.36), "roughness": 0.9, "tex": "myc_bark", "tile_m": 4.0},
+	"z2_cap_teal": {"albedo": Color(0.2, 0.7, 0.62), "roughness": 0.6, "tex": "cap_spots", "tile_m": 3.0,
+		"emission": Color(0.18, 0.85, 0.72), "emission_energy": 0.8, "emission_tex": true},
+	"z2_cap_violet": {"albedo": Color(0.5, 0.34, 0.74), "roughness": 0.6, "tex": "cap_spots", "tile_m": 3.0,
+		"emission": Color(0.55, 0.34, 0.85), "emission_energy": 0.8, "emission_tex": true},
+	"z2_cap_far_teal": {"albedo": Color(0.12, 0.42, 0.42), "roughness": 0.8, "tex": "cap_spots", "tile_m": 5.0,
+		"emission": Color(0.12, 0.55, 0.5), "emission_energy": 0.7, "emission_tex": true},
+	"z2_cap_far_violet": {"albedo": Color(0.3, 0.2, 0.46), "roughness": 0.8, "tex": "cap_spots", "tile_m": 5.0,
+		"emission": Color(0.36, 0.22, 0.6), "emission_energy": 0.7, "emission_tex": true},
+	"z2_gill": {"albedo": Color(0.08, 0.16, 0.2), "roughness": 1.0},
+	"z2_vine": {"albedo": Color(0.06, 0.16, 0.13), "roughness": 1.0},
+	"z2_sprout": {"albedo": Color(1.0, 0.5, 0.8), "emission": Color(1.0, 0.45, 0.8), "emission_energy": 2.2},
+	"planks": {"albedo": Color(0.78, 0.66, 0.54), "roughness": 0.85, "tex": "planks", "tile_m": 2.0},
+	"rope": {"albedo": Color(0.42, 0.34, 0.24), "roughness": 1.0},
+	"brazier": {"albedo": Color(0.2, 0.2, 0.24), "roughness": 0.5, "metallic": 0.6},
 }
+
+const TEXTURE_DIR := "res://assets/art/textures/"
 
 static var _cache: Dictionary[String, StandardMaterial3D] = {}
 
@@ -61,6 +95,20 @@ static func get_material(name: String) -> StandardMaterial3D:
 		mat.emission_enabled = true
 		mat.emission = spec["emission"]
 		mat.emission_energy_multiplier = float(spec.get("emission_energy", 1.0))
+	if spec.has("tex"):
+		# World-space triplanar: no UV work on code-built meshes, and merged meshes tile seamlessly.
+		var tex := TexBank.get_tex("%s%s.png" % [TEXTURE_DIR, spec["tex"]])
+		var scale := 1.0 / maxf(float(spec.get("tile_m", 4.0)), 0.1)
+		mat.albedo_texture = tex
+		mat.uv1_triplanar = true
+		mat.uv1_world_triplanar = true
+		mat.uv1_scale = Vector3(scale, scale, scale)
+		mat.normal_enabled = true
+		mat.normal_texture = TexBank.get_tex("%s%s_n.png" % [TEXTURE_DIR, spec["tex"]])
+		mat.normal_scale = float(spec.get("normal", 1.0))
+		if bool(spec.get("emission_tex", false)):
+			mat.emission_texture = tex
+			mat.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
 	_cache[name] = mat
 	return mat
 

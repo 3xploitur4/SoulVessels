@@ -1,0 +1,286 @@
+{
+  "_source": "Story 020. Addendum 'Progression': Soul Core (shared), paid with Lesser Soul Shards, 1 per node; +15 max HP, +5% stamina regen, +10 Soul Gauge cap, +1 flask charge (3 to 6), 20 nodes, about 14 reachable in Chapter I. Five branches from the Core Heart: Vitality (HP, up), Endurance (stamina regen, right), Resonance (gauge cap, down), Vessel (flask charges, left) and Mercy (flask healing +5% of max HP per drink, under Vessel). 'pos' is the grid cell the altar screen draws the node in; 'requires' lists nodes that must be owned first. Effect keys: max_hp (HP), stamina_regen (fraction of base regen), gauge_cap (Soul Gauge points), flask_charges (charges), flask_heal (fraction of max HP added to each drink).",
+  "shard_item": "lesser_soul_shard",
+  "nodes": [
+    {
+      "id": "core_heart",
+      "effect": {
+        "max_hp": 15
+      },
+      "pos": [
+        0,
+        0
+      ],
+      "requires": [],
+      "cost": 1
+    },
+    {
+      "id": "vitality_1",
+      "effect": {
+        "max_hp": 15
+      },
+      "pos": [
+        0,
+        -1
+      ],
+      "requires": [
+        "core_heart"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vitality_2",
+      "effect": {
+        "max_hp": 15
+      },
+      "pos": [
+        0,
+        -2
+      ],
+      "requires": [
+        "vitality_1"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vitality_3",
+      "effect": {
+        "max_hp": 15
+      },
+      "pos": [
+        0,
+        -3
+      ],
+      "requires": [
+        "vitality_2"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vitality_4",
+      "effect": {
+        "max_hp": 15
+      },
+      "pos": [
+        0,
+        -4
+      ],
+      "requires": [
+        "vitality_3"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vitality_5",
+      "effect": {
+        "max_hp": 15
+      },
+      "pos": [
+        0,
+        -5
+      ],
+      "requires": [
+        "vitality_4"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "endurance_1",
+      "effect": {
+        "stamina_regen": 0.05
+      },
+      "pos": [
+        1,
+        0
+      ],
+      "requires": [
+        "core_heart"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "endurance_2",
+      "effect": {
+        "stamina_regen": 0.05
+      },
+      "pos": [
+        2,
+        0
+      ],
+      "requires": [
+        "endurance_1"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "endurance_3",
+      "effect": {
+        "stamina_regen": 0.05
+      },
+      "pos": [
+        3,
+        0
+      ],
+      "requires": [
+        "endurance_2"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "endurance_4",
+      "effect": {
+        "stamina_regen": 0.05
+      },
+      "pos": [
+        4,
+        0
+      ],
+      "requires": [
+        "endurance_3"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "resonance_1",
+      "effect": {
+        "gauge_cap": 10
+      },
+      "pos": [
+        0,
+        1
+      ],
+      "requires": [
+        "core_heart"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "resonance_2",
+      "effect": {
+        "gauge_cap": 10
+      },
+      "pos": [
+        0,
+        2
+      ],
+      "requires": [
+        "resonance_1"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "resonance_3",
+      "effect": {
+        "gauge_cap": 10
+      },
+      "pos": [
+        0,
+        3
+      ],
+      "requires": [
+        "resonance_2"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "resonance_4",
+      "effect": {
+        "gauge_cap": 10
+      },
+      "pos": [
+        0,
+        4
+      ],
+      "requires": [
+        "resonance_3"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vessel_1",
+      "effect": {
+        "flask_charges": 1
+      },
+      "pos": [
+        -1,
+        0
+      ],
+      "requires": [
+        "core_heart"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vessel_2",
+      "effect": {
+        "flask_charges": 1
+      },
+      "pos": [
+        -2,
+        0
+      ],
+      "requires": [
+        "vessel_1"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vessel_3",
+      "effect": {
+        "flask_charges": 1
+      },
+      "pos": [
+        -3,
+        0
+      ],
+      "requires": [
+        "vessel_2"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "mercy_1",
+      "effect": {
+        "flask_heal": 0.05
+      },
+      "pos": [
+        -1,
+        1
+      ],
+      "requires": [
+        "vessel_1"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "mercy_2",
+      "effect": {
+        "flask_heal": 0.05
+      },
+      "pos": [
+        -2,
+        1
+      ],
+      "requires": [
+        "mercy_1",
+        "vessel_2"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "mercy_3",
+      "effect": {
+        "flask_heal": 0.05
+      },
+      "pos": [
+        -3,
+        1
+      ],
+      "requires": [
+        "mercy_2",
+        "vessel_3"
+      ],
+      "cost": 1
+    }
+  ]
+}

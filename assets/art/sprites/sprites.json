@@ -1,0 +1,158 @@
+{
+  "abyssal_leviathan": {
+    "file": "res://assets/art/sprites/abyssal_leviathan.png",
+    "height": 466,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      676,
+      293,
+      322,
+      229
+    ],
+    "width": 652
+  },
+  "branded_warden": {
+    "file": "res://assets/art/sprites/branded_warden.png",
+    "height": 466,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      626,
+      14,
+      208,
+      229
+    ],
+    "width": 424
+  },
+  "caelan": {
+    "file": "res://assets/art/sprites/caelan.png",
+    "height": 946,
+    "source": "docs/design/concept-art/vessels.webp",
+    "source_rect": [
+      19,
+      51,
+      256,
+      469
+    ],
+    "width": 520
+  },
+  "calcified_husk": {
+    "file": "res://assets/art/sprites/calcified_husk.png",
+    "height": 410,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      433,
+      42,
+      146,
+      201
+    ],
+    "width": 300
+  },
+  "choir_prelate": {
+    "file": "res://assets/art/sprites/choir_prelate.png",
+    "height": 350,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      852,
+      53,
+      122,
+      171
+    ],
+    "width": 252
+  },
+  "darius": {
+    "file": "res://assets/art/sprites/darius.png",
+    "height": 938,
+    "source": "docs/design/concept-art/vessels.webp",
+    "source_rect": [
+      595,
+      52,
+      233,
+      465
+    ],
+    "width": 474
+  },
+  "echo_crawler": {
+    "file": "res://assets/art/sprites/echo_crawler.png",
+    "height": 336,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      31,
+      77,
+      207,
+      164
+    ],
+    "width": 422
+  },
+  "guardian_below": {
+    "file": "res://assets/art/sprites/guardian_below.png",
+    "height": 468,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      376,
+      293,
+      231,
+      230
+    ],
+    "width": 470
+  },
+  "ilyr": {
+    "file": "res://assets/art/sprites/ilyr.png",
+    "height": 866,
+    "source": "docs/design/concept-art/vessels.webp",
+    "source_rect": [
+      833,
+      87,
+      166,
+      429
+    ],
+    "width": 340
+  },
+  "nyra": {
+    "file": "res://assets/art/sprites/nyra.png",
+    "height": 858,
+    "source": "docs/design/concept-art/vessels.webp",
+    "source_rect": [
+      264,
+      88,
+      197,
+      425
+    ],
+    "width": 402
+  },
+  "seris": {
+    "file": "res://assets/art/sprites/seris.png",
+    "height": 884,
+    "source": "docs/design/concept-art/vessels.webp",
+    "source_rect": [
+      435,
+      78,
+      160,
+      438
+    ],
+    "width": 328
+  },
+  "subterranean_watcher": {
+    "file": "res://assets/art/sprites/subterranean_watcher.png",
+    "height": 208,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      281,
+      84,
+      99,
+      100
+    ],
+    "width": 206
+  },
+  "weeping_sovereign": {
+    "file": "res://assets/art/sprites/weeping_sovereign.png",
+    "height": 468,
+    "source": "docs/design/concept-art/enemies.webp",
+    "source_rect": [
+      33,
+      293,
+      294,
+      230
+    ],
+    "width": 596
+  }
+}

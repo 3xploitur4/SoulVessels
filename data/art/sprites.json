@@ -1,0 +1,232 @@
+{
+  "_source": "Story 027, decision D-032. How each sprite cut from the concept sheets (tools/art/slice_concepts.gd) stands in the world. height_m: world height of the whole image, weapons and crests included (the body heights come from the bible: Caelan 1.88 m, Nyra 1.69, Seris 1.73, Darius 1.94, Ilyr 1.80, Warden 2.6). faces: +1 when the painting's front is to the right of the sheet, -1 when to the left (the Warden's shield, the Leviathan's head). anchor: 'feet' (origin on the ground) or 'centre' (hovering bodies). leg_height: share of the height that steps when walking. step_m: metres a foot lifts. wind: metres the outer edges sway. tell: where the enemy's own tell glows, as a share of the image from its top-left, with colour and size in metres. slash: colour and reach of the weapon arc. emission: self-light, so painted shading stays readable in dark rooms. portrait: the face square for the swap wheel, as shares of the image (left, top, right, bottom).",
+  "emission": 0.62,
+  "sprites": {
+    "caelan": {
+      "file": "res://assets/art/sprites/caelan.png",
+      "height_m": 1.95,
+      "faces": 1,
+      "wind": 0.035,
+      "slash": {
+        "color": "#d6e6ff",
+        "reach_m": 2.3
+      },
+      "portrait": [
+        0.4,
+        0.0,
+        0.68,
+        0.154
+      ]
+    },
+    "nyra": {
+      "file": "res://assets/art/sprites/nyra.png",
+      "height_m": 1.76,
+      "faces": 1,
+      "wind": 0.04,
+      "slash": {
+        "color": "#b48cff",
+        "reach_m": 1.7
+      },
+      "portrait": [
+        0.27,
+        0.0,
+        0.66,
+        0.183
+      ]
+    },
+    "seris": {
+      "file": "res://assets/art/sprites/seris.png",
+      "height_m": 1.9,
+      "faces": 1,
+      "wind": 0.04,
+      "leg_height": 0.3,
+      "slash": {
+        "color": "#9fd8ff",
+        "reach_m": 1.8
+      },
+      "portrait": [
+        0.42,
+        0.075,
+        0.8,
+        0.216
+      ]
+    },
+    "darius": {
+      "file": "res://assets/art/sprites/darius.png",
+      "height_m": 2.02,
+      "faces": 1,
+      "wind": 0.01,
+      "slash": {
+        "color": "#ffb46a",
+        "reach_m": 2.6
+      },
+      "portrait": [
+        0.39,
+        0.0,
+        0.67,
+        0.141
+      ]
+    },
+    "ilyr": {
+      "file": "res://assets/art/sprites/ilyr.png",
+      "height_m": 1.88,
+      "faces": 1,
+      "wind": 0.06,
+      "leg_height": 0.35,
+      "slash": {
+        "color": "#e8f4ff",
+        "reach_m": 2.0
+      },
+      "portrait": [
+        0.34,
+        0.0,
+        0.72,
+        0.149
+      ]
+    },
+    "echo_crawler": {
+      "file": "res://assets/art/sprites/echo_crawler.png",
+      "height_m": 1.1,
+      "faces": 1,
+      "wind": 0.0,
+      "leg_height": 0.55,
+      "step_m": 0.07,
+      "step_rate": 20.0,
+      "tell": {
+        "pos": [
+          0.52,
+          0.24
+        ],
+        "color": "#4cff6a",
+        "size_m": 1.0
+      }
+    },
+    "subterranean_watcher": {
+      "file": "res://assets/art/sprites/subterranean_watcher.png",
+      "height_m": 1.25,
+      "faces": 1,
+      "anchor": "centre",
+      "shadow": false,
+      "wind": 0.0,
+      "step_m": 0.0,
+      "float_m": 0.1,
+      "tell": {
+        "pos": [
+          0.62,
+          0.55
+        ],
+        "color": "#39d7ff",
+        "size_m": 0.9
+      }
+    },
+    "calcified_husk": {
+      "file": "res://assets/art/sprites/calcified_husk.png",
+      "height_m": 2.15,
+      "faces": 1,
+      "wind": 0.015,
+      "tell": {
+        "pos": [
+          0.45,
+          0.22
+        ],
+        "color": "#b6ff6a",
+        "size_m": 1.3
+      }
+    },
+    "fungal_stalker": {
+      "file": "res://assets/art/sprites/calcified_husk.png",
+      "height_m": 1.85,
+      "faces": 1,
+      "wind": 0.03,
+      "tint": "#b89cff",
+      "_note": "No concept art yet for the Fungal Stalker (new in the addendum): the Husk painting, smaller and tinted violet, stands in.",
+      "tell": {
+        "pos": [
+          0.45,
+          0.22
+        ],
+        "color": "#c79bff",
+        "size_m": 1.1
+      }
+    },
+    "branded_warden": {
+      "file": "res://assets/art/sprites/branded_warden.png",
+      "height_m": 3.1,
+      "faces": -1,
+      "wind": 0.01,
+      "leg_height": 0.36,
+      "step_m": 0.07,
+      "step_rate": 6.5,
+      "tell": {
+        "pos": [
+          0.5,
+          0.4
+        ],
+        "color": "#f2c14e",
+        "size_m": 0.9
+      }
+    },
+    "choir_prelate": {
+      "file": "res://assets/art/sprites/choir_prelate.png",
+      "height_m": 2.3,
+      "faces": 1,
+      "wind": 0.05,
+      "anchor": "feet",
+      "step_m": 0.0,
+      "float_m": 0.12,
+      "tell": {
+        "pos": [
+          0.12,
+          0.62
+        ],
+        "color": "#ffd76a",
+        "size_m": 0.9
+      }
+    },
+    "weeping_sovereign": {
+      "file": "res://assets/art/sprites/weeping_sovereign.png",
+      "height_m": 2.9,
+      "faces": 1,
+      "wind": 0.05,
+      "leg_height": 0.3,
+      "tell": {
+        "pos": [
+          0.5,
+          0.2
+        ],
+        "color": "#7fd4ff",
+        "size_m": 1.2
+      }
+    },
+    "guardian_below": {
+      "file": "res://assets/art/sprites/guardian_below.png",
+      "height_m": 4.4,
+      "faces": 1,
+      "wind": 0.0,
+      "step_rate": 4.0,
+      "tell": {
+        "pos": [
+          0.5,
+          0.36
+        ],
+        "color": "#ff9a3a",
+        "size_m": 1.6
+      }
+    },
+    "abyssal_leviathan": {
+      "file": "res://assets/art/sprites/abyssal_leviathan.png",
+      "height_m": 6.5,
+      "faces": -1,
+      "wind": 0.0,
+      "step_m": 0.0,
+      "tell": {
+        "pos": [
+          0.2,
+          0.3
+        ],
+        "color": "#6fe8ff",
+        "size_m": 2.0
+      }
+    }
+  }
+}
