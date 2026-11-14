@@ -360,7 +360,7 @@ func try_flask() -> bool:
 		return false
 	flask_charges -= 1
 	var duration := Balance.combat_f("flask.heal_duration_s")
-	var total := health.max_value * Balance.combat_f("flask.heal_fraction")
+	var total := health.max_value * (Balance.combat_f("flask.heal_fraction") + float(bonuses.get("flask_heal", 0.0)))
 	var a := PlayerAction.new("flask", duration)
 	a.steer = 0.35
 	a.on_tick = func(pl: Player, _act: PlayerAction, dt: float) -> void:
@@ -393,6 +393,7 @@ func equip(ids: Array[String], levels: Dictionary = {}) -> void:
 		loadout.add(slot)
 	if prev != "" and loadout.index_of(prev) >= 0:
 		loadout.active_index = loadout.index_of(prev)
+	_apply_slot_bonuses()
 	if health != null:
 		health.max_value = max_hp()
 		health.current = clampf(health.max_value * ratio, 1.0, health.max_value)
@@ -401,6 +402,26 @@ func equip(ids: Array[String], levels: Dictionary = {}) -> void:
 	stop_action()
 	_show_active_visual()
 	GameEvents.vessel_swapped.emit(loadout.active().id, loadout.active_index)
+
+
+## Apply Soul Core bonuses (story 020): max HP (the gain is also healed), Soul Gauge cap, stamina
+## regen, flask charges (new charges arrive full) and flask healing.
+func apply_bonuses(mods: Dictionary) -> void:
+	var old_max := health.max_value
+	var old_flasks := flask_max()
+	bonuses = mods.duplicate()
+	health.max_value = max_hp()
+	health.current = clampf(health.current + maxf(health.max_value - old_max, 0.0), 1.0, health.max_value)
+	gauge.max_value = Balance.combat_f("soul_gauge.max") + float(bonuses.get("gauge_cap", 0.0))
+	flask_charges = mini(flask_charges + maxi(flask_max() - old_flasks, 0), flask_max())
+	_apply_slot_bonuses()
+	GameEvents.player_hp_changed.emit(health.current, health.max_value)
+
+
+func _apply_slot_bonuses() -> void:
+	var regen := Balance.combat_f("stamina.regen_per_s") * (1.0 + float(bonuses.get("stamina_regen", 0.0)))
+	for slot in loadout.slots:
+		slot.stamina.regen_per_s = regen
 
 
 ## Update Affinity levels without re-equipping (a level-up mid-run).

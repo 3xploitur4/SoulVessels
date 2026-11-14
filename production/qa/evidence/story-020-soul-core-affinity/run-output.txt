@@ -1,0 +1,11 @@
+hp before: 420.0 flasks: 3
+{'pressed': 'Core_core_heart'}
+{'pressed': 'Core_vitality_1'}
+{'pressed': 'Core_vessel_1'}
+{'pressed': 'Core_endurance_1'}
+bound: ['core_heart', 'vitality_1', 'vessel_1', 'endurance_1'] shards left: 1 hp max: 450.0 flasks: 4
+locked press: {'pressed': 'Core_vitality_5'} bound still: 4
+{'level': 1, 'vessel': 'caelan', 'xp': 48.0}
+{'level': 1, 'vessel': 'caelan', 'xp': 96.0}
+{'level': 2, 'vessel': 'caelan', 'xp': 144.0}
+toasts: ['Caelan: Affinity 1', 'A memory of Caelan stirs. Read it at a Soul Altar.', 'Caelan: Affinity 2', 'Sync Guard awakened'] lore: ['memory_caelan']

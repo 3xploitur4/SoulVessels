@@ -183,3 +183,23 @@ LORE_MEMORY_CAELAN_TITLE,Memory of Caelan: The Door
 LORE_MEMORY_CAELAN_BODY,"The Queen came to the sealed door alone, without her crown. ""Stand aside, Caelan."" He did not. ""Then stand here forever,"" she said, and wept, and he understood she was not angry with him. He was still standing there when the stone came down."
 LORE_MEMORY_NYRA_TITLE,Memory of Nyra: The Herding
 LORE_MEMORY_NYRA_BODY,"She saw it from the root-tunnels: Wardens walking whole streets of people downward, gently, the way you lead a horse that does not know it is going to the river. Nobody fought. Everyone looked up, as if listening for someone who had promised to come back."
+CORE_SHORT_MAX_HP,HP
+CORE_SHORT_STAMINA_REGEN,STA
+CORE_SHORT_GAUGE_CAP,SOUL
+CORE_SHORT_FLASK_CHARGES,FLASK
+CORE_SHORT_FLASK_HEAL,HEAL
+CORE_EFFECT_MAX_HP,+%d max HP
+CORE_EFFECT_STAMINA_REGEN,+%d%% stamina regen
+CORE_EFFECT_GAUGE_CAP,+%d Soul Gauge
+CORE_EFFECT_FLASK_CHARGES,+%d Soul Flask charge
+CORE_EFFECT_FLASK_HEAL,+%d%% of max HP per flask
+CORE_STATUS_OWNED,Bound
+CORE_STATUS_BUYABLE,Costs 1 Lesser Soul Shard
+CORE_STATUS_NO_SHARD,Needs 1 Lesser Soul Shard
+CORE_STATUS_LOCKED,Locked: bind the node before it
+CORE_STATUS_UNKNOWN,?
+CORE_SHARDS,Lesser Soul Shards: %d
+AFFINITY_LEVEL,%s: Affinity %d
+AFFINITY_UNLOCK_GUARD,Sync Guard awakened
+AFFINITY_UNLOCK_ULTIMATE,Sync Ultimate awakened
+AFFINITY_MEMORY,A memory of %s stirs. Read it at a Soul Altar.

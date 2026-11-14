@@ -15,11 +15,14 @@ signal core_buy_requested(node_id: String)
 signal leave_requested
 
 var state: GameState
+## The Soul Core tree, to draw (never to change).
+var soul_core: SoulCore
 var altar_name: String = ""
 
 var _root: Control
 var _page: Control
 var _working: Array[String] = []
+var _core_view: SoulCoreView
 
 
 func _ready() -> void:
@@ -101,15 +104,34 @@ func _toggle(v: String) -> void:
 	_draw_loadout()
 
 
-# --- Soul Core (story 020 fills the page) -----------------------------------------------------
+# --- Soul Core --------------------------------------------------------------------------------
 
 func show_core() -> void:
 	var col := _new_page()
 	col.add_child(UiKit.heading(tr("ALTAR_SOUL_CORE"), 48))
 	var back := UiKit.button(tr("UI_BACK"), 520.0)
+	back.name = "CoreBack"
 	back.pressed.connect(show_main)
+	_core_view = null
+	if soul_core != null:
+		_core_view = SoulCoreView.new()
+		_core_view.name = "SoulCoreView"
+		_core_view.core = soul_core
+		_core_view.state = state
+		_core_view.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		_core_view.buy_requested.connect(func(id: String) -> void: core_buy_requested.emit(id))
+		col.add_child(_core_view)
 	col.add_child(back)
-	UiKit.link_focus([back] as Array[Control])
+	if _core_view != null:
+		_core_view.focus_first()
+	else:
+		UiKit.link_focus([back] as Array[Control])
+
+
+## Redraw the tree after the game applied a purchase.
+func refresh_core() -> void:
+	if _core_view != null and is_instance_valid(_core_view):
+		_core_view.refresh()
 
 
 # --- Lore -----------------------------------------------------------------------------------

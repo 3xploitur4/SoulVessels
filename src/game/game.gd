@@ -43,6 +43,8 @@ var altar_menu: AltarMenu
 var player: Player
 var bridge_handler: Node
 
+## The Soul Core tree (story 020).
+var soul_core: SoulCore
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -79,6 +81,9 @@ func _ready() -> void:
 	register_feature(_build_echo)
 	register_feature(_build_pickups)
 	loot = LootTable.from_data()
+	soul_core = SoulCore.from_data()
+	GameEvents.perfect_parry.connect(func(_a: Node3D) -> void: _award_xp("perfect_parry"))
+	GameEvents.perfect_dodge.connect(func(_a: Node3D) -> void: _award_xp("perfect_dodge"))
 	GameEvents.enemy_died.connect(_on_enemy_died)
 	fx = FxLayer.new()
 	fx.name = "Fx"
@@ -200,6 +205,7 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 	player.affinity_levels = affinity_levels()
 	player.auto_respawn = false
 	add_child(player)
+	player.apply_bonuses(soul_core.modifiers(state.soul_core))
 	player.died.connect(_on_player_died)
 	camera.target = player
 	rooms.player = player
@@ -230,8 +236,45 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 func affinity_levels() -> Dictionary:
 	var out := {}
 	for v in state.unlocked_vessels:
-		out[v] = 0
+		out[v] = Affinity.level(state, v)
 	return out
+
+
+## Give the active Vessel Affinity XP from `source` (story 020). A new level shows a toast, turns
+## on what it unlocks, and at the memory level adds that Vessel's memory to the lore.
+func _award_xp(source: String, amount: float = 1.0) -> void:
+	if not playing or player == null or state == null:
+		return
+	var vessel := player.loadout.active().id
+	var lvl := Affinity.add_xp(state, vessel, source, amount)
+	if lvl == -1:
+		return
+	_on_affinity_changed(vessel, lvl)
+
+
+func _on_affinity_changed(vessel: String, lvl: int) -> void:
+	player.set_affinity(vessel, lvl)
+	var vessel_name := tr("VESSEL_" + vessel.to_upper())
+	prompts.toast(tr("AFFINITY_LEVEL") % [vessel_name, lvl], UiKit.COL_GOLD)
+	if lvl == int(Balance.combat_f("sync_guard.min_affinity")):
+		prompts.toast(tr("AFFINITY_UNLOCK_GUARD"), UiKit.COL_ACCENT)
+	elif lvl == int(Balance.combat_f("sync_ultimate.min_affinity")):
+		prompts.toast(tr("AFFINITY_UNLOCK_ULTIMATE"), UiKit.COL_ACCENT)
+	var memory := "memory_" + vessel
+	if lvl >= Affinity.memory_level() and not LoreDb.entry(memory).is_empty() \
+			and GameState.add_unique(state.lore_found, memory):
+		prompts.toast(tr("AFFINITY_MEMORY") % vessel_name, UiKit.COL_GOLD)
+
+
+## Buy Soul Core node `id` at an altar (request from the altar screen).
+func buy_core(id: String) -> void:
+	if state == null or not soul_core.buy(state, id):
+		return
+	player.apply_bonuses(soul_core.modifiers(state.soul_core))
+	Sfx.play("altar_kindle")
+	save_now()
+	if altar_menu != null:
+		altar_menu.refresh_core()
 
 
 ## Save the slot now. `resume` also records where the player stands, so Continue starts there.
@@ -339,6 +382,8 @@ func open_altar_menu(altar: Altar) -> void:
 		return
 	altar_menu = AltarMenu.new()
 	altar_menu.state = state
+	altar_menu.soul_core = soul_core
+	altar_menu.core_buy_requested.connect(buy_core)
 	altar_menu.altar_name = tr(altar.name_key)
 	altar_menu.loadout_requested.connect(apply_loadout)
 	altar_menu.lore_read_requested.connect(read_lore)
@@ -379,9 +424,11 @@ func read_lore(id: String) -> void:
 		return
 	var vessel := LoreDb.vessel_of(id)
 	if vessel != "":
+		var before := Affinity.level(state, vessel)
 		state.affinity_bonus[vessel] = int(state.affinity_bonus.get(vessel, 0)) + 1
-		player.set_affinity(vessel, int(affinity_levels().get(vessel, 0)))
 		prompts.toast(tr("AFFINITY_BONUS") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+		if Affinity.level(state, vessel) != before:
+			_on_affinity_changed(vessel, Affinity.level(state, vessel))
 
 
 # --- Soul Essence, death and the Soul Echo (story 018) ----------------------------------------
@@ -395,6 +442,7 @@ func _on_enemy_died(enemy: Node) -> void:
 		return
 	state.essence += amount
 	fx.popup("+%d" % amount, e.global_position + Vector3(0, 1.2, 0), Color(0.6, 0.92, 1.0))
+	_award_xp("elite_kill" if e.tier == "elite" else "kill")
 	for d: Dictionary in loot.roll(e.data, _zone, loot_rng, state):
 		spawn_pickup(str(d["item"]), int(d["count"]), "", Vector2(e.global_position.x, e.global_position.y))
 
@@ -508,6 +556,8 @@ func _process(delta: float) -> void:
 	if not playing or player == null:
 		return
 	state.play_time_s += delta
+	if player.is_alive() and player.gauge.in_combat():
+		_award_xp("combat_s", delta)
 	if camera.zoom_in > 0.0 and player.state != "ultimate":
 		camera.zoom_in = maxf(camera.zoom_in - delta * 2.0, 0.0)
 	_update_interact()
@@ -716,6 +766,15 @@ func bridge_leave_altar(_args: Dictionary) -> Dictionary:
 func bridge_drop_chance(args: Dictionary) -> Dictionary:
 	(loot.config["drop_chance"] as Dictionary)[str(args.get("tier", "common"))] = float(args.get("value", 0.35))
 	return {"drop_chance": loot.config["drop_chance"]}
+
+
+## {"vessel", "source", "amount"}: give Affinity XP (playtests).
+func bridge_affinity(args: Dictionary) -> Dictionary:
+	var vessel := str(args.get("vessel", player.loadout.active().id))
+	var lvl := Affinity.add_xp(state, vessel, str(args.get("source", "kill")), float(args.get("amount", 1.0)))
+	if lvl != -1:
+		_on_affinity_changed(vessel, lvl)
+	return {"vessel": vessel, "level": Affinity.level(state, vessel), "xp": state.affinity_xp.get(vessel, 0.0)}
 
 
 ## {"item", "count"}: give an item as if picked up.
