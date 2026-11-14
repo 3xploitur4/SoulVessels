@@ -140,7 +140,15 @@ func kill_all() -> void:
 	if enemies_root == null:
 		return
 	for e in enemies_root.get_children():
+		enemies_root.remove_child(e)
 		e.queue_free()
+
+
+## Altar rest and respawn: clear this room's enemies and spawn the ones the save says are alive.
+func respawn_enemies() -> void:
+	kill_all()
+	if data != null:
+		_spawn_enemies()
 
 
 ## Is `p` (room metres) inside rock?

@@ -33,6 +33,26 @@ BARS = 8
 BEATS_PER_BAR = 4
 LOOP_S = BARS * BEATS_PER_BAR * BEAT
 N = int(round(LOOP_S * SR))
+# Pulses per beat: 2 eighths in 4/4, 3 eighths per dotted quarter in 6/8.
+SUBDIV = 2
+# Semitones the leitmotif is moved for this track's key (0 = A minor).
+MOTIF_SHIFT = 0
+
+
+def configure(bpm, beats_per_bar, bars, subdiv, chords, roots, motif, motif_shift=0):
+    """Switch the module to another track's meter, harmony and motif (stems read these globals)."""
+    global BPM, BEAT, BARS, BEATS_PER_BAR, LOOP_S, N, SUBDIV, CHORDS, ROOTS, MOTIF, MOTIF_SHIFT
+    BPM = float(bpm)
+    BEAT = 60.0 / BPM
+    BARS = bars
+    BEATS_PER_BAR = beats_per_bar
+    LOOP_S = BARS * BEATS_PER_BAR * BEAT
+    N = int(round(LOOP_S * SR))
+    SUBDIV = subdiv
+    CHORDS = chords
+    ROOTS = roots
+    MOTIF = motif
+    MOTIF_SHIFT = motif_shift
 
 TABLE = 4096
 SINE = array("f", [math.sin(2.0 * math.pi * i / TABLE) for i in range(TABLE)])
@@ -303,7 +323,7 @@ def stem_elite():
 
 def _motif_notes(octave_shift=0):
     for beat, length, nm in MOTIF:
-        f = hz(nm) * (2.0 ** octave_shift)
+        f = hz(nm) * (2.0 ** octave_shift) * (2.0 ** (MOTIF_SHIFT / 12.0))
         yield beat * BEAT, length * BEAT, f
 
 
@@ -313,7 +333,7 @@ def stem_lead_caelan():
         mix(buf, t, additive(f, d * 1.05, HORN, attack=0.09, release=0.15, vibrato=0.003), 0.35)
     strings = lambda f, d: additive(f, d, STRING, attack=0.5, release=0.8, vibrato=0.003, detune=[0.998, 1.002])
     for bar in range(BARS):
-        pad_chord(buf, bar, CHORDS[bar][2:4], strings, 0.1, 4.2)
+        pad_chord(buf, bar, CHORDS[bar][2:4], strings, 0.1, BEATS_PER_BAR + 0.2)
     return normalise(buf, 0.7)
 
 
@@ -321,9 +341,9 @@ def stem_lead_nyra():
     buf = blank()
     for t, d, f in _motif_notes(0):
         mix(buf, t, pluck(f, 0.6), 0.5)
-        mix(buf, t + BEAT * 0.5, pluck(f * 2.0, 0.35, 0.8), 0.25)
-    for k in range(BARS * 8):
-        mix(buf, k * BEAT / 2.0, noise(0.05, 70.0, highpass=True), 0.18 if k % 2 else 0.1)
+        mix(buf, t + BEAT * (1.0 / SUBDIV) * (SUBDIV // 2 if SUBDIV > 2 else 1), pluck(f * 2.0, 0.35, 0.8), 0.25)
+    for k in range(BARS * BEATS_PER_BAR * SUBDIV):
+        mix(buf, k * BEAT / SUBDIV, noise(0.05, 70.0, highpass=True), 0.18 if k % SUBDIV else 0.1)
     return normalise(buf, 0.7)
 
 
@@ -334,7 +354,7 @@ def stem_lead_seris():
     choir = lambda f, d: additive(f, d, CHOIR, attack=0.7, release=1.0, vibrato=0.004,
                                   detune=[0.995, 1.0, 1.005])
     for bar in range(BARS):
-        pad_chord(buf, bar, CHORDS[bar][2:5], choir, 0.1, 4.4)
+        pad_chord(buf, bar, CHORDS[bar][2:5], choir, 0.1, BEATS_PER_BAR + 0.4)
     return normalise(buf, 0.7)
 
 
@@ -343,8 +363,8 @@ def stem_lead_darius():
     for t, d, f in _motif_notes(-2):
         mix(buf, t, additive(f, d * 1.1, CELLO, attack=0.06, release=0.15, vibrato=0.004), 0.4)
     for bar in range(BARS):
-        for b in (0, 2):
-            mix(buf, (bar * 4 + b) * BEAT, sweep(75, 38, 0.8, 4.0), 0.8)
+        for b in range(0, BEATS_PER_BAR, 2 if BEATS_PER_BAR % 2 == 0 and BEATS_PER_BAR > 2 else 1):
+            mix(buf, (bar * BEATS_PER_BAR + b) * BEAT, sweep(75, 38, 0.8, 4.0), 0.8)
     return normalise(buf, 0.7)
 
 
@@ -356,17 +376,17 @@ def stem_lead_ilyr():
         mix(buf, t - (len(s) / SR - d), s, 0.4)
     # 7/8 accent grouping (2+2+3 eighths) running across the 4/4 grid.
     groups = [2, 2, 3]
-    eighth = BEAT / 2.0
+    eighth = BEAT / SUBDIV
     k = 0
     g = 0
-    while k < BARS * 8:
+    while k < BARS * BEATS_PER_BAR * SUBDIV:
         mix(buf, k * eighth, sweep(400, 250, 0.08, 30.0), 0.25)
         k += groups[g % 3]
         g += 1
     # Dissonant string ghost: a minor second above the chord root.
     for bar in range(BARS):
         f = hz(CHORDS[bar][2]) * (2.0 ** (1 / 12))
-        mix(buf, bar * 4 * BEAT, additive(f, 4 * BEAT, STRING, attack=1.0, release=1.0, vibrato=0.01), 0.07)
+        mix(buf, bar * BEATS_PER_BAR * BEAT, additive(f, BEATS_PER_BAR * BEAT, STRING, attack=1.0, release=1.0, vibrato=0.01), 0.07)
     return normalise(buf, 0.7)
 
 
@@ -414,6 +434,109 @@ def sfx_bank():
     return s
 
 
+# ---- Zone 2: "Track 03 - Spore Light", 84 BPM in 6/8 (decision D-031) ---------------------
+# The beat is the dotted quarter (2 per bar, 3 eighths each), so the director's 4-bar boundary is
+# 8 beats = 5.71 s. D minor, the same falling cadence as Zone 1 a fourth up (Dm | C | Bb | A, two
+# bars each), so the leitmotif sits over the harmony it was written for.
+
+Z2_CHORDS = ([["D2", "A2", "D3", "F3", "A3"]] * 2 + [["C2", "G2", "C3", "E3", "G3"]] * 2 +
+             [["Bb1", "F2", "Bb2", "D3", "F3"]] * 2 + [["A1", "E2", "A2", "C#3", "E3"]] * 2) * 2
+Z2_ROOTS = (["D2"] * 2 + ["C2"] * 2 + ["Bb1"] * 2 + ["A1"] * 2) * 2
+
+
+def z2_bed():
+    buf = blank()
+    pad = lambda f, d: additive(f, d, [(1, 1.0), (2, 0.3), (3, 0.1)], attack=0.9, release=1.4,
+                                detune=[0.996, 1.0, 1.004])
+    eighth = BEAT / SUBDIV
+    pattern = [2, 4, 3, 4, 2, 4]
+    for bar in range(BARS):
+        if bar % 2 == 0:
+            pad_chord(buf, bar, CHORDS[bar][1:4], pad, 0.2, 2 * BEATS_PER_BAR + 0.3)
+        # The lilting 6/8 piano arpeggio of the glowing forest.
+        for k in range(BEATS_PER_BAR * SUBDIV):
+            nm = CHORDS[bar][pattern[k % len(pattern)]]
+            mix(buf, bar * BEATS_PER_BAR * BEAT + k * eighth, piano(hz(nm) * 2.0, 0.9), 0.1 if k == 0 else 0.065)
+    # Spores: soft high blips drifting through.
+    rnd = random.Random(23)
+    for _ in range(26):
+        t = rnd.uniform(0, LOOP_S)
+        f = hz(rnd.choice(["D6", "A6", "F6", "E6", "C6"]))
+        mix(buf, t, additive(f, 0.5, [(1, 1.0), (3, 0.1)], attack=0.01, release=0.4, decay=4.0), 0.05)
+    mix(buf, 0.0, lowpass(noise(LOOP_S, 0.0, gain=0.04), 0.03), 1.0)
+    return normalise(buf, 0.7)
+
+
+def z2_pulse():
+    buf = blank()
+    eighth = BEAT / SUBDIV
+    for b in range(BARS * BEATS_PER_BAR):
+        mix(buf, b * BEAT, sweep(85, 45, 0.35, 9.0), 0.8)
+        for k in range(1, SUBDIV):
+            mix(buf, b * BEAT + k * eighth, noise(0.04, 80.0, highpass=True), 0.1)
+    return normalise(buf, 0.7)
+
+
+def z2_combat():
+    buf = blank()
+    eighth = BEAT / SUBDIV
+    stacc = lambda f: additive(f, 0.12, STRING, attack=0.004, release=0.05)
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        root = hz(CHORDS[bar][1])
+        fifth = hz(CHORDS[bar][2])
+        for k in range(BEATS_PER_BAR * SUBDIV):
+            f = [root, fifth, root * 2.0][k % 3]
+            mix(buf, t0 + k * eighth, stacc(f), 0.32 if k % 3 == 0 else 0.22)
+        for b in range(BEATS_PER_BAR):
+            t = t0 + b * BEAT
+            mix(buf, t, sweep(140, 45, 0.3, 10.0), 0.9)
+            if b == 1:
+                mix(buf, t, noise(0.18, 22.0), 0.35)
+            mix(buf, t + 2 * eighth, sweep(140, 45, 0.2, 12.0), 0.35)
+    for k in range(6):
+        mix(buf, LOOP_S - BEAT * 2 + k * eighth, sweep(160 - k * 12, 70, 0.2, 14.0), 0.5)
+    return normalise(buf, 0.75)
+
+
+def z2_elite():
+    buf = blank()
+    eighth = BEAT / SUBDIV
+    for bar in range(0, BARS, 2):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        for nm in (ROOTS[bar], CHORDS[bar][0]):
+            s = additive(hz(nm), 2 * BEATS_PER_BAR * BEAT, BRASS, attack=0.6, release=0.5, vibrato=0.002)
+            mix(buf, t0, lowpass(s, 0.25), 0.4)
+    for k in range(BARS * BEATS_PER_BAR * SUBDIV):
+        bar = k // (BEATS_PER_BAR * SUBDIV)
+        f = hz(CHORDS[bar][0]) * (2.0 if k % 2 else 1.0)
+        mix(buf, k * eighth, additive(f, 0.14, CELLO, attack=0.005, release=0.06), 0.2)
+    return normalise(buf, 0.75)
+
+
+# ---- Title and altars: "Track 02 - The Intruder", solo piano, 60 BPM 3/4 --------------------
+# The leitmotif bare: the right hand plays the first 24 notes of the motif, one per beat; the
+# left hand a slow waltz (bass on 1, chord on 2 and 3) under Am | F | C | E.
+
+ALTAR_CHORDS = [["A2", "E3", "A3", "C4", "E4"], ["F2", "C3", "F3", "A3", "C4"],
+                ["C3", "G3", "C4", "E4", "G4"], ["E2", "B2", "E3", "G#3", "B3"]] * 2
+
+
+def altar_bed():
+    buf = blank()
+    melody = [nm for _b, _l, nm in MOTIF][:BARS * BEATS_PER_BAR]
+    for i, nm in enumerate(melody):
+        mix(buf, i * BEAT, piano(hz(nm), 1.6), 0.32)
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        mix(buf, t0, piano(hz(CHORDS[bar][0]), 2.6), 0.28)
+        for b in (1, 2):
+            for nm in CHORDS[bar][2:4]:
+                mix(buf, t0 + b * BEAT, piano(hz(nm), 0.9), 0.1)
+    mix(buf, 0.0, lowpass(noise(LOOP_S, 0.0, gain=0.02), 0.02), 1.0)
+    return normalise(buf, 0.7)
+
+
 STEMS = {
     "bed": stem_bed,
     "pulse": stem_pulse,
@@ -430,18 +553,29 @@ STEMS = {
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--out", default="assets/audio")
-    ap.add_argument("--only", default="", help="comma list of stem or sfx names")
+    ap.add_argument("--only", default="", help="comma list: stem or sfx names, track names, or track/stem")
     args = ap.parse_args()
     only = set(x for x in args.only.split(",") if x)
     random.seed(1234)
-    music_dir = os.path.join(args.out, "music", "zone1")
-    for name, fn in STEMS.items():
-        if only and name not in only:
-            continue
-        buf = fn()
-        assert len(buf) == N, (name, len(buf), N)
-        write_wav(os.path.join(music_dir, name + ".wav"), buf)
-        print("stem %-12s %d frames  %.3f s" % (name, len(buf), len(buf) / SR))
+    zone1 = (BPM, BEATS_PER_BAR, BARS, SUBDIV, CHORDS, ROOTS, MOTIF, 0)
+    z2_leads = {k: v for k, v in STEMS.items() if k.startswith("lead_")}
+    tracks = [
+        ("zone1", zone1, STEMS),
+        ("zone2", (84, 2, 16, 3, Z2_CHORDS, Z2_ROOTS, MOTIF, 5),
+         dict({"bed": z2_bed, "pulse": z2_pulse, "combat": z2_combat, "elite": z2_elite}, **z2_leads)),
+        ("altar", (60, 3, 8, 2, ALTAR_CHORDS, ["A1", "F1", "C2", "E1"] * 2, MOTIF, 0), {"bed": altar_bed}),
+    ]
+    for track, cfg, stems in tracks:
+        configure(*cfg)
+        music_dir = os.path.join(args.out, "music", track)
+        for name, fn in stems.items():
+            if only and name not in only and "%s/%s" % (track, name) not in only and track not in only:
+                continue
+            buf = fn()
+            assert len(buf) == N, (track, name, len(buf), N)
+            write_wav(os.path.join(music_dir, name + ".wav"), buf)
+            print("%-6s stem %-12s %d frames  %.3f s" % (track, name, len(buf), len(buf) / SR))
+    configure(*zone1)
     for name, buf in sfx_bank().items():
         if only and name not in only:
             continue

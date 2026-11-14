@@ -85,9 +85,9 @@ func _run_file(path: String) -> void:
 	for mname in methods:
 		var test: TestCase = script.new()
 		test.tree = self
-		test.before_each()
+		await test.before_each()
 		await test.call(mname)
-		test.after_each()
+		await test.after_each()
 		for node in test.owned:
 			if is_instance_valid(node):
 				node.queue_free()

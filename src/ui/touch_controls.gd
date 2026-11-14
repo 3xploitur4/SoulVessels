@@ -175,8 +175,12 @@ func _draw_controls() -> void:
 		var cr := CONTEXT_RADIUS * ui_scale
 		_canvas.draw_circle(cc, cr, Color(0.1, 0.12, 0.08, 0.6 * a))
 		_canvas.draw_arc(cc, cr, 0.0, TAU, 48, Color(0.95, 0.8, 0.35, 0.9 * a), 3.0)
-		var cw := _font.get_string_size(context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 22).x
-		_canvas.draw_string(_font, cc + Vector2(-cw * 0.5, 8.0), context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 22,
+		var fs := 22
+		var cw := _font.get_string_size(context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+		if cw > cr * 1.7:
+			fs = maxi(13, int(floor(float(fs) * cr * 1.7 / cw)))
+			cw = _font.get_string_size(context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+		_canvas.draw_string(_font, cc + Vector2(-cw * 0.5, fs * 0.35), context_label, HORIZONTAL_ALIGNMENT_LEFT, -1, fs,
 			Color(1.0, 0.92, 0.7, a))
 	for b: Array in BUTTONS:
 		var action := str(b[0])

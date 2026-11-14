@@ -79,6 +79,9 @@ func start_zone(zone_id: String) -> void:
 	beats_per_bar = int(_zone_cfg.get("beats_per_bar", 4))
 	_sync = AudioStreamSynchronized.new()
 	_index.clear()
+	_current_db.clear()
+	_target_db.clear()
+	_rate_db.clear()
 	var folder := str(_zone_cfg.get("folder", ""))
 	var names: Array[String] = []
 	var stems: Dictionary = _zone_cfg.get("stems", {})
@@ -149,6 +152,11 @@ func silent_db() -> float:
 ## Current volume of a stem in dB (tests, debug HUD).
 func stem_db(stem: String) -> float:
 	return _current_db.get(stem, silent_db())
+
+
+## Does the current track have a stem called `stem`?
+func has_stem(stem: String) -> bool:
+	return _index.has(stem)
 
 
 func is_playing() -> bool:

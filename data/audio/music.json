@@ -16,18 +16,169 @@
       "bars": 8,
       "folder": "res://assets/audio/music/zone1/",
       "stems": {
-        "bed": { "file": "bed.wav", "db": -4.0, "states": ["explore", "alert", "combat", "elite"] },
-        "pulse": { "file": "pulse.wav", "db": -6.0, "states": ["alert", "combat", "elite"] },
-        "combat": { "file": "combat.wav", "db": -5.0, "states": ["combat", "elite"] },
-        "elite": { "file": "elite.wav", "db": -5.0, "states": ["elite"] }
+        "bed": {
+          "file": "bed.wav",
+          "db": -4.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "pulse": {
+          "file": "pulse.wav",
+          "db": -6.0,
+          "states": [
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "combat": {
+          "file": "combat.wav",
+          "db": -5.0,
+          "states": [
+            "combat",
+            "elite"
+          ]
+        },
+        "elite": {
+          "file": "elite.wav",
+          "db": -5.0,
+          "states": [
+            "elite"
+          ]
+        }
       },
       "leads": {
-        "caelan": { "file": "lead_caelan.wav", "db": -6.0 },
-        "nyra": { "file": "lead_nyra.wav", "db": -6.0 },
-        "seris": { "file": "lead_seris.wav", "db": -6.0 },
-        "darius": { "file": "lead_darius.wav", "db": -6.0 },
-        "ilyr": { "file": "lead_ilyr.wav", "db": -6.0 }
+        "caelan": {
+          "file": "lead_caelan.wav",
+          "db": -6.0
+        },
+        "nyra": {
+          "file": "lead_nyra.wav",
+          "db": -6.0
+        },
+        "seris": {
+          "file": "lead_seris.wav",
+          "db": -6.0
+        },
+        "darius": {
+          "file": "lead_darius.wav",
+          "db": -6.0
+        },
+        "ilyr": {
+          "file": "lead_ilyr.wav",
+          "db": -6.0
+        }
       }
+    },
+    "zone2": {
+      "title": "Track 03 - Spore Light",
+      "bpm": 84,
+      "beats_per_bar": 2,
+      "bars": 16,
+      "folder": "res://assets/audio/music/zone2/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -4.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "pulse": {
+          "file": "pulse.wav",
+          "db": -6.0,
+          "states": [
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "combat": {
+          "file": "combat.wav",
+          "db": -5.0,
+          "states": [
+            "combat",
+            "elite"
+          ]
+        },
+        "elite": {
+          "file": "elite.wav",
+          "db": -5.0,
+          "states": [
+            "elite"
+          ]
+        }
+      },
+      "leads": {
+        "caelan": {
+          "file": "lead_caelan.wav",
+          "db": -6.0
+        },
+        "nyra": {
+          "file": "lead_nyra.wav",
+          "db": -6.0
+        },
+        "seris": {
+          "file": "lead_seris.wav",
+          "db": -6.0
+        },
+        "darius": {
+          "file": "lead_darius.wav",
+          "db": -6.0
+        },
+        "ilyr": {
+          "file": "lead_ilyr.wav",
+          "db": -6.0
+        }
+      },
+      "meter": "6/8: bpm counts the dotted quarter, 2 per bar (decision D-031)"
+    },
+    "altar": {
+      "title": "Track 02 - The Intruder (leitmotif, solo piano)",
+      "bpm": 60,
+      "beats_per_bar": 3,
+      "bars": 8,
+      "folder": "res://assets/audio/music/altar/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -5.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        }
+      },
+      "leads": {}
+    },
+    "title": {
+      "title": "Track 02 - The Intruder (title)",
+      "bpm": 60,
+      "beats_per_bar": 3,
+      "bars": 8,
+      "folder": "res://assets/audio/music/altar/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -5.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        }
+      },
+      "leads": {}
     }
   }
 }

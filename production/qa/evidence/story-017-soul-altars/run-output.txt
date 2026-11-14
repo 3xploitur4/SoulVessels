@@ -1,0 +1,8 @@
+prompt: [W]  Kindle the altar | music: zone1
+interact: {'used': 'UI_KINDLE'}
+hp: 460.0 lit: ['altar_z1_a'] rested: {'altar': 'altar_z1_a', 'room': 'z1_04'} paused: True music: altar
+{'buttons': ['Loadout', 'SoulCore', 'Lore', 'Leave'], 'focus': 'Loadout'}
+{'buttons': ['Vessel_caelan', 'Vessel_nyra', 'ConfirmLoadout', '@Button@179'], 'focus': 'Vessel_caelan'}
+after toggling caelan twice: ['Vessel_caelan', 'Vessel_nyra']
+loadout: ['nyra', 'caelan'] active: caelan
+after leave paused: False music: zone1

@@ -129,3 +129,20 @@ ITEM_ABYSSAL_SCALE,Abyssal Scale
 ITEM_ABYSSAL_SCALE_DESC,Black as the sea that shed it.
 ITEM_PRIMEVAL_TRUTH,Primeval Truth
 ITEM_PRIMEVAL_TRUTH_DESC,An Architect's own words.
+UI_REST,Rest
+UI_KINDLE,Kindle the altar
+ALTAR_KINDLED,Soul Altar kindled
+ALTAR_RESTED,"You rest. Your soul is whole again, and the dead rise to wander once more."
+ALTAR_LOADOUT,Vessels
+ALTAR_LOADOUT_HELP,Choose up to three Vessels. Their order is the order of the swap wheel.
+ALTAR_SLOT_N,Slot %d:  %s
+ALTAR_RESTING,%s  (resting)
+ALTAR_CONFIRM,Bind these Vessels
+ALTAR_SOUL_CORE,Soul Core
+ALTAR_LORE,Lore
+ALTAR_LEAVE,Leave the altar
+ALTAR_Z1_A,Altar of the Fallen Aqueduct
+ALTAR_Z1_B,Altar of Quiet Water
+ALTAR_Z2_A,Altar of Spores
+ALTAR_Z2_B,Altar of the Wanderer
+AFFINITY_BONUS,%s trusts you more deeply

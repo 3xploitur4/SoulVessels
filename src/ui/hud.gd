@@ -38,6 +38,8 @@ var _scratch: Array[Node3D] = []
 
 func _ready() -> void:
 	layer = 5
+	# Display only: keeps drawing under pause and altar menus so values are never stale.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_font = ThemeDB.fallback_font
 	_canvas = Control.new()
 	_canvas.name = "HudCanvas"

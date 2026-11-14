@@ -39,6 +39,7 @@ var touch: TouchControls
 var debug_hud: DebugHud
 var title: TitleScreen
 var pause_menu: PauseMenu
+var altar_menu: AltarMenu
 var player: Player
 var bridge_handler: Node
 
@@ -71,6 +72,7 @@ func _ready() -> void:
 	rooms.camera = camera
 	add_child(rooms)
 	rooms.room_entered.connect(_on_room_entered)
+	register_feature(_build_altar)
 	fx = FxLayer.new()
 	fx.name = "Fx"
 	fx.show_numbers = true
@@ -239,6 +241,10 @@ func quit_to_title() -> void:
 
 
 func _end_run() -> void:
+	if altar_menu != null:
+		altar_menu.queue_free()
+		altar_menu = null
+		get_tree().paused = false
 	playing = false
 	_interact_target = null
 	if player != null:
@@ -281,6 +287,89 @@ func _play_music(zone_id: String) -> void:
 			MusicDirector.set_vessel(player.loadout.active().id)
 
 
+# --- Soul Altars (story 017) ---------------------------------------------------------------
+
+func _build_altar(manager: RoomManager, room: RoomData) -> void:
+	if not room.markers.has("altar"):
+		return
+	var spec: Dictionary = room.raw.get("altar", {})
+	var a := Altar.new()
+	a.name = "Altar"
+	a.altar_id = str(spec.get("id", room.id + "_altar"))
+	a.name_key = str(spec.get("name", "ALTAR"))
+	a.lit = state != null and state.lit_altars.has(a.altar_id)
+	manager.features_root.add_child(a)
+	var pos: Vector2 = room.markers["altar"]
+	a.global_position = Vector3(pos.x, pos.y, 0.0)
+
+
+## Rest at `altar` (addendum "Soul Altars"): light it, full heal and flasks, ordinary enemies
+## return (killed elites stay dead), it becomes the respawn point, save, then the altar menu.
+func rest_at_altar(altar: Altar) -> void:
+	if state == null or player == null:
+		return
+	if GameState.add_unique(state.lit_altars, altar.altar_id):
+		altar.set_lit(true)
+		prompts.toast(tr("ALTAR_KINDLED"), UiKit.COL_GOLD)
+	state.rested_altar = {"room": rooms.data.id, "altar": altar.altar_id}
+	state.checkpoint = {"room": rooms.data.id, "x": altar.global_position.x + 1.2, "y": altar.global_position.y}
+	player.rest()
+	state.reset_commons()
+	rooms.respawn_enemies()
+	save_now()
+	open_altar_menu(altar)
+
+
+func open_altar_menu(altar: Altar) -> void:
+	if altar_menu != null:
+		return
+	altar_menu = AltarMenu.new()
+	altar_menu.state = state
+	altar_menu.altar_name = tr(altar.name_key)
+	altar_menu.loadout_requested.connect(apply_loadout)
+	altar_menu.lore_read_requested.connect(read_lore)
+	altar_menu.leave_requested.connect(close_altar_menu)
+	add_child(altar_menu)
+	prompts.show_interact("")
+	get_tree().paused = true
+	_play_music("altar")
+
+
+func close_altar_menu() -> void:
+	if altar_menu == null:
+		return
+	altar_menu.queue_free()
+	altar_menu = null
+	get_tree().paused = false
+	save_now()
+	_play_music(str(WorldData.zone(_zone).get("music", _zone)))
+
+
+## Equip `ids` (wheel order) from the altar's Loadout page.
+func apply_loadout(ids: Array[String]) -> void:
+	var list: Array[String] = []
+	for v in ids:
+		if state.unlocked_vessels.has(v) and not list.has(v) and list.size() < Loadout.MAX_SLOTS:
+			list.append(v)
+	if list.is_empty():
+		return
+	state.loadout = list
+	player.equip(list, affinity_levels())
+	MusicDirector.set_vessel(player.loadout.active().id)
+
+
+## Mark lore `id` read. A Vessel memory read for the first time grants that Vessel +1 Affinity
+## (addendum "Affinity": reading that Vessel's lore at a Soul Altar).
+func read_lore(id: String) -> void:
+	if not state.lore_found.has(id) or not GameState.add_unique(state.lore_read, id):
+		return
+	var vessel := LoreDb.vessel_of(id)
+	if vessel != "":
+		state.affinity_bonus[vessel] = int(state.affinity_bonus.get(vessel, 0)) + 1
+		player.set_affinity(vessel, int(affinity_levels().get(vessel, 0)))
+		prompts.toast(tr("AFFINITY_BONUS") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+
+
 # --- Frame ----------------------------------------------------------------------------------
 
 func _process(delta: float) -> void:
@@ -320,7 +409,7 @@ func interact_target() -> Interactable:
 func _unhandled_input(event: InputEvent) -> void:
 	if not playing:
 		return
-	if event.is_action_pressed("pause") and pause_menu == null:
+	if event.is_action_pressed("pause") and pause_menu == null and altar_menu == null:
 		open_pause()
 		get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.is_pressed() and not event.is_echo() and OS.is_debug_build():
@@ -337,6 +426,7 @@ func open_pause() -> void:
 	pause_menu.resume_requested.connect(close_pause)
 	pause_menu.quit_requested.connect(quit_to_title)
 	add_child(pause_menu)
+	prompts.show_interact("")
 	get_tree().paused = true
 
 
@@ -354,7 +444,9 @@ func _notification(what: int) -> void:
 			if playing:
 				save_now(true)
 		NOTIFICATION_WM_GO_BACK_REQUEST:
-			if playing and pause_menu == null:
+			if altar_menu != null:
+				close_altar_menu()
+			elif playing and pause_menu == null:
 				open_pause()
 			elif pause_menu != null:
 				close_pause()
@@ -464,6 +556,7 @@ func bridge_game_state(_args: Dictionary) -> Dictionary:
 		"toasts": prompts.toast_texts(),
 		"title": title != null,
 		"pause": pause_menu != null,
+		"altar_menu": altar_menu != null,
 		"fader": fader.alpha(),
 	}
 
@@ -482,6 +575,11 @@ func bridge_interact(_args: Dictionary) -> Dictionary:
 	return {"used": verb}
 
 
+func bridge_leave_altar(_args: Dictionary) -> Dictionary:
+	close_altar_menu()
+	return {"paused": get_tree().paused}
+
+
 func bridge_pause(_args: Dictionary) -> Dictionary:
 	open_pause()
 	return {"paused": get_tree().paused}
@@ -495,7 +593,7 @@ func bridge_resume(_args: Dictionary) -> Dictionary:
 ## {"name"}: press the visible menu button with this node name (title, pause, altar menus).
 func bridge_ui_press(args: Dictionary) -> Dictionary:
 	var wanted := str(args.get("name", ""))
-	for root: Node in [title, pause_menu, get_node_or_null("AltarMenu")]:
+	for root: Node in [title, pause_menu, altar_menu]:
 		if root == null:
 			continue
 		var b := root.find_child(wanted, true, false) as BaseButton
@@ -510,7 +608,7 @@ func bridge_ui_press(args: Dictionary) -> Dictionary:
 ## Names of the visible buttons in open menus (to drive menus by name).
 func bridge_ui_buttons(_args: Dictionary) -> Dictionary:
 	var out: Array[String] = []
-	for root: Node in [title, pause_menu, get_node_or_null("AltarMenu")]:
+	for root: Node in [title, pause_menu, altar_menu]:
 		if root == null:
 			continue
 		for b in root.find_children("*", "BaseButton", true, false):

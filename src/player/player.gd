@@ -422,6 +422,17 @@ func flask_max() -> int:
 	return int(Balance.combat_f("flask.charges")) + int(bonuses.get("flask_charges", 0))
 
 
+## Rest at an altar: full HP and flasks, stamina and posture reset, no move.
+func rest() -> void:
+	stop_action()
+	health.reset(max_hp())
+	flask_charges = flask_max()
+	for slot in loadout.slots:
+		slot.stamina.restore(slot.stamina.max_value)
+		slot.posture.value = 0.0
+	GameEvents.player_hp_changed.emit(health.current, health.max_value)
+
+
 ## Back to full at the spawn point (sandbox death, debug, altar rest).
 func respawn() -> void:
 	health.reset(max_hp())
