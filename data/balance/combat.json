@@ -75,6 +75,16 @@
     "ground_decel": 80.0,
     "max_fall_speed": 30.0
   },
+  "traversal": {
+    "_note": "Story 021, decision D-029. wall_slide_max_fall_mps: fall speed while pressing into a wall. wall_jump_velocity: [away from the wall, up] in m/s. wall_jump_lock_s: seconds steering is ignored after a wall-jump, so the kick carries. wall_coyote_s: seconds after leaving a wall a wall-jump still works. bounce_height_m: apex above a bounce mushroom's cap. void_damage_fraction: share of max HP lost on falling out of a room. void_depth_m: metres below the room bottom that counts as out.",
+    "wall_slide_max_fall_mps": 3.5,
+    "wall_jump_velocity": [7.0, 10.5],
+    "wall_jump_lock_s": 0.16,
+    "wall_coyote_s": 0.1,
+    "bounce_height_m": 6.5,
+    "void_damage_fraction": 0.1,
+    "void_depth_m": 3.0
+  },
   "death": { "respawn_delay_s": 2.5, "_note": "Seconds the fallen body stays on screen before the fade to the rested altar (story 018)." },
   "difficulty": {
     "story": { "enemy_damage": 0.5, "window_scale": 1.8, "echo_lost_on_second_death": false },

@@ -15,6 +15,8 @@ extends Node3D
 
 signal room_entered(room_id: String)
 signal room_left(room_id: String)
+## The player fell below the room (story 021). The game scene decides what it costs.
+signal fell_out
 
 const FADE_OUT_S := 0.18
 const FADE_IN_S := 0.25
@@ -39,6 +41,7 @@ var transitioning: bool = false
 var last_safe: Vector2 = Vector2.ZERO
 
 var _ignore_exit: String = ""
+var _fell: bool = false
 var _spawn_seed: int = 5000
 
 
@@ -52,6 +55,13 @@ func enter(room_id: String, exit: String = "", at: Vector2 = Vector2.INF) -> boo
 	var next := WorldData.room(room_id)
 	if next == null:
 		return false
+	return enter_data(next, exit, at)
+
+
+## As `enter`, for a room that is not in the world files (tests build small rooms inline).
+func enter_data(next: RoomData, exit: String = "", at: Vector2 = Vector2.INF) -> bool:
+	var room_id := next.id
+	_fell = false
 	if data != null:
 		room_left.emit(data.id)
 	_clear()
@@ -168,6 +178,11 @@ func _physics_process(_delta: float) -> void:
 		return
 	if player.is_on_floor() and player.velocity.y <= 0.01:
 		last_safe = Vector2(player.global_position.x, player.global_position.y)
+		_fell = false
+	if not _fell and player.global_position.y < -float(Balance.combat("traversal.void_depth_m")):
+		_fell = true
+		fell_out.emit()
+		return
 	var centre := Vector2(player.global_position.x, player.global_position.y + 0.9)
 	var digit := data.exit_at(centre)
 	if digit == "":

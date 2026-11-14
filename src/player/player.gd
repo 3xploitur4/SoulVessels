@@ -101,6 +101,13 @@ var _aggro_ids: Dictionary[int, bool] = {}
 var _platforms: Array[StaticBody3D] = []
 var _platform_solid: Dictionary[int, bool] = {}
 var _drop_left: float = 0.0
+## Wall contact (story 021): +1 when the wall is to the left (its face points right), -1 when to
+## the right, kept for a short grace after leaving it.
+var _wall_normal_x: float = 0.0
+var _wall_coyote_left: float = 0.0
+var _wall_lock_left: float = 0.0
+var _wall_sliding: bool = false
+var _trav: Dictionary = {}
 
 
 func _ready() -> void:
@@ -125,6 +132,7 @@ func _ready() -> void:
 	if fx_parent == null:
 		fx_parent = get_parent()
 	_move = Balance.combat("movement")
+	_trav = Balance.combat("traversal")
 	gauge = SoulGauge.from_balance()
 	health = Health.new(Balance.combat_f("soul_hp_base"))
 	var levels: Dictionary = affinity_levels
@@ -555,6 +563,7 @@ func _physics_process(delta: float) -> void:
 		_coyote_left = float(_move.get("coyote_s", 0.08))
 	else:
 		_coyote_left = maxf(_coyote_left - delta, 0.0)
+	_update_wall_contact(delta)
 	_update_state_name()
 	_animate(delta)
 
@@ -663,9 +672,14 @@ func _free_move(delta: float) -> void:
 	var accel := float(_move.get("ground_accel", 60.0)) if absf(target_vx) > 0.01 else float(_move.get("ground_decel", 80.0))
 	if not is_on_floor():
 		accel *= float(_move.get("air_control", 0.9))
-	velocity.x = move_toward(velocity.x, target_vx, accel * delta)
-	if absf(_move_axis.x) > 0.2:
-		set_facing(int(signf(_move_axis.x)))
+	_wall_lock_left = maxf(_wall_lock_left - delta, 0.0)
+	# Right after a wall-jump the kick carries: steering waits out the lock.
+	if _wall_lock_left <= 0.0:
+		velocity.x = move_toward(velocity.x, target_vx, accel * delta)
+		if absf(_move_axis.x) > 0.2:
+			set_facing(int(signf(_move_axis.x)))
+	if _jump_buffer_left > 0.0 and not is_on_floor() and _coyote_left <= 0.0 and _wall_coyote_left > 0.0:
+		_wall_jump()
 	if _jump_buffer_left > 0.0 and is_on_floor() and _move_axis.y > 0.5 and _standing_on_platform():
 		# Down + jump drops through a one-way platform.
 		_drop_left = DROP_THROUGH_S
@@ -678,6 +692,69 @@ func _free_move(delta: float) -> void:
 		Sfx.play("jump")
 	if input_enabled and controls.just_released("jump") and velocity.y > 0.0:
 		velocity.y *= 0.5
+
+
+## Kick off the wall just touched: away and up, with a short steering lock, and the air-dash back.
+func _wall_jump() -> void:
+	var v: Array = _trav.get("wall_jump_velocity", [7.0, 10.5])
+	velocity.x = _wall_normal_x * float(v[0])
+	velocity.y = float(v[1])
+	set_facing(int(_wall_normal_x))
+	_wall_lock_left = float(_trav.get("wall_jump_lock_s", 0.16))
+	_wall_coyote_left = 0.0
+	_jump_buffer_left = 0.0
+	_air_dash_ready = true
+	Sfx.play("wall_jump")
+
+
+## Track the wall being touched in the air, and slow the fall while pressing into it.
+func _update_wall_contact(delta: float) -> void:
+	_wall_sliding = false
+	if is_on_floor():
+		_wall_coyote_left = 0.0
+		return
+	var touching := false
+	if is_on_wall():
+		var n := get_wall_normal()
+		if absf(n.x) > 0.7:
+			touching = true
+			_wall_normal_x = signf(n.x)
+			_wall_coyote_left = float(_trav.get("wall_coyote_s", 0.1))
+	if not touching:
+		_wall_coyote_left = maxf(_wall_coyote_left - delta, 0.0)
+		return
+	var pressing := _move_axis.x * -_wall_normal_x > 0.2
+	var slide := float(_trav.get("wall_slide_max_fall_mps", 3.5))
+	if pressing and action == null and velocity.y < -slide:
+		velocity.y = -slide
+		_wall_sliding = true
+
+
+## Thrown upward by a bounce mushroom at `speed` m/s (story 021).
+func bounce(speed: float) -> void:
+	if health.is_dead():
+		return
+	stop_action()
+	velocity.y = speed
+	_air_dash_ready = true
+	_coyote_left = 0.0
+	_jump_buffer_left = 0.0
+	Sfx.play("bounce")
+
+
+## Damage from the world, not an attack (falling out of a room): no i-frames, no block. Returns
+## true when it killed.
+func hurt_by_world(amount: float) -> bool:
+	if health.is_dead():
+		return true
+	var taken := health.damage(amount)
+	took_damage.emit(taken)
+	GameEvents.player_hp_changed.emit(health.current, health.max_value)
+	Sfx.play("hurt")
+	if health.is_dead():
+		_die()
+		return true
+	return false
 
 
 func _update_platforms(delta: float) -> void:
@@ -854,6 +931,8 @@ func _update_state_name() -> void:
 		return
 	if is_on_floor():
 		state = "run" if absf(velocity.x) > 0.3 else "idle"
+	elif _wall_sliding:
+		state = "wall_slide"
 	else:
 		state = "jump" if velocity.y > 0.0 else "fall"
 

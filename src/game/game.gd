@@ -80,6 +80,8 @@ func _ready() -> void:
 	register_feature(_build_altar)
 	register_feature(_build_echo)
 	register_feature(_build_pickups)
+	register_feature(_build_mushrooms)
+	rooms.fell_out.connect(_on_fell_out)
 	loot = LootTable.from_data()
 	soul_core = SoulCore.from_data()
 	GameEvents.perfect_parry.connect(func(_a: Node3D) -> void: _award_xp("perfect_parry"))
@@ -492,6 +494,34 @@ func _on_player_died() -> void:
 	rooms.enter(room, "", at if at.x >= 0.0 else Vector2.INF)
 	save_now()
 	await fader.fade_to(0.0, 0.6)
+
+
+# --- Traversal (story 021) -------------------------------------------------------------------
+
+func _build_mushrooms(manager: RoomManager, room: RoomData) -> void:
+	var height := Balance.combat_f("traversal.bounce_height_m")
+	var speed := sqrt(2.0 * Balance.combat_f("movement.gravity") * height)
+	for pos: Vector2 in room.mushrooms:
+		var m := BounceMushroom.new()
+		m.name = "BounceMushroom"
+		m.player = player
+		m.launch_speed = speed
+		manager.features_root.add_child(m)
+		m.global_position = Vector3(pos.x, pos.y, 0.0)
+
+
+## Falling out of a room costs a share of max HP and returns the player to the last safe
+## ground; if that kills, it is an ordinary death (the echo forms at that safe ground).
+func _on_fell_out() -> void:
+	if player == null or not playing:
+		return
+	var cost := player.health.max_value * Balance.combat_f("traversal.void_damage_fraction")
+	if player.hurt_by_world(cost):
+		return
+	player.teleport(rooms.last_safe.x, rooms.last_safe.y + 0.05)
+	player.grant_invulnerability(1.0)
+	camera.snap()
+	camera.add_trauma(0.3)
 
 
 # --- Loot and pickups (story 019) -------------------------------------------------------------
