@@ -107,6 +107,9 @@ func _cavern() -> void:
 			pool.scale = Vector3(1.0, 1.0, 0.36)
 	_stalactites("z1_rock")
 	_silhouettes()
+	_shafts(3)
+	_motes(Color(0.75, 0.85, 1.0, 0.55), 0.06)
+	_mist_bands()
 
 
 ## A stone arch: two piers, a ring of voussoirs, and the wall above up to the deck. `ruined`
@@ -181,7 +184,9 @@ func _mycelium() -> void:
 	_vines()
 	_stalactites("z2_rock")
 	_silhouettes()
-	_spores()
+	_shafts(2)
+	_motes(Color(0.55, 1.0, 0.85, 0.9), 0.12)
+	_mist_bands()
 
 
 ## A mushroom: tapered stalk, a wide domed cap with spots, and dark gills beneath.
@@ -216,11 +221,12 @@ func _vines() -> void:
 			x += rng.randf_range(4.0, 9.0)
 
 
-## Drifting spores: one small CPU particle system across the room (one draw call).
-func _spores() -> void:
+## Drifting motes (dust in the cavern, spores in the forest): one small CPU particle system
+## across the room (one draw call). `per_m2` sets how many per square metre of room.
+func _motes(color: Color, per_m2: float) -> void:
 	var p := CPUParticles3D.new()
-	p.name = "Spores"
-	p.amount = int(clampf(_w * _h * 0.12, 24.0, 90.0))
+	p.name = "Motes"
+	p.amount = int(clampf(_w * _h * per_m2, 16.0, 90.0))
 	p.lifetime = 9.0
 	p.preprocess = 9.0
 	p.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
@@ -239,7 +245,7 @@ func _spores() -> void:
 	mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.albedo_texture = SpriteArt.blob()
-	mat.albedo_color = Color(0.55, 1.0, 0.85, 0.9)
+	mat.albedo_color = color
 	mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	q.material = mat
 	p.mesh = q
@@ -247,6 +253,69 @@ func _spores() -> void:
 	p.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	p.set_meta("dynamic", true)
 	root.add_child(p)
+
+
+## Shafts of pale light slanting down from the ceiling, behind the play plane.
+func _shafts(count: int) -> void:
+	var shader := load("res://src/vfx/spatial_env_shaft.gdshader") as Shader
+	var tint := Color(str(theme.get("shaft", "#9cc8ff")))
+	var n := maxi(1, int(round(float(count) * _w / 30.0)))
+	for i in range(n):
+		var tall := minf(_h - 1.0, rng.randf_range(7.0, 11.0))
+		var quad := MeshInstance3D.new()
+		var mesh := QuadMesh.new()
+		mesh.size = Vector2(rng.randf_range(1.8, 3.4), tall)
+		quad.mesh = mesh
+		var mat := ShaderMaterial.new()
+		mat.shader = shader
+		mat.set_shader_parameter("tint", tint)
+		mat.set_shader_parameter("strength", rng.randf_range(0.1, 0.2))
+		mat.set_shader_parameter("phase", rng.randf() * TAU)
+		quad.material_override = mat
+		quad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		quad.position = Vector3(rng.randf_range(2.0, _w - 2.0), _h - 1.0 - tall * 0.5, rng.randf_range(-5.5, -3.2))
+		quad.rotation_degrees.z = rng.randf_range(-24.0, -12.0)
+		quad.set_meta("dynamic", true)
+		root.add_child(quad)
+
+
+## Ground mist: one band behind the play plane and a thinner one just in front of it, along
+## the floor most of the room stands on.
+func _mist_bands() -> void:
+	var tops := _deep_tops()
+	if tops.is_empty():
+		return
+	# The floor height with the most walkable width.
+	var widths: Dictionary[float, float] = {}
+	for t in tops:
+		widths[t.position.y] = float(widths.get(t.position.y, 0.0)) + t.size.x
+	var floor_y := 0.0
+	var best := -1.0
+	for y: float in widths.keys():
+		if widths[y] > best:
+			best = widths[y]
+			floor_y = y
+	var shader := load("res://src/vfx/spatial_env_mist.gdshader") as Shader
+	var clouds := TexBank.get_tex("res://assets/art/textures/mist.png")
+	var tint := Color(str(theme.get("mist", "#8fb0d0")))
+	var layers := [[-2.9, 3.6, 1.1, 0.3, 0.008], [0.9, 1.4, 0.4, 0.12, -0.012]]
+	for l: Array in layers:
+		var quad := MeshInstance3D.new()
+		var mesh := QuadMesh.new()
+		mesh.size = Vector2(_w + 14.0, float(l[1]))
+		quad.mesh = mesh
+		var mat := ShaderMaterial.new()
+		mat.shader = shader
+		mat.set_shader_parameter("clouds", clouds)
+		mat.set_shader_parameter("tint", tint)
+		mat.set_shader_parameter("density", float(l[3]) * float(theme.get("mist_density", 1.0)))
+		mat.set_shader_parameter("repeats", (_w + 14.0) / 16.0)
+		mat.set_shader_parameter("speed", float(l[4]))
+		quad.material_override = mat
+		quad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		quad.position = Vector3(_w * 0.5, floor_y + float(l[2]), float(l[0]))
+		quad.set_meta("dynamic", true)
+		root.add_child(quad)
 
 
 # --- Shared -----------------------------------------------------------------------------------
@@ -272,12 +341,14 @@ func _stalactites(mat: String) -> void:
 		var length := rng.randf_range(0.8, 2.2)
 		_cone(Vector3(x, _h - 1.0 - length * 0.5, rng.randf_range(-3.5, -1.8)), rng.randf_range(0.25, 0.5), length, mat)
 		x += rng.randf_range(2.5, 6.0)
+	# Front silhouettes stay short: closer to the camera they look bigger, and they must never
+	# hang over an upper ledge.
 	x = rng.randf_range(3.0, 9.0)
 	while x < _w:
-		var length := rng.randf_range(1.6, 3.4)
-		var c := _cone(Vector3(x, _h - 0.6 - length * 0.5, Z_FRONT), rng.randf_range(0.35, 0.7), length, "silhouette")
+		var length := rng.randf_range(0.9, 1.7)
+		var c := _cone(Vector3(x, _h - 0.3 - length * 0.5, Z_FRONT), rng.randf_range(0.25, 0.45), length, "silhouette")
 		c.rotation_degrees.z = rng.randf_range(-6.0, 6.0)
-		x += rng.randf_range(8.0, 15.0)
+		x += rng.randf_range(9.0, 16.0)
 
 
 ## Black rocks toward the camera along the bottom edge. Only in rooms about one screen tall:

@@ -1,5 +1,5 @@
 {
-  "_source": "Stories 015/028. Per-zone look: environment, key light, the materials rooms are built from (ArenaMaterials.PALETTE keys: rock = big masses touching the room edge, ledge = floating platforms, trim = the walkable top), the decor style and the backdrop painting cut from the zone concept sheet (decision D-033). backdrop_tint darkens the painting so the play plane stays the brightest thing on screen.",
+  "_source": "Stories 015/028. Per-zone look: environment, key light, the materials rooms are built from (ArenaMaterials.PALETTE keys: rock = big masses touching the room edge, ledge = floating platforms, trim = the walkable top), the decor style and the backdrop painting cut from the zone concept sheet (decision D-033). backdrop_tint darkens the painting so the play plane stays the brightest thing on screen. mist, mist_density and shaft colour the ground mist and the light shafts.",
   "cavern": {
     "background": "#04060a",
     "ambient": "#8791a6",
@@ -22,7 +22,9 @@
     "ledge": "z1_ledge",
     "backdrop": "res://assets/art/backdrops/zone1.png",
     "backdrop_tint": "#8c9bb8",
-    "glow": 0.55
+    "glow": 0.55,
+    "mist": "#6f8fb8",
+    "shaft": "#9cc8ff"
   },
   "mycelium": {
     "background": "#05040a",
@@ -46,6 +48,9 @@
     "ledge": "z2_ledge",
     "backdrop": "res://assets/art/backdrops/zone2.png",
     "backdrop_tint": "#9aa6b4",
-    "glow": 0.75
+    "glow": 0.75,
+    "mist": "#4fc0b0",
+    "shaft": "#7fffd8",
+    "mist_density": 0.6
   }
 }

@@ -34,6 +34,7 @@ func _init() -> void:
 	_bark()
 	_cap()
 	_moss()
+	_mist()
 	print("textures: done")
 	quit()
 
@@ -202,3 +203,16 @@ func _moss() -> void:
 			var hgt := a * 0.6 + b * 0.4
 			im[1].set_pixel(x, y, Color(hgt, hgt, hgt))
 	_save("moss", im[0], im[1], 5.0)
+
+
+## Drifting mist: soft clouds in the alpha channel (white colour, tinted by the shader).
+func _mist() -> void:
+	var im := Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+	for y in range(SIZE):
+		for x in range(SIZE):
+			var a := _tile(_noise, float(x), float(y) * 2.0, 0.004)
+			var b := _tile(_noise, float(x) + 700.0, float(y) * 2.0 + 120.0, 0.012)
+			var v := smoothstep(0.25, 0.95, a * 0.75 + b * 0.25)
+			im.set_pixel(x, y, Color(1.0, 1.0, 1.0, v))
+	im.save_png(ProjectSettings.globalize_path("%s/mist.png" % OUT))
+	print("textures: mist")

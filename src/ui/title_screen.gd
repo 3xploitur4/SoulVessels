@@ -31,6 +31,7 @@ func _ready() -> void:
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(shade)
+	_build_lineup()
 	show_slots()
 
 
@@ -42,9 +43,12 @@ func refresh(new_summaries: Array[Dictionary]) -> void:
 
 func show_slots() -> void:
 	var col := _new_page()
-	col.add_child(UiKit.label(tr("TITLE_GAME"), 96, UiKit.COL_TEXT))
-	col.add_child(UiKit.label(tr("TITLE_SUBTITLE"), 30, UiKit.COL_DIM))
-	col.add_child(_spacer(24))
+	var logo := UiKit.heading(tr("TITLE_GAME").to_upper(), 104, Color(0.96, 0.9, 0.78))
+	logo.custom_minimum_size.x = 1500.0
+	col.add_child(logo)
+	col.add_child(UiKit.rule(620.0))
+	col.add_child(UiKit.heading(tr("TITLE_SUBTITLE"), 30, UiKit.COL_GOLD))
+	col.add_child(_spacer(20))
 	var buttons: Array[Control] = []
 	for i in range(3):
 		var b := UiKit.button(_slot_text(i), 760.0)
@@ -76,7 +80,8 @@ func _on_slot(i: int) -> void:
 
 func _show_difficulty(i: int) -> void:
 	var col := _new_page()
-	col.add_child(UiKit.label(tr("TITLE_CHOOSE_DIFFICULTY"), 44))
+	col.add_child(UiKit.heading(tr("TITLE_CHOOSE_DIFFICULTY"), 48))
+	col.add_child(UiKit.rule())
 	var buttons: Array[Control] = []
 	for d: String in ["story", "normal"]:
 		var b := UiKit.button(tr("DIFFICULTY_" + d.to_upper()), 560.0)
@@ -123,6 +128,38 @@ func _confirm_delete(i: int) -> void:
 	col.add_child(no)
 	col.add_child(yes)
 	UiKit.link_focus([no, yes] as Array[Control])
+
+
+## The five Vessels from the concept sheet, standing in shadow along the bottom of the screen.
+func _build_lineup() -> void:
+	var row := HBoxContainer.new()
+	row.name = "Lineup"
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.anchor_left = 0.0
+	row.anchor_right = 1.0
+	row.anchor_top = 0.44
+	row.anchor_bottom = 1.04
+	row.add_theme_constant_override("separation", 40)
+	_root.add_child(row)
+	# Two groups either side of the menu, so no one stands behind the buttons.
+	for id: String in ["darius", "caelan", "", "nyra", "seris", "ilyr"]:
+		if id == "":
+			var gap := Control.new()
+			gap.custom_minimum_size = Vector2(900.0, 0.0)
+			gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			row.add_child(gap)
+			continue
+		if not SpriteArt.has(id):
+			continue
+		var t := TextureRect.new()
+		t.texture = SpriteArt.texture(id)
+		t.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# Caelan, the first Vessel, stands lit; the others wait in the dark.
+		t.modulate = Color(0.62, 0.66, 0.78, 0.95) if id == "caelan" else Color(0.2, 0.23, 0.32, 0.9)
+		row.add_child(t)
 
 
 func _new_page() -> VBoxContainer:

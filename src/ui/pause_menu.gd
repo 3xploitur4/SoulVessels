@@ -41,7 +41,9 @@ func _ready() -> void:
 	var left := VBoxContainer.new()
 	left.custom_minimum_size = Vector2(380, 0)
 	row.add_child(left)
-	left.add_child(UiKit.label(tr("UI_PAUSE"), 48, UiKit.COL_TEXT, HORIZONTAL_ALIGNMENT_LEFT))
+	var title := UiKit.heading(tr("UI_PAUSE"), 52)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	left.add_child(title)
 	var pages := [["UI_RESUME", "resume"], ["UI_MAP", "map"], ["UI_INVENTORY", "inventory"],
 		["UI_LORE", "lore"], ["UI_QUIT_TO_TITLE", "quit"]]
 	for p: Array in pages:

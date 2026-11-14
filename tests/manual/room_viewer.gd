@@ -32,6 +32,7 @@ func _ready() -> void:
 	camera = SideCamera.new()
 	camera.target = player
 	add_child(camera)
+	add_child(Vignette.new())
 	rooms = RoomManager.new()
 	rooms.world = world
 	rooms.player = player

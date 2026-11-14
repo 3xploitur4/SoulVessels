@@ -39,9 +39,10 @@ func _ready() -> void:
 
 func show_main() -> void:
 	var col := _new_page()
-	var heading := UiKit.label(altar_name, 52, UiKit.COL_GOLD)
+	var heading := UiKit.heading(altar_name, 56)
 	heading.custom_minimum_size.x = 1100.0
 	col.add_child(heading)
+	col.add_child(UiKit.rule(520.0))
 	col.add_child(UiKit.label(tr("ALTAR_RESTED"), 26, UiKit.COL_DIM))
 	var items: Array[Control] = []
 	var pages := [["ALTAR_LOADOUT", "Loadout", show_loadout], ["ALTAR_SOUL_CORE", "SoulCore", show_core],
@@ -64,7 +65,7 @@ func show_loadout() -> void:
 
 func _draw_loadout() -> void:
 	var col := _new_page()
-	col.add_child(UiKit.label(tr("ALTAR_LOADOUT"), 44))
+	col.add_child(UiKit.heading(tr("ALTAR_LOADOUT"), 48))
 	col.add_child(UiKit.label(tr("ALTAR_LOADOUT_HELP"), 22, UiKit.COL_DIM))
 	var items: Array[Control] = []
 	for v in state.unlocked_vessels:
@@ -104,7 +105,7 @@ func _toggle(v: String) -> void:
 
 func show_core() -> void:
 	var col := _new_page()
-	col.add_child(UiKit.label(tr("ALTAR_SOUL_CORE"), 44))
+	col.add_child(UiKit.heading(tr("ALTAR_SOUL_CORE"), 48))
 	var back := UiKit.button(tr("UI_BACK"), 520.0)
 	back.pressed.connect(show_main)
 	col.add_child(back)
@@ -115,7 +116,7 @@ func show_core() -> void:
 
 func show_lore() -> void:
 	var col := _new_page()
-	col.add_child(UiKit.label(tr("ALTAR_LORE"), 44))
+	col.add_child(UiKit.heading(tr("ALTAR_LORE"), 48))
 	var items: Array[Control] = []
 	if state.lore_found.is_empty():
 		col.add_child(UiKit.label(tr("UI_LORE_EMPTY"), 24, UiKit.COL_DIM))
@@ -136,7 +137,8 @@ func show_lore() -> void:
 func _read(id: String) -> void:
 	lore_read_requested.emit(id)
 	var col := _new_page()
-	col.add_child(UiKit.label(tr(LoreDb.title_key(id)), 40, UiKit.COL_GOLD))
+	col.add_child(UiKit.heading(tr(LoreDb.title_key(id)), 40))
+	col.add_child(UiKit.rule())
 	var body := UiKit.label(tr(LoreDb.body_key(id)), 26, UiKit.COL_TEXT, HORIZONTAL_ALIGNMENT_LEFT)
 	body.custom_minimum_size = Vector2(1100, 0)
 	col.add_child(body)

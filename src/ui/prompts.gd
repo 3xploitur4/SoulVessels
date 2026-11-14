@@ -39,7 +39,8 @@ func _ready() -> void:
 	_tutorial = _make_label(30, Vector2(0.5, 0.2), Vector2(1100, 120))
 	_tutorial.add_theme_color_override("font_color", Color(0.95, 0.92, 0.82))
 	_card = _make_label(72, Vector2(0.5, 0.36), Vector2(1600, 120))
-	_card.add_theme_color_override("font_color", Color(0.9, 0.88, 0.82))
+	_card.add_theme_color_override("font_color", Color(0.96, 0.9, 0.78))
+	_card.add_theme_font_override("font", UiKit.display_font())
 	_subtitle = _make_label(30, Vector2(0.5, 0.88), Vector2(1400, 90))
 	_toasts = VBoxContainer.new()
 	_toasts.mouse_filter = Control.MOUSE_FILTER_IGNORE

@@ -23,6 +23,17 @@ var glow: float = 0.0          # extra self-light
 var tell: float = 0.0          # 0..1 strength of the enemy tell glow
 ## Walk cycle speed in radians per second at stride 1.
 var step_rate: float = 11.0
+## While true the body leaves fading afterimages behind it (dashes, lunges, Shadowstep).
+var trailing: bool = false
+## Colour of the afterimages.
+var trail_color: Color = Color(0.55, 0.7, 1.0)
+
+## Afterimage pool size, spacing and life.
+const GHOSTS := 5
+const GHOST_EVERY_S := 0.03
+const GHOST_LIFE_S := 0.24
+## Landing dust life.
+const PUFF_S := 0.32
 
 var spec: Dictionary = {}
 var height_m: float = 2.0
@@ -39,6 +50,12 @@ var _flash_left: float = 0.0
 var _flash_total: float = 0.0
 var _cur: Dictionary[String, float] = {"lean": 0.0, "crouch": 0.0, "stretch": 0.0, "lift": 0.0, "forward": 0.0, "step": 0.0}
 var _centre_y: float = 1.0
+var _ghosts: Array[MeshInstance3D] = []
+var _ghost_left: Array[float] = []
+var _ghost_next: int = 0
+var _ghost_timer: float = 0.0
+var _puff: MeshInstance3D
+var _puff_left: float = 0.0
 
 
 ## A body for sprite `id` (see data/art/sprites.json). Null when there is no art for it.
@@ -90,6 +107,32 @@ func _build(id: String) -> void:
 		_shadow.scale = Vector3(width_m * 0.95, width_m * 0.42, 1.0)
 		_shadow.position = Vector3(0.0, 0.03, 0.1)
 		add_child(_shadow)
+	# Afterimages: copies of the sprite left in the world, additive and fading. They live at
+	# the top level so they stay where they were dropped while the body moves on.
+	for i in range(GHOSTS):
+		var g := MeshInstance3D.new()
+		var gq := QuadMesh.new()
+		gq.size = Vector2(width_m, height_m)
+		g.mesh = gq
+		var gm := StandardMaterial3D.new()
+		gm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		gm.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		gm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		gm.albedo_texture = tex
+		gm.cull_mode = BaseMaterial3D.CULL_DISABLED
+		g.material_override = gm
+		g.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		g.top_level = true
+		g.visible = false
+		add_child(g)
+		_ghosts.append(g)
+		_ghost_left.append(0.0)
+	if bool(spec.get("shadow", true)):
+		_puff = _blob_quad(Color(0.8, 0.85, 0.95, 0.0), false)
+		_puff.rotation_degrees.x = -90.0
+		_puff.top_level = true
+		_puff.visible = false
+		add_child(_puff)
 	var t: Dictionary = spec.get("tell", {})
 	if not t.is_empty():
 		_tell_glow = _blob_quad(Color(str(t.get("color", "#ffffff"))), true)
@@ -140,6 +183,15 @@ func set_grounded(on: bool) -> void:
 		_shadow.visible = on
 
 
+## A ring of dust at the feet (landing, a heavy step).
+func puff() -> void:
+	if _puff == null:
+		return
+	_puff_left = PUFF_S
+	_puff.global_position = global_position + Vector3(0.0, 0.05, 0.2)
+	_puff.visible = true
+
+
 ## Ease toward the targets and push them to the shader. Call once per frame.
 func tick(delta: float) -> void:
 	var k := minf(delta * 16.0, 1.0)
@@ -165,9 +217,37 @@ func tick(delta: float) -> void:
 	if _flash_left > 0.0:
 		_flash_left = maxf(_flash_left - delta, 0.0)
 		_mat.set_shader_parameter("flash", 0.85 * _flash_left / _flash_total)
+	_tick_ghosts(delta)
+	if _puff_left > 0.0:
+		_puff_left = maxf(_puff_left - delta, 0.0)
+		var k_puff := 1.0 - _puff_left / PUFF_S
+		_puff.scale = Vector3(width_m * lerpf(0.6, 2.2, k_puff), width_m * lerpf(0.25, 0.7, k_puff), 1.0)
+		(_puff.material_override as StandardMaterial3D).albedo_color.a = 0.45 * (1.0 - k_puff)
+		_puff.visible = _puff_left > 0.0
 	if _tell_glow != null:
 		_tell_glow.visible = tell > 0.02
 		if _tell_glow.visible:
 			var size := float(_tell_glow.get_meta("size")) * lerpf(0.5, 1.6, tell)
 			_tell_glow.scale = Vector3(size, size, 1.0)
 			_tell_mat.albedo_color.a = clampf(0.35 + tell, 0.0, 1.0)
+
+
+func _tick_ghosts(delta: float) -> void:
+	if trailing:
+		_ghost_timer -= delta
+		if _ghost_timer <= 0.0:
+			_ghost_timer = GHOST_EVERY_S
+			var g := _ghosts[_ghost_next]
+			_ghost_left[_ghost_next] = GHOST_LIFE_S
+			_ghost_next = (_ghost_next + 1) % GHOSTS
+			g.global_transform = _mesh.global_transform
+			g.visible = true
+	else:
+		_ghost_timer = 0.0
+	for i in range(GHOSTS):
+		if _ghost_left[i] <= 0.0:
+			continue
+		_ghost_left[i] = maxf(_ghost_left[i] - delta, 0.0)
+		var a := 0.8 * _ghost_left[i] / GHOST_LIFE_S
+		(_ghosts[i].material_override as StandardMaterial3D).albedo_color = Color(trail_color.r, trail_color.g, trail_color.b, a)
+		_ghosts[i].visible = _ghost_left[i] > 0.0

@@ -84,6 +84,9 @@ func _ready() -> void:
 	fx.name = "Fx"
 	fx.show_numbers = true
 	add_child(fx)
+	var vignette := Vignette.new()
+	vignette.name = "Vignette"
+	add_child(vignette)
 	fader = Fader.new()
 	fader.name = "Fader"
 	add_child(fader)

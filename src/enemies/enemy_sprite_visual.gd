@@ -23,6 +23,7 @@ static func build_sprite(enemy_data: Dictionary) -> EnemySpriteVisual:
 	v.body = SpriteBody.create(id)
 	v.add_child(v.body)
 	v._h = v.body.height_m
+	v.body.trail_color = Color(str((v.body.spec.get("tell", {}) as Dictionary).get("color", "#ff5040")))
 	# Enemies sit a little behind the player's plane, each at its own depth, so overlapping
 	# sprites never fight over the same pixels.
 	v._z = -0.06 - 0.02 * float(randi() % 8)
@@ -56,6 +57,8 @@ func animate(state: String, facing: int, speed: float, delta: float) -> void:
 	b.roll = 0.0
 	b.forward = 0.0
 	b.lift = 0.0
+	# A fast attack (the Crawler lunge, the Warden charge) leaves afterimages in its tell colour.
+	b.trailing = state == "attack" and speed > 4.0
 	match state:
 		"approach":
 			if speed > 0.2:

@@ -23,6 +23,7 @@ var _slash_color: Color = Color.WHITE
 var _reach: float = 2.0
 var _dagger_user: bool = false
 var _h: float = 1.9
+var _was_air: bool = false
 
 
 static func build_sprite(vessel_data: Dictionary) -> VesselSpriteVisual:
@@ -34,6 +35,7 @@ static func build_sprite(vessel_data: Dictionary) -> VesselSpriteVisual:
 	v._h = v.body.height_m
 	var slash: Dictionary = v.body.spec.get("slash", {})
 	v._slash_color = Color(str(slash.get("color", "#ffffff")))
+	v.body.trail_color = v._slash_color
 	v._reach = float(slash.get("reach_m", 2.0))
 	v._dagger_user = (vessel_data.get("primary", {}).get("hits", []) as Array).size() >= 6
 	v._arc = SlashArc.new()
@@ -76,7 +78,13 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	b.lift = 0.0
 	b.forward = 0.0
 	var guard := 0.0
-	b.set_grounded(state != "jump" and state != "fall" and state != "air_dash")
+	var air := state == "jump" or state == "fall" or state == "air_dash"
+	b.set_grounded(not air)
+	if _was_air and not air and state != "dead":
+		b.puff()
+	_was_air = air
+	b.trailing = state in ["dodge", "air_dash", "shadowstep", "oathbreaker_lunge", "severing_arrival", "shadow_counter",
+		"dance_of_shadows"]
 	if state == "run":
 		b.stride = clampf(speed, 0.4, 1.3)
 		b.lean = 0.07 * _h

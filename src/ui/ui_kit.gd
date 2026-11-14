@@ -27,6 +27,42 @@ const PAD_BUTTONS := {
 const PAD_AXES := {4: "LT", 5: "RT"}
 
 static var _theme: Theme
+static var _display: Font
+
+
+## The display face for titles and headings: an old-style serif from the device (nothing is
+## shipped, so no font licence is needed). Falls back through common serifs to the generic one.
+static func display_font() -> Font:
+	if _display == null:
+		var f := SystemFont.new()
+		f.font_names = PackedStringArray(["Palatino Linotype", "Book Antiqua", "Constantia", "Georgia",
+			"Noto Serif", "DejaVu Serif", "serif"])
+		f.font_weight = 600
+		_display = f
+	return _display
+
+
+## A heading in the display face, gold by default.
+static func heading(text: String, size: int = 44, color: Color = COL_GOLD) -> Label:
+	var l := label(text, size, color)
+	l.add_theme_font_override("font", display_font())
+	l.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
+	l.add_theme_constant_override("outline_size", 6)
+	return l
+
+
+## A thin gold rule with a diamond at its centre, to sit under a heading.
+static func rule(width: float = 420.0) -> Control:
+	var c := Control.new()
+	c.custom_minimum_size = Vector2(width, 18.0)
+	c.draw.connect(func() -> void:
+		var mid := c.size * 0.5
+		var col := Color(COL_GOLD.r, COL_GOLD.g, COL_GOLD.b, 0.8)
+		c.draw_line(Vector2(mid.x - width * 0.5, mid.y), Vector2(mid.x - 12.0, mid.y), col, 1.5)
+		c.draw_line(Vector2(mid.x + 12.0, mid.y), Vector2(mid.x + width * 0.5, mid.y), col, 1.5)
+		c.draw_colored_polygon(PackedVector2Array([mid + Vector2(0, -6), mid + Vector2(7, 0), mid + Vector2(0, 6),
+			mid + Vector2(-7, 0)]), col))
+	return c
 
 
 ## The shared menu theme (built once).
@@ -41,13 +77,14 @@ static func theme() -> Theme:
 	t.set_color("font_focus_color", "Button", Color.WHITE)
 	t.set_color("font_pressed_color", "Button", COL_ACCENT)
 	t.set_color("font_disabled_color", "Button", Color(0.45, 0.45, 0.5))
-	t.set_stylebox("normal", "Button", _box(Color(0.06, 0.08, 0.12, 0.88), Color(0.5, 0.52, 0.58, 0.8), 2))
-	t.set_stylebox("hover", "Button", _box(Color(0.1, 0.14, 0.2, 0.95), Color(0.75, 0.78, 0.85), 2))
-	t.set_stylebox("pressed", "Button", _box(Color(0.04, 0.12, 0.16, 0.95), COL_ACCENT, 3))
-	t.set_stylebox("focus", "Button", _box(Color(0, 0, 0, 0), COL_ACCENT, 3))
+	# Dark slate plates with a worn gold edge; focus and hover brighten the gold.
+	t.set_stylebox("normal", "Button", _box(Color(0.045, 0.055, 0.085, 0.9), Color(0.55, 0.45, 0.25, 0.75), 2))
+	t.set_stylebox("hover", "Button", _box(Color(0.09, 0.1, 0.14, 0.96), Color(0.95, 0.78, 0.35), 2))
+	t.set_stylebox("pressed", "Button", _box(Color(0.14, 0.11, 0.05, 0.96), Color(1.0, 0.86, 0.5), 3))
+	t.set_stylebox("focus", "Button", _box(Color(0.95, 0.78, 0.35, 0.07), Color(1.0, 0.84, 0.45), 3))
 	t.set_stylebox("disabled", "Button", _box(Color(0.04, 0.05, 0.07, 0.7), Color(0.25, 0.26, 0.3), 2))
 	t.set_color("font_color", "Label", COL_TEXT)
-	t.set_stylebox("panel", "PanelContainer", _box(COL_PANEL, Color(0.4, 0.42, 0.5, 0.7), 2, 14))
+	t.set_stylebox("panel", "PanelContainer", _box(COL_PANEL, Color(0.55, 0.45, 0.25, 0.7), 2, 14))
 	t.set_constant("separation", "VBoxContainer", 14)
 	t.set_constant("separation", "HBoxContainer", 14)
 	_theme = t
@@ -59,7 +96,9 @@ static func _box(bg: Color, border: Color, width: int, pad: int = 10) -> StyleBo
 	sb.bg_color = bg
 	sb.border_color = border
 	sb.set_border_width_all(width)
-	sb.set_corner_radius_all(6)
+	sb.set_corner_radius_all(3)
+	sb.shadow_color = Color(0, 0, 0, 0.45)
+	sb.shadow_size = 6
 	sb.content_margin_left = pad + 8
 	sb.content_margin_right = pad + 8
 	sb.content_margin_top = pad
@@ -72,6 +111,8 @@ static func button(text: String, min_width: float = 380.0) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.custom_minimum_size = Vector2(min_width, 64.0)
+	# Keep its own width in a column that a wide heading has stretched.
+	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.focus_mode = Control.FOCUS_ALL
 	return b
 

@@ -162,19 +162,17 @@ func _build_oneway() -> void:
 		oneway_bodies.append(body)
 
 
-## Gate bodies are built plainly here; the gate features (story 023) dress and open them.
+## Gate bodies: collision here, the look from `GateLook`; the gate features (story 023) add
+## behaviour and open them.
 func _build_gates() -> void:
-	const MATERIALS := {"ward": "ward_gold", "veil": "foreground", "lock": "lock_bars", "rune": "rune_dark",
-		"masonry": "masonry", "flood": "flood"}
 	for kind: String in data.gate_rects.keys():
 		var bodies: Array = []
 		for r: Rect2 in data.gate_rects[kind]:
 			var layer := LAYER_VEIL if kind == "veil" else LAYER_WORLD
-			var front := 0.6 if kind in ["ward", "lock", "veil"] else FRONT_Z
-			var back := -0.6 if kind in ["ward", "lock", "veil"] else BACK_Z
-			var body := _body(r, layer, MATERIALS.get(kind, "slate"), back, front)
+			var body := _body(r, layer, "", -0.6, 0.6)
 			body.name = "Gate_%s" % kind
 			body.set_meta("dynamic", true)
+			GateLook.dress(body, kind, r)
 			bodies.append(body)
 		gate_bodies[kind] = bodies
 
@@ -216,6 +214,9 @@ func _body(r: Rect2, layer: int, material: String, back: float, front: float) ->
 	shape.shape = box
 	shape.position.z = -body.position.z
 	body.add_child(shape)
+	add_child(body)
+	if material == "":
+		return body
 	var mesh := MeshInstance3D.new()
 	var bm := BoxMesh.new()
 	bm.size = Vector3(r.size.x, r.size.y, depth)
@@ -223,7 +224,6 @@ func _body(r: Rect2, layer: int, material: String, back: float, front: float) ->
 	mesh.material_override = ArenaMaterials.get_material(material)
 	mesh.set_meta("cast_shadow", true)
 	body.add_child(mesh)
-	add_child(body)
 	return body
 
 

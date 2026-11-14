@@ -21,8 +21,12 @@
 | 024 | Zone 1 — Whispering Cavern | Integration | L |
 | 025 | Zone 2 — Luminous Mycelium Forest, Track 03 | Integration | L |
 | 026 | M2 playtest, evidence and APK | Integration | M |
+| 027 | Art pass: painted Vessels and enemies from the concept sheets | Visual/Feel | L |
+| 028 | Art pass: zones, gates, altars and UI after the zone paintings | Visual/Feel | L |
 
-Build order is the story order. 019-022 only need 014-015.
+Build order is the story order. 019-022 only need 014-015. 027 and 028 were added on 2026-11-14,
+when the user supplied concept sheets and asked for the look to follow them; they were built
+between 019 and 020.
 
 Out of M2 (later milestones, per the addendum): Vessel ability ranks, Sync passives and reforging
 (M3, with Standard and Greater Shards and Essence as their currency), fast travel (needs all 7

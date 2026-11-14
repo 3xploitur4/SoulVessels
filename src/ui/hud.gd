@@ -102,38 +102,61 @@ func _draw_hud() -> void:
 
 
 func _draw_vitals(origin: Vector2) -> void:
-	var hp_w := 420.0
-	_canvas.draw_rect(Rect2(origin - Vector2(10, 8), Vector2(hp_w + 20, 112)), COL_PANEL)
-	# HP bar.
-	var hp_rect := Rect2(origin, Vector2(hp_w, 24))
+	var hp_w := 440.0
+	var hp_h := 26.0
+	var gold := Color(0.86, 0.7, 0.36)
+	var gold_dim := Color(0.5, 0.4, 0.2)
+	# A soft dark plate behind the block so it reads over bright backdrops.
+	_canvas.draw_rect(Rect2(origin - Vector2(14, 12), Vector2(hp_w + 60, 118)), Color(0.0, 0.01, 0.03, 0.42))
+	# HP: dark trough, two-tone fill, a highlight line, a gold frame with diamond end caps.
+	var hp_rect := Rect2(origin, Vector2(hp_w, hp_h))
+	_canvas.draw_rect(hp_rect.grow(3.0), Color(0.02, 0.02, 0.03, 0.95))
 	_canvas.draw_rect(hp_rect, COL_HP_BACK)
-	_canvas.draw_rect(Rect2(origin, Vector2(hp_w * player.health.ratio(), 24)), COL_HP)
-	_canvas.draw_rect(hp_rect, COL_FRAME, false, 2.0)
+	var fill := hp_w * player.health.ratio()
+	_canvas.draw_rect(Rect2(origin, Vector2(fill, hp_h)), Color(0.62, 0.1, 0.14))
+	_canvas.draw_rect(Rect2(origin, Vector2(fill, hp_h * 0.5)), COL_HP)
+	_canvas.draw_rect(Rect2(origin + Vector2(0, 2), Vector2(fill, 2)), Color(1.0, 0.6, 0.55, 0.55))
+	_canvas.draw_rect(hp_rect.grow(3.0), gold_dim, false, 1.5)
+	_canvas.draw_rect(hp_rect, gold, false, 1.5)
+	for x: float in [origin.x - 3.0, origin.x + hp_w + 3.0]:
+		var c := Vector2(x, origin.y + hp_h * 0.5)
+		_canvas.draw_colored_polygon(PackedVector2Array([c + Vector2(0, -11), c + Vector2(9, 0), c + Vector2(0, 11),
+			c + Vector2(-9, 0)]), gold)
 	var hp_text := "%d / %d" % [int(ceilf(player.health.current)), int(player.health.max_value)]
-	_canvas.draw_string(_font, origin + Vector2(10, 19), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(1, 1, 1, 0.9))
+	_canvas.draw_string_outline(_font, origin + Vector2(14, 20), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, 4, Color(0, 0, 0, 0.8))
+	_canvas.draw_string(_font, origin + Vector2(14, 20), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(1, 1, 1, 0.95))
 	# Flask pips: small vials.
 	for i in range(player.flask_max()):
-		var p := origin + Vector2(hp_w - 70.0 + 24.0 * float(i), 32.0)
-		var full := i < player.flask_charges
-		_draw_vial(p, full)
-	# Soul Gauge: three segments.
-	var seg_w := 120.0
-	var gap := 8.0
-	var gy := origin.y + 62.0
+		var p := origin + Vector2(hp_w - 20.0 - 24.0 * float(player.flask_max() - 1 - i), 36.0)
+		_draw_vial(p, i < player.flask_charges)
+	# Soul Gauge: three slanted segments.
+	var seg_w := 118.0
+	var gap := 10.0
+	var gy := origin.y + 66.0
+	var slant := 8.0
 	for i in range(3):
-		var seg := Rect2(Vector2(origin.x + float(i) * (seg_w + gap), gy), Vector2(seg_w, 16))
-		var fill := clampf((player.gauge.value - float(i) * player.gauge.bar_size) / player.gauge.bar_size, 0.0, 1.0)
-		_canvas.draw_rect(seg, Color(0.05, 0.1, 0.12, 0.9))
-		_canvas.draw_rect(Rect2(seg.position, Vector2(seg_w * fill, 16)), COL_GAUGE_FULL if fill >= 1.0 else COL_GAUGE)
-		_canvas.draw_rect(seg, COL_FRAME, false, 1.5)
+		var x0 := origin.x + float(i) * (seg_w + gap)
+		var fill_k := clampf((player.gauge.value - float(i) * player.gauge.bar_size) / player.gauge.bar_size, 0.0, 1.0)
+		var shape := PackedVector2Array([Vector2(x0 + slant, gy), Vector2(x0 + seg_w + slant, gy),
+			Vector2(x0 + seg_w, gy + 16.0), Vector2(x0, gy + 16.0)])
+		_canvas.draw_colored_polygon(shape, Color(0.03, 0.08, 0.1, 0.95))
+		if fill_k > 0.0:
+			var fw := seg_w * fill_k
+			var filled := PackedVector2Array([Vector2(x0 + slant, gy), Vector2(x0 + fw + slant, gy),
+				Vector2(x0 + fw, gy + 16.0), Vector2(x0, gy + 16.0)])
+			_canvas.draw_colored_polygon(filled, COL_GAUGE_FULL if fill_k >= 1.0 else COL_GAUGE)
+		shape.append(shape[0])
+		_canvas.draw_polyline(shape, gold if fill_k >= 1.0 else gold_dim, 1.5)
 	_canvas.draw_string(_font, Vector2(origin.x, gy + 38), tr("HUD_SOUL_GAUGE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16,
 		Color(0.75, 0.9, 0.95, 0.85))
 	if state != null:
 		# Soul Essence: a small soul-light diamond and the carried amount.
-		var ep := Vector2(origin.x + 3.0 * (seg_w + gap) + 6.0, gy + 8.0)
-		var d := PackedVector2Array([ep + Vector2(0, -9), ep + Vector2(7, 0), ep + Vector2(0, 9), ep + Vector2(-7, 0)])
+		var ep := Vector2(origin.x + 3.0 * (seg_w + gap) + 22.0, gy + 8.0)
+		var d := PackedVector2Array([ep + Vector2(0, -10), ep + Vector2(8, 0), ep + Vector2(0, 10), ep + Vector2(-8, 0)])
 		_canvas.draw_colored_polygon(d, COL_GAUGE_FULL)
-		_canvas.draw_string(_font, ep + Vector2(14, 8), str(state.essence), HORIZONTAL_ALIGNMENT_LEFT, -1, 22,
+		_canvas.draw_string_outline(_font, ep + Vector2(16, 8), str(state.essence), HORIZONTAL_ALIGNMENT_LEFT, -1, 22, 4,
+			Color(0, 0, 0, 0.8))
+		_canvas.draw_string(_font, ep + Vector2(16, 8), str(state.essence), HORIZONTAL_ALIGNMENT_LEFT, -1, 22,
 			Color(0.85, 0.95, 1.0))
 
 
@@ -170,8 +193,7 @@ func _draw_wheel(top_right: Vector2) -> void:
 		# Stamina ring.
 		_canvas.draw_arc(pos, rr + 3.0, -PI * 0.5, -PI * 0.5 + TAU * slot.stamina.ratio(), 48,
 			Color(0.9, 0.4, 0.3) if slot.stamina.is_exhausted() else COL_STAMINA, 5.0)
-		if active:
-			_canvas.draw_arc(pos, rr - 4.0, 0.0, TAU, 48, COL_FRAME, 2.0)
+		_canvas.draw_arc(pos, rr + 8.0, 0.0, TAU, 48, Color(0.86, 0.7, 0.36, 0.95 if active else 0.5), 2.0)
 	# Swap cooldown sweep around the whole wheel.
 	if lo.swap_cooldown_left > 0.0:
 		var k := lo.swap_cooldown_left / maxf(lo.swap_cooldown_s, 0.01)
