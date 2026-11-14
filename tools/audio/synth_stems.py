@@ -431,6 +431,18 @@ def sfx_bank():
                              detune=[0.99, 1.0, 1.01])
     s["sync_guard"] = additive(660.0, 0.35, [(1, 1.0), (1.5, 0.6)], attack=0.005, release=0.2, decay=2.0)
     s["perfect_dodge"] = additive(1100.0, 0.18, [(1, 1.0), (2, 0.3)], attack=0.003, release=0.1, decay=5.0)
+    # M2 (stories 017-023).
+    s["pickup"] = additive(1480.0, 0.16, [(1, 1.0), (1.5, 0.5), (2, 0.25)], attack=0.002, release=0.1, decay=6.0)
+    s["altar_kindle"] = additive(330.0, 1.2, PIANO + [(3.01, 0.2)], attack=0.01, release=0.8, decay=1.2)
+    s["echo_recover"] = additive(880.0, 0.6, [(1, 1.0), (1.25, 0.6), (1.5, 0.5)], attack=0.01, release=0.4, decay=2.5)
+    s["bounce"] = sweep(180, 520, 0.22, 6.0)
+    s["wall_jump"] = lowpass(noise(0.07, 50.0), 0.35)
+    s["spore"] = lowpass(noise(0.3, 9.0, highpass=True), 0.4)
+    s["root_snare"] = sweep(140, 70, 0.35, 6.0)
+    s["root_break"] = lowpass(noise(0.2, 18.0), 0.2)
+    s["gate_open"] = sweep(70, 160, 0.7, 2.5)
+    s["ward_hum"] = additive(196.0, 0.5, [(1, 1.0), (2, 0.6), (3, 0.3)], attack=0.05, release=0.2, vibrato=0.01,
+                             vib_rate=12.0)
     return s
 
 

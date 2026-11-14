@@ -31,7 +31,7 @@
       "cooldown_s": 1.5
     }
   ],
-  "drops": ["crude_stone", "lesser_soul_shard"],
+  "drops": {"common": {"crude_stone": 2, "lesser_soul_shard": 1}},
   "silhouette": {
     "kind": "arachnid",
     "height_m": 0.7,

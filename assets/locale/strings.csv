@@ -148,3 +148,38 @@ ALTAR_Z2_B,Altar of the Wanderer
 AFFINITY_BONUS,%s trusts you more deeply
 ECHO_RECOVERED,%d Essence recovered
 ECHO_LOST,%d Essence lost to the dark
+LORE_FOUND,Lore found: %s
+LORE_PARCHMENT_01_TITLE,Faded Parchment: A Child's Lesson
+LORE_PARCHMENT_01_BODY,"""Vael-Sora stands upon the Foundation, and the Foundation stands upon nothing at all. That is why we are kind to one another."" Copied out in a careful, uneven hand, three times over."
+LORE_PARCHMENT_02_TITLE,Faded Parchment: Aqueduct Ledger
+LORE_PARCHMENT_02_BODY,"Water tithe, Lower Ward: paid. Water tithe, Marble Ward: paid. Water tithe, the Queen's Gardens: waived, by order. A note in the margin: the channels have begun to hum at night. Report to the Wardens? Crossed out."
+LORE_PARCHMENT_03_TITLE,Faded Parchment: The Architects
+LORE_PARCHMENT_03_BODY,"They did not build the city. They wrote it. My grandmother swore she saw one once, on the highest bridge, tracing the air with a finger, and the stone beneath it set like cooling wax."
+LORE_PARCHMENT_04_TITLE,Faded Parchment: Night Watch Orders
+LORE_PARCHMENT_04_BODY,By decree of the Sovereign: all gates below the Third Aqueduct are to be sealed at dusk. No citizen is to ask why. No Warden is to answer.
+LORE_PARCHMENT_05_TITLE,Faded Parchment: The Knight's Oath
+LORE_PARCHMENT_05_BODY,"""I will stand where the Queen cannot. I will be the door she does not open."" Signed C., below the royal seal. The ink has run, as if the page was once wet."
+LORE_PARCHMENT_06_TITLE,Faded Parchment: The Descent
+LORE_PARCHMENT_06_BODY,"It took one night. The sky went first, then the stars, then the sound of the sea. In the morning the windows showed only rock, and the bells would not ring."
+LORE_PARCHMENT_07_TITLE,Faded Parchment: A Smuggler's Margin Note
+LORE_PARCHMENT_07_BODY,"Third root-tunnel north of the spore gate: dry, wide enough for a cart. Wardens never check below the glowcaps. Tell no one who cannot pay. - N."
+LORE_PARCHMENT_08_TITLE,Faded Parchment: On the Mycelium
+LORE_PARCHMENT_08_BODY,"The forest below the city drinks soul-light the way roots drink rain. Where the dead lie long enough, it grows. Where it grows, it remembers."
+LORE_PARCHMENT_09_TITLE,"Faded Parchment: Census, Revised"
+LORE_PARCHMENT_09_BODY,"Population of the Lower Ward, before: four thousand. After: unrecorded. The Wardens took the census in person, and the ledgers came back empty."
+LORE_PARCHMENT_10_TITLE,Faded Parchment: A Prayer Without a Name
+LORE_PARCHMENT_10_BODY,"""To whoever wrote us: we are sorry for whatever we were. Let us be something kinder in the next draft."""
+LORE_PARCHMENT_11_TITLE,Faded Parchment: The Court Arcanist
+LORE_PARCHMENT_11_BODY,The Arcanist has asked again for the Foundation records. The Sovereign refused again. The Arcanist did not argue. She went down to the palace vaults and has not come up.
+LORE_PARCHMENT_12_TITLE,Faded Parchment: The Last Line
+LORE_PARCHMENT_12_BODY,"""They are not sinking us to punish us. They are sinking us to hide something."" The rest of the page is torn away along a clean, straight edge."
+LORE_RELIC_01_TITLE,Echoing Relic: A Warden's Bell
+LORE_RELIC_01_BODY,"A brass hand-bell, its clapper wrapped in cloth. When you hold it you hear, faintly, a voice counting heads. It stops at forty and begins again."
+LORE_RELIC_02_TITLE,Echoing Relic: A Child's Lantern
+LORE_RELIC_02_BODY,Paper and glow-moss. It still gives a little light. Somewhere inside it a girl is humming the same four notes the walls hum at night.
+LORE_RELIC_03_TITLE,Echoing Relic: The Map-Maker's Compass
+LORE_RELIC_03_BODY,"It does not point north. It points down. A thin scratch on the lid reads: ""for when the city forgets the way out."""
+LORE_MEMORY_CAELAN_TITLE,Memory of Caelan: The Door
+LORE_MEMORY_CAELAN_BODY,"The Queen came to the sealed door alone, without her crown. ""Stand aside, Caelan."" He did not. ""Then stand here forever,"" she said, and wept, and he understood she was not angry with him. He was still standing there when the stone came down."
+LORE_MEMORY_NYRA_TITLE,Memory of Nyra: The Herding
+LORE_MEMORY_NYRA_BODY,"She saw it from the root-tunnels: Wardens walking whole streets of people downward, gently, the way you lead a horse that does not know it is going to the river. Nobody fought. Everyone looked up, as if listening for someone who had promised to come back."

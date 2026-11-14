@@ -52,7 +52,7 @@
       "min_range_m": 3.5
     }
   ],
-  "drops": ["polished_basalt_core", "standard_soul_shard", "weapon_schematic"],
+  "drops": {"common": {"crude_stone": 1, "lesser_soul_shard": 1}, "rare": {"polished_basalt_core": 1, "standard_soul_shard": 1}, "epic": {"weapon_schematic": 1, "greater_soul_shard": 1}},
   "silhouette": {
     "kind": "humanoid_giant",
     "height_m": 2.6,

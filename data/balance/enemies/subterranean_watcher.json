@@ -34,7 +34,7 @@
       "tick_s": 0.25
     }
   ],
-  "drops": ["faded_parchment", "lesser_soul_shard"],
+  "drops": {"common": {"faded_parchment": 1, "lesser_soul_shard": 1}},
   "silhouette": {
     "kind": "sphere",
     "radius_m": 0.6,

@@ -43,6 +43,9 @@ var altar_menu: AltarMenu
 var player: Player
 var bridge_handler: Node
 
+## Loot rolls (story 019) and the run's random source for them.
+var loot: LootTable
+var loot_rng := RandomNumberGenerator.new()
 var _zone: String = ""
 var _interact_target: Interactable
 var _camera_anchor: Node3D
@@ -74,6 +77,8 @@ func _ready() -> void:
 	rooms.room_entered.connect(_on_room_entered)
 	register_feature(_build_altar)
 	register_feature(_build_echo)
+	register_feature(_build_pickups)
+	loot = LootTable.from_data()
 	GameEvents.enemy_died.connect(_on_enemy_died)
 	fx = FxLayer.new()
 	fx.name = "Fx"
@@ -182,6 +187,7 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 	slot = run_slot
 	state = gs
 	_zone = ""
+	loot_rng.randomize()
 	player = Player.new()
 	player.name = "Player"
 	player.world = world
@@ -315,6 +321,7 @@ func rest_at_altar(altar: Altar) -> void:
 	if GameState.add_unique(state.lit_altars, altar.altar_id):
 		altar.set_lit(true)
 		prompts.toast(tr("ALTAR_KINDLED"), UiKit.COL_GOLD)
+		Sfx.play("altar_kindle")
 	state.rested_altar = {"room": rooms.data.id, "altar": altar.altar_id}
 	state.checkpoint = {"room": rooms.data.id, "x": altar.global_position.x + 1.2, "y": altar.global_position.y}
 	player.rest()
@@ -385,6 +392,8 @@ func _on_enemy_died(enemy: Node) -> void:
 		return
 	state.essence += amount
 	fx.popup("+%d" % amount, e.global_position + Vector3(0, 1.2, 0), Color(0.6, 0.92, 1.0))
+	for d: Dictionary in loot.roll(e.data, _zone, loot_rng, state):
+		spawn_pickup(str(d["item"]), int(d["count"]), "", Vector2(e.global_position.x, e.global_position.y))
 
 
 func _build_echo(manager: RoomManager, room: RoomData) -> void:
@@ -403,7 +412,7 @@ func _on_echo_recovered() -> void:
 	var got := DeathRules.recover(state)
 	if got > 0:
 		prompts.toast(tr("ECHO_RECOVERED") % got, Color(0.6, 0.92, 1.0))
-		Sfx.play("perfect_dodge")
+		Sfx.play("echo_recover")
 
 
 ## Death (addendum "Death, saving"): Essence becomes a Soul Echo at the last safe ground, an older
@@ -432,6 +441,62 @@ func _on_player_died() -> void:
 	rooms.enter(room, "", at if at.x >= 0.0 else Vector2.INF)
 	save_now()
 	await fader.fade_to(0.0, 0.6)
+
+
+# --- Loot and pickups (story 019) -------------------------------------------------------------
+
+func _build_pickups(_manager: RoomManager, room: RoomData) -> void:
+	if state == null:
+		return
+	for p: Dictionary in room.pickups:
+		var pid := str(p["pickup_id"])
+		if state.taken_pickups.has(pid) or str(p["item"]) == "":
+			continue
+		var pos: Vector2 = p["pos"]
+		spawn_pickup(str(p["item"]), 1, pid, pos)
+
+
+## Put `item` in the world at room point `at`. Enemy drops (no `pickup_id`) home in on the player.
+func spawn_pickup(item: String, count: int, pickup_id: String, at: Vector2) -> Pickup:
+	var p := Pickup.new()
+	p.item = item
+	p.count = count
+	p.pickup_id = pickup_id
+	p.player = player
+	p.magnet_radius = loot.num("magnet_radius_m", 1.5)
+	p.homing_after_s = -1.0 if pickup_id != "" else loot.num("drop_homing_after_s", 0.8)
+	p.collected.connect(_on_pickup)
+	var parent := rooms.features_root if pickup_id != "" else rooms.transient_root
+	parent.add_child(p)
+	p.global_position = Vector3(at.x, at.y, 0.0)
+	return p
+
+
+func _on_pickup(p: Pickup) -> void:
+	if p.pickup_id != "":
+		GameState.add_unique(state.taken_pickups, p.pickup_id)
+	collect_item(p.item, p.count)
+
+
+## Add `item` to the run. Lore items become the next unread lore entry of their kind (Essence
+## once every entry of that kind is found).
+func collect_item(item: String, count: int) -> void:
+	var lore_kind := str(ItemDb.item(item).get("lore_kind", ""))
+	if lore_kind != "":
+		for i in range(count):
+			var lore_id := LoreDb.next_unfound(lore_kind, state.lore_found)
+			if lore_id == "":
+				var extra := int(loot.num("%s_overflow_essence" % lore_kind, 25.0))
+				state.essence += extra
+				prompts.toast("+%d %s" % [extra, tr("HUD_ESSENCE")], Color(0.6, 0.92, 1.0))
+			else:
+				state.lore_found.append(lore_id)
+				prompts.toast(tr("LORE_FOUND") % tr(LoreDb.title_key(lore_id)), ItemDb.color(item))
+		Sfx.play("pickup")
+		return
+	state.add_item(item, count)
+	prompts.toast("+%d %s" % [count, tr(ItemDb.name_key(item))], ItemDb.color(item))
+	Sfx.play("pickup")
 
 
 # --- Frame ----------------------------------------------------------------------------------
@@ -642,6 +707,18 @@ func bridge_interact(_args: Dictionary) -> Dictionary:
 func bridge_leave_altar(_args: Dictionary) -> Dictionary:
 	close_altar_menu()
 	return {"paused": get_tree().paused}
+
+
+## {"tier", "value"}: change a drop chance for this run (playtests).
+func bridge_drop_chance(args: Dictionary) -> Dictionary:
+	(loot.config["drop_chance"] as Dictionary)[str(args.get("tier", "common"))] = float(args.get("value", 0.35))
+	return {"drop_chance": loot.config["drop_chance"]}
+
+
+## {"item", "count"}: give an item as if picked up.
+func bridge_give(args: Dictionary) -> Dictionary:
+	collect_item(str(args.get("item", "")), int(args.get("count", 1)))
+	return {"inventory": state.inventory, "lore": state.lore_found}
 
 
 func bridge_pause(_args: Dictionary) -> Dictionary:
