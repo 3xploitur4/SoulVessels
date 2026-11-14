@@ -2,6 +2,7 @@
   "id": "branded_warden",
   "name_key": "ENEMY_BRANDED_WARDEN",
   "tier": "elite",
+  "essence": 150,
   "hp": 900,
   "atk": 55,
   "def": 25,

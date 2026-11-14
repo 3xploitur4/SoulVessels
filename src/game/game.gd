@@ -73,6 +73,8 @@ func _ready() -> void:
 	add_child(rooms)
 	rooms.room_entered.connect(_on_room_entered)
 	register_feature(_build_altar)
+	register_feature(_build_echo)
+	GameEvents.enemy_died.connect(_on_enemy_died)
 	fx = FxLayer.new()
 	fx.name = "Fx"
 	fx.show_numbers = true
@@ -187,7 +189,9 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 	player.vessel_ids = state.loadout.duplicate()
 	player.difficulty = state.difficulty
 	player.affinity_levels = affinity_levels()
+	player.auto_respawn = false
 	add_child(player)
+	player.died.connect(_on_player_died)
 	camera.target = player
 	rooms.player = player
 	rooms.state = state
@@ -368,6 +372,66 @@ func read_lore(id: String) -> void:
 		state.affinity_bonus[vessel] = int(state.affinity_bonus.get(vessel, 0)) + 1
 		player.set_affinity(vessel, int(affinity_levels().get(vessel, 0)))
 		prompts.toast(tr("AFFINITY_BONUS") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+
+
+# --- Soul Essence, death and the Soul Echo (story 018) ----------------------------------------
+
+func _on_enemy_died(enemy: Node) -> void:
+	if not playing or state == null or not enemy is EnemyBase:
+		return
+	var e := enemy as EnemyBase
+	var amount := int(e.data.get("essence", 0))
+	if amount <= 0:
+		return
+	state.essence += amount
+	fx.popup("+%d" % amount, e.global_position + Vector3(0, 1.2, 0), Color(0.6, 0.92, 1.0))
+
+
+func _build_echo(manager: RoomManager, room: RoomData) -> void:
+	if state == null or state.echo.is_empty() or str(state.echo.get("room", "")) != room.id:
+		return
+	var e := SoulEcho.new()
+	e.name = "SoulEcho"
+	e.essence = int(state.echo.get("essence", 0))
+	e.player = player
+	e.recovered.connect(_on_echo_recovered)
+	manager.features_root.add_child(e)
+	e.global_position = Vector3(float(state.echo.get("x", 0.0)), float(state.echo.get("y", 0.0)), 0.0)
+
+
+func _on_echo_recovered() -> void:
+	var got := DeathRules.recover(state)
+	if got > 0:
+		prompts.toast(tr("ECHO_RECOVERED") % got, Color(0.6, 0.92, 1.0))
+		Sfx.play("perfect_dodge")
+
+
+## Death (addendum "Death, saving"): Essence becomes a Soul Echo at the last safe ground, an older
+## echo is lost (unless the difficulty says never), ordinary enemies return, and the player wakes
+## at the rested altar with full HP and flasks.
+func _on_player_died() -> void:
+	if state == null:
+		return
+	var lose := bool(Balance.combat("difficulty.%s.echo_lost_on_second_death" % state.difficulty))
+	var result := DeathRules.on_death(state, rooms.data.id, rooms.last_safe, lose)
+	if int(result["lost"]) > 0:
+		prompts.toast(tr("ECHO_LOST") % int(result["lost"]), Color(0.7, 0.7, 0.75))
+	await get_tree().create_timer(Balance.combat_f("death.respawn_delay_s"), false).timeout
+	if player == null or not playing:
+		return
+	await fader.fade_to(1.0, 0.5)
+	var p := DeathRules.respawn_point(state)
+	var room := str(p.get("room", GameState.START_ROOM))
+	var at := Vector2(float(p.get("x", -1.0)), float(p.get("y", -1.0)))
+	if at.x < 0.0:
+		var r := WorldData.room(room)
+		if r != null and r.markers.has("altar"):
+			var ap: Vector2 = r.markers["altar"]
+			at = Vector2(ap.x + 1.2, ap.y)
+	player.respawn()
+	rooms.enter(room, "", at if at.x >= 0.0 else Vector2.INF)
+	save_now()
+	await fader.fade_to(0.0, 0.6)
 
 
 # --- Frame ----------------------------------------------------------------------------------

@@ -2,6 +2,7 @@
   "id": "echo_crawler",
   "name_key": "ENEMY_ECHO_CRAWLER",
   "tier": "common",
+  "essence": 12,
   "hp": 90,
   "atk": 18,
   "def": 0,

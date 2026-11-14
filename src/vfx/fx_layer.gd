@@ -92,6 +92,17 @@ func _on_hit_fx(where: Vector3, amount: float, crit: bool, blocked: bool) -> voi
 	l.visible = true
 
 
+## A floating text (Essence gained, "Recovered"), from the number pool.
+func popup(text: String, where: Vector3, color: Color) -> void:
+	var l := _numbers[_next_number]
+	_number_t[_next_number] = 0.0
+	_next_number = (_next_number + 1) % NUMBERS
+	l.text = text
+	l.modulate = color
+	l.global_position = where + Vector3(0.0, 0.6, 0.3)
+	l.visible = true
+
+
 func _on_ultimate_fx(kind: String, where: Vector3, size: float) -> void:
 	match kind:
 		"final_stand", "dance_of_shadows":

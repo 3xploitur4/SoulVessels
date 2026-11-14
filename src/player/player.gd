@@ -55,6 +55,9 @@ var difficulty: String = "normal"
 var spawn_point: Vector3 = Vector3.ZERO
 ## When false the body ignores input (bots drive it through the same Input actions anyway).
 var input_enabled: bool = true
+## The sandbox respawns in place after a death; the game scene turns this off and runs the
+## Soul Echo and altar respawn itself (story 018).
+var auto_respawn: bool = true
 
 var team: int = CombatWorld.TEAM_PLAYER
 ## +1 looks right, -1 left.
@@ -458,6 +461,15 @@ func set_room_platforms(bodies: Array[StaticBody3D]) -> void:
 	_update_platforms(0.0)
 
 
+## Die now (void falls, debug, tests).
+func kill() -> void:
+	if health.is_dead():
+		return
+	health.damage(health.current)
+	GameEvents.player_hp_changed.emit(health.current, health.max_value)
+	_die()
+
+
 func on_floor() -> bool:
 	return is_on_floor()
 
@@ -791,7 +803,7 @@ func _dead_tick(delta: float) -> void:
 	var vis := loadout.active().visual
 	if vis != null:
 		vis.rotation.z = lerpf(vis.rotation.z, -PI * 0.5 * float(facing), minf(delta * 8.0, 1.0))
-	if _dead_left <= 0.0:
+	if _dead_left <= 0.0 and auto_respawn:
 		respawn()
 
 

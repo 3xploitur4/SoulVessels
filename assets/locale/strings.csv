@@ -146,3 +146,5 @@ ALTAR_Z1_B,Altar of Quiet Water
 ALTAR_Z2_A,Altar of Spores
 ALTAR_Z2_B,Altar of the Wanderer
 AFFINITY_BONUS,%s trusts you more deeply
+ECHO_RECOVERED,%d Essence recovered
+ECHO_LOST,%d Essence lost to the dark

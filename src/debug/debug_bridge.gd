@@ -142,6 +142,9 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 			player.health.current = clampf(float(args.get("hp", 1.0)), 1.0, player.health.max_value)
 			GameEvents.player_hp_changed.emit(player.health.current, player.health.max_value)
 			return {"hp": player.health.current}
+		"kill_player":
+			player.kill()
+			return {"dead": not player.is_alive()}
 		"set_stamina":
 			player.loadout.active().stamina.value = float(args.get("value", 100.0))
 			return {"stamina": player.loadout.active().stamina.value}

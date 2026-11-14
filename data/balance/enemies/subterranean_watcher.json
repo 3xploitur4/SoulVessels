@@ -2,6 +2,7 @@
   "id": "subterranean_watcher",
   "name_key": "ENEMY_SUBTERRANEAN_WATCHER",
   "tier": "common",
+  "essence": 18,
   "hp": 120,
   "atk": 30,
   "def": 5,

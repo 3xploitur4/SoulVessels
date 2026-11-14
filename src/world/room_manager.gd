@@ -35,6 +35,8 @@ var features_root: Node3D
 ## Projectiles and short-lived effects; cleared on every room change.
 var transient_root: Node3D
 var transitioning: bool = false
+## Last place the player stood on solid ground in this room (Soul Echo spot, void-fall return).
+var last_safe: Vector2 = Vector2.ZERO
 
 var _ignore_exit: String = ""
 var _spawn_seed: int = 5000
@@ -164,6 +166,8 @@ func is_solid(p: Vector2) -> bool:
 func _physics_process(_delta: float) -> void:
 	if data == null or player == null or transitioning or not player.is_alive():
 		return
+	if player.is_on_floor() and player.velocity.y <= 0.01:
+		last_safe = Vector2(player.global_position.x, player.global_position.y)
 	var centre := Vector2(player.global_position.x, player.global_position.y + 0.9)
 	var digit := data.exit_at(centre)
 	if digit == "":
@@ -203,6 +207,7 @@ func _place_player(exit: String, at: Vector2) -> void:
 		pos = data.markers["start"]
 	player.teleport(pos.x, pos.y + 0.05)
 	player.spawn_point = player.global_position
+	last_safe = Vector2(pos.x, pos.y + 0.05)
 	if boost:
 		player.velocity.y = float(Balance.combat("movement.jump_velocity")) * 1.05
 

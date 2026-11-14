@@ -75,6 +75,7 @@
     "ground_decel": 80.0,
     "max_fall_speed": 30.0
   },
+  "death": { "respawn_delay_s": 2.5, "_note": "Seconds the fallen body stays on screen before the fade to the rested altar (story 018)." },
   "difficulty": {
     "story": { "enemy_damage": 0.5, "window_scale": 1.8, "echo_lost_on_second_death": false },
     "normal": { "enemy_damage": 1.0, "window_scale": 1.0, "echo_lost_on_second_death": true },

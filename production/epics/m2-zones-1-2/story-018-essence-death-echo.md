@@ -1,6 +1,6 @@
 # Story 018: Soul Essence, death and Soul Echo
 
-> **Epic**: M2 — Zones 1–2 · **Status**: In progress · **Layer**: Feature · **Type**: Logic · **Estimate**: M
+> **Epic**: M2 — Zones 1–2 · **Status**: Done (2026-11-14) · **Layer**: Feature · **Type**: Logic · **Estimate**: M
 
 ## Context
 
@@ -11,12 +11,18 @@ are never lost.
 
 ## Acceptance Criteria
 
-- [ ] Every kill adds the enemy's `essence` (data) to the carried total with a pop-up.
-- [ ] Death: Essence moves to a Soul Echo at the last safe ground in that room; an older echo is lost (Story: merged instead); respawn at the rested altar with full HP, flasks and ordinary enemies back.
-- [ ] Touching the echo returns its Essence and removes it; it survives save and reload.
-- [ ] Pure `DeathRules`, unit-tested: first death, second death, Story merge, recovery, zero Essence makes no echo.
+- [x] Every kill adds the enemy's `essence` (data) to the carried total with a pop-up.
+- [x] Death: Essence moves to a Soul Echo at the last safe ground in that room; an older echo is lost (Story: merged instead); respawn at the rested altar with full HP, flasks and ordinary enemies back.
+- [x] Touching the echo returns its Essence and removes it; it survives save and reload.
+- [x] Pure `DeathRules`, unit-tested: first death, second death, Story merge, recovery, zero Essence makes no echo.
 
 ## Files
 
 - `src/progression/death_rules.gd`, `src/world/soul_echo.gd`
 - `tests/unit/progression/death_rules_test.gd`, `tests/integration/progression/death_echo_test.gd`
+
+---
+
+## Completion
+
+The sandbox keeps its in-place respawn (`Player.auto_respawn`); the game scene runs the echo and the altar respawn. Essence per enemy in each enemy JSON (`essence`). Evidence: `production/qa/evidence/story-018-essence-death-echo/`.
