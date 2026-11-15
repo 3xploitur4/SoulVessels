@@ -180,3 +180,6 @@ _to_delete/
 builds/android/*.apk
 builds/android/*.aab
 !**/.godot/global_script_class_cache.cfg
+
+# helper AI tool logs
+production/ai-helpers/logs/
