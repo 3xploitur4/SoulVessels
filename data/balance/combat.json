@@ -85,6 +85,7 @@
     "void_damage_fraction": 0.1,
     "void_depth_m": 3.0
   },
+  "root_snare": { "duration_s": 2.5, "taps_to_break": 6, "_note": "Story 022, addendum resolved contradictions: the Husk's root-snare holds 2.5 s; 6 taps of attack, jump or dodge break it; a Shadowstep breaks it at once." },
   "death": { "respawn_delay_s": 2.5, "_note": "Seconds the fallen body stays on screen before the fade to the rested altar (story 018)." },
   "difficulty": {
     "story": { "enemy_damage": 0.5, "window_scale": 1.8, "echo_lost_on_second_death": false },

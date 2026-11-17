@@ -1,0 +1,70 @@
+{
+  "_source": "Story 022. Addendum enemy table: Calcified Husk 160 HP / 22 ATK / 70 posture, weak Ember, resists Venom, 1.0 s spore telegraph then a root-snare; disguised as a statue until the player is within wake_range_m.",
+  "id": "calcified_husk",
+  "name_key": "ENEMY_CALCIFIED_HUSK",
+  "tier": "common",
+  "essence": 22,
+  "hp": 160,
+  "atk": 22,
+  "def": 5,
+  "posture": 70,
+  "move_speed": 2.4,
+  "aggro_range_m": 3.5,
+  "leash_range_m": 14.0,
+  "preferred_range_m": 1.6,
+  "weaknesses": [
+    "ember"
+  ],
+  "resists": [
+    "venom"
+  ],
+  "aoe_multiplier": 1.0,
+  "group_size": 1,
+  "wake_range_m": 3.5,
+  "attacks": [
+    {
+      "id": "spore_snare",
+      "kind": "unblockable",
+      "telegraph_s": 1.0,
+      "tell": "spore_puff",
+      "tell_color": "#b6ff6a",
+      "range_m": 3.0,
+      "motion": 0.5,
+      "posture": 5,
+      "active_s": 0.4,
+      "recover_s": 1.0,
+      "cooldown_s": 4.0,
+      "snare": true
+    },
+    {
+      "id": "claw",
+      "kind": "parryable",
+      "telegraph_s": 0.5,
+      "tell": "claw_raise",
+      "tell_color": "#f2c14e",
+      "range_m": 1.8,
+      "motion": 1.0,
+      "posture": 14,
+      "active_s": 0.15,
+      "recover_s": 0.5,
+      "cooldown_s": 1.2
+    }
+  ],
+  "drops": {
+    "common": {
+      "lesser_soul_shard": 1,
+      "crude_stone": 1
+    },
+    "rare": {
+      "luminous_root_resin": 2,
+      "standard_soul_shard": 1
+    }
+  },
+  "silhouette": {
+    "kind": "humanoid",
+    "height_m": 2.1,
+    "width_m": 1.0,
+    "primary_color": "#6b7a63",
+    "accent_color": "#b6ff6a"
+  }
+}

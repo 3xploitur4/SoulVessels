@@ -203,3 +203,6 @@ AFFINITY_LEVEL,%s: Affinity %d
 AFFINITY_UNLOCK_GUARD,Sync Guard awakened
 AFFINITY_UNLOCK_ULTIMATE,Sync Ultimate awakened
 AFFINITY_MEMORY,A memory of %s stirs. Read it at a Soul Altar.
+ENEMY_CALCIFIED_HUSK,Calcified Husk
+ENEMY_FUNGAL_STALKER,Fungal Stalker
+SNARE_BREAK,Rooted! Tap to break free (%d)

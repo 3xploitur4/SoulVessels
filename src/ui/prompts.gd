@@ -86,6 +86,12 @@ func show_interact(verb: String) -> void:
 	_interact.visible = true
 
 
+## Show a status line in the prompt spot with no control prefix ("Rooted! ..."); "" hides it.
+func show_status(text: String) -> void:
+	_interact.text = text
+	_interact.visible = text != ""
+
+
 func interact_text() -> String:
 	return _interact.text if _interact.visible else ""
 

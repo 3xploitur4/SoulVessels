@@ -183,6 +183,12 @@ func set_grounded(on: bool) -> void:
 		_shadow.visible = on
 
 
+## Multiply the painting by `c` (stone disguise, variants), on top of the sprite's own tint.
+func set_tint(c: Color) -> void:
+	var base := Color(str(spec.get("tint", "#ffffff")))
+	_mat.set_shader_parameter("tint", Color(base.r * c.r, base.g * c.g, base.b * c.b, 1.0))
+
+
 ## A ring of dust at the feet (landing, a heavy step).
 func puff() -> void:
 	if _puff == null:

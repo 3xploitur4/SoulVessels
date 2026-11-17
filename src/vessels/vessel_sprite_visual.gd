@@ -91,6 +91,11 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	elif state == "jump":
 		b.stretch = -0.25
 		b.lean = 0.04 * _h
+	elif state == "rooted":
+		# Caught in the roots: hunched, shaking against them.
+		b.crouch = 0.55
+		b.lean = sin(Time.get_ticks_msec() * 0.03) * 0.03 * _h
+		b.glow = 0.0
 	elif state == "wall_slide":
 		# Braced against the wall: leaning back into it, knees bent.
 		b.lean = -0.06 * _h

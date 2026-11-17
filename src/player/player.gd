@@ -108,6 +108,8 @@ var _wall_coyote_left: float = 0.0
 var _wall_lock_left: float = 0.0
 var _wall_sliding: bool = false
 var _trav: Dictionary = {}
+## The Calcified Husk root-snare (story 022): while active the body cannot move, jump or dodge.
+var snare: RootSnare
 
 
 func _ready() -> void:
@@ -133,6 +135,8 @@ func _ready() -> void:
 		fx_parent = get_parent()
 	_move = Balance.combat("movement")
 	_trav = Balance.combat("traversal")
+	var snare_cfg: Variant = Balance.combat("root_snare")
+	snare = RootSnare.from_data(snare_cfg if snare_cfg is Dictionary else {})
 	gauge = SoulGauge.from_balance()
 	health = Health.new(Balance.combat_f("soul_hp_base"))
 	var levels: Dictionary = affinity_levels
@@ -205,6 +209,11 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	if dmg >= health.current and _try_sync_guard("lethal_blow", p):
 		return DamagePacket.Result.BLOCKED
 	var taken := health.damage(dmg)
+	if bool(p.tags.get("snare", false)) and not health.is_dead():
+		stop_action()
+		snare.apply()
+		velocity.x = 0.0
+		Sfx.play("root_snare")
 	gauge.gain_from_damage_taken(taken)
 	took_damage.emit(taken)
 	GameEvents.player_hp_changed.emit(health.current, health.max_value)
@@ -216,6 +225,8 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	if guard_broken:
 		_start_guard_break()
 		return DamagePacket.Result.GUARD_BROKEN
+	if snare.is_active():
+		return DamagePacket.Result.HIT
 	if action == null or not action.hyper_armor:
 		_flinch(p)
 	return DamagePacket.Result.HIT
@@ -467,6 +478,7 @@ func rest() -> void:
 
 ## Back to full at the spawn point (sandbox death, debug, altar rest).
 func respawn() -> void:
+	snare.break_now()
 	health.reset(max_hp())
 	flask_charges = flask_max()
 	stop_action()
@@ -530,6 +542,8 @@ func snapshot() -> Dictionary:
 		"flasks": flask_charges,
 		"last_sync_guard": last_sync_guard,
 		"cooldowns": slot.cooldowns.duplicate(),
+		"rooted": snare.is_active(),
+		"snare_taps_left": snare.taps_left(),
 	}
 
 
@@ -548,6 +562,9 @@ func _physics_process(delta: float) -> void:
 		_dead_tick(delta)
 		return
 	_move_axis = controls.move_axis() if input_enabled else Vector2.ZERO
+	if snare.is_active():
+		_rooted_tick(delta)
+		return
 	_read_buttons(delta)
 	_update_platforms(delta)
 	if action != null:
@@ -728,6 +745,28 @@ func _update_wall_contact(delta: float) -> void:
 	if pressing and action == null and velocity.y < -slide:
 		velocity.y = -slide
 		_wall_sliding = true
+
+
+## Rooted by a Husk: no movement, jump or dodge. Attack, jump and dodge taps count toward breaking
+## free; Nyra's Shadowstep (ability 1) breaks it at once and goes ahead.
+func _rooted_tick(delta: float) -> void:
+	snare.tick(delta)
+	state = "rooted"
+	velocity.x = 0.0
+	if input_enabled:
+		for a: String in ["attack", "jump", "dodge"]:
+			if controls.just_pressed(a) and snare.tap():
+				Sfx.play("root_break")
+		if controls.just_pressed("ability_1") and loadout.active().id == "nyra":
+			snare.break_now()
+			Sfx.play("root_break")
+	_apply_gravity(delta)
+	move_and_slide()
+	if global_position.z != 0.0:
+		global_position.z = 0.0
+	if not snare.is_active():
+		state = "idle"
+	_animate(delta)
 
 
 ## Thrown upward by a bounce mushroom at `speed` m/s (story 021).

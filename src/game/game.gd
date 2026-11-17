@@ -586,6 +586,8 @@ func _process(delta: float) -> void:
 	if not playing or player == null:
 		return
 	state.play_time_s += delta
+	if player.snare.is_active():
+		prompts.show_status(tr("SNARE_BREAK") % player.snare.taps_left())
 	if player.is_alive() and player.gauge.in_combat():
 		_award_xp("combat_s", delta)
 	if camera.zoom_in > 0.0 and player.state != "ultimate":
@@ -594,6 +596,8 @@ func _process(delta: float) -> void:
 
 
 func _update_interact() -> void:
+	if player.snare.is_active():
+		return
 	var best: Interactable = null
 	var best_d := INF
 	if player.is_alive() and not rooms.transitioning:

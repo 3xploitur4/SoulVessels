@@ -1,0 +1,67 @@
+{
+  "_source": "Story 022. Addendum enemy table: Fungal Stalker (new) 140 HP / 26 ATK / 60 posture, weak Ember, ceiling ambusher for vertical sections; drops when the player passes within drop_trigger_m beneath it.",
+  "id": "fungal_stalker",
+  "name_key": "ENEMY_FUNGAL_STALKER",
+  "tier": "common",
+  "essence": 20,
+  "hp": 140,
+  "atk": 26,
+  "def": 4,
+  "posture": 60,
+  "move_speed": 3.6,
+  "aggro_range_m": 8.0,
+  "leash_range_m": 18.0,
+  "preferred_range_m": 1.8,
+  "weaknesses": [
+    "ember"
+  ],
+  "resists": [],
+  "aoe_multiplier": 1.0,
+  "group_size": 1,
+  "drop_trigger_m": 2.0,
+  "attacks": [
+    {
+      "id": "drop_slam",
+      "kind": "unblockable",
+      "telegraph_s": 0.6,
+      "tell": "gill_shudder",
+      "tell_color": "#c79bff",
+      "range_m": 0.0,
+      "motion": 1.2,
+      "posture": 18,
+      "active_s": 0.6,
+      "recover_s": 0.9,
+      "cooldown_s": 99.0,
+      "from_ceiling": true
+    },
+    {
+      "id": "slash",
+      "kind": "parryable",
+      "telegraph_s": 0.45,
+      "tell": "claw_raise",
+      "tell_color": "#f2c14e",
+      "range_m": 2.0,
+      "motion": 1.0,
+      "posture": 12,
+      "active_s": 0.15,
+      "recover_s": 0.55,
+      "cooldown_s": 1.0
+    }
+  ],
+  "drops": {
+    "common": {
+      "lesser_soul_shard": 1,
+      "crude_stone": 1
+    },
+    "rare": {
+      "luminous_root_resin": 1
+    }
+  },
+  "silhouette": {
+    "kind": "humanoid",
+    "height_m": 1.8,
+    "width_m": 1.0,
+    "primary_color": "#4d3f66",
+    "accent_color": "#c79bff"
+  }
+}

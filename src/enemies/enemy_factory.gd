@@ -15,6 +15,10 @@ static func create(enemy_id: String) -> EnemyBase:
 			return SubterraneanWatcher.new()
 		"branded_warden":
 			return BrandedWarden.new()
+		"calcified_husk":
+			return CalcifiedHusk.new()
+		"fungal_stalker":
+			return FungalStalker.new()
 	push_error("EnemyFactory: unknown enemy %s" % enemy_id)
 	return null
 

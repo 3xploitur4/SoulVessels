@@ -1,0 +1,5 @@
+husks: [('calcified_husk', 22.5, 'recover'), ('calcified_husk', 31.5, 'idle')]
+rooted, taps left: 6 prompt: Rooted! Tap to break free (6)
+after 6 taps rooted: False
+stalkers: [('fungal_stalker', 8.5, 9.2, 'idle'), ('fungal_stalker', 19.5, 9.2, 'idle'), ('calcified_husk', 26.5, 2.0, 'idle')]
+after drop: [('fungal_stalker', 8.5, 2.0, 'recover'), ('fungal_stalker', 19.5, 9.2, 'idle'), ('calcified_husk', 26.5, 2.0, 'idle')] hp 425.2
