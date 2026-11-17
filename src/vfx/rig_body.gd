@@ -34,6 +34,12 @@ var _mats: Array[ShaderMaterial] = []
 var _root: Node3D
 var _loop_t: float = 0.0
 var _px: float = 0.0
+var _squash: float = 0.0
+## Secondary motion (capes, tails): bone -> settings from the rig data, and spring state.
+var _secondary: Dictionary = {}
+var _sec_angle: Dictionary[String, float] = {}
+var _sec_vel: Dictionary[String, float] = {}
+var _last_pos: Vector3 = Vector3.INF
 
 
 ## True when `id` has a cut rig and clips.
@@ -70,7 +76,7 @@ func sample(name: String, t: float) -> Dictionary:
 			next = b
 			break
 	var span := maxf(float(next[0]) - float(prev[0]), 0.0001)
-	var k := smoothstep(0.0, 1.0, clampf((t - float(prev[0])) / span, 0.0, 1.0))
+	var k := ease_key(clampf((t - float(prev[0])) / span, 0.0, 1.0), str(next[2]) if next.size() > 2 else "")
 	var pa: Dictionary = prev[1]
 	var pb: Dictionary = next[1]
 	for j: String in pa.keys():
@@ -79,6 +85,19 @@ func sample(name: String, t: float) -> Dictionary:
 		if not out.has(j):
 			out[j] = lerpf(0.0, float(pb[j]), k)
 	return out
+
+
+## Easing into a key: "in" accelerates into it (a strike landing), "out" decelerates into it (a
+## wind-up settling, an overshoot), "linear" is even; anything else eases both ends.
+static func ease_key(k: float, mode: String) -> float:
+	match mode:
+		"in":
+			return k * k * k
+		"out":
+			return 1.0 - pow(1.0 - k, 3.0)
+		"linear":
+			return k
+	return smoothstep(0.0, 1.0, k)
 
 
 ## Jump straight to clip `name` at `t` with no blending (previews, tests).
@@ -90,6 +109,8 @@ func pose_now(name: String, t: float) -> void:
 		_angle[j] = float(pose.get(j, 0.0))
 		_bones[j].rotation.z = deg_to_rad(_angle[j])
 	_root.position.y = float(pose.get("root_y", 0.0))
+	_squash = float(pose.get("squash", 0.0))
+	_apply_squash()
 
 
 ## Current angle of joint `bone` in degrees (for tests and debugging).
@@ -175,6 +196,10 @@ func _build(id: String) -> void:
 		_mats.append(mat)
 	_lean_bone = str(def.get("lean_bone", ""))
 	_lean_scale = float(def.get("lean_scale", 1.0))
+	_secondary = def.get("secondary", {})
+	for j: String in _secondary.keys():
+		_sec_angle[j] = 0.0
+		_sec_vel[j] = 0.0
 
 
 func tick(delta: float) -> void:
@@ -191,17 +216,59 @@ func tick(delta: float) -> void:
 	# mirror the depth back so the front-most part stays nearest the camera.
 	_root.scale.z = -1.0 if _pivot.global_basis.z.z < 0.0 else 1.0
 	var pose := sample(clip, t)
-	var k := minf(delta * BLEND_RATE, 1.0)
+	# Attacks blend fast so the snap of the blow survives; idle poses drift in softly.
+	var k := minf(delta * float(c.get("blend", BLEND_RATE)), 1.0)
+	_tick_secondary(delta)
 	for j: String in _bones.keys():
 		_angle[j] = lerpf(_angle[j], float(pose.get(j, 0.0)), k)
-		_bones[j].rotation.z = deg_to_rad(_angle[j])
+		_bones[j].rotation.z = deg_to_rad(_angle[j] + _sec_angle.get(j, 0.0))
 	# The body's lean (metres at the head, forward positive) tips the lean bone forward.
 	if _lean_bone != "" and _bones.has(_lean_bone):
 		_bones[_lean_bone].rotation.z -= atan(_cur["lean"] * _lean_scale / maxf(height_m * 0.5, 0.1))
 	_root.position.y = lerpf(_root.position.y, float(pose.get("root_y", 0.0)), k)
+	_squash = lerpf(_squash, float(pose.get("squash", 0.0)), k)
+	_apply_squash()
 	for name: String in SHARED:
 		var v: Variant = _mat.get_shader_parameter(name)
 		if v == null:
 			continue
 		for m in _mats:
 			m.set_shader_parameter(name, v)
+
+
+## "squash" in a pose: positive crouches the whole body down and wide (coiling), negative
+## stretches it tall and thin (a lunge). Scaled about the feet.
+func _apply_squash() -> void:
+	var f := float(spec.get("faces", 1))
+	_root.scale.x = f * (1.0 + _squash * 0.5)
+	_root.scale.y = 1.0 - _squash
+
+
+## Parts that react to movement on their own (a cape): each is a spring pulled toward an angle
+## set by how fast the body moves forward and falls, so it trails, lifts and settles late.
+## Settings per bone in the rig data: drag (degrees per m/s forward), fall (degrees per m/s
+## falling), min/max (degrees), stiffness and damping of the spring.
+func _tick_secondary(delta: float) -> void:
+	if _secondary.is_empty() or delta <= 0.0:
+		return
+	var pos := global_position
+	var vel := Vector3.ZERO
+	if _last_pos != Vector3.INF:
+		vel = (pos - _last_pos) / delta
+	_last_pos = pos
+	# Teleports and room changes are not movement.
+	if vel.length() > 30.0:
+		vel = Vector3.ZERO
+	var forward := vel.x * signf(_pivot.global_basis.x.x)
+	for j: String in _secondary.keys():
+		var s: Dictionary = _secondary[j]
+		var target := -forward * float(s.get("drag", 3.0)) + minf(vel.y, 0.0) * float(s.get("fall", 3.0))
+		target = clampf(target, float(s.get("min", -35.0)), float(s.get("max", 10.0)))
+		var acc := (target - _sec_angle[j]) * float(s.get("stiffness", 120.0)) - _sec_vel[j] * float(s.get("damping", 12.0))
+		_sec_vel[j] += acc * delta
+		_sec_angle[j] += _sec_vel[j] * delta
+
+
+## Extra angle a secondary bone carries now (for tests).
+func secondary_deg(bone: String) -> float:
+	return _sec_angle.get(bone, 0.0)

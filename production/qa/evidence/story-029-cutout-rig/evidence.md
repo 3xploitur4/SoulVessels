@@ -32,3 +32,21 @@ wind-up flipped the shoulder plate over the face, now 135.
 
 Full suite: 206 tests pass. One earlier run had `death_echo_test` fail once; it passed on two
 reruns with these changes and once without them (a timing flake, not this story).
+
+## Tweak pass (2026-11-17, same day)
+
+User asked to tweak the pilot before the rest of the cast. Changed:
+
+- Attacks follow the hit timing in `data/balance/vessels/caelan.json` (wind-up ends about 30 %
+  in, the blow lands by about 50 %): a small anticipation, the sword raised, a fast strike that
+  accelerates into contact (key easing "in"), a small overshoot, then recovery. Attacks blend
+  at 45 per second so the snap survives. The downward cuts now finish in front of him.
+- The cape is a spring driven by movement: it trails behind when he runs, lifts when he falls,
+  and settles late when he stops (`secondary` in `data/art/rigs/caelan.json`).
+- The cape now reaches under the arm to the body, and hidden areas lean toward the part's average
+  colour (`fill_mean`), so a lifted arm shows dark cloth, not a black wedge or a gap.
+- Stronger hurt recoil for both; the Crawler coils down and wide on its telegraph and stretches
+  on its lunge (`squash`).
+
+Shots 01-14 were retaken after these changes. Tests: 12 in `rig_body_test.gd` (easing, cape
+trail and settle, a teleport does not fling the cape, squash); full suite 210 pass.

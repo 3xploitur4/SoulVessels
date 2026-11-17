@@ -406,47 +406,55 @@
     [
      0,
      {
-      "abdomen": 8,
-      "head": 14,
-      "leg_f": 22,
-      "leg_g": 28,
-      "leg_e": 15,
-      "leg_a": -10,
-      "leg_b": -8,
-      "leg_c": -6,
-      "root_y": 0.04
+      "abdomen": 10,
+      "head": 16,
+      "leg_f": 24,
+      "leg_g": 30,
+      "leg_e": 16,
+      "leg_a": -12,
+      "leg_b": -10,
+      "leg_c": -8,
+      "root_y": 0.02,
+      "squash": 0.14
      }
     ]
    ]
   },
   "attack": {
+   "blend": 40,
    "keys": [
     [
      0,
      {
-      "abdomen": -6,
-      "head": -12,
-      "leg_f": -25,
-      "leg_g": -32,
-      "leg_e": -22,
-      "leg_a": 15,
-      "leg_b": 12,
-      "leg_c": 10
+      "abdomen": -10,
+      "head": -16,
+      "leg_f": -38,
+      "leg_g": -42,
+      "leg_e": -28,
+      "leg_a": 18,
+      "leg_b": 15,
+      "leg_c": 12,
+      "squash": -0.12
      }
     ]
    ]
   },
   "hurt": {
+   "blend": 40,
    "keys": [
     [
      0,
      {
-      "abdomen": 10,
-      "head": 16,
-      "leg_f": -8,
-      "leg_g": -8,
-      "leg_a": -8,
-      "leg_b": -8
+      "abdomen": 14,
+      "head": 20,
+      "leg_f": -12,
+      "leg_g": 12,
+      "leg_a": -12,
+      "leg_b": 12,
+      "leg_c": -10,
+      "leg_e": 10,
+      "root_y": 0.03,
+      "squash": 0.08
      }
     ]
    ]

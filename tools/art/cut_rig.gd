@@ -88,7 +88,7 @@ func _cut(id: String) -> void:
 			elif owner[k] > i and inside[i][k] == 1:
 				hole[k] = 1
 		# 2. Completion behind front parts.
-		_pull_push(img, own, hole)
+		_pull_push(img, own, hole, float(p.get("fill_mean", 0.5)))
 		# 3. Joint overlap around the pivot (from the source, unshaded).
 		var jr := float(p.get("joint_r", 0.0))
 		if jr > 0.0:
@@ -156,7 +156,9 @@ func _grow(m: PackedByteArray, px: int) -> PackedByteArray:
 
 ## Fill `hole` pixels from `known` pixels: average down a pyramid of known colour, then pull
 ## back up so every hole pixel gets a smooth blend of the nearest known colours.
-func _pull_push(img: Image, known: PackedByteArray, hole: PackedByteArray) -> void:
+## `mean_share` blends the result toward the part's average colour, so a hole whose only
+## neighbours are dark outlines still reads as the part's material (cloth, steel), not black.
+func _pull_push(img: Image, known: PackedByteArray, hole: PackedByteArray, mean_share: float) -> void:
 	var any := false
 	for v in hole:
 		if v == 1:
@@ -218,9 +220,11 @@ func _pull_push(img: Image, known: PackedByteArray, hole: PackedByteArray) -> vo
 				lc[k] = lc[k] * la[k] + cu * (1.0 - la[k])
 		lv["c"] = lc
 	var full: PackedColorArray = levels[0]["c"]
+	# The 1x1 top of the pyramid is the average of every known pixel.
+	var mean: Color = (levels[levels.size() - 1]["c"] as PackedColorArray)[0]
 	for k in range(_w * _h):
 		if hole[k] == 1:
-			var c := full[k]
+			var c := full[k].lerp(mean, mean_share)
 			img.set_pixel(k % _w, k / _w, Color(c.r * FILL_SHADE, c.g * FILL_SHADE, c.b * FILL_SHADE, 1.0))
 
 
