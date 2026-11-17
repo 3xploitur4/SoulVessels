@@ -277,6 +277,225 @@
         }
       },
       "leads": {}
+    },
+    "zone4": {
+      "title": "Track 09 - The Sealed Rift",
+      "bpm": 66,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/zone4/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -4.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "pulse": {
+          "file": "pulse.wav",
+          "db": -6.0,
+          "states": [
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "combat": {
+          "file": "combat.wav",
+          "db": -5.0,
+          "states": [
+            "combat",
+            "elite"
+          ]
+        },
+        "elite": {
+          "file": "elite.wav",
+          "db": -5.0,
+          "states": [
+            "elite"
+          ]
+        }
+      },
+      "leads": {
+        "caelan": {
+          "file": "lead_caelan.wav",
+          "db": -6.0
+        },
+        "nyra": {
+          "file": "lead_nyra.wav",
+          "db": -6.0
+        },
+        "seris": {
+          "file": "lead_seris.wav",
+          "db": -6.0
+        },
+        "darius": {
+          "file": "lead_darius.wav",
+          "db": -6.0
+        },
+        "ilyr": {
+          "file": "lead_ilyr.wav",
+          "db": -6.0
+        }
+      },
+      "_note": "Story 048. Zone 4 (the Sealed Rift): D minor, low and heavy. Same stem set as the other zones."
+    },
+    "zone4_shore": {
+      "title": "Track 12 - The Starless Shore",
+      "bpm": 60,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/zone4_shore/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -4.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "pulse": {
+          "file": "pulse.wav",
+          "db": -6.0,
+          "states": [
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "combat": {
+          "file": "combat.wav",
+          "db": -5.0,
+          "states": [
+            "combat",
+            "elite"
+          ]
+        },
+        "elite": {
+          "file": "elite.wav",
+          "db": -5.0,
+          "states": [
+            "elite"
+          ]
+        }
+      },
+      "leads": {
+        "caelan": {
+          "file": "lead_caelan.wav",
+          "db": -6.0
+        },
+        "nyra": {
+          "file": "lead_nyra.wav",
+          "db": -6.0
+        },
+        "seris": {
+          "file": "lead_seris.wav",
+          "db": -6.0
+        },
+        "darius": {
+          "file": "lead_darius.wav",
+          "db": -6.0
+        },
+        "ilyr": {
+          "file": "lead_ilyr.wav",
+          "db": -6.0
+        }
+      },
+      "_note": "Story 048. The Leviathan shore rooms of Zone 4: sparse and wide, E minor."
+    },
+    "boss_guardian": {
+      "title": "Track 10 - The Guardian Below",
+      "_note": "Story 048. War drums and sub-bass brass (p1), male choir joins (p2), double time (p3).",
+      "boss": true,
+      "bpm": 65,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/boss_guardian/",
+      "stems": {
+        "p1": {
+          "file": "p1.wav",
+          "db": -3.0,
+          "states": [
+            "phase1"
+          ]
+        },
+        "p2": {
+          "file": "p2.wav",
+          "db": -3.0,
+          "states": [
+            "phase2"
+          ]
+        },
+        "p3": {
+          "file": "p3.wav",
+          "db": -3.0,
+          "states": [
+            "phase3"
+          ]
+        }
+      },
+      "leads": {}
+    },
+    "boss_leviathan": {
+      "title": "Track 13 - Leviathan",
+      "_note": "Story 048. 5/4 with a 3+2+2 accent lean: distorted cellos and sonar (p1), drums (p2), choir and running cellos (p3).",
+      "boss": true,
+      "bpm": 96,
+      "beats_per_bar": 5,
+      "bars": 8,
+      "folder": "res://assets/audio/music/boss_leviathan/",
+      "stems": {
+        "p1": {
+          "file": "p1.wav",
+          "db": -3.0,
+          "states": [
+            "phase1"
+          ]
+        },
+        "p2": {
+          "file": "p2.wav",
+          "db": -3.0,
+          "states": [
+            "phase2"
+          ]
+        },
+        "p3": {
+          "file": "p3.wav",
+          "db": -3.0,
+          "states": [
+            "phase3"
+          ]
+        }
+      },
+      "leads": {}
+    },
+    "finale_short": {
+      "title": "Track 14 - The End of Everything (short)",
+      "_note": "Story 048. Ilyr awakening: every Vessel leitmotif over one pad.",
+      "bpm": 60,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/finale_short/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -3.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        }
+      },
+      "leads": {}
     }
   }
 }

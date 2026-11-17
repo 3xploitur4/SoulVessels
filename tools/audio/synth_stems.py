@@ -623,6 +623,110 @@ def boss_p3():
     return normalise(buf, 0.78)
 
 
+# ---- Zone 4 and the finale (story 048) -----------------------------------------------------
+# The Sealed Rift (zone4): D minor, low and heavy, 66 BPM. The Starless Shore (zone4_shore,
+# Track 12): 60 BPM, sparse and wide. Both reuse the zone stem set over their own harmony.
+Z4_CHORDS = [["D2", "A2", "D3", "F3", "A3"], ["Bb1", "F2", "Bb2", "D3", "F3"],
+             ["G1", "D2", "G2", "Bb2", "D3"], ["A1", "E2", "A2", "C#3", "E3"]] * 2
+Z4_ROOTS = ["D1", "Bb0", "G1", "A1"] * 2
+SHORE_CHORDS = [["E2", "B2", "E3", "G3", "B3"], ["C2", "G2", "C3", "E3", "G3"],
+                ["E2", "B2", "E3", "G3", "B3"], ["D2", "A2", "D3", "F#3", "A3"]] * 2
+SHORE_ROOTS = ["E1", "C1", "E1", "D1"] * 2
+
+
+def _drum(buf, t0, f0=120.0, f1=38.0, dur=0.45, gain=0.9):
+    mix(buf, t0, sweep(f0, f1, dur, 7.0), gain)
+
+
+# Boss 2: "Track 10 - The Guardian Below", 65 BPM (P3 at 130): war drums, sub-bass brass, male choir.
+def guardian_p1():
+    buf = blank()
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        for nm in (ROOTS[bar], CHORDS[bar][0]):
+            mix(buf, t0, lowpass(additive(hz(nm), BEATS_PER_BAR * BEAT, BRASS, attack=0.5, release=0.6), 0.2), 0.32)
+        for b in range(BEATS_PER_BAR):
+            _drum(buf, t0 + b * BEAT, gain=0.9 if b % 2 == 0 else 0.55)
+    return normalise(buf, 0.75)
+
+
+def guardian_p2():
+    buf = guardian_p1()
+    for bar in range(BARS):
+        pad_chord(buf, bar, CHORDS[bar][:3], lambda f, d: additive(f, d, CHOIR, attack=0.4, release=0.6,
+                                                                  detune=[0.993, 1.0, 1.007]), 0.18, 4.0)
+    return normalise(buf, 0.76)
+
+
+def guardian_p3():
+    buf = blank()
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        mix(buf, t0, lowpass(additive(hz(ROOTS[bar]), BEATS_PER_BAR * BEAT, BRASS, attack=0.2, release=0.4), 0.25), 0.3)
+        pad_chord(buf, bar, CHORDS[bar][1:4], lambda f, d: additive(f, d, CHOIR, attack=0.15, release=0.3), 0.15, 4.0)
+        for k in range(BEATS_PER_BAR * 2):
+            _drum(buf, t0 + k * BEAT * 0.5, 140.0, 40.0, 0.25, 0.8 if k % 2 == 0 else 0.5)
+            if k % 4 == 2:
+                mix(buf, t0 + k * BEAT * 0.5, noise(0.12, 28.0), 0.3)
+    return normalise(buf, 0.78)
+
+
+# Boss 3: "Track 13 - Leviathan", 96 BPM in 5: distorted cellos and sonar. The 7/8 lean is in the
+# accents (3+2+2 inside each bar), so the director's bar grid stays even.
+def _sonar(buf, t0):
+    s = additive(1480.0, 0.6, [(1, 1.0), (2.0, 0.2)], attack=0.002, release=0.5, decay=4.0)
+    mix(buf, t0, s, 0.18)
+
+
+def _dist_cello(f, d):
+    s = additive(f, d, CELLO, attack=0.03, release=0.1, vibrato=0.004)
+    return [max(-0.6, min(0.6, x * 1.8)) for x in s]
+
+
+def leviathan_p1():
+    buf = blank()
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        for b, acc in zip(range(BEATS_PER_BAR), (1.0, 0.4, 0.4, 0.8, 0.4)):
+            mix(buf, t0 + b * BEAT, _dist_cello(hz(ROOTS[bar]) * 2.0, BEAT * 0.7), 0.3 * acc)
+        _sonar(buf, t0)
+        mix(buf, t0, lowpass(noise(BEATS_PER_BAR * BEAT, 2.0, gain=0.05), 0.02), 1.0)
+    return normalise(buf, 0.74)
+
+
+def leviathan_p2():
+    buf = leviathan_p1()
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        for b in (0, 3):
+            _drum(buf, t0 + b * BEAT, 100.0, 34.0, 0.5, 0.8)
+    return normalise(buf, 0.76)
+
+
+def leviathan_p3():
+    buf = leviathan_p2()
+    for bar in range(BARS):
+        t0 = bar * BEATS_PER_BAR * BEAT
+        for k in range(BEATS_PER_BAR * 2):
+            mix(buf, t0 + k * BEAT * 0.5, _dist_cello(hz(CHORDS[bar][1]) * 2.0, BEAT * 0.4), 0.18)
+        pad_chord(buf, bar, CHORDS[bar][2:], lambda f, d: additive(f * 2.0, d, CHOIR, attack=0.1, release=0.3), 0.12, 5.0)
+    return normalise(buf, 0.78)
+
+
+# "Track 14 - The End of Everything", short: every Vessel's leitmotif layered over one pad.
+def finale_bed():
+    buf = blank()
+    soft = lambda f, d: additive(f, d, [(1, 1.0), (2, 0.3)], attack=1.0, release=1.4, detune=[0.996, 1.0, 1.004])
+    for bar in range(BARS):
+        pad_chord(buf, bar, CHORDS[bar][:3], soft, 0.18, BEATS_PER_BAR + 0.5)
+    for fn, gain in ((stem_lead_caelan, 0.22), (stem_lead_nyra, 0.18), (stem_lead_seris, 0.2),
+                     (stem_lead_darius, 0.2), (stem_lead_ilyr, 0.22)):
+        lead = fn()
+        for i in range(min(len(buf), len(lead))):
+            buf[i] += lead[i] * gain
+    return normalise(buf, 0.75)
+
+
 STEMS = {
     "bed": stem_bed,
     "pulse": stem_pulse,
@@ -652,6 +756,11 @@ def main():
         ("altar", (60, 3, 8, 2, ALTAR_CHORDS, ["A1", "F1", "C2", "E1"] * 2, MOTIF, 0), {"bed": altar_bed}),
         ("zone3", (72, 4, 8, 2, Z3_CHORDS, Z3_ROOTS, MOTIF, 7), dict(STEMS)),
         ("boss_sovereign", (76, 4, 8, 2, Z3_CHORDS, Z3_ROOTS, MOTIF, 7), {"p1": boss_p1, "p2": boss_p2, "p3": boss_p3}),
+        ("zone4", (66, 4, 8, 2, Z4_CHORDS, Z4_ROOTS, MOTIF, 5), dict(STEMS)),
+        ("zone4_shore", (60, 4, 8, 2, SHORE_CHORDS, SHORE_ROOTS, MOTIF, 7), dict(STEMS)),
+        ("boss_guardian", (65, 4, 8, 2, Z4_CHORDS, Z4_ROOTS, MOTIF, 5), {"p1": guardian_p1, "p2": guardian_p2, "p3": guardian_p3}),
+        ("boss_leviathan", (96, 5, 8, 2, SHORE_CHORDS, SHORE_ROOTS, MOTIF, 7), {"p1": leviathan_p1, "p2": leviathan_p2, "p3": leviathan_p3}),
+        ("finale_short", (60, 4, 8, 2, CHORDS, ROOTS, MOTIF, 0), {"bed": finale_bed}),
     ]
     for track, cfg, stems in tracks:
         configure(*cfg)
