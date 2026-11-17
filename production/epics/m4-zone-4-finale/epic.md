@@ -1,6 +1,6 @@
 # Epic M4 — Zone 4 and the Chapter I finale
 
-**Status: Planned (2026-11-17).**
+**Status: Done (2026-11-17). Stories 041-052 complete; look sign-off on 051 pending.**
 
 > Milestone: M4 (addendum "Production milestones" #5). Darius, the Guardian Below, the Abyssal
 > Leviathan, darkness lighting, Overdrive, Ilyr's awakening. Content: Zone 4, the Sealed Rift and

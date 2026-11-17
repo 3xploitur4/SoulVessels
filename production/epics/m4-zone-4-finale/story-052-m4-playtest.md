@@ -25,7 +25,7 @@ build. M4 closes Chapter I, so its playtest walks the whole chapter.
 
 Evidence: `production/qa/evidence/story-052-m4/`.
 - `tools/playtest/drive_m4.py`: 23/23 from the Breach through Darius, masonry, dark and sliding rooms, the Guardian's and the Leviathan's three phases on the real arenas, the Primeval Truth, Overdrive, the rift, the four echoes, the chapter-end screen and Abyssal on the title.
-- Regression: `drive.py` 44/44, `drive_m2.py` and `drive_m3.py` 0 failed (logs in `regression/`); 422 tests pass; smoke ok.
+- Regression: `drive.py` 44/44, `drive_m2.py` and `drive_m3.py` 0 failed (logs in `regression/`); 421 tests pass; smoke ok.
 - Found and fixed: reaching the title any way but the chapter-end button left that screen drawn over the title (`show_title` now closes it; test added).
 - Atlas: `atlas/` (27 shots, Zone 4 rooms via `tests/manual/room_viewer.tscn`).
 - APK: `bash tools/build/export_android.sh` (51.6 MB) installs and boots on the `Medium_Phone_API_36.1` emulator and loads both Zone 4 boss arenas (`android/`, `android_check.py` 13/13). The emulator renders in software (1-3 FPS): frame rate on a real phone is still unmeasured.
