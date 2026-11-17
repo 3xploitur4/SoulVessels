@@ -572,14 +572,26 @@ func _build_story(manager: RoomManager, room: RoomData) -> void:
 		story.fired.connect(_on_story)
 		manager.features_root.add_child(story)
 	for ev: Dictionary in room.events:
-		if str(ev["kind"]) != "possess" or (state != null and state.flag("possessed_" + str(ev["vessel"]))):
-			continue
-		var b := PossessionBody.new()
-		b.name = "Body_" + str(ev["vessel"])
-		b.vessel = str(ev["vessel"])
-		manager.features_root.add_child(b)
+		var v := str(ev["kind"])
+		var vid := str(ev["vessel"])
 		var pos: Vector2 = ev["pos"]
-		b.global_position = Vector3(pos.x, pos.y, -0.1)
+		if v == "possess" and not (state != null and state.flag("possessed_" + vid)):
+			var b := PossessionBody.new()
+			b.name = "Body_" + vid
+			b.vessel = vid
+			manager.features_root.add_child(b)
+			b.global_position = Vector3(pos.x, pos.y, -0.1)
+		elif v == "roots" and not (state != null and state.flag("freed_" + vid)):
+			# Story 025: a Vessel bound in roots; cut them, then free her.
+			var r := RootPrison.new()
+			r.name = "Roots_" + vid
+			r.vessel = vid
+			r.world = world
+			r.roots_cut.connect(func(left: int) -> void:
+				if left == 0 and story != null:
+					story.event("roots_cut"))
+			manager.features_root.add_child(r)
+			r.global_position = Vector3(pos.x, pos.y, -0.1)
 	if room.raw.has("arena") and room.gate_rects.has("lock"):
 		var a := Arena.new()
 		a.name = "Arena"
@@ -592,6 +604,10 @@ func _build_story(manager: RoomManager, room: RoomData) -> void:
 			Sfx.play("gate_open")
 			if story != null:
 				story.event("arena_start"))
+		a.wave_started.connect(func(_id: String, _i: int) -> void:
+			camera.add_trauma(0.3)
+			if story != null:
+				story.event("arena_wave"))
 		a.cleared.connect(func(_id: String) -> void:
 			Sfx.play("gate_open")
 			save_now()
@@ -622,6 +638,27 @@ func possess(vessel: String, body: Node3D = null) -> void:
 	prompts.toast(tr("POSSESSED") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
 	if story != null:
 		story.event("possessed")
+	save_now()
+
+
+## Free `vessel` from its root prison (story 025): bind her, add her to the loadout when there is
+## room (the active Vessel stays), remember it in the save, remove the empty prison.
+func free_vessel(vessel: String, prison: Node3D = null) -> void:
+	if state == null or player == null:
+		return
+	state.unlock_vessel(vessel)
+	state.set_flag("freed_" + vessel)
+	player.equip(state.loadout, affinity_levels())
+	var at := player.global_position + Vector3(0.0, 1.0, 0.4)
+	GameEvents.hit_fx_requested.emit(at, 0.0, true, false)
+	camera.add_trauma(0.3)
+	Sfx.play("altar_kindle")
+	if prison != null and is_instance_valid(prison):
+		prison.queue_free()
+	prompts.hide_tutorial()
+	prompts.toast(tr("FREED") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+	if story != null:
+		story.event("freed")
 	save_now()
 
 

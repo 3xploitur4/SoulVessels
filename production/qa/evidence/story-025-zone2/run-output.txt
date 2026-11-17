@@ -1,0 +1,29 @@
+PASS  the forest opens z2_01
+PASS  told to cut the roots Someone is bound in the roots. Cut them: J.
+PASS  the roots are cut and Free is offered [W]  Free
+PASS  Nyra joins the loadout ['caelan', 'nyra']
+PASS  Nyra speaks Nyra: ...Took you long enough. I don't know what you are. Keep it that way, and I'll keep up.
+PASS  swap tutorial E to change Vessel. Each carries its own body, blade and soul.
+PASS  a swap makes Nyra active 
+PASS  Nyra Shadowsteps through the veil x=19.5
+PASS  the queen calls the husks A voice in the walls: Rise. All of you. Rise for your queen.
+PASS  wave 2 arrives 
+PASS  wave 3 arrives 
+PASS  the gauntlet is cleared and saved 
+PASS  room z2_01 builds 
+PASS  room z2_02 builds 
+PASS  room z2_03 builds 
+PASS  room z2_04 builds 
+PASS  room z2_05 builds 
+PASS  room z2_06 builds 
+PASS  room z2_07 builds 
+PASS  room z2_08 builds 
+PASS  room z2_09 builds 
+PASS  room z2_10 builds 
+PASS  room z2_11 builds 
+PASS  room z2_12 builds 
+PASS  room z2_13 builds 
+PASS  room z2_14 builds 
+PASS  room z2_15 builds 
+PASS  room z2_16 builds 
+SUMMARY: 0 failed

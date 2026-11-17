@@ -86,6 +86,7 @@
     "void_depth_m": 3.0
   },
   "shield_ward": { "_note": "Story 023, decision D-030. The statue beam: height above the statue base, length, damage per tick to a player standing in it unguarded, the reflect angle off Caelan's shield, how long the reflected ray must rest on the crystal, how fast an interrupted charge fades, and the crystal size (w, h).", "beam_height_m": 1.2, "beam_length_m": 40.0, "tick_s": 0.5, "damage": 12, "deflect_angle_deg": 30.0, "reflect_length_m": 20.0, "charge_s": 1.0, "charge_decay_per_s": 0.5, "crystal_size_m": [1.0, 1.5] },
+  "root_prison": { "hits": 3, "hurt_size_m": [1.4, 2.2], "_note": "Story 025, addendum zone table: Nyra is freed from the roots in room 8. Three blows cut the roots (one per thick root drawn), then interact frees her." },
   "root_snare": { "duration_s": 2.5, "taps_to_break": 6, "_note": "Story 022, addendum resolved contradictions: the Husk's root-snare holds 2.5 s; 6 taps of attack, jump or dodge break it; a Shadowstep breaks it at once." },
   "death": { "respawn_delay_s": 2.5, "_note": "Seconds the fallen body stays on screen before the fade to the rested altar (story 018)." },
   "difficulty": {

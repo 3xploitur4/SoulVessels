@@ -232,3 +232,19 @@ SOV_Z1_WARDENS,My Wardens kept every door in this city. Let one of them keep you
 SOV_Z1_KNEEL,Kneel.
 SOV_Z1_WARDEN_FALLS,Another of mine. How many more of mine will you take?
 SOV_Z1_DEEPER,"Go down, then. The roots will hold you better than stone."
+UI_FREE,Free
+FREED,%s joins you.
+TUT_MUSHROOM,Glowcaps throw you upward. Land on one to bounce.
+TUT_WALLJUMP,"Slide down a wall, then {jump} to kick off it. Climb the chimney wall to wall."
+TUT_ROOTS,Someone is bound in the roots. Cut them: {attack}.
+TUT_FREE,The roots give. {interact} to free her.
+NYRA_FREED,"...Took you long enough. I don't know what you are. Keep it that way, and I'll keep up."
+TUT_SWAP,"{swap_next} to change Vessel. Each carries its own body, blade and soul."
+TUT_BACKSTAB,Strike an enemy from behind for a backstab. Nyra's blades bite deepest there.
+TUT_SHADOWSTEP,"As Nyra, {ability_1} to Shadowstep. Shadow lets her through."
+NYRA_VEIL,A Warden's veil. They never thought anyone would walk through.
+SOV_Z2_ROOTS,The forest drinks what falls. It will drink you.
+SOV_Z2_AMBUSH,Rise. All of you. Rise for your queen.
+SOV_Z2_MORE,More of them. There are always more of them.
+SOV_Z2_CLEAR,Even the stone ones. Is nothing of mine safe from you?
+SOV_Z2_PALACE,"Below the water is my palace. Come down, then. I will be waiting where he could not follow."
