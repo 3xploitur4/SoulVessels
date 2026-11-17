@@ -115,6 +115,8 @@ var _trav: Dictionary = {}
 var _water_cfg: Dictionary = {}
 ## Metres under the surface of the water the player stands in (story 031); 0 on dry land.
 var water_depth: float = 0.0
+## Set by the room: returns the room's solid rects, so bolts stop at rock (story 032).
+var solid_source: Callable
 ## The Calcified Husk root-snare (story 022): while active the body cannot move, jump or dodge.
 var snare: RootSnare
 

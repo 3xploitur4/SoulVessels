@@ -38,3 +38,10 @@ static func beam_end_x(origin: Vector2, beam_dir_x: float, max_length: float, bl
 ## Returns whether the normalized ray segment crosses `rect`.
 static func ray_hits(origin: Vector2, dir: Vector2, length: float, rect: Rect2) -> bool:
 	return CombatWorld.segment_hits_rect(origin, origin + dir.normalized() * length, rect)
+
+
+## Story 032: a bolt with velocity `v` off a two-sided mirror whose normal points at `angle_deg`
+## (0 = facing right, so the mirror stands upright; 90 = lying flat). Same speed, mirrored angle.
+static func mirror_reflect(v: Vector2, angle_deg: float) -> Vector2:
+	var n := Vector2.from_angle(deg_to_rad(angle_deg))
+	return v - 2.0 * v.dot(n) * n

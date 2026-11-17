@@ -458,6 +458,9 @@ def sfx_bank():
     for i in range(len(sp)):
         sp[i] = sp[i] * 0.8 + blip[i] * 0.3
     s["splash"] = sp
+    s["rune_lit"] = additive(990.0, 0.6, [(1, 1.0), (1.5, 0.6), (2.0, 0.4), (3.0, 0.2)], attack=0.01, release=0.4,
+                             decay=2.5)
+    s["rune_wrong"] = additive(185.0, 0.45, [(1, 1.0), (1.06, 0.8), (2.0, 0.3)], attack=0.005, release=0.25, decay=4.0)
     return s
 
 

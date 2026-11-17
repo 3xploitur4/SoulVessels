@@ -58,6 +58,8 @@ func fire_bolt(player: Player, index: int) -> Projectile:
 	var proj := player.spawn_projectile(p, origin, Vector2(speed * player.facing, 0.0), Vector2(0.5, 0.9),
 		float(pr.get("range_m", 20.0)), VfxShapes.bolt(BOLT_COLOR, radius))
 	proj.pierce = false
+	if player.solid_source.is_valid():
+		proj.blockers = player.solid_source
 	proj.add_to_group(BOLT_GROUP)
 	Sfx.play("bolt")
 	return proj

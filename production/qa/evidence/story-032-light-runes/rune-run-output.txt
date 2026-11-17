@@ -1,0 +1,8 @@
+PASS  z1_02: the rune door is shut and dark          {'door': True, 'lit': 0, 'size': 1, 'solved': False}
+PASS  one bolt lights it and the door opens          {'door': False, 'lit': 1, 'size': 1, 'solved': True}
+PASS  the open door is saved                         ['z1_02_rune']
+PASS  the shard behind the door is taken             {'standard_soul_shard': 1}
+PASS  a bolt from the right hits rune 2 first: all out {'door': True, 'lit': 0, 'size': 3, 'solved': False}
+PASS  from the left: runes 1 and 2 in order          {'door': True, 'lit': 2, 'size': 3, 'solved': False}
+PASS  the mirror bounces bolt 3 up into rune 3       {'door': False, 'lit': 3, 'size': 3, 'solved': True}
+SUMMARY: 0 failed

@@ -162,6 +162,23 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 			elif args.has("to"):
 				w.rise_to(float(args.get("to")), float(args.get("seconds", 0.0)))
 			return {"id": wid, "level": w.level, "patches": w.patches.size()}
+		"mirror":
+			# Stand a mirror-shield in the current room (story 032 playtests).
+			var rmm: RoomManager = sandbox.get("rooms")
+			var m := MirrorShield.new()
+			m.name = "DebugMirror"
+			m.player = player
+			m.angle = float(args.get("angle", 135.0))
+			rmm.features_root.add_child(m)
+			m.global_position = Vector3(float(args.get("x", 5.0)), float(args.get("y", 1.0)), 0.0)
+			return {"angle": m.angle}
+		"runes":
+			var rmr: RoomManager = sandbox.get("rooms")
+			var pz := rmr.features_root.get_node_or_null("RunePuzzle") as RunePuzzle
+			if pz == null:
+				return {"error": "no rune puzzle here"}
+			return {"lit": pz.sequence.lit_count(), "size": pz.sequence.size(), "solved": pz.sequence.solved,
+				"door": rmr.builder.gate_active(pz.door_kind)}
 		"root_player":
 			player.snare.apply()
 			return {"rooted": player.snare.is_active()}

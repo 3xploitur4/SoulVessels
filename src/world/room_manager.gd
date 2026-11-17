@@ -83,6 +83,7 @@ func enter_data(next: RoomData, exit: String = "", at: Vector2 = Vector2.INF) ->
 	add_child(transient_root)
 	if player != null:
 		player.fx_parent = transient_root
+		player.solid_source = solid_rects
 		player.set_room_platforms(builder.oneway_bodies)
 	_spawn_enemies()
 	_build_water()
@@ -298,3 +299,16 @@ func _build_water() -> void:
 		node.setup(str(w.get("id", "pool")), Vector2(float(xs[0]), float(xs[1])), float(w.get("floor", 0.0)),
 			float(w.get("level", 1.0)))
 		features_root.add_child(node)
+
+
+## Rock and every gate still standing, in room metres (bolts stop at these; story 032).
+func solid_rects() -> Array[Rect2]:
+	var out: Array[Rect2] = []
+	if data == null:
+		return out
+	out.append_array(data.solids)
+	if builder != null:
+		for kind: String in data.gate_rects.keys():
+			if builder.gate_active(kind):
+				out.append_array(data.gate_rects[kind])
+	return out

@@ -22,6 +22,8 @@ var pierce: bool = true
 var lifetime: float = 1.0
 var max_distance: float = INF
 var travelled: float = 0.0
+## Optional: returns the room's solid rects (Array[Rect2]); the projectile dies on touching one.
+var blockers: Callable
 
 var _hit_ids: Dictionary[int, bool] = {}
 var _scratch: Array[Node3D] = []
@@ -50,6 +52,10 @@ func _physics_process(delta: float) -> void:
 	var step := velocity * delta
 	global_position += Vector3(step.x, step.y, 0.0)
 	travelled += step.length()
+	if blockers.is_valid() and _in_rock(Vector2(global_position.x, global_position.y)):
+		GameEvents.hit_fx_requested.emit(global_position, 0.0, false, true)
+		queue_free()
+		return
 	if velocity.x != 0.0:
 		rotation.y = 0.0 if velocity.x > 0.0 else PI
 	_scratch.clear()
@@ -69,3 +75,10 @@ func _physics_process(delta: float) -> void:
 			return
 	if _age >= lifetime or travelled >= max_distance:
 		queue_free()
+
+
+func _in_rock(p: Vector2) -> bool:
+	for r: Rect2 in blockers.call():
+		if r.has_point(p):
+			return true
+	return false

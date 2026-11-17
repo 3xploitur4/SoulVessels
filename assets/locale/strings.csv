@@ -251,3 +251,6 @@ SOV_Z2_PALACE,"Below the water is my palace. Come down, then. I will be waiting 
 TOUCH_STICK,the stick on the left
 PAD_LEFT_STICK,the left stick
 UI_SWAP_NEXT,Vessel wheel
+UI_ROTATE,Turn
+UI_CARRY,Carry
+UI_SET_DOWN,Set down
