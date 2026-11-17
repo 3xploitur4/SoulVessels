@@ -1119,6 +1119,8 @@ func _update_state_name() -> void:
 		state = "run" if absf(velocity.x) > 0.3 else "idle"
 	elif _wall_sliding:
 		state = "wall_slide"
+	elif is_swimming():
+		state = "swim"
 	else:
 		state = "jump" if velocity.y > 0.0 else "fall"
 

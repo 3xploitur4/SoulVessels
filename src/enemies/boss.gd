@@ -107,6 +107,9 @@ func _check_phase() -> void:
 		var w := _arena_water()
 		if w != null:
 			w.rise_to(w.level + float(ph.get("water_rise_m", 0.0)), float(ph.get("water_rise_s", 2.0)))
+	if ph.has("tint") and visual is EnemySpriteVisual:
+		# The phase shows on her: phase 3 of the Sovereign burns warm (story 039).
+		(visual as EnemySpriteVisual).body.set_tint(Color(str(ph["tint"])))
 	phase_changed.emit(phase)
 	GameEvents.boss_phase_changed.emit(self, phase)
 

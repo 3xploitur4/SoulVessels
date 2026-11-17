@@ -25,7 +25,7 @@
   "phases": [
     {"at": 1.0},
     {"at": 0.6, "water_rise_m": 1.5, "water_rise_s": 2.5},
-    {"at": 0.25}
+    {"at": 0.25, "tint": "#ffb48c"}
   ],
   "on_defeat": {"flag": "boss_weeping_sovereign", "affinity_bonus": {"caelan": 1}, "line": "CAELAN_GOODBYE", "speaker": "SPEAKER_CAELAN"},
   "attacks": [

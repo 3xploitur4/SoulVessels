@@ -3,7 +3,7 @@ PASS  Unravel strips the buff                        [('choir_prelate', False, 9
 PASS  walking up to it makes it teleport away        10.1 -> 15.7
 PASS  the Courtier waits under water                 {'attack': '', 'buffed': False, 'facing': -1, 'frozen': False, 'hp': 110.0, 'hp_max': 110.0, 'id': 'drowned_courtier', 'posture': 0.0, 'posture_max': 50.0, 'staggered': False, 'state': 'idle', 'state_time': 1.217, 'tier': 'common', 'x': 15.0, 'y': 2.36}
 PASS  it rises to slash when Seris is close          {'attack': 'rising_slash', 'buffed': False, 'facing': -1, 'frozen': False, 'hp': 110.0, 'hp_max': 110.0, 'id': 'drowned_courtier', 'posture': 0.0, 'posture_max': 50.0, 'staggered': False, 'state': 'telegraph', 'state_time': 0.233, 'tier': 'common', 'x': 12.1, 'y': 2.9}
-before the cast: {'x': 9.9, 'y': 2.79, 'state': 'fall', 'facing': 1, 'water_depth': 1.2, 'cooldowns': {'aether_shield': 0.0}}
+before the cast: {'x': 9.9, 'y': 2.79, 'state': 'swim', 'facing': 1, 'water_depth': 1.2, 'cooldowns': {'aether_shield': 0.0}}
 after the cast: {'state': 'frost_binding', 'cooldowns': {'aether_shield': 0.0, 'frost_binding': 7.4975}}
 PASS  Frost Binding freezes it in the water          {'attack': 'rising_slash', 'buffed': False, 'facing': -1, 'frozen': True, 'hp': 72.5, 'hp_max': 110.0, 'id': 'drowned_courtier', 'posture': 2.5, 'posture_max': 50.0, 'staggered': False, 'state': 'hurt', 'state_time': 0.252, 'tier': 'common', 'x': 11.42, 'y': 2.01}
 SUMMARY: 0 failed

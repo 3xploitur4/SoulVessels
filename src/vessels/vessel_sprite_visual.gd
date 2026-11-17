@@ -151,10 +151,31 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 			_struck = true
 			b.flash(Color(0.5, 0.95, 1.0), 0.6)
 	if b is RigBody:
-		(b as RigBody).play(_clip_for(state), progress)
+		(b as RigBody).play(clip_for_rig(state, (b as RigBody).clips), progress)
 	_guard_mat.albedo_color.a = lerpf(_guard_mat.albedo_color.a, 0.75 * guard, minf(delta * 20.0, 1.0))
 	_guard.visible = _guard_mat.albedo_color.a > 0.02
 	b.tick(delta)
+
+
+## The clip for `state` on a rig that has `clips`: a Vessel's own clip when it has one (Seris
+## casts her bolts with "bolt", plants Frost Binding with "frost", swims with "swim"; story 039),
+## else the shared clip from `_clip_for`.
+static func clip_for_rig(state: String, clips: Dictionary) -> String:
+	var own := ""
+	if state.begins_with("primary"):
+		own = "bolt"
+	match state:
+		"frost_binding":
+			own = "frost"
+		"aether_burst", "cataclysm_fused":
+			own = "cast"
+		"swim":
+			own = "swim"
+	if own != "" and clips.has(own):
+		return own
+	if state == "swim":
+		return "fall"
+	return _clip_for(state)
 
 
 ## The rig clip (story 029) for a player state.

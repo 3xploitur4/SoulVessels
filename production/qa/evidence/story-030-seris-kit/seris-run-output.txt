@@ -5,6 +5,6 @@ PASS  Aether Shield is up                            2.75
 PASS  the shield drops after 3 s                     0.0
 PASS  Rift Step breaks a root-snare at once          False
 PASS  swap back to Seris plays Aether Burst          {'swapped': True, 'vessel': 'seris'}
-state after ultimate: {"bars": 1, "blocking": false, "cooldowns": {"aether_shield": 1.63666666666659, "frost_binding": 0.0}, "exhausted": false, "facing": 1, "flasks": 3, "gauge": 116.0, "hidden": false, "hp": 464.3, "hp_max": 480.0, "invulnerable": true, "last_sync_guard": "", "on_floor": true, "posture": 0.0, "rooted":
+state after ultimate: {"bars": 1, "blocking": false, "burning": false, "cooldowns": {"aether_shield": 1.75249999999992, "frost_binding": 0.0}, "exhausted": false, "facing": 1, "flasks": 3, "gauge": 116.0, "hidden": false, "hp": 448.7, "hp_max": 480.0, "invulnerable": true, "last_sync_guard": "", "on_floor": true, "postur
 PASS  Cataclysm meteors hit the Crawlers             12 hp left of 180
 SUMMARY: 0 failed

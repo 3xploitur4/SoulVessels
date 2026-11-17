@@ -3,7 +3,7 @@ PASS  her track plays its phase 1 clip               boss_sovereign / phase1
 PASS  she attacks in phase 1                         ['grief_wave', 'veil_sweep']
 PASS  below 60 %: phase 2 begins                     {'attack': 'veil_sweep', 'hp': 2581.06557377049, 'phase': 1, 'state': 'recover', 'transition': True}
 PASS  the water rose 1.5 m                           3.75
-PASS  the phase 2 clip comes in on a boundary        [{'at': 0.0, 'state': 'phase1'}, {'at': 12.634, 'state': 'phase2'}]
+PASS  the phase 2 clip comes in on a boundary        [{'at': 0.0, 'state': 'phase1'}, {'at': 12.639, 'state': 'phase2'}]
 PASS  below 25 %: phase 3                            {'attack': 'drowned_hands', 'hp': 956.885245901639, 'phase': 2, 'state': 'recover', 'transition': True}
 PASS  phase 3 uses Ember attacks                     {'attack': 'pyre_tears', 'hp': 956.885245901639, 'phase': 2, 'state': 'telegraph', 'transition': False}
 PASS  she falls                                      []
