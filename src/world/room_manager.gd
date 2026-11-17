@@ -17,6 +17,8 @@ signal room_entered(room_id: String)
 signal room_left(room_id: String)
 ## The player fell below the room (story 021). The game scene decides what it costs.
 signal fell_out
+## The player walked into an exit that waits on story flag `flag` (story 024).
+signal exit_blocked(exit: String, flag: String)
 
 const FADE_OUT_S := 0.18
 const FADE_IN_S := 0.25
@@ -207,6 +209,15 @@ func _physics_process(_delta: float) -> void:
 	if digit == _ignore_exit:
 		return
 	var ex: Dictionary = data.exits[digit]
+	# Story 024: an exit may wait on a story flag (`exit_needs` in the room data), e.g. the wisp
+	# cannot leave the Knight's Vigil before it has taken Caelan's body.
+	var need := str((data.raw.get("exit_needs", {}) as Dictionary).get(digit, ""))
+	if need != "" and state != null and not state.flag(need):
+		var inward := signf(float(data.cols) * 0.5 - player.global_position.x)
+		player.teleport(player.global_position.x + inward * 0.8, player.global_position.y)
+		player.velocity.x = 0.0
+		exit_blocked.emit(digit, need)
+		return
 	var to := str(ex.get("to", ""))
 	if to == "" or WorldData.room(to) == null:
 		return

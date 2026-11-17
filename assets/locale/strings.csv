@@ -211,3 +211,24 @@ SEALED_RUNE,"A circle of dead runes. It wants light, not force."
 SEALED_MASONRY,Orange light seeps through the cracks. Something heavy could break this.
 SEALED_FLOOD,"Black water fills the stair down. The way below is drowned, for now."
 SEALED_RIFT,A shimmering tear in the air. It does not open for you. Not yet.
+UI_POSSESS,Possess
+POSSESSED,You wear %s now.
+SPEAKER_VOICE,A voice in the walls
+BLOCKED_POSSESSED_CAELAN,Your light is too thin to go on alone. Take the fallen knight's body ({interact}).
+TUT_MOVE,{move_left} / {move_right} to drift. You are only light now.
+TUT_JUMP,{jump} to rise.
+TUT_POSSESS,"A knight fell here, guarding the door. Step into him: {interact}."
+TUT_ATTACK,{attack} to strike. Up to four blows chain together.
+TUT_DODGE,"{dodge} to roll. For the first instant of a roll, nothing can touch you."
+TUT_REST,"Kneel at a Soul Altar ({interact}): rest, heal and refill your flasks. The dead return."
+TUT_FLASK,{flask} to drink a soul flask and heal.
+TUT_VEIL,A curtain of shadow. Someone lighter on her feet might slip through it.
+TUT_BLOCK,Hold {ability_1} to raise Caelan's shield. Face the light and give it back.
+TUT_PARRY,Block the moment a blow lands to parry. A parried Warden drops its guard.
+SOV_Z1_THIEF,Thief. Something is moving in my halls that I did not write.
+SOV_Z1_KNIGHT,You wear his face now? He would not open the door for me either.
+SOV_Z1_WARD,"The light remembers who kept it. Do you, thief?"
+SOV_Z1_WARDENS,My Wardens kept every door in this city. Let one of them keep you.
+SOV_Z1_KNEEL,Kneel.
+SOV_Z1_WARDEN_FALLS,Another of mine. How many more of mine will you take?
+SOV_Z1_DEEPER,"Go down, then. The roots will hold you better than stone."

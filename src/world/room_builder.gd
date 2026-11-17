@@ -193,6 +193,24 @@ func _build_enemy_walls() -> void:
 		add_child(body)
 
 
+## Turn gate `kind` on or off without removing it (arena lock bars: open until the fight starts,
+## shut while it runs). Off means no collision and not drawn.
+func set_gate_active(kind: String, on: bool) -> void:
+	for b: Node in gate_bodies.get(kind, []):
+		if not is_instance_valid(b):
+			continue
+		(b as Node3D).visible = on
+		for c: Node in b.get_children():
+			if c is CollisionShape3D:
+				(c as CollisionShape3D).set_deferred("disabled", not on)
+
+
+## Is gate `kind` present and switched on?
+func gate_active(kind: String) -> bool:
+	var list: Array = gate_bodies.get(kind, [])
+	return not list.is_empty() and is_instance_valid(list[0]) and (list[0] as Node3D).visible
+
+
 ## Remove every body of gate `kind` (opened for good, or an arena that ended).
 func open_gate(kind: String) -> void:
 	for b: Node in gate_bodies.get(kind, []):

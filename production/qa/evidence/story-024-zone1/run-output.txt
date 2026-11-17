@@ -1,0 +1,26 @@
+PASS  a new game starts in Awakening Hollow z1_01
+PASS  move tutorial shows with real keys A / D to drift. You are only light now.
+PASS  the voice calls the wisp a thief A voice in the walls: Thief. Something is moving in my halls that I did not write.
+PASS  the wisp cannot leave the Vigil yet Your light is too thin to go on alone. Take the fallen knight's body (W).
+PASS  the body offers Possess [W]  Possess
+PASS  the wisp is now Caelan ['caelan']
+PASS  the voice answers the possession A voice in the walls: You wear his face now? He would not open the door for me either.
+PASS  Caelan walks out of the Vigil z1_03
+PASS  attack tutorial on entering the steps J to strike. Up to four blows chain together.
+PASS  room z1_01 builds 
+PASS  room z1_02 builds 
+PASS  room z1_03 builds 
+PASS  room z1_04 builds 
+PASS  room z1_05 builds 
+PASS  room z1_06 builds 
+PASS  room z1_07 builds 
+PASS  room z1_08 builds 
+PASS  room z1_09 builds 
+PASS  room z1_10 builds 
+PASS  room z1_11 builds 
+PASS  room z1_12 builds 
+PASS  room z1_13 builds 
+PASS  room z1_14 builds 
+PASS  the voice orders Caelan to kneel A voice in the walls: Kneel.
+PASS  the hall is cleared and saved 
+SUMMARY: 0 failed

@@ -82,7 +82,9 @@ func _ready() -> void:
 	register_feature(_build_pickups)
 	register_feature(_build_mushrooms)
 	register_feature(_build_gates)
+	register_feature(_build_story)
 	rooms.fell_out.connect(_on_fell_out)
+	rooms.exit_blocked.connect(_on_exit_blocked)
 	loot = LootTable.from_data()
 	soul_core = SoulCore.from_data()
 	GameEvents.perfect_parry.connect(func(_a: Node3D) -> void: _award_xp("perfect_parry"))
@@ -549,6 +551,91 @@ func _add_sealed(manager: RoomManager, kind: String, at: Vector2) -> void:
 	g.kind = kind
 	manager.features_root.add_child(g)
 	g.global_position = Vector3(at.x, at.y, 0.0)
+
+
+# --- Zone story: possession, arenas, tutorials and lines (story 024) -------------------------
+
+## The room's story triggers (null in rooms without any); arena and possession events go here.
+var story: StoryTriggers
+
+
+func _build_story(manager: RoomManager, room: RoomData) -> void:
+	story = null
+	if player == null:
+		return
+	if room.raw.has("story"):
+		story = StoryTriggers.new()
+		story.name = "Story"
+		story.room = room
+		story.player = player
+		story.state = state
+		story.fired.connect(_on_story)
+		manager.features_root.add_child(story)
+	for ev: Dictionary in room.events:
+		if str(ev["kind"]) != "possess" or (state != null and state.flag("possessed_" + str(ev["vessel"]))):
+			continue
+		var b := PossessionBody.new()
+		b.name = "Body_" + str(ev["vessel"])
+		b.vessel = str(ev["vessel"])
+		manager.features_root.add_child(b)
+		var pos: Vector2 = ev["pos"]
+		b.global_position = Vector3(pos.x, pos.y, -0.1)
+	if room.raw.has("arena") and room.gate_rects.has("lock"):
+		var a := Arena.new()
+		a.name = "Arena"
+		a.room = room
+		a.manager = manager
+		a.player = player
+		a.state = state
+		a.started.connect(func(_id: String) -> void:
+			camera.add_trauma(0.35)
+			Sfx.play("gate_open")
+			if story != null:
+				story.event("arena_start"))
+		a.cleared.connect(func(_id: String) -> void:
+			Sfx.play("gate_open")
+			save_now()
+			if story != null:
+				story.event("arena_clear"))
+		manager.features_root.add_child(a)
+
+
+## Take the body of `vessel` (the wisp's possession, addendum Narrative 1): bind and equip it,
+## remember it in the save, and remove the empty body.
+func possess(vessel: String, body: Node3D = null) -> void:
+	if state == null or player == null:
+		return
+	state.unlock_vessel(vessel)
+	state.set_flag("possessed_" + vessel)
+	player.equip(state.loadout, affinity_levels())
+	player.health.reset(player.max_hp())
+	GameEvents.player_hp_changed.emit(player.health.current, player.health.max_value)
+	MusicDirector.set_vessel(player.loadout.active().id)
+	var at := player.global_position + Vector3(0.0, 1.0, 0.4)
+	GameEvents.hit_fx_requested.emit(at, 0.0, true, false)
+	camera.add_trauma(0.4)
+	Sfx.play("altar_kindle")
+	if body != null and is_instance_valid(body):
+		player.teleport(body.global_position.x, body.global_position.y + 0.05)
+		body.queue_free()
+	prompts.hide_tutorial()
+	prompts.toast(tr("POSSESSED") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+	if story != null:
+		story.event("possessed")
+	save_now()
+
+
+func _on_story(e: Dictionary) -> void:
+	var key := str(e.get("key", ""))
+	if str(e.get("kind", "")) == "tutorial":
+		prompts.tutorial(tr(key))
+	else:
+		var speaker := str(e.get("speaker", "SPEAKER_VOICE"))
+		prompts.subtitle(tr(speaker), tr(key), Color(str(e.get("color", "#b8d4ff"))))
+
+
+func _on_exit_blocked(_exit: String, need: String) -> void:
+	prompts.tutorial(tr("BLOCKED_" + need.to_upper()))
 
 
 # --- Loot and pickups (story 019) -------------------------------------------------------------

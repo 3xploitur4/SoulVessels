@@ -1280,6 +1280,27 @@
      }
     ]
    ]
+  },
+  "kneel": {
+   "keys": [
+    [
+     0,
+     {
+      "torso": -22,
+      "head": -24,
+      "arm_upper": -8,
+      "arm_fore": 20,
+      "sword": 40,
+      "shield_arm": 14,
+      "leg_l_thigh": 75,
+      "leg_l_shin": -105,
+      "leg_r_thigh": -15,
+      "leg_r_shin": -70,
+      "cape": 6,
+      "root_y": -0.42
+     }
+    ]
+   ]
   }
  },
  "secondary": {

@@ -103,6 +103,12 @@ func tutorial(text: String) -> void:
 	_refresh_tutorial()
 
 
+## Hide the tutorial banner now (its advice no longer applies, e.g. after a possession).
+func hide_tutorial() -> void:
+	_tutorial_left = 0.0
+	_tutorial.visible = false
+
+
 func tutorial_text() -> String:
 	return _tutorial.text if _tutorial.visible else ""
 
