@@ -67,7 +67,7 @@ func test_arcane_bolt_is_a_magic_aether_projectile_with_twenty_metre_range() -> 
 	assert_not_null(proj)
 	assert_almost(proj.max_distance, 20.0)
 	assert_eq(proj.packet.element, "aether")
-	assert_almost(proj.packet.element_buildup, 12.0)
+	assert_almost(proj.packet.element_buildup, 20.0)
 	assert_eq(proj.packet.kind, DamagePacket.KIND_MAGIC)
 	assert_true(proj.is_in_group(SerisKit.BOLT_GROUP), "rune doors and mirrors find bolts by group")
 

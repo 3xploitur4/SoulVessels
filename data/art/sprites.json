@@ -167,6 +167,7 @@
         "size_m": 0.9
       }
     },
+    "drowned_courtier": {"file": "res://assets/art/sprites/calcified_husk.png", "height_m": 1.8, "faces": 1, "wind": 0.04, "tint": "#7fc8d4", "_note": "No concept art for the Drowned Courtier (new in the addendum): the Husk painting, smaller and tinted sea-green, stands in until story 039.", "tell": {"pos": [0.45, 0.22], "color": "#f2c14e", "size_m": 1.0}, "rig": "calcified_husk"},
     "choir_prelate": {
       "file": "res://assets/art/sprites/choir_prelate.png",
       "height_m": 2.3,

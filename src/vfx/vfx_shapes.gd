@@ -33,7 +33,8 @@ static func knife(color: Color) -> Node3D:
 
 
 ## An energy bolt (Watcher beam reflection, magic shots).
-static func bolt(color: Color, radius: float) -> Node3D:
+## `energy` is the glow; high values wash a colour out to white.
+static func bolt(color: Color, radius: float, energy: float = 4.0) -> Node3D:
 	var root := Node3D.new()
 	var mi := MeshInstance3D.new()
 	var s := SphereMesh.new()
@@ -42,7 +43,7 @@ static func bolt(color: Color, radius: float) -> Node3D:
 	s.radial_segments = 10
 	s.rings = 5
 	mi.mesh = s
-	mi.material_override = ArenaMaterials.flat(color, 4.0)
+	mi.material_override = ArenaMaterials.flat(color, energy)
 	root.add_child(mi)
 	return root
 

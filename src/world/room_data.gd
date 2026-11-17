@@ -16,6 +16,7 @@ extends RefCounted
 ##   E  event body (Vessel to possess or free, from `events`, reading order)
 ##   c  Echo Crawler   w  Subterranean Watcher   W  Branded Warden
 ##   h  Calcified Husk t  Fungal Stalker (hangs under the ceiling)
+##   d  Drowned Courtier (place it in water)   p  Choir Prelate
 ##   M  bounce mushroom (stands on the cell below)
 ##   V  shadow veil curtain (solid except to a Shadowstep)
 ##   G  shield-ward bars   S  ward statue (beam origin)   O  receiver crystal
@@ -30,6 +31,8 @@ const ENEMY_CODES := {
 	"W": "branded_warden",
 	"h": "calcified_husk",
 	"t": "fungal_stalker",
+	"d": "drowned_courtier",
+	"p": "choir_prelate",
 }
 ## Characters that build collision (with the gate kind they belong to; "" = plain rock).
 const SOLID_CODES := {"#": "", "G": "ward", "V": "veil", "L": "lock", "R": "rune", "K": "masonry", "F": "flood"}

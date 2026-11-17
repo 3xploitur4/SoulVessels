@@ -19,6 +19,10 @@ static func create(enemy_id: String) -> EnemyBase:
 			return CalcifiedHusk.new()
 		"fungal_stalker":
 			return FungalStalker.new()
+		"drowned_courtier":
+			return DrownedCourtier.new()
+		"choir_prelate":
+			return ChoirPrelate.new()
 	push_error("EnemyFactory: unknown enemy %s" % enemy_id)
 	return null
 

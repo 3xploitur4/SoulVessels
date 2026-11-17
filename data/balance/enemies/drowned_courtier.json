@@ -1,0 +1,41 @@
+{
+  "_source": "Story 033. Addendum enemy table: Drowned Courtier (new) 110 HP / 24 ATK / 50 posture, weak to Frost (freezes in water); swims under the surface and rises with a gold-flash slash. surface_range_m: how close the player must be before it rises; dive_after_s: time above water before it sinks again; swim_depth_m: how far under the surface it waits; freeze_in_water_s: Freeze length while it is in water (longer than the 2 s base). water_frost_buildup_mult: Frost build-up multiplier while in water, so one Frost Binding (60) freezes it.",
+  "id": "drowned_courtier",
+  "name_key": "ENEMY_DROWNED_COURTIER",
+  "tier": "common",
+  "essence": 18,
+  "hp": 110,
+  "atk": 24,
+  "def": 3,
+  "posture": 50,
+  "move_speed": 3.4,
+  "aggro_range_m": 9.0,
+  "leash_range_m": 18.0,
+  "preferred_range_m": 1.6,
+  "weaknesses": ["frost"],
+  "resists": [],
+  "aoe_multiplier": 1.0,
+  "group_size": 1,
+  "surface_range_m": 2.4,
+  "dive_after_s": 1.6,
+  "swim_depth_m": 1.6,
+  "freeze_in_water_s": 4.0,
+  "water_frost_buildup_mult": 2.0,
+  "attacks": [
+    {
+      "id": "rising_slash",
+      "kind": "parryable",
+      "telegraph_s": 0.5,
+      "tell": "blade_rise",
+      "tell_color": "#f2c14e",
+      "range_m": 2.4,
+      "motion": 1.0,
+      "posture": 12,
+      "active_s": 0.16,
+      "recover_s": 0.6,
+      "cooldown_s": 1.4
+    }
+  ],
+  "drops": {"common": {"lesser_soul_shard": 1, "crude_stone": 1}, "rare": {"standard_soul_shard": 1}},
+  "silhouette": {"kind": "humanoid", "height_m": 1.8, "width_m": 0.9, "primary_color": "#2f5d66", "accent_color": "#9fe0e8"}
+}

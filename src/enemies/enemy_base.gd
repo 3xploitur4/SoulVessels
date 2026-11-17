@@ -59,6 +59,9 @@ var _flinch_left: float = 0.0
 var _dead_left: float = 0.0
 var _preferred_range: float = 2.0
 var _scratch: Array[Node3D] = []
+var _buff_left: float = 0.0
+var _buff_mult: float = 1.0
+var _buff_fx: Node3D
 
 
 func _ready() -> void:
@@ -124,7 +127,7 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	var riposte := p.is_primary and posture.is_staggered()
 	var element_mult := CombatMath.element_multiplier(p.element, data.get("weaknesses", []), data.get("resists", []),
 		Balance.combat_f("damage.weakness_multiplier"), Balance.combat_f("damage.resist_multiplier"))
-	var def := float(data.get("def", 0.0)) * status.def_multiplier()
+	var def := float(data.get("def", 0.0)) * status.def_multiplier() * buff_multiplier()
 	var dmg := CombatMath.damage(p.atk, p.motion, def, p.crit_multiplier if crit else 1.0, element_mult,
 		p.backstab_multiplier if backstab else 1.0)
 	if p.aoe:
@@ -222,6 +225,8 @@ func snapshot() -> Dictionary:
 		"staggered": posture.is_staggered(),
 		"attack": str(current_attack.get("id", "")),
 		"tier": tier,
+		"buffed": buff_multiplier() > 1.0,
+		"frozen": status.has_status("frozen"),
 	}
 
 
@@ -233,6 +238,7 @@ func _physics_process(delta: float) -> void:
 	status.tick(delta)
 	for key: String in _cooldowns.keys():
 		_cooldowns[key] = maxf(_cooldowns[key] - delta, 0.0)
+	_tick_buff(delta)
 	if state == STATE_DEAD:
 		_dead_left -= delta
 		visual.dissolve(1.0 - clampf(_dead_left / DISSOLVE_S, 0.0, 1.0))
@@ -250,6 +256,9 @@ func _physics_process(delta: float) -> void:
 			_enter_stagger()
 	elif state == STATE_STAGGERED:
 		_enter_state(STATE_APPROACH)
+	if status.has_status("frozen") and state != STATE_STAGGERED:
+		_frozen_tick(delta)
+		return
 	var player := _target()
 	match state:
 		STATE_IDLE:
@@ -287,6 +296,44 @@ func _physics_process(delta: float) -> void:
 	if global_position.z != 0.0:
 		global_position.z = 0.0
 	visual.animate(state, facing, absf(velocity.x), delta)
+
+
+# --- Buffs and Freeze (story 033) -----------------------------------------------------------
+
+## An ally's aura (the Choir Prelate): ATK and DEF times mult for the given seconds, refreshed while in range.
+func apply_buff(mult: float, seconds: float) -> void:
+	_buff_mult = mult
+	_buff_left = maxf(_buff_left, seconds)
+
+
+## The ATK and DEF multiplier from a buff now (1.0 when none).
+func buff_multiplier() -> float:
+	return _buff_mult if _buff_left > 0.0 else 1.0
+
+
+func _tick_buff(delta: float) -> void:
+	_buff_left = maxf(_buff_left - delta, 0.0)
+	var on := _buff_left > 0.0 and is_alive()
+	if on and _buff_fx == null:
+		_buff_fx = VfxShapes.ring(Color(1.0, 0.82, 0.38), _hurt_size().x * 0.75)
+		add_child(_buff_fx)
+		_buff_fx.position.y = 0.06
+	if _buff_fx != null:
+		_buff_fx.visible = on
+
+
+## Frozen (Frost build-up full): it cannot move or act until the ice breaks.
+func _frozen_tick(delta: float) -> void:
+	if state == STATE_TELEGRAPH or state == STATE_ATTACK:
+		_end_attack()
+		_enter_state(STATE_RECOVER)
+	velocity.x = 0.0
+	_apply_gravity(delta)
+	move_and_slide()
+	if global_position.z != 0.0:
+		global_position.z = 0.0
+	visual.flash(Color(0.7, 0.92, 1.0), 0.05)
+	visual.animate(STATE_STAGGERED, facing, 0.0, delta)
 
 
 # --- Overridable behaviour ------------------------------------------------------------------
@@ -442,7 +489,7 @@ func _make_packet(attack: Dictionary) -> DamagePacket:
 	var p := DamagePacket.new()
 	p.attacker = self
 	p.team = team
-	p.atk = float(data.get("atk", 10.0)) * damage_scale
+	p.atk = float(data.get("atk", 10.0)) * damage_scale * buff_multiplier()
 	p.motion = float(attack.get("motion", 1.0))
 	p.posture = float(attack.get("posture", 10.0))
 	p.kind = str(attack.get("kind", DamagePacket.KIND_PARRYABLE))

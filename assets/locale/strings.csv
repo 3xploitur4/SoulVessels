@@ -254,3 +254,5 @@ UI_SWAP_NEXT,Vessel wheel
 UI_ROTATE,Turn
 UI_CARRY,Carry
 UI_SET_DOWN,Set down
+ENEMY_DROWNED_COURTIER,Drowned Courtier
+ENEMY_CHOIR_PRELATE,Choir Prelate
