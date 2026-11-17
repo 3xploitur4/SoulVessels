@@ -37,6 +37,10 @@ var _focus: Vector3 = Vector3.ZERO
 var _lead: float = 0.0
 var _rng := RandomNumberGenerator.new()
 var _time: float = 0.0
+## Camera roll in degrees (a tilting arena), eased toward `_roll_target`.
+var roll_deg: float = 0.0
+var _roll_target: float = 0.0
+var _roll_rate: float = 0.0
 
 
 func _ready() -> void:
@@ -51,6 +55,12 @@ func _ready() -> void:
 
 
 ## Add shake (0..1 trauma; it decays and is squared for the offset).
+## Roll to `degrees` over `seconds`; a new room resets it.
+func roll_to(degrees: float, seconds: float) -> void:
+	_roll_target = degrees
+	_roll_rate = absf(degrees - roll_deg) / maxf(seconds, 0.01)
+
+
 func add_trauma(amount: float) -> void:
 	_trauma = clampf(_trauma + amount, 0.0, 1.0)
 
@@ -95,6 +105,9 @@ func _update_transform(_delta: float) -> void:
 		pos += Vector3(_rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0), 0.0) * 0.35 * shake
 	global_position = pos
 	look_at(Vector3(x, pos.y - 1.1, 0.0), Vector3.UP)
+	roll_deg = move_toward(roll_deg, _roll_target, _roll_rate * _delta)
+	if roll_deg != 0.0:
+		rotate_object_local(Vector3(0.0, 0.0, 1.0), deg_to_rad(roll_deg))
 
 
 ## Keep the visible band inside `v_bounds`. The camera looks 1.1 m below its own height, so the

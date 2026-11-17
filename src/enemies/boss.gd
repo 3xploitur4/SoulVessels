@@ -107,6 +107,11 @@ func _check_phase() -> void:
 		var w := _arena_water()
 		if w != null:
 			w.rise_to(w.level + float(ph.get("water_rise_m", 0.0)), float(ph.get("water_rise_s", 2.0)))
+	if ph.has("tilt"):
+		# The arena tilts (the Guardian's elevator, story 044): every slide zone and the camera.
+		for n in get_tree().get_nodes_in_group(SlideZone.GROUP):
+			(n as SlideZone).tilt_to(float(ph["tilt"]), float(ph.get("tilt_s", 1.5)))
+		GameEvents.camera_roll_requested.emit(float(ph["tilt"]) * 0.5, float(ph.get("tilt_s", 1.5)))
 	if ph.has("tint") and visual is EnemySpriteVisual:
 		# The phase shows on her: phase 3 of the Sovereign burns warm (story 039).
 		(visual as EnemySpriteVisual).body.set_tint(Color(str(ph["tint"])))
@@ -158,6 +163,23 @@ func _choose_attack(distance: float) -> Dictionary:
 	return options[rng.randi_range(0, options.size() - 1)]
 
 
+## The attack with its timings divided by this phase's `speed` (the Guardian's phase 3 is x1.4).
+func scaled_attack(attack: Dictionary) -> Dictionary:
+	var ph: Dictionary = (data.get("phases", [{}]) as Array)[phase]
+	var speed := float(ph.get("speed", 1.0))
+	if speed == 1.0:
+		return attack
+	var a := attack.duplicate()
+	for k: String in ["telegraph_s", "active_s", "recover_s", "cooldown_s"]:
+		if a.has(k):
+			a[k] = float(a[k]) / speed
+	return a
+
+
+func _begin_telegraph(attack: Dictionary) -> void:
+	super(scaled_attack(attack))
+
+
 func _begin_attack() -> void:
 	super()
 	_cooldowns["_any"] = float(data.get("attack_gap_s", 0.6))
@@ -165,6 +187,14 @@ func _begin_attack() -> void:
 	match style:
 		"wave":
 			_fire_wave()
+		"shockwave":
+			# Radial: a wave each way.
+			_fire_wave()
+			facing = -facing
+			_fire_wave()
+			facing = -facing
+		"beam":
+			_fire_beam()
 		"orbs":
 			_fire_orbs(false)
 		"rain":
@@ -180,7 +210,7 @@ func _attack_tick(player: Node3D, delta: float) -> void:
 
 func _make_attack_hit(attack: Dictionary) -> ActionHit:
 	match str(attack.get("style", "melee")):
-		"wave", "orbs", "rain":
+		"wave", "orbs", "rain", "shockwave", "beam":
 			return null
 		"dash":
 			return ActionHit.new(0.0, float(attack.get("active_s", 0.4)) + 0.01, Vector2(0.6, 0.0),
@@ -239,3 +269,21 @@ func _attack_color() -> Color:
 	if str(current_attack.get("kind", "")) == "magic":
 		return Color(0.55, 0.75, 1.0)
 	return Color(0.9, 0.85, 0.7)
+
+
+## A fast, thin magic beam from the chest toward the player (the Guardian's chest laser).
+func _fire_beam() -> void:
+	var speed := float(current_attack.get("speed_mps", 24.0))
+	var y := global_position.y + float(current_attack.get("height_m", 2.6))
+	var player := _target()
+	var dy := 0.0
+	if player != null:
+		dy = clampf((player.global_position.y + 1.0) - y, -3.0, 3.0)
+	var origin := Vector2(global_position.x + 1.2 * facing, y)
+	var v := Vector2(speed * facing, dy / maxf(absf(float(current_attack.get("range_m", 14.0))) / speed, 0.1))
+	var proj := Projectile.spawn(get_parent(), world, _make_packet(current_attack), origin, v, Vector2(2.4, 0.45),
+		VfxShapes.knife(Color(1.0, 0.45, 0.2)))
+	proj.target_team = CombatWorld.TEAM_PLAYER
+	proj.max_distance = float(current_attack.get("range_m", 14.0))
+	proj.lifetime = proj.max_distance / speed + 0.1
+	Sfx.play("beam")

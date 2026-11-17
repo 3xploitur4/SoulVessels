@@ -121,6 +121,7 @@ func _ready() -> void:
 	add_child(debug_hud)
 	GameEvents.hitstop_requested.connect(_on_hitstop)
 	GameEvents.camera_shake_requested.connect(camera.add_trauma)
+	GameEvents.camera_roll_requested.connect(camera.roll_to)
 	GameEvents.ultimate_fx_requested.connect(_on_ultimate_fx)
 	if enable_bridge and (OS.is_debug_build() or args.has("--bridge")):
 		_start_bridge()
@@ -548,6 +549,9 @@ func _on_boss_defeated(e: EnemyBase) -> void:
 	var od: Dictionary = e.data.get("on_defeat", {})
 	if od.has("flag"):
 		state.set_flag(str(od["flag"]))
+	for f: Variant in od.get("flags", []):
+		state.set_flag(str(f))
+	camera.roll_to(0.0, 1.5)
 	var gifts: Dictionary = od.get("affinity_bonus", {})
 	for v: String in gifts.keys():
 		state.affinity_bonus[v] = int(state.affinity_bonus.get(v, 0)) + int(gifts[v])

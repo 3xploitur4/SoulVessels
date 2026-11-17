@@ -42,3 +42,5 @@ signal boss_phase_changed(boss: Node, phase: int)
 signal boss_defeated(boss: Node)
 ## A heavy slam landed over `rect` (world X/Y); `info` says what it can break ("breaks_masonry"). Story 041/042.
 signal slam_landed(rect: Rect2, info: Dictionary)
+## Roll the camera to `degrees` over `seconds` (the Guardian's tilting elevator, story 044).
+signal camera_roll_requested(degrees: float, seconds: float)

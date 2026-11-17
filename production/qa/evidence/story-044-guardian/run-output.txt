@@ -1,0 +1,7 @@
+PASS  the Guardian stands, phase 1                   {'attack': 'chest_laser', 'hp': 8000.0, 'phase': 0, 'rocks': 0, 'state': 'recover', 'transition': False}
+PASS  it attacks in phase 1                          ['chest_laser', 'seismic_wave']
+PASS  below 65 %: phase 2                            {'attack': 'chest_laser', 'hp': 5043.07692307692, 'phase': 1, 'rocks': 0, 'state': 'recover', 'transition': True}
+PASS  boulders roll down the tilted elevator         1 rolled in 10 s
+PASS  below 30 %: phase 3, the core opens            {'attack': 'seismic_wave', 'hp': 2220.0, 'phase': 2, 'rocks': 1, 'state': 'recover', 'transition': True}
+PASS  it falls; the Greatsword is unlocked           True
+SUMMARY: 0 failed
