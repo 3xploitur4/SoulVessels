@@ -268,3 +268,45 @@ REFORGE_OR," or "
 REFORGE_MAX,Fully reforged.
 REFORGE_BUTTON,Reforge %s to +%d
 CRAFT_CENSER,"Craft a Censer Core (3 Tarnished Censer Shards; you have %d)"
+ALTAR_UPGRADE,Upgrade
+UPGRADE_SHARDS,"Standard Soul Shards: %d    Greater Soul Shards: %d"
+UPGRADE_RANK,%s  rank %d
+UPGRADE_NEXT,(rank %d: %d shards)
+UPGRADE_PASSIVES,"Sync passive (one slot):"
+UPGRADE_SLOTTED,(slotted)
+UPGRADE_EQUIP,(slot it)
+UPGRADE_BUY,(buy: %d Greater Shard)
+UPGRADE_NEXT_VESSEL,Next Vessel
+ABILITY_ROYAL_GUARD,Royal Guard
+ABILITY_KINGS_JUDGMENT,King's Judgment
+ABILITY_OATHBREAKER_LUNGE,Oathbreaker Lunge
+ABILITY_FINAL_STAND,Final Stand
+ABILITY_SHADOWSTEP,Shadowstep
+ABILITY_PHANTOM_BLADES,Phantom Blades
+ABILITY_SEVERING_ARRIVAL,Severing Arrival
+ABILITY_DANCE_OF_SHADOWS,Dance of Shadows
+ABILITY_FROST_BINDING,Frost Binding
+ABILITY_AETHER_SHIELD,Aether Shield
+ABILITY_AETHER_BURST,Aether Burst
+ABILITY_CATACLYSM,Cataclysm Fused
+RANK3_ROYAL_GUARD,Rank 3: a Counterstrike breaks more posture and holds the guard open longer.
+RANK3_KINGS_JUDGMENT,Rank 3: the shockwave travels half again as far and staggers harder.
+RANK3_OATHBREAKER_LUNGE,Rank 3: the lunge dashes half again as far.
+RANK3_FINAL_STAND,Rank 3: Final Stand lasts 2 seconds longer.
+RANK3_SHADOWSTEP,Rank 3: Shadowstep returns a third sooner.
+RANK3_PHANTOM_BLADES,Rank 3: seven blades instead of five.
+RANK3_SEVERING_ARRIVAL,Rank 3: the arrival strike breaks twice the posture.
+RANK3_DANCE_OF_SHADOWS,Rank 3: sixteen slashes instead of twelve.
+RANK3_FROST_BINDING,Rank 3: the ice field is 6 metres wide.
+RANK3_AETHER_SHIELD,Rank 3: the shield returns sooner.
+RANK3_AETHER_BURST,Rank 3: the burst reaches 4.5 metres.
+RANK3_CATACLYSM,Rank 3: fourteen meteors instead of ten.
+PASSIVE_KINGS_MERCY,King's Mercy: Sync Guard also heals 20 %
+PASSIVE_UNBOWED,Unbowed: take less damage while blocking
+PASSIVE_OATH_UNBROKEN,Oath Unbroken: Oathbreaker Lunge breaks more posture
+PASSIVE_SECOND_SHADOW,Second Shadow: Sync Guard heals 10 % and counters harder
+PASSIVE_KNIFES_EDGE,Knife's Edge: +10 % critical chance
+PASSIVE_LONG_VANISH,Long Vanish: Vanishing Act lasts half again as long
+PASSIVE_WARD_ECHO,Ward Echo: Sync Guard also heals 15 %
+PASSIVE_DEEP_FROST,Deep Frost: the Frost field lasts half again as long
+PASSIVE_RESONANT_MIND,Resonant Mind: the crowd passive rises to +45 %

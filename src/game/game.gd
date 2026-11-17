@@ -47,6 +47,9 @@ var bridge_handler: Node
 var soul_core: SoulCore
 ## Weapon reforging and Censer Core crafting rules (story 036).
 var reforge: Reforge
+## Ability ranks and Sync passives (story 037).
+var ranks: AbilityRanks
+var passives: SyncPassives
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -91,6 +94,8 @@ func _ready() -> void:
 	loot = LootTable.from_data()
 	soul_core = SoulCore.from_data()
 	reforge = Reforge.from_data()
+	ranks = AbilityRanks.from_data()
+	passives = SyncPassives.from_data()
 	GameEvents.perfect_parry.connect(func(_a: Node3D) -> void: _award_xp("perfect_parry"))
 	GameEvents.perfect_dodge.connect(func(_a: Node3D) -> void: _award_xp("perfect_dodge"))
 	GameEvents.enemy_died.connect(_on_enemy_died)
@@ -213,6 +218,7 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 	player.difficulty = state.difficulty
 	player.affinity_levels = affinity_levels()
 	player.weapon_mults = weapon_mults()
+	player.data_patcher = _patch_vessel
 	player.auto_respawn = false
 	add_child(player)
 	player.apply_bonuses(soul_core.modifiers(state.soul_core))
@@ -304,6 +310,46 @@ func reforge_weapon(vessel_id: String) -> void:
 	save_now()
 	if altar_menu != null:
 		altar_menu.show_reforge()
+
+
+## A Vessel's balance data with its bought ranks and slotted Sync passive applied.
+func _patch_vessel(vessel_id: String, data: Dictionary) -> Dictionary:
+	if state == null:
+		return data
+	return passives.patched(ranks.patched(data, state, vessel_id), state, vessel_id)
+
+
+## Buy the next rank of a Vessel's ability (story 037); the Vessels are re-bound to pick it up.
+func buy_rank(vessel_id: String, ability: String) -> void:
+	if state == null or not ranks.buy(state, vessel_id, ability):
+		return
+	_rebind_vessels()
+	Sfx.play("altar_kindle")
+	save_now()
+	if altar_menu != null:
+		altar_menu.show_upgrade(vessel_id)
+
+
+## Buy a Sync passive, or slot one already owned (free).
+func choose_passive(vessel_id: String, passive_id: String) -> void:
+	if state == null:
+		return
+	var ok := false
+	if passives.owned(state, vessel_id, passive_id):
+		ok = passives.equip(state, vessel_id, passive_id)
+	else:
+		ok = passives.buy(state, vessel_id, passive_id) and passives.equip(state, vessel_id, passive_id)
+	if not ok:
+		return
+	_rebind_vessels()
+	Sfx.play("sync_guard")
+	save_now()
+	if altar_menu != null:
+		altar_menu.show_upgrade(vessel_id)
+
+
+func _rebind_vessels() -> void:
+	player.equip(player.vessel_ids.duplicate(), affinity_levels())
 
 
 ## Craft an item from its recipe at an altar (the Censer Core).
@@ -426,6 +472,10 @@ func open_altar_menu(altar: Altar) -> void:
 	altar_menu.reforge = reforge
 	altar_menu.reforge_requested.connect(reforge_weapon)
 	altar_menu.craft_requested.connect(craft_item)
+	altar_menu.ranks = ranks
+	altar_menu.passives = passives
+	altar_menu.rank_requested.connect(buy_rank)
+	altar_menu.passive_requested.connect(choose_passive)
 	altar_menu.altar_name = tr(altar.name_key)
 	altar_menu.loadout_requested.connect(apply_loadout)
 	altar_menu.lore_read_requested.connect(read_lore)

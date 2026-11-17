@@ -21,10 +21,11 @@ var visual: Node3D
 
 
 ## Build a slot from Balance data. `affinity` comes from the save (the sandbox sets it).
-static func create(vessel_id: String, vessel_affinity: int) -> VesselSlot:
+## `vessel_data` replaces the Balance data (ability ranks and Sync passives patch it, story 037).
+static func create(vessel_id: String, vessel_affinity: int, vessel_data: Dictionary = {}) -> VesselSlot:
 	var s := VesselSlot.new()
 	s.id = vessel_id
-	s.data = Balance.vessel(vessel_id)
+	s.data = vessel_data if not vessel_data.is_empty() else Balance.vessel(vessel_id)
 	s.kit = VesselKit.create(vessel_id, s.data)
 	s.stamina = Stamina.from_balance()
 	s.posture = Posture.for_player()

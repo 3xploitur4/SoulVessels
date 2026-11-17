@@ -1,0 +1,5 @@
+PASS  the altar is in reach                          UI_REST
+PASS  the altar menu has a Reforge page              ['Loadout', 'SoulCore', 'Upgrade', 'Reforge', 'Lore', 'Leave']
+PASS  King's Judgment to rank 3                      {'caelan': {'kings_judgment': 3}}
+PASS  King's Mercy slotted                           {'caelan': 'kings_mercy'}
+SUMMARY: 0 failed

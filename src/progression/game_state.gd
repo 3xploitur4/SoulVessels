@@ -34,6 +34,12 @@ var affinity_xp: Dictionary[String, float] = {}
 var affinity_bonus: Dictionary[String, int] = {}
 ## Vessel id -> weapon reforge level, 0-5 (story 036). Older saves have none: every weapon +0.
 var weapon_levels: Dictionary[String, int] = {}
+## Vessel id -> {ability id: rank 2 or 3} (story 037). Absent means rank 1.
+var ability_ranks: Dictionary[String, Dictionary] = {}
+## Sync passives bought, as "vessel:passive" (story 037).
+var owned_passives: Array[String] = []
+## Vessel id -> the passive id in its one Sync slot.
+var sync_passive: Dictionary[String, String] = {}
 ## The altar you respawn at: {"room": id, "altar": id}. Empty before the first rest.
 var rested_altar: Dictionary = {}
 ## Altar ids lit so far (fast travel needs all 7).
@@ -153,6 +159,9 @@ func to_dict() -> Dictionary:
 		"affinity_xp": affinity_xp.duplicate(),
 		"affinity_bonus": affinity_bonus.duplicate(),
 		"weapon_levels": weapon_levels.duplicate(),
+		"ability_ranks": ability_ranks.duplicate(true),
+		"owned_passives": owned_passives.duplicate(),
+		"sync_passive": sync_passive.duplicate(),
 		"rested_altar": rested_altar.duplicate(),
 		"lit_altars": lit_altars.duplicate(),
 		"checkpoint": checkpoint.duplicate(),
@@ -201,6 +210,20 @@ static func from_dict(d: Dictionary) -> GameState:
 	if wl is Dictionary:
 		for k: Variant in (wl as Dictionary).keys():
 			gs.weapon_levels[str(k)] = int((wl as Dictionary)[k])
+	var ar: Variant = d.get("ability_ranks", {})
+	if ar is Dictionary:
+		for k: Variant in (ar as Dictionary).keys():
+			var inner: Variant = (ar as Dictionary)[k]
+			if inner is Dictionary:
+				var ranks := {}
+				for a: Variant in (inner as Dictionary).keys():
+					ranks[str(a)] = int((inner as Dictionary)[a])
+				gs.ability_ranks[str(k)] = ranks
+	gs.owned_passives = _strings(d.get("owned_passives"))
+	var sp: Variant = d.get("sync_passive", {})
+	if sp is Dictionary:
+		for k: Variant in (sp as Dictionary).keys():
+			gs.sync_passive[str(k)] = str((sp as Dictionary)[k])
 	gs.rested_altar = _dict(d.get("rested_altar"))
 	gs.lit_altars = _strings(d.get("lit_altars"))
 	gs.checkpoint = _dict(d.get("checkpoint"))

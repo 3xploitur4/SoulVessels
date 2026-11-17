@@ -17,11 +17,17 @@ signal leave_requested
 signal reforge_requested(vessel_id: String)
 ## Craft one of this item.
 signal craft_requested(item: String)
+## Buy the next rank of an ability (story 037).
+signal rank_requested(vessel_id: String, ability: String)
+## Buy or slot a Sync passive.
+signal passive_requested(vessel_id: String, passive_id: String)
 
 var state: GameState
 ## The Soul Core tree, to draw (never to change).
 var soul_core: SoulCore
 var reforge: Reforge
+var ranks: AbilityRanks
+var passives: SyncPassives
 var altar_name: String = ""
 
 var _root: Control
@@ -54,6 +60,7 @@ func show_main() -> void:
 	col.add_child(UiKit.label(tr("ALTAR_RESTED"), 26, UiKit.COL_DIM))
 	var items: Array[Control] = []
 	var pages := [["ALTAR_LOADOUT", "Loadout", show_loadout], ["ALTAR_SOUL_CORE", "SoulCore", show_core],
+		["ALTAR_UPGRADE", "Upgrade", func() -> void: show_upgrade("")],
 		["ALTAR_REFORGE", "Reforge", show_reforge], ["ALTAR_LORE", "Lore", show_lore], ["ALTAR_LEAVE", "Leave", func() -> void: leave_requested.emit()]]
 	for p: Array in pages:
 		var b := UiKit.button(tr(str(p[0])), 520.0)
@@ -137,6 +144,66 @@ func show_core() -> void:
 func refresh_core() -> void:
 	if _core_view != null and is_instance_valid(_core_view):
 		_core_view.refresh()
+
+
+# --- Upgrade: ability ranks and Sync passives (story 037) --------------------------------
+
+## One Vessel at a time: its four abilities with rank and next cost, and its three Sync passives
+## (buy, slot, or slotted). "Next Vessel" cycles the held Vessels.
+func show_upgrade(vessel_id: String) -> void:
+	var held: Array[String] = []
+	for hv: String in state.unlocked_vessels:
+		if ranks != null and not ranks.abilities(hv).is_empty():
+			held.append(hv)
+	if held.is_empty():
+		show_main()
+		return
+	var v: String = vessel_id if held.has(vessel_id) else held[0]
+	var col := _new_page()
+	col.add_child(UiKit.heading(tr("ALTAR_UPGRADE") + ": " + tr("VESSEL_" + v.to_upper()), 44))
+	col.add_child(UiKit.label(tr("UPGRADE_SHARDS") % [state.item_count(ranks.shard_item),
+		state.item_count(passives.shard_item)], 24, UiKit.COL_GOLD))
+	var items: Array[Control] = []
+	for a: String in ranks.abilities(v):
+		var r := ranks.rank(state, v, a)
+		var spec: Dictionary = (ranks.vessels.get(v, {}) as Dictionary).get(a, {})
+		var text := tr("UPGRADE_RANK") % [tr(str(spec.get("name_key", a))), r]
+		if r < 3:
+			text += "   " + tr("UPGRADE_NEXT") % [r + 1, ranks.cost(state, v, a)]
+		var b := UiKit.button(text, 760.0)
+		b.name = "Rank_%s_%s" % [v, a]
+		b.disabled = not ranks.can_buy(state, v, a)
+		b.tooltip_text = tr(str(spec.get("rank3_key", "")))
+		b.pressed.connect(func() -> void: rank_requested.emit(v, a))
+		col.add_child(b)
+		items.append(b)
+	col.add_child(UiKit.label(tr("UPGRADE_PASSIVES"), 24, UiKit.COL_DIM))
+	for p: Dictionary in passives.options(v):
+		var pid := str(p.get("id", ""))
+		var slotted := passives.slotted(state, v) == pid
+		var owned := passives.owned(state, v, pid)
+		var tag := tr("UPGRADE_SLOTTED") if slotted else (tr("UPGRADE_EQUIP") if owned else tr("UPGRADE_BUY") % 1)
+		var b := UiKit.button("%s   %s" % [tr(str(p.get("name_key", pid))), tag], 760.0)
+		b.name = "Passive_%s_%s" % [v, pid]
+		b.disabled = slotted or (not owned and not passives.can_buy(state, v, pid))
+		b.pressed.connect(func() -> void: passive_requested.emit(v, pid))
+		col.add_child(b)
+		items.append(b)
+	var next := UiKit.button(tr("UPGRADE_NEXT_VESSEL"), 760.0)
+	next.name = "UpgradeNext"
+	next.pressed.connect(func() -> void: show_upgrade(held[(held.find(v) + 1) % held.size()]))
+	col.add_child(next)
+	items.append(next)
+	var back := UiKit.button(tr("UI_BACK"), 760.0)
+	back.name = "UpgradeBack"
+	back.pressed.connect(show_main)
+	col.add_child(back)
+	items.append(back)
+	var enabled: Array[Control] = []
+	for c in items:
+		if not (c as Button).disabled:
+			enabled.append(c)
+	UiKit.link_focus(enabled)
 
 
 # --- Reforge (story 036) ------------------------------------------------------------------

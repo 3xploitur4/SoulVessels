@@ -51,6 +51,8 @@ var affinity_levels: Dictionary = {}
 var bonuses: Dictionary = {}
 ## Vessel id -> weapon ATK multiplier from reforging (story 036), applied on equip.
 var weapon_mults: Dictionary = {}
+## Optional (vessel_id, data) -> data: patches a Vessel's balance data on equip (ranks, passives).
+var data_patcher: Callable
 ## Difficulty row in combat.json `difficulty`.
 var difficulty: String = "normal"
 ## Where the sandbox respawns the player.
@@ -514,7 +516,10 @@ func equip(ids: Array[String], levels: Dictionary = {}) -> void:
 	vessel_ids = list
 	loadout = Loadout.from_balance()
 	for vid in list:
-		var slot := VesselSlot.create(vid, int(levels.get(vid, 0)))
+		var vdata: Dictionary = Balance.vessel(vid)
+		if data_patcher.is_valid():
+			vdata = data_patcher.call(vid, vdata)
+		var slot := VesselSlot.create(vid, int(levels.get(vid, 0)), vdata)
 		slot.atk_mult = float(weapon_mults.get(vid, 1.0))
 		slot.visual = VesselVisual.build(slot.data)
 		slot.visual.visible = false
@@ -1039,6 +1044,11 @@ func _try_sync_guard(trigger: String, p: DamagePacket) -> bool:
 			try_swap(i, true)
 		grant_invulnerability(0.5)
 		slot.kit.sync_guard(self, p)
+		# A Sync passive may make the guard heal too (Caelan's King's Mercy, story 037).
+		var heal := float(slot.data.get("sync_guard", {}).get("heal_fraction", 0.0))
+		if heal > 0.0:
+			health.heal(max_hp() * heal)
+			GameEvents.player_hp_changed.emit(health.current, health.max_value)
 		last_sync_guard = slot.id
 		sync_guard_triggered.emit(slot.id)
 		Sfx.play("sync_guard")

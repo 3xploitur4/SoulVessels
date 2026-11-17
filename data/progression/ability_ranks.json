@@ -1,0 +1,26 @@
+{
+  "_source": "Story 037, decision D-046. Addendum progression table: Vessel Ability Ranks paid in Standard Soul Shards (1/2/3 per rank); rank 2 gives +20 % power, rank 3 adds a modifier; 4 abilities x 3 ranks per Vessel. Rank 1 (the 1-shard step) is how every ability starts, so buying rank 2 costs 2 and rank 3 costs 3. power: the data paths (in the Vessel's balance file) multiplied by power_mult from rank 2. rank3: a patch on the Vessel's data ({set|mul|add: {path: value}}). The addendum's example, King's Judgment travelling along walls, needs wall-crawling projectiles; its rank 3 here widens and strengthens the wave instead.",
+  "shard_item": "standard_soul_shard",
+  "rank_costs": {"2": 2, "3": 3},
+  "power_mult": 1.2,
+  "vessels": {
+    "caelan": {
+      "royal_guard": {"name_key": "ABILITY_ROYAL_GUARD", "power": ["ability_1.counterstrike.motion"], "rank3": {"mul": {"ability_1.counterstrike.posture": 1.5, "ability_1.counterstrike.guard_break_s": 1.5}}, "rank3_key": "RANK3_ROYAL_GUARD"},
+      "kings_judgment": {"name_key": "ABILITY_KINGS_JUDGMENT", "power": ["ability_2.motion"], "rank3": {"mul": {"ability_2.range_m": 1.5, "ability_2.posture": 1.5}}, "rank3_key": "RANK3_KINGS_JUDGMENT"},
+      "oathbreaker_lunge": {"name_key": "ABILITY_OATHBREAKER_LUNGE", "power": ["resonance.motion"], "rank3": {"mul": {"resonance.dash_m": 1.5}}, "rank3_key": "RANK3_OATHBREAKER_LUNGE"},
+      "final_stand": {"name_key": "ABILITY_FINAL_STAND", "power": ["ultimate.motion"], "rank3": {"add": {"ultimate.duration_s": 2.0}}, "rank3_key": "RANK3_FINAL_STAND"}
+    },
+    "nyra": {
+      "shadowstep": {"name_key": "ABILITY_SHADOWSTEP", "power": ["ability_1.distance_m"], "rank3": {"mul": {"ability_1.cooldown_s": 0.67}}, "rank3_key": "RANK3_SHADOWSTEP"},
+      "phantom_blades": {"name_key": "ABILITY_PHANTOM_BLADES", "power": ["ability_2.motion"], "rank3": {"set": {"ability_2.knives": 7}}, "rank3_key": "RANK3_PHANTOM_BLADES"},
+      "severing_arrival": {"name_key": "ABILITY_SEVERING_ARRIVAL", "power": ["resonance.motion"], "rank3": {"mul": {"resonance.posture": 2.0}}, "rank3_key": "RANK3_SEVERING_ARRIVAL"},
+      "dance_of_shadows": {"name_key": "ABILITY_DANCE_OF_SHADOWS", "power": ["ultimate.motion"], "rank3": {"set": {"ultimate.slashes": 16}}, "rank3_key": "RANK3_DANCE_OF_SHADOWS"}
+    },
+    "seris": {
+      "frost_binding": {"name_key": "ABILITY_FROST_BINDING", "power": ["ability_1.motion", "ability_1.buildup"], "rank3": {"set": {"ability_1.width_m": 6.0}}, "rank3_key": "RANK3_FROST_BINDING"},
+      "aether_shield": {"name_key": "ABILITY_AETHER_SHIELD", "power": ["ability_2.duration_s"], "rank3": {"mul": {"ability_2.cooldown_s": 0.7}}, "rank3_key": "RANK3_AETHER_SHIELD"},
+      "aether_burst": {"name_key": "ABILITY_AETHER_BURST", "power": ["resonance.motion"], "rank3": {"set": {"resonance.radius_m": 4.5}}, "rank3_key": "RANK3_AETHER_BURST"},
+      "cataclysm_fused": {"name_key": "ABILITY_CATACLYSM", "power": ["ultimate.motion"], "rank3": {"set": {"ultimate.meteors": 14}}, "rank3_key": "RANK3_CATACLYSM"}
+    }
+  }
+}
