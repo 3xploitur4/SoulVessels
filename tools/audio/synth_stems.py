@@ -567,6 +567,62 @@ def altar_bed():
     return normalise(buf, 0.7)
 
 
+# ---- Zone 3: "Track 05 - Drowned Court", 72 BPM 4/4 (story 035) -------------------------
+# E minor, drowned and stately: the zone 1 stems played over this harmony and tempo, with the
+# motif up a fifth. Real recordings replace these files by name (decision D-006).
+Z3_CHORDS = [["E2", "B2", "E3", "G3", "B3"], ["C2", "G2", "C3", "E3", "B3"],
+             ["A1", "E2", "A2", "C3", "E3"], ["B1", "F#2", "B2", "D#3", "F#3"]] * 2
+Z3_ROOTS = ["E1", "C1", "A1", "B1"] * 2
+
+
+# ---- Boss 1: "Track 08 - Tears of the Sovereign", 76 BPM, three phase clips (story 035) -----
+# One clip per phase, all the same 8-bar length so the director swaps them on a 4-bar boundary:
+# p1 a solo cello over a held drone; p2 strings and choir; p3 the same harmony in double time
+# (the 152 BPM feel: sixteenth-note strings and driving drums).
+
+def boss_p1():
+    buf = blank()
+    for bar in range(BARS):
+        mix(buf, bar * 4 * BEAT, lowpass(additive(hz(ROOTS[bar]), 4.2 * BEAT, CELLO, attack=0.8, release=0.8), 0.2), 0.25)
+    for start, length, f in _motif_notes(-1):
+        s = additive(f, length * 1.9, CELLO, attack=0.12, release=0.35, vibrato=0.006, vib_rate=5.5)
+        mix(buf, start * 2.0 % LOOP_S, s, 0.5)
+    return normalise(buf, 0.72)
+
+
+def boss_p2():
+    buf = blank()
+    for bar in range(BARS):
+        pad_chord(buf, bar, CHORDS[bar][:4], lambda f, d: additive(f, d, STRING, attack=0.5, release=0.6,
+                                                                  vibrato=0.004), 0.16, 4.2)
+        pad_chord(buf, bar, CHORDS[bar][2:], lambda f, d: additive(f * 2.0, d, CHOIR, attack=0.7, release=0.8,
+                                                                  detune=[0.995, 1.0, 1.005]), 0.12, 4.2)
+        mix(buf, bar * 4 * BEAT, sweep(110, 42, 0.5, 6.0), 0.6)
+    for start, length, f in _motif_notes(0):
+        mix(buf, start, additive(f, length, CELLO, attack=0.05, release=0.2, vibrato=0.005), 0.32)
+    return normalise(buf, 0.75)
+
+
+def boss_p3():
+    buf = blank()
+    sixteenth = BEAT / 4.0
+    stacc = lambda f: additive(f, 0.09, STRING, attack=0.003, release=0.04)
+    for bar in range(BARS):
+        root = hz(CHORDS[bar][1])
+        for k in range(16):
+            f = root * (2.0 if k % 4 == 2 else 1.0)
+            mix(buf, bar * 4 * BEAT + k * sixteenth, stacc(f), 0.3 if k % 4 == 0 else 0.2)
+        pad_chord(buf, bar, CHORDS[bar][2:], lambda f, d: additive(f * 2.0, d, CHOIR, attack=0.2, release=0.4), 0.13, 4.0)
+        for b in range(8):
+            t0 = (bar * 4 + b * 0.5) * BEAT
+            mix(buf, t0, sweep(150, 45, 0.22, 12.0), 0.7)
+            if b % 2 == 1:
+                mix(buf, t0, noise(0.12, 28.0), 0.3)
+    for start, length, f in _motif_notes(0):
+        mix(buf, start, additive(f, length * 0.5, BRASS, attack=0.02, release=0.1), 0.28)
+    return normalise(buf, 0.78)
+
+
 STEMS = {
     "bed": stem_bed,
     "pulse": stem_pulse,
@@ -594,6 +650,8 @@ def main():
         ("zone2", (84, 2, 16, 3, Z2_CHORDS, Z2_ROOTS, MOTIF, 5),
          dict({"bed": z2_bed, "pulse": z2_pulse, "combat": z2_combat, "elite": z2_elite}, **z2_leads)),
         ("altar", (60, 3, 8, 2, ALTAR_CHORDS, ["A1", "F1", "C2", "E1"] * 2, MOTIF, 0), {"bed": altar_bed}),
+        ("zone3", (72, 4, 8, 2, Z3_CHORDS, Z3_ROOTS, MOTIF, 7), dict(STEMS)),
+        ("boss_sovereign", (76, 4, 8, 2, Z3_CHORDS, Z3_ROOTS, MOTIF, 7), {"p1": boss_p1, "p2": boss_p2, "p3": boss_p3}),
     ]
     for track, cfg, stems in tracks:
         configure(*cfg)

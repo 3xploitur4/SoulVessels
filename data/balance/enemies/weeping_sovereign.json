@@ -3,6 +3,7 @@
   "id": "weeping_sovereign",
   "name_key": "BOSS_WEEPING_SOVEREIGN",
   "tier": "boss",
+  "music": "boss_sovereign",
   "essence": 1500,
   "hp": 4500,
   "atk": 52,

@@ -179,6 +179,104 @@
         }
       },
       "leads": {}
+    },
+    "zone3": {
+      "title": "Track 05 - Drowned Court",
+      "bpm": 72,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/zone3/",
+      "stems": {
+        "bed": {
+          "file": "bed.wav",
+          "db": -4.0,
+          "states": [
+            "explore",
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "pulse": {
+          "file": "pulse.wav",
+          "db": -6.0,
+          "states": [
+            "alert",
+            "combat",
+            "elite"
+          ]
+        },
+        "combat": {
+          "file": "combat.wav",
+          "db": -5.0,
+          "states": [
+            "combat",
+            "elite"
+          ]
+        },
+        "elite": {
+          "file": "elite.wav",
+          "db": -5.0,
+          "states": [
+            "elite"
+          ]
+        }
+      },
+      "leads": {
+        "caelan": {
+          "file": "lead_caelan.wav",
+          "db": -6.0
+        },
+        "nyra": {
+          "file": "lead_nyra.wav",
+          "db": -6.0
+        },
+        "seris": {
+          "file": "lead_seris.wav",
+          "db": -6.0
+        },
+        "darius": {
+          "file": "lead_darius.wav",
+          "db": -6.0
+        },
+        "ilyr": {
+          "file": "lead_ilyr.wav",
+          "db": -6.0
+        }
+      }
+    },
+    "boss_sovereign": {
+      "title": "Track 08 - Tears of the Sovereign",
+      "_note": "Story 035, decision D-044. A boss track: one clip per phase (p1 solo cello, p2 strings and choir, p3 double time), all 8 bars long, swapped on a 4-bar boundary. The director plays it while the boss lives and returns to the zone track after.",
+      "boss": true,
+      "bpm": 76,
+      "beats_per_bar": 4,
+      "bars": 8,
+      "folder": "res://assets/audio/music/boss_sovereign/",
+      "stems": {
+        "p1": {
+          "file": "p1.wav",
+          "db": -3.0,
+          "states": [
+            "phase1"
+          ]
+        },
+        "p2": {
+          "file": "p2.wav",
+          "db": -3.0,
+          "states": [
+            "phase2"
+          ]
+        },
+        "p3": {
+          "file": "p3.wav",
+          "db": -3.0,
+          "states": [
+            "phase3"
+          ]
+        }
+      },
+      "leads": {}
     }
   }
 }

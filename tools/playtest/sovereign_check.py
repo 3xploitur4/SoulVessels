@@ -39,6 +39,9 @@ def main():
         wait(b, 1.5)
         r = b.call("boss")
         check(r.get("phase") == 0, "she is up, phase 1", str(r))
+        m = b.call("get_state")["music"]
+        check(m.get("zone") == "boss_sovereign" and m.get("state") == "phase1", "her track plays its phase 1 clip",
+              "%s / %s" % (m.get("zone"), m.get("state")))
         shot(b, OUT + "/01-sovereign-bars.png")
         seen = set()
         for i in range(40):
@@ -58,6 +61,14 @@ def main():
         wait(b, 1.8)
         lvl = b.call("water", id="arena").get("level", 0)
         check(abs(float(lvl) - (floor_y + 1.75)) < 0.1, "the water rose 1.5 m", "%.2f" % float(lvl))
+        m = b.call("get_state")["music"]
+        for i in range(28):
+            if m.get("state") == "phase2":
+                break
+            wait(b, 0.5)
+            b.call("heal")
+            m = b.call("get_state")["music"]
+        check(m.get("state") == "phase2", "the phase 2 clip comes in on a boundary", str(m.get("history"))[-160:])
         shot(b, OUT + "/04-p2-flooded.png")
         r = b.call("boss", fraction=0.26, strike=200)
         check(r.get("phase") == 2, "below 25 %: phase 3", str(r))
@@ -76,6 +87,9 @@ def main():
         wait(b, 0.6)
         es = [e for e in b.call("get_state")["enemies"] if e.get("id") == "weeping_sovereign"]
         check(not es, "she falls", str(es))
+        wait(b, 0.5)
+        m = b.call("get_state")["music"]
+        check(m.get("zone") == "zone1", "the zone track returns", str(m.get("zone")))
         shot(b, OUT + "/06-fallen.png")
     log.append("SUMMARY: %d failed" % fails)
     with open(os.path.join(OUT, "run-output.txt"), "w") as f:

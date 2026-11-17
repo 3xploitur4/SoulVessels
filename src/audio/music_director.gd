@@ -46,6 +46,9 @@ var _damage_seen: bool = false
 var _calm_left: float = 0.0
 var _forced: String = ""
 var _duck_left: float = 0.0
+## The boss whose track plays (story 035), and the zone track to return to.
+var _boss: Node
+var _zone_before_boss: String = ""
 
 
 func _ready() -> void:
@@ -60,6 +63,12 @@ func _ready() -> void:
 	GameEvents.hit_fx_requested.connect(func(_w: Vector3, _a: float, _c: bool, _b: bool) -> void: _damage_seen = true)
 	GameEvents.vessel_swapped.connect(func(id: String, _s: int) -> void: set_vessel(id))
 	GameEvents.telegraph_fired.connect(func(_k: String, _s: Node) -> void: _duck_left = _num("telegraph_duck_s", 0.15))
+	GameEvents.boss_started.connect(func(b: Node) -> void:
+		var d: Variant = b.get("data")
+		if d is Dictionary:
+			boss_begin(b, str((d as Dictionary).get("music", ""))))
+	GameEvents.boss_phase_changed.connect(boss_phase)
+	GameEvents.boss_defeated.connect(boss_end)
 
 
 ## True when music.json has a track for `zone_id`.
@@ -122,6 +131,34 @@ func set_vessel(vessel_id: String) -> void:
 		var key := "lead_" + n
 		var on_db := float((leads[n] as Dictionary).get("db", -6.0))
 		_set_target(key, on_db if n == vessel_id else silent_db(), fade_s)
+
+
+## A boss fight began: play `track` (a music.json entry with \"boss\": true) from its phase 1 clip
+## at once; the automatic intensity rules stand aside until the fight ends.
+func boss_begin(boss: Node, track: String) -> void:
+	if track == "" or not has_zone(track):
+		return
+	if _boss == null:
+		_zone_before_boss = zone
+	_boss = boss
+	start_zone(track)
+	_apply_state("phase1")
+
+
+## The boss reached `phase` (0-based): its clip comes in on the next 4-bar boundary.
+func boss_phase(boss: Node, phase: int) -> void:
+	if boss == _boss and _boss != null:
+		request_state("phase%d" % (phase + 1))
+
+
+## The fight is over (won, or the boss left with the room): back to the zone track.
+func boss_end(boss: Node) -> void:
+	if boss != _boss:
+		return
+	_boss = null
+	if _zone_before_boss != "" and has_zone(_zone_before_boss):
+		start_zone(_zone_before_boss)
+	_zone_before_boss = ""
 
 
 ## Pin a state (tests, bridge); "" returns control to the automatic rules.
@@ -220,6 +257,9 @@ func _process(_delta: float) -> void:
 	if _player == null or _sync == null:
 		return
 	_advance_clock(dt)
+	if _boss != null and not is_instance_valid(_boss):
+		# The boss left without a win (the player died or fled): its track ends with it.
+		boss_end(_boss)
 	_update_rules(dt)
 	if pending_state != "" and _song_time >= pending_at:
 		_apply_state(pending_state)
@@ -257,7 +297,7 @@ func _advance_clock(dt: float) -> void:
 
 
 func _update_rules(dt: float) -> void:
-	if _forced != "":
+	if _forced != "" or bool(_zone_cfg.get("boss", false)):
 		return
 	var any_aggro := false
 	var elite_near := false
