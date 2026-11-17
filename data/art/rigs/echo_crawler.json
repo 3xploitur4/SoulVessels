@@ -320,21 +320,56 @@
  "clips": {
   "idle": {
    "loop": true,
-   "length_s": 1.6,
+   "length_s": 2.2,
    "keys": [
     [
      0,
      {}
     ],
     [
+     0.15,
+     {
+      "leg_f": 5,
+      "leg_e": -3,
+      "head": 3
+     }
+    ],
+    [
+     0.3,
+     {
+      "leg_f": 0,
+      "leg_a": -4,
+      "head": 5,
+      "abdomen": 1.5,
+      "squash": -0.015
+     }
+    ],
+    [
      0.5,
      {
-      "abdomen": 1.5,
-      "head": -2,
+      "leg_g": -5,
+      "leg_b": 3,
+      "head": 1,
+      "abdomen": 2.0,
+      "squash": -0.02
+     }
+    ],
+    [
+     0.65,
+     {
+      "leg_g": 0,
+      "leg_c": 4,
+      "head": -4,
+      "abdomen": 1.0
+     }
+    ],
+    [
+     0.85,
+     {
+      "leg_e": 4,
       "leg_a": 2,
-      "leg_g": -2,
-      "leg_f": 1,
-      "root_y": 0.01
+      "head": -2,
+      "squash": 0.01
      }
     ],
     [
@@ -492,5 +527,9 @@
     ]
    ]
   }
+ },
+ "kicks": {
+  "land": 0.18,
+  "turn": 0.08
  }
 }

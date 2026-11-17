@@ -563,31 +563,58 @@
    ]
   }
  ],
- "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping).",
+ "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own).",
  "lean_bone": "torso",
  "lean_scale": 0.4,
  "clips": {
   "idle": {
    "loop": true,
-   "length_s": 2.6,
+   "length_s": 3.4,
    "keys": [
     [
      0,
-     {}
+     {
+      "squash": 0.0
+     }
     ],
     [
-     0.5,
+     0.3,
      {
-      "torso": 1.2,
-      "head": -1.5,
-      "arm_upper": -2.5,
+      "torso": 1.6,
+      "head": -1.0,
+      "arm_upper": -3.0,
+      "arm_fore": 2.0,
       "shield_arm": 1.5,
-      "cape": -0.8
+      "squash": -0.012
+     }
+    ],
+    [
+     0.55,
+     {
+      "torso": 1.0,
+      "head": -3.0,
+      "arm_upper": -2.0,
+      "arm_fore": 3.0,
+      "shield_arm": 2.5,
+      "sword": 1.5,
+      "squash": -0.008
+     }
+    ],
+    [
+     0.8,
+     {
+      "torso": -0.4,
+      "head": -1.2,
+      "arm_upper": 1.0,
+      "shield_arm": 0.5,
+      "squash": 0.004
      }
     ],
     [
      1,
-     {}
+     {
+      "squash": 0.0
+     }
     ]
    ]
   },
@@ -605,9 +632,11 @@
       "leg_r_shin": -40,
       "arm_upper": -14,
       "arm_fore": 8,
-      "shield_arm": 6,
+      "shield_arm": 9,
       "torso": -6,
-      "cape": -3.0
+      "cape": -3.0,
+      "squash": 0.035,
+      "head": 4.0
      }
     ],
     [
@@ -621,7 +650,9 @@
       "arm_fore": 12,
       "torso": -7,
       "cape": -3.0,
-      "root_y": 0.05
+      "root_y": 0.05,
+      "squash": -0.02,
+      "head": 5.0
      }
     ],
     [
@@ -633,9 +664,11 @@
       "leg_r_shin": -8,
       "arm_upper": 14,
       "arm_fore": 18,
-      "shield_arm": -6,
+      "shield_arm": -9,
       "torso": -6,
-      "cape": -2.5
+      "cape": -2.5,
+      "squash": 0.035,
+      "head": 4.0
      }
     ],
     [
@@ -649,7 +682,9 @@
       "arm_fore": 12,
       "torso": -7,
       "cape": -3.0,
-      "root_y": 0.05
+      "root_y": 0.05,
+      "squash": -0.02,
+      "head": 5.0
      }
     ],
     [
@@ -661,9 +696,11 @@
       "leg_r_shin": -40,
       "arm_upper": -14,
       "arm_fore": 8,
-      "shield_arm": 6,
+      "shield_arm": 9,
       "torso": -6,
-      "cape": -3.0
+      "cape": -3.0,
+      "squash": 0.035,
+      "head": 4.0
      }
     ]
    ]
@@ -681,7 +718,8 @@
       "arm_fore": 20,
       "shield_arm": 10,
       "cape": -3.0,
-      "torso": -4
+      "torso": -4,
+      "squash": -0.07
      }
     ]
    ]
@@ -699,7 +737,8 @@
       "arm_fore": 15,
       "shield_arm": 20,
       "cape": 3.0,
-      "torso": 3
+      "torso": 3,
+      "squash": -0.03
      }
     ]
    ]
@@ -1252,5 +1291,9 @@
    "stiffness": 110,
    "damping": 11
   }
+ },
+ "kicks": {
+  "land": 0.11,
+  "turn": 0.05
  }
 }

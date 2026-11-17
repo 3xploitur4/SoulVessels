@@ -17,6 +17,10 @@ extends SpriteBody
 const BLEND_RATE := 18.0
 ## Depth step between parts so the draw order holds (metres toward the camera).
 const PART_Z := 0.004
+## Landing and turning squash spring (see `kick`).
+const KICK_SPEED := 26.0
+const KICK_STIFFNESS := 260.0
+const KICK_DAMPING := 18.0
 ## Shader values copied from the hidden whole-body material to every part each frame.
 const SHARED := ["flash", "flash_color", "dissolve", "ghost", "glow", "tint"]
 
@@ -35,6 +39,12 @@ var _root: Node3D
 var _loop_t: float = 0.0
 var _px: float = 0.0
 var _squash: float = 0.0
+## A short squash on top of the clip's (landing, turning round), decaying on its own.
+var _kick: float = 0.0
+var _kick_vel: float = 0.0
+var _facing_sign: float = 0.0
+## Squash amounts per event from the rig data ("land", "turn").
+var _kicks: Dictionary = {}
 ## Secondary motion (capes, tails): bone -> settings from the rig data, and spring state.
 var _secondary: Dictionary = {}
 var _sec_angle: Dictionary[String, float] = {}
@@ -197,6 +207,7 @@ func _build(id: String) -> void:
 	_lean_bone = str(def.get("lean_bone", ""))
 	_lean_scale = float(def.get("lean_scale", 1.0))
 	_secondary = def.get("secondary", {})
+	_kicks = def.get("kicks", {})
 	for j: String in _secondary.keys():
 		_sec_angle[j] = 0.0
 		_sec_vel[j] = 0.0
@@ -227,6 +238,7 @@ func tick(delta: float) -> void:
 		_bones[_lean_bone].rotation.z -= atan(_cur["lean"] * _lean_scale / maxf(height_m * 0.5, 0.1))
 	_root.position.y = lerpf(_root.position.y, float(pose.get("root_y", 0.0)), k)
 	_squash = lerpf(_squash, float(pose.get("squash", 0.0)), k)
+	_tick_kick(delta)
 	_apply_squash()
 	for name: String in SHARED:
 		var v: Variant = _mat.get_shader_parameter(name)
@@ -240,8 +252,9 @@ func tick(delta: float) -> void:
 ## stretches it tall and thin (a lunge). Scaled about the feet.
 func _apply_squash() -> void:
 	var f := float(spec.get("faces", 1))
-	_root.scale.x = f * (1.0 + _squash * 0.5)
-	_root.scale.y = 1.0 - _squash
+	var sq := _squash + _kick
+	_root.scale.x = f * (1.0 + sq * 0.5)
+	_root.scale.y = 1.0 - sq
 
 
 ## Parts that react to movement on their own (a cape): each is a spring pulled toward an angle
@@ -269,6 +282,36 @@ func _tick_secondary(delta: float) -> void:
 		_sec_angle[j] += _sec_vel[j] * delta
 
 
+## The landing or turning squash now (for tests).
+func kick_amount() -> float:
+	return _kick
+
+
 ## Extra angle a secondary bone carries now (for tests).
 func secondary_deg(bone: String) -> float:
 	return _sec_angle.get(bone, 0.0)
+
+
+## Squash the body down for a moment, springing back with a little rebound (landings).
+func kick(amount: float) -> void:
+	_kick_vel += amount * KICK_SPEED
+
+
+## Landing dust also squashes the body.
+func puff() -> void:
+	super.puff()
+	kick(float(_kicks.get("land", 0.0)))
+
+
+func _tick_kick(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	# Turning round squashes a little too, so the flip does not read as a snap.
+	var f := signf(_pivot.global_basis.x.x)
+	if _facing_sign != 0.0 and f != _facing_sign:
+		kick(float(_kicks.get("turn", 0.0)))
+	_facing_sign = f
+	# A stiff, lightly damped spring: down fast, a small bounce, settled in about 0.3 s.
+	var acc := -_kick * KICK_STIFFNESS - _kick_vel * KICK_DAMPING
+	_kick_vel += acc * delta
+	_kick += _kick_vel * delta

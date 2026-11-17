@@ -50,3 +50,18 @@ User asked to tweak the pilot before the rest of the cast. Changed:
 
 Shots 01-14 were retaken after these changes. Tests: 12 in `rig_body_test.gd` (easing, cape
 trail and settle, a teleport does not fling the cape, squash); full suite 210 pass.
+
+## Second tweak pass (2026-11-17)
+
+- Idle breathes: a slow rise of the whole body (about 1 %), the head drifting out of step with
+  the torso, small arm, sword and shield shifts (3.4 s loop).
+- Run has weight: the body compresses on each footfall and rises on the passing step, the head
+  steadies against the lean, and the shield arm swings against the sword arm.
+- Jumps stretch on take-off; landing squashes the body on a spring that rebounds and settles in
+  about half a second; turning round gives a small squash so the flip does not snap
+  (`kicks` in the rig data).
+- The Crawler's idle twitches its legs out of step and scans with its head.
+
+New shots `15-jump-0.png` to `19-jump-4.png`: in the air (knee tucked, cape lifted), then the
+landing (body compressed, cape flaring). Tests: 14 in `rig_body_test.gd` (adds the landing squash
+peak and settle, and the turn squash).

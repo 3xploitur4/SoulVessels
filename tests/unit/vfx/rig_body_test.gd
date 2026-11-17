@@ -107,6 +107,35 @@ func test_squash_coils_the_crawler_down_and_wide() -> void:
 	assert_gt(absf(rig.scale.x), 1.02, "wider")
 
 
+func test_landing_squashes_the_body_and_it_springs_back() -> void:
+	var b := add_node(SpriteBody.create("caelan")) as RigBody
+	b.tick(1.0 / 60.0)
+	b.puff()
+	var peak := 0.0
+	for i in range(10):
+		b.tick(1.0 / 60.0)
+		peak = maxf(peak, b.kick_amount())
+	var land := float(JSON.parse_string(FileAccess.get_file_as_string("res://data/art/rigs/caelan.json"))["kicks"]["land"])
+	assert_gt(peak, land * 0.6, "squashed down")
+	assert_lt(peak, land * 1.5, "not overdone")
+	for i in range(60):
+		b.tick(1.0 / 60.0)
+	assert_almost(b.kick_amount(), 0.0, 0.005, "settled within a second")
+
+
+func test_turning_round_gives_a_small_squash() -> void:
+	var holder := add_node(Node3D.new()) as Node3D
+	var b := SpriteBody.create("caelan") as RigBody
+	holder.add_child(b)
+	b.tick(1.0 / 60.0)
+	holder.rotation.y = PI
+	var peak := 0.0
+	for i in range(10):
+		b.tick(1.0 / 60.0)
+		peak = maxf(peak, b.kick_amount())
+	assert_gt(peak, 0.02)
+
+
 func test_an_unknown_clip_falls_back_to_idle() -> void:
 	var b := add_node(SpriteBody.create("echo_crawler")) as RigBody
 	b.play("no_such_clip")

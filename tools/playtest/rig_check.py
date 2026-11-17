@@ -50,6 +50,14 @@ def main():
         wait(b, 0.3)
         shot(b, OUT + "/12-block.png")
         b.call("release", action="ability_1")
+        # Jump in place: stretch on the way up, squash on landing.
+        wait(b, 0.4)
+        b.call("press", action="jump")
+        wait(b, 0.12)
+        b.call("release", action="jump")
+        for n, at in enumerate([0.1, 0.25, 0.2, 0.06, 0.06]):
+            wait(b, at)
+            shot(b, OUT + "/%02d-jump-%d.png" % (15 + n, n))
         st = b.call("game_state")
         log.append("end: room %s" % st.get("room"))
     with open(OUT + "/run-output.txt", "w") as f:
