@@ -52,6 +52,8 @@ var chapter_end: ChapterEnd
 ## Ability ranks and Sync passives (story 037).
 var ranks: AbilityRanks
 var passives: SyncPassives
+## Second weapons and Affinity 5 signature passives (story 050).
+var weapons: Weapons
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -101,6 +103,7 @@ func _ready() -> void:
 	reforge = Reforge.from_data()
 	ranks = AbilityRanks.from_data()
 	passives = SyncPassives.from_data()
+	weapons = Weapons.from_data()
 	GameEvents.perfect_parry.connect(func(_a: Node3D) -> void: _award_xp("perfect_parry"))
 	GameEvents.perfect_dodge.connect(func(_a: Node3D) -> void: _award_xp("perfect_dodge"))
 	GameEvents.enemy_died.connect(_on_enemy_died)
@@ -284,6 +287,11 @@ func _on_affinity_changed(vessel: String, lvl: int) -> void:
 		prompts.toast(tr("AFFINITY_UNLOCK_GUARD"), UiKit.COL_ACCENT)
 	elif lvl == int(Balance.combat_f("sync_ultimate.min_affinity")):
 		prompts.toast(tr("AFFINITY_UNLOCK_ULTIMATE"), UiKit.COL_ACCENT)
+	elif weapons != null and weapons.signatures.has(vessel) and weapons.signature_active(vessel, lvl) 			and not weapons.signature_active(vessel, lvl - 1):
+		# Story 050: the Affinity 5 signature passive; re-bind so the Vessel's data carries it.
+		prompts.toast(tr("AFFINITY_UNLOCK_SIGNATURE") % tr(str(weapons.signatures[vessel].get("name_key", ""))),
+			UiKit.COL_ACCENT)
+		_rebind_vessels()
 	var memory := "memory_" + vessel
 	if lvl >= Affinity.memory_level() and not LoreDb.entry(memory).is_empty() \
 			and GameState.add_unique(state.lore_found, memory):
@@ -324,7 +332,8 @@ func reforge_weapon(vessel_id: String) -> void:
 func _patch_vessel(vessel_id: String, data: Dictionary) -> Dictionary:
 	if state == null:
 		return data
-	return passives.patched(ranks.patched(data, state, vessel_id), state, vessel_id)
+	var out := passives.patched(ranks.patched(data, state, vessel_id), state, vessel_id)
+	return weapons.patched(out, state, vessel_id, Affinity.level(state, vessel_id))
 
 
 ## Buy the next rank of a Vessel's ability (story 037); the Vessels are re-bound to pick it up.
@@ -351,6 +360,17 @@ func choose_passive(vessel_id: String, passive_id: String) -> void:
 		return
 	_rebind_vessels()
 	Sfx.play("sync_guard")
+	save_now()
+	if altar_menu != null:
+		altar_menu.show_upgrade(vessel_id)
+
+
+## Take up a Vessel's second weapon, or go back to the first ("" ; story 050).
+func choose_weapon(vessel_id: String, weapon_id: String) -> void:
+	if state == null or not weapons.equip(state, vessel_id, weapon_id):
+		return
+	_rebind_vessels()
+	Sfx.play("altar_kindle")
 	save_now()
 	if altar_menu != null:
 		altar_menu.show_upgrade(vessel_id)
@@ -506,6 +526,9 @@ func open_altar_menu(altar: Altar) -> void:
 	altar_menu.passives = passives
 	altar_menu.rank_requested.connect(buy_rank)
 	altar_menu.passive_requested.connect(choose_passive)
+	weapons.refresh(state)
+	altar_menu.weapons = weapons
+	altar_menu.weapon_requested.connect(choose_weapon)
 	altar_menu.altar_name = tr(altar.name_key)
 	altar_menu.loadout_requested.connect(apply_loadout)
 	altar_menu.lore_read_requested.connect(read_lore)

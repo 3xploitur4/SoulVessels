@@ -21,6 +21,8 @@ signal craft_requested(item: String)
 signal rank_requested(vessel_id: String, ability: String)
 ## Buy or slot a Sync passive.
 signal passive_requested(vessel_id: String, passive_id: String)
+## Take up a Vessel's second weapon, or the first ("") (story 050).
+signal weapon_requested(vessel_id: String, weapon_id: String)
 
 var state: GameState
 ## The Soul Core tree, to draw (never to change).
@@ -28,6 +30,7 @@ var soul_core: SoulCore
 var reforge: Reforge
 var ranks: AbilityRanks
 var passives: SyncPassives
+var weapons: Weapons
 var altar_name: String = ""
 
 var _root: Control
@@ -189,6 +192,8 @@ func show_upgrade(vessel_id: String) -> void:
 		b.pressed.connect(func() -> void: passive_requested.emit(v, pid))
 		col.add_child(b)
 		items.append(b)
+	if weapons != null and not weapons.second(v).is_empty():
+		items.append_array(_weapon_rows(col, v))
 	var next := UiKit.button(tr("UPGRADE_NEXT_VESSEL"), 760.0)
 	next.name = "UpgradeNext"
 	next.pressed.connect(func() -> void: show_upgrade(held[(held.find(v) + 1) % held.size()]))
@@ -204,6 +209,39 @@ func show_upgrade(vessel_id: String) -> void:
 		if not (c as Button).disabled:
 			enabled.append(c)
 	UiKit.link_focus(enabled)
+
+
+## Story 050: the Vessel's two weapons (the second locked until found) and its Affinity 5 passive.
+func _weapon_rows(col: VBoxContainer, v: String) -> Array[Control]:
+	var out: Array[Control] = []
+	col.add_child(UiKit.label(tr("UPGRADE_WEAPONS"), 24, UiKit.COL_DIM))
+	var second := weapons.second(v)
+	var sid := str(second.get("id", ""))
+	var in_hand := weapons.equipped(state, v)
+	var open := weapons.unlocked(state, v)
+	# Both weapons on one row, so the page still fits a phone screen.
+	var row_box := HBoxContainer.new()
+	row_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	row_box.add_theme_constant_override("separation", 16)
+	col.add_child(row_box)
+	for row: Array in [["", tr("WEAPON_FIRST")], [sid, tr(str(second.get("name_key", sid)))]]:
+		var wid: String = row[0]
+		var tag := tr("WEAPON_IN_HAND") if in_hand == wid else (tr("WEAPON_TAKE") if wid == "" or open else tr("WEAPON_LOCKED"))
+		var b := UiKit.button("%s  (%s)" % [row[1], tag], 372.0)
+		b.name = "Weapon_%s_%s" % [v, wid if wid != "" else "first"]
+		b.disabled = in_hand == wid or (wid != "" and not open)
+		b.tooltip_text = tr(str(second.get("desc_key", ""))) if wid != "" else ""
+		b.pressed.connect(func() -> void: weapon_requested.emit(v, wid))
+		row_box.add_child(b)
+		out.append(b)
+	var sig: Dictionary = weapons.signatures.get(v, {})
+	if not sig.is_empty():
+		var lvl := int(sig.get("level", 5))
+		var active := Affinity.level(state, v) >= lvl
+		col.add_child(UiKit.label(tr("SIGNATURE_LINE") % [tr(str(sig.get("name_key", ""))),
+			tr("SIGNATURE_ACTIVE") if active else tr("SIGNATURE_AT") % lvl], 22,
+			UiKit.COL_GOLD if active else UiKit.COL_DIM))
+	return out
 
 
 # --- Reforge (story 036) ------------------------------------------------------------------

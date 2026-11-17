@@ -67,6 +67,7 @@ func primary_action(player: Player, index: int) -> PlayerAction:
 	var p := player.make_packet(float(h.get("motion", 1.0)), float(h.get("posture", 10.0)))
 	p.is_primary = true
 	p.heavy = bool(h.get("heavy", false))
+	primary_element(p, h)
 	a.add_hit(ActionHit.new(windup, windup + active, Vector2(reach * 0.5 + 0.15, 1.0),
 		Vector2(reach, 1.7), p))
 	if p.heavy:
@@ -196,3 +197,17 @@ func damage_taken_multiplier(_player: Player, _blocking: bool) -> float:
 func ability_cooldown_keys() -> PackedStringArray:
 	return PackedStringArray([str(data.get("ability_1", {}).get("id", "")),
 		str(data.get("ability_2", {}).get("id", ""))])
+
+
+## Story 050: a weapon that carries an element (Nyra's Venom blades) or a random one per blow
+## (Darius's Improvised Heavy: "element": "random" with "elements"). Physical leaves the packet as is.
+func primary_element(p: DamagePacket, hit: Dictionary) -> void:
+	var pr: Dictionary = data.get("primary", {})
+	var el := str(pr.get("element", "physical"))
+	if el == "random":
+		var pool: Array = pr.get("elements", [])
+		el = str(pool[randi() % pool.size()]) if not pool.is_empty() else "physical"
+	if el == "physical":
+		return
+	p.element = el
+	p.element_buildup = float(hit.get("buildup", pr.get("buildup", 0.0)))

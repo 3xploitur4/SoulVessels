@@ -455,3 +455,24 @@ LORE_MEMORY_DARIUS_TITLE,Memory of Darius: The Rope
 LORE_MEMORY_DARIUS_BODY,"He was the last one up the rope when the shaft caved in, and the only one who could climb back down. It took him three years to dig through. By then the camp was cold, and the tracks led to the sea."
 LORE_TRUTH_01_TITLE,Primeval Truth: The Descent Was Not a Fall
 LORE_TRUTH_01_BODY,"An Architect's order, in a hand that sets the stone: sink Vael-Sora, every street and soul, to contain the Unwritten. Below it, where a name should be, a sigil: a small, bright wisp. Your shape."
+UPGRADE_WEAPONS,Weapons
+WEAPON_FIRST,First weapon
+WEAPON_LOCKED,not found yet
+WEAPON_GREATSWORD,Greatsword
+WEAPON_GREATSWORD_DESC,"No shield: parry with the blade. Heavier blows, 1.5x posture damage, a little slower."
+WEAPON_VENOM_BLADES,Venom Blades
+WEAPON_VENOM_BLADES_DESC,Short blades from a Warden's schematic. Every cut builds Venom.
+WEAPON_FLOATING_FOCUS,Floating Focus
+WEAPON_FLOATING_FOCUS_DESC,A focus bound by the Deep-Realm Rune. Seris casts while moving at full speed.
+WEAPON_IMPROVISED_HEAVY,Improvised Heavy
+WEAPON_IMPROVISED_HEAVY_DESC,Basalt cores lashed to the haft. Every blow lands a random element.
+SIGNATURE_SWORN_SHIELD,Sworn Shield: a perfect parry sends magic back
+SIGNATURE_GHOST_STEP,Ghost Step: a backstab kill readies Shadowstep
+SIGNATURE_SPELLWEAVE,Spellweave: every third bolt copies the last spell
+SIGNATURE_UNKILLABLE,Unkillable: Sync Guard every 45 s
+SIGNATURE_LINE,%s   (%s)
+SIGNATURE_ACTIVE,active
+SIGNATURE_AT,at Affinity %d
+AFFINITY_UNLOCK_SIGNATURE,Signature passive: %s
+WEAPON_IN_HAND,in hand
+WEAPON_TAKE,take up

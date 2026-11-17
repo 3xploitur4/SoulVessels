@@ -1,6 +1,6 @@
 # Story 050: Second weapons from Zone 4's drops
 
-> **Epic**: M4 — Zone 4 and the Chapter I finale · **Status**: Ready · **Layer**: Feature · **Type**: Logic · **Estimate**: M
+> **Epic**: M4 — Zone 4 and the Chapter I finale · **Status**: Done · **Layer**: Feature · **Type**: Logic · **Estimate**: M
 
 ## Context
 
@@ -20,12 +20,24 @@ Not in the addendum's milestone list; built last in M4 and the first to cut (D-0
 
 ## Acceptance Criteria
 
-- [ ] A per-Vessel weapon choice saved in GameState, switched at an altar once unlocked; each second weapon is a data patch on the Vessel (the story-037 mechanism) plus any kit hook it needs.
-- [ ] Unlock sources wired: the Guardian's flag, the Schematic, the Deep-Realm Rune, Basalt Cores.
-- [ ] The four Affinity 5 passives, active at Affinity 5.
-- [ ] Unit tests per weapon and passive; an altar screenshot.
+- [x] A per-Vessel weapon choice saved in GameState, switched at an altar once unlocked; each second weapon is a data patch on the Vessel (the story-037 mechanism) plus any kit hook it needs.
+- [x] Unlock sources wired: the Guardian's flag, the Schematic, the Deep-Realm Rune, Basalt Cores.
+- [x] The four Affinity 5 passives, active at Affinity 5.
+- [x] Unit tests per weapon and passive; an altar screenshot.
 
 ## Files
 
 - `data/balance/vessels/*.json`, `data/progression/weapons.json`, `src/progression/weapons.gd`, `src/ui/altar_menu.gd`
 - `tests/unit/progression/weapons_test.gd`
+
+---
+
+## Completion
+
+Decision D-056. Evidence: `production/qa/evidence/story-050-weapons/` (`weapons_check.py`, 6 checks; altar screenshots).
+- `data/progression/weapons.json` and `src/progression/weapons.gd` (unlock, refresh, equip, patched); `GameState.weapons` in the save.
+- Kit hooks: `VesselKit.primary_element` (Venom Blades, Improvised Heavy), Seris `primary.steer` (Floating Focus) and Spellweave, Nyra Ghost Step, Caelan Sworn Shield, Sync Guard cooldown from the Vessel's data (Unkillable).
+- The game applies the weapon and signature patches after ranks and passives, re-binds at Affinity 5, and refreshes unlocks when an altar opens. The Upgrade page shows both weapons and the signature line.
+- The Deep-Realm Rune is a pickup in z4_12.
+- Tests: `tests/unit/progression/weapons_test.gd` (12). 421 tests pass; smoke ok; drive.py 44/44.
+- Not done: weapon art (each second weapon still shows the first weapon's sprite).

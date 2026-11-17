@@ -1,0 +1,7 @@
+PASS  the Rift altar is in reach                         UI_REST
+PASS  the Upgrade page lists Caelan's Greatsword         ['Rank_caelan_royal_guard (disabled)', 'Rank_caelan_kings_judgment (disabled)', 'Rank_caelan_oathbreaker_lunge (disabled)', 'Rank_caelan_final_stand (disabled)', 'Passive_caelan_kings_mercy (disabled)', 'Passive_caelan_unbowed (disabled)', 'Passive_caelan_oath_unbroken (disabled)', 'Weapon_caelan_first (disabled)', 'Weapon_caelan_greatsword', 'UpgradeNext', 'UpgradeBack']
+PASS  Caelan takes up the Greatsword                     {'caelan': 'greatsword'}
+PASS  Nyra's Venom Blades are offered                    ['Rank_nyra_shadowstep (disabled)', 'Rank_nyra_phantom_blades (disabled)', 'Rank_nyra_severing_arrival (disabled)', 'Rank_nyra_dance_of_shadows (disabled)', 'Passive_nyra_second_shadow (disabled)', 'Passive_nyra_knifes_edge (disabled)', 'Passive_nyra_long_vanish (disabled)', 'Weapon_nyra_first (disabled)', 'Weapon_nyra_venom_blades', 'UpgradeNext', 'UpgradeBack']
+PASS  the Floating Focus stays locked without the rune   ['Rank_seris_frost_binding (disabled)', 'Rank_seris_aether_shield (disabled)', 'Rank_seris_aether_burst (disabled)', 'Rank_seris_cataclysm_fused (disabled)', 'Passive_seris_ward_echo (disabled)', 'Passive_seris_deep_frost (disabled)', 'Passive_seris_resonant_mind (disabled)', 'Weapon_seris_first (disabled)', 'Weapon_seris_floating_focus (disabled)', 'UpgradeNext', 'UpgradeBack']
+PASS  the choice is in the save                          {'caelan': 'greatsword'}
+SUMMARY: 0 failed

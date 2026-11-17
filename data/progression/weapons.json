@@ -1,0 +1,55 @@
+{
+  "_source": "Story 050, decision D-056. Addendum 'Weapon unlocks and Affinity 5 passives'. One second weapon per Vessel, switched at an altar (the Upgrade page) once unlocked; its patch (as in ability_ranks.json) is applied to the Vessel's data while it is in hand. unlock: {flag} is a save flag, {item} is an item held once (the unlock is then remembered as flag weapon_<id>). signatures: each Vessel's Affinity 5 passive, applied from `level` on. Read by src/progression/weapons.gd.",
+  "vessels": {
+    "caelan": {
+      "id": "greatsword",
+      "name_key": "WEAPON_GREATSWORD",
+      "desc_key": "WEAPON_GREATSWORD_DESC",
+      "unlock": { "flag": "unlock_greatsword" },
+      "patch": {
+        "set": { "primary.name": "Greatsword", "weapon.id": "greatsword", "weapon.shield": false,
+                 "passive.blocking_damage_taken_multiplier": 0.85 },
+        "mul": { "stats.posture_multiplier": 1.5, "stats.atk": 1.15, "stats.attack_speed": 0.85 }
+      }
+    },
+    "nyra": {
+      "id": "venom_blades",
+      "name_key": "WEAPON_VENOM_BLADES",
+      "desc_key": "WEAPON_VENOM_BLADES_DESC",
+      "unlock": { "item": "weapon_schematic" },
+      "patch": {
+        "set": { "primary.name": "Venom blades", "weapon.id": "venom_blades", "primary.element": "venom",
+                 "primary.buildup": 14.0 }
+      }
+    },
+    "seris": {
+      "id": "floating_focus",
+      "name_key": "WEAPON_FLOATING_FOCUS",
+      "desc_key": "WEAPON_FLOATING_FOCUS_DESC",
+      "unlock": { "item": "deep_realm_rune" },
+      "patch": {
+        "set": { "primary.name": "Floating Focus", "weapon.id": "floating_focus", "primary.steer": 1.0 }
+      }
+    },
+    "darius": {
+      "id": "improvised_heavy",
+      "name_key": "WEAPON_IMPROVISED_HEAVY",
+      "desc_key": "WEAPON_IMPROVISED_HEAVY_DESC",
+      "unlock": { "item": "polished_basalt_core" },
+      "patch": {
+        "set": { "primary.name": "Improvised Heavy", "weapon.id": "improvised_heavy", "primary.element": "random",
+                 "primary.elements": ["ember", "frost", "venom", "aether"], "primary.buildup": 18.0 }
+      }
+    }
+  },
+  "signatures": {
+    "caelan": { "id": "sworn_shield", "name_key": "SIGNATURE_SWORN_SHIELD", "level": 5,
+                "patch": { "set": { "signature.reflect_magic": true } } },
+    "nyra": { "id": "ghost_step", "name_key": "SIGNATURE_GHOST_STEP", "level": 5,
+              "patch": { "set": { "signature.backstab_kill_resets": true } } },
+    "seris": { "id": "spellweave", "name_key": "SIGNATURE_SPELLWEAVE", "level": 5,
+               "patch": { "set": { "signature.spellweave_every": 3 } } },
+    "darius": { "id": "unkillable", "name_key": "SIGNATURE_UNKILLABLE", "level": 5,
+                "patch": { "set": { "sync_guard.cooldown_s": 45.0 } } }
+  }
+}

@@ -14,6 +14,10 @@ const BOLT_GROUP := &"arcane_bolt"
 const BOLT_COLOR := Color(0.55, 0.85, 1.0)
 const FROST_COLOR := Color(0.7, 0.92, 1.0)
 
+## Spellweave (story 050, Affinity 5): bolts fired, and the last spell cast ({element, buildup}).
+var bolts_fired: int = 0
+var last_spell: Dictionary = {}
+
 
 ## Spell-damage multiplier for `enemies` nearby: 1 + per_enemy each, capped at 1 + cap.
 static func spell_multiplier(enemies: int, per_enemy: float, cap: float) -> float:
@@ -52,6 +56,13 @@ func fire_bolt(player: Player, index: int) -> Projectile:
 	p.is_primary = true
 	p.heavy = bool(h.get("heavy", false))
 	p.tags["ability"] = "arcane_bolt"
+	bolts_fired += 1
+	var every := int(data.get("signature", {}).get("spellweave_every", 0))
+	if every > 0 and bolts_fired % every == 0 and not last_spell.is_empty():
+		# Spellweave: this bolt copies the last spell's element and build-up.
+		p.element = str(last_spell["element"])
+		p.element_buildup = float(last_spell["buildup"])
+		p.tags["spellweave"] = true
 	var speed := float(pr.get("speed_mps", 24.0))
 	var origin := Vector2(player.global_position.x + 0.6 * player.facing, player.global_position.y + 0.95)
 	var radius := 0.22 if p.heavy else 0.16
@@ -79,7 +90,8 @@ func primary_action(player: Player, index: int) -> PlayerAction:
 	a.cancel_after = windup + active
 	a.cancel_into = PackedStringArray(["attack", "dodge", "jump", "ability"])
 	a.gravity_scale = 0.55
-	a.steer = 0.4
+	# The Floating Focus (story 050) casts while moving at full speed.
+	a.steer = float(data.get("primary", {}).get("steer", 0.4))
 	a.data["combo_index"] = index
 	a.data["windup"] = windup
 	a.data["active"] = active
@@ -129,6 +141,7 @@ func ability_1_released(player: Player, _held_s: float) -> void:
 			str(a1.get("element", "frost")), float(a1.get("buildup", 60.0)))
 		p.aoe = true
 		p.tags["ability"] = key
+		last_spell = {"element": p.element, "buildup": p.element_buildup}
 		var field := FrostField.spawn(pl.fx_parent, pl.world, p, rect, float(a1.get("duration_s", 3.0)))
 		field.hit_landed.connect(pl.report_hit)
 		if bool(a1.get("freezes_water", true)):

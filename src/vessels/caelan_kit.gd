@@ -48,6 +48,7 @@ func on_perfect_parry(player: Player, attacker: Node3D, _p: DamagePacket) -> voi
 	var cs: Dictionary = data.get("ability_1", {}).get("counterstrike", {})
 	if attacker != null and is_instance_valid(attacker) and attacker.has_method("open_guard"):
 		attacker.call("open_guard", float(cs.get("guard_break_s", 2.0)))
+	_sworn_shield(player, attacker, _p)
 	var a := PlayerAction.new("counterstrike", 0.38)
 	var p := player.make_packet(float(cs.get("motion", 1.5)), float(cs.get("posture", 35.0)))
 	p.is_primary = true
@@ -130,3 +131,22 @@ func ultimate_action(player: Player) -> PlayerAction:
 
 func ability_cooldown_keys() -> PackedStringArray:
 	return PackedStringArray(["royal_guard", "kings_judgment"])
+
+
+## Sworn Shield (story 050, Affinity 5): a perfect parry sends a magic attack back at its caster
+## (one that is not already reflected, like the Watcher's beam), at its own strength.
+func _sworn_shield(player: Player, attacker: Node3D, p: DamagePacket) -> void:
+	if p == null or not bool(data.get("signature", {}).get("reflect_magic", false)):
+		return
+	if p.kind != DamagePacket.KIND_MAGIC or p.can_reflect:
+		return
+	if attacker == null or not is_instance_valid(attacker) or not attacker.has_method("receive_hit"):
+		return
+	var back := player.make_packet(p.motion, 20.0)
+	back.kind = DamagePacket.KIND_MAGIC
+	back.atk = p.atk
+	back.element = p.element
+	back.element_buildup = p.element_buildup
+	back.tags["ability"] = "sworn_shield"
+	attacker.call("receive_hit", back)
+	GameEvents.hit_fx_requested.emit(attacker.global_position + Vector3(0.0, 1.0, 0.3), 0.0, true, false)

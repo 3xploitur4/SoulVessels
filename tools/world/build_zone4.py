@@ -239,20 +239,21 @@ rooms["z4_11"] = room("ROOM_Z4_11", [58, 2, 1, 1], 40, 12, b11,
     story=[{"kind": "line", "key": "DARIUS_SHORE", "speaker": "VESSEL_DARIUS", "x": [3, 10], "needs": "vessel",
             "color": DARIUS}])
 
-# z4_12 The Drowned Expedition: Darius's people, what is left of them. The checkpoint before the
-# Leviathan.
+# z4_12 The Drowned Expedition: Darius's people, what is left of them, and the Deep-Realm Rune they
+# carried (Seris's Floating Focus, story 050). The checkpoint before the Leviathan.
 def b12(r):
     r.exit("left", "0", 2)
     r.exit("right", "1", 2)
     r.put(9, 2, "*")
     r.put(15, 2, "*")
     r.put(21, 2, "*")
+    r.put(26, 2, "*")
     r.put(5, 8, "T")
     r.put(24, 8, "Y")
 rooms["z4_12"] = room("ROOM_Z4_12", [59, 2, 1, 1], 30, 12, b12,
     {"0": {"to": "z4_11", "exit": "1"}, "1": {"to": "z4_13", "exit": "0"}},
     theme="shore", music="zone4_shore", checkpoint=True,
-    pickups=["faded_parchment", "echoing_relic", "faded_parchment"],
+    pickups=["faded_parchment", "echoing_relic", "faded_parchment", "deep_realm_rune"],
     story=[{"kind": "line", "key": "DARIUS_EXPEDITION", "speaker": "VESSEL_DARIUS", "x": [8, 18], "needs": "vessel",
             "color": DARIUS}])
 

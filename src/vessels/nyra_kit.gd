@@ -167,5 +167,13 @@ func breaks_snare_on(action_name: String) -> bool:
 	return action_name == "ability_1"
 
 
+## Ghost Step (story 050, Affinity 5): a backstab kill makes Shadowstep ready again.
+func on_primary_landed(player: Player, _target: Node3D, p: DamagePacket) -> void:
+	if not bool(data.get("signature", {}).get("backstab_kill_resets", false)):
+		return
+	if p.was_backstab and p.result == DamagePacket.Result.KILLED:
+		player.loadout.active().cooldowns.erase(str(data.get("ability_1", {}).get("id", "shadowstep")))
+
+
 func ability_cooldown_keys() -> PackedStringArray:
 	return PackedStringArray(["shadowstep", "phantom_blades"])

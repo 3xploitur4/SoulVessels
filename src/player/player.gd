@@ -1161,7 +1161,9 @@ func _try_sync_guard(trigger: String, p: DamagePacket) -> bool:
 		if slot.affinity < min_aff or slot.sync_guard_left > 0.0 or not gauge.has_bars(cost):
 			continue
 		gauge.spend_bars(cost)
-		slot.sync_guard_left = Balance.combat_f("sync_guard.cooldown_s")
+		# Darius's Unkillable (story 050) shortens his guard's cooldown in his own data.
+		slot.sync_guard_left = float(slot.data.get("sync_guard", {}).get("cooldown_s",
+			Balance.combat_f("sync_guard.cooldown_s")))
 		if i != loadout.active_index:
 			try_swap(i, true)
 		grant_invulnerability(0.5)

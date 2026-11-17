@@ -34,6 +34,9 @@ var affinity_xp: Dictionary[String, float] = {}
 var affinity_bonus: Dictionary[String, int] = {}
 ## Vessel id -> weapon reforge level, 0-5 (story 036). Older saves have none: every weapon +0.
 var weapon_levels: Dictionary[String, int] = {}
+## Vessel id -> the second weapon in hand (story 050, D-056). Absent: the first weapon. Older
+## saves have none.
+var weapons: Dictionary[String, String] = {}
 ## Vessel id -> {ability id: rank 2 or 3} (story 037). Absent means rank 1.
 var ability_ranks: Dictionary[String, Dictionary] = {}
 ## Sync passives bought, as "vessel:passive" (story 037).
@@ -159,6 +162,7 @@ func to_dict() -> Dictionary:
 		"affinity_xp": affinity_xp.duplicate(),
 		"affinity_bonus": affinity_bonus.duplicate(),
 		"weapon_levels": weapon_levels.duplicate(),
+		"weapons": weapons.duplicate(),
 		"ability_ranks": ability_ranks.duplicate(true),
 		"owned_passives": owned_passives.duplicate(),
 		"sync_passive": sync_passive.duplicate(),
@@ -210,6 +214,10 @@ static func from_dict(d: Dictionary) -> GameState:
 	if wl is Dictionary:
 		for k: Variant in (wl as Dictionary).keys():
 			gs.weapon_levels[str(k)] = int((wl as Dictionary)[k])
+	var wp: Variant = d.get("weapons", {})
+	if wp is Dictionary:
+		for k: Variant in (wp as Dictionary).keys():
+			gs.weapons[str(k)] = str((wp as Dictionary)[k])
 	var ar: Variant = d.get("ability_ranks", {})
 	if ar is Dictionary:
 		for k: Variant in (ar as Dictionary).keys():
