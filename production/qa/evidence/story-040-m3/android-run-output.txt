@@ -1,0 +1,12 @@
+PASS  a device is attached                         emulator-5554	device
+PASS  the APK installs                             Success
+PASS  the game boots and the bridge answers        22 s ok
+PASS  the title screen shows its slots             ['Slot0', 'Slot1', 'Slot2']
+PASS  a new game loads room 1                      z1_01
+PASS  the Warden's hall loads                      z1_12
+PASS  the Warden is there                          [None]
+fps on device: 3.0
+PASS  the throne hall loads                        z3_17
+PASS  the Sovereign is there                       ['weeping_sovereign']
+fps on device (throne hall): 1.0
+SUMMARY: 0 failed

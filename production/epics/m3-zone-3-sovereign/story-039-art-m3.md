@@ -13,7 +13,8 @@ painting of it, its parts come from the closest existing figure and the gap is r
 ## Acceptance Criteria
 
 - [x] Seris clips: Arcane Bolt cast (3 beats), Frost Binding, Aether Shield, swim.
-- [x] Choir Prelate clips: orb cast, teleport out and in, aura idle. Sovereign clips for every attack and each phase change.
+- [x] Choir Prelate clips: orb cast, teleport out and in, aura idle.
+- [ ] Sovereign clips for every attack and each phase change (partly: a phase 3 tint; every attack still shares one telegraph and one attack pose).
 - [ ] A Drowned Courtier rig with surface, slash and dive clips.
 - [x] Zone 3 palace theme after the zone painting: marble, gold, water light on walls.
 - [x] VFX: Arcane Bolt trail, Frost field, the shield, rune glow, the Prelate's aura.

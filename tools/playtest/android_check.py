@@ -2,7 +2,8 @@
 
 Installs builds/android/soulvessels-debug.apk with adb, starts it, forwards the playtest bridge
 port, checks the title screen, starts a new game and confirms room 1 is built, then a later
-room with the rigged Warden. Screenshots come from the device (adb screencap) into
+room with the rigged Warden, then (story 040) Zone 3's throne hall with the Weeping Sovereign.
+--out <folder> writes the screenshots and log elsewhere (story 040 uses its own folder). Screenshots come from the device (adb screencap) into
 production/qa/evidence/story-026-m2/. Needs a booted emulator or a phone with USB debugging.
 
     bash tools/python.sh tools/playtest/android_check.py
@@ -21,6 +22,8 @@ ADB = os.path.join(SDK, "platform-tools", "adb.exe")
 APK = os.path.join(ROOT, "builds", "android", "soulvessels-debug.apk")
 PKG = "com.soulvessels.chapter1"
 OUT = os.path.join(ROOT, "production", "qa", "evidence", "story-026-m2")
+if "--out" in sys.argv:
+    OUT = os.path.join(ROOT, sys.argv[sys.argv.index("--out") + 1])
 HOST_PORT = 9190
 DEVICE_PORT = 9177
 
@@ -78,6 +81,16 @@ def main():
         check(len(s.get("enemies", [])) == 1, "the Warden is there", str([e.get("name") for e in s.get("enemies", [])]))
         log.append("fps on device: %s" % s.get("fps"))
         screencap("android-03-warden-hall.png")
+        # Story 040: the Sunken Palace and the Weeping Sovereign's throne hall.
+        st = b.call("goto", room="z3_17", exit="0", instant=True)
+        # The emulator draws in software (a few frames a second): give the room fade time to finish.
+        time.sleep(12.0)
+        check(st.get("room") == "z3_17", "the throne hall loads", str(st.get("room")))
+        s = b.call("get_state")
+        check(any(e.get("id") == "weeping_sovereign" for e in s.get("enemies", [])), "the Sovereign is there",
+              str([e.get("id") for e in s.get("enemies", [])]))
+        log.append("fps on device (throne hall): %s" % s.get("fps"))
+        screencap("android-04-throne-hall.png")
         try:
             b.call("quit")
         except Exception:

@@ -1,6 +1,6 @@
 # Epic M3 — Zone 3 and the Weeping Sovereign
 
-**Status: Planned (2026-11-17).**
+**Status: Done (2026-11-17).** All 11 stories closed; the M3 playtest (`tools/playtest/drive_m3.py`) passes end to end and the APK runs on the Android emulator. Open: your sign-off on the M3 look (story 039), concept art for the Drowned Courtier, a clip per Sovereign attack, frame rate on a real phone, and hand-play of puzzles 4-6 and a full Sovereign fight.
 
 > Milestone: M3 (addendum "Production milestones" #4). Seris, light-rune puzzles, water, Choir
 > Prelate, the first boss with 3 music phases, reforging. Content: Zone 3 Sunken Palace (18 rooms,
