@@ -117,5 +117,20 @@
     "freeze_s": 8.0,
     "freeze_reach_m": 2.0,
     "patch_thickness_m": 0.4
+  },
+  "darkness": {
+    "_note": "Story 043, decision D-050. radius_m: light around the player with an empty Soul Gauge; gauge_bonus_m: extra metres at a full gauge. lamp_radius_m: each lamp (and each T/Y light in a dark room). cue_radius_m: light around an enemy showing an attack cue, so telegraphs are never hidden. depth: how black the dark is (0-1). fade_s: fade in/out.",
+    "radius_m": 3.5,
+    "gauge_bonus_m": 2.0,
+    "lamp_radius_m": 3.0,
+    "cue_radius_m": 2.2,
+    "depth": 0.94,
+    "fade_s": 1.0
+  },
+  "slide": {
+    "_note": "Story 043, decision D-050. friction: share of gravity along the slope that pushes you (0-1). uphill_penalty: how much running uphill slows you per sin(angle). max_slide_mps: top speed while coasting downhill with no input (there is no braking on a slope).",
+    "friction": 0.6,
+    "uphill_penalty": 1.6,
+    "max_slide_mps": 7.0
   }
 }

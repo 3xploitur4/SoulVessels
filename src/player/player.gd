@@ -117,6 +117,7 @@ var _wall_lock_left: float = 0.0
 var _wall_sliding: bool = false
 var _trav: Dictionary = {}
 var _water_cfg: Dictionary = {}
+var _slide_cfg: Dictionary = {}
 ## Metres under the surface of the water the player stands in (story 031); 0 on dry land.
 var water_depth: float = 0.0
 ## Element statuses on the player (story 034: the Sovereign's Ember burns).
@@ -150,6 +151,8 @@ func _ready() -> void:
 		fx_parent = get_parent()
 	_move = Balance.combat("movement")
 	_trav = Balance.combat("traversal")
+	var sc: Variant = Balance.combat("slide")
+	_slide_cfg = sc if sc is Dictionary else {}
 	var wc: Variant = Balance.combat("water")
 	_water_cfg = wc if wc is Dictionary else {}
 	var snare_cfg: Variant = Balance.combat("root_snare")
@@ -345,6 +348,18 @@ func _tick_status(delta: float) -> void:
 		GameEvents.player_hp_changed.emit(health.current, health.max_value)
 		if health.is_dead():
 			_die()
+
+
+## The tilt in degrees of the sliding floor under the player's feet (0 off any, or in the air).
+func slide_angle() -> float:
+	if not is_on_floor() or not is_inside_tree():
+		return 0.0
+	var feet := Vector2(global_position.x, global_position.y)
+	for n in get_tree().get_nodes_in_group(SlideZone.GROUP):
+		var z := n as SlideZone
+		if z.covers(feet):
+			return z.angle
+	return 0.0
 
 
 ## True while deep enough in water to swim (slower, strokes instead of jumps, no roll).
@@ -815,8 +830,14 @@ func _free_move(delta: float) -> void:
 	var speed := stat("move_speed")
 	if is_swimming():
 		speed *= float(_water_cfg.get("move_mult", 0.6))
+	var slope := slide_angle()
+	if slope != 0.0 and absf(_move_axis.x) > 0.01:
+		speed = SlideZone.run_speed(speed, slope, int(signf(_move_axis.x)), float(_slide_cfg.get("uphill_penalty", 1.6)))
 	var target_vx := _move_axis.x * speed
 	var accel := float(_move.get("ground_accel", 60.0)) if absf(target_vx) > 0.01 else float(_move.get("ground_decel", 80.0))
+	if slope != 0.0 and absf(target_vx) <= 0.01:
+		# Coasting on a slope: no braking, the slope carries you (capped below).
+		accel = 0.0
 	if not is_on_floor():
 		accel *= float(_move.get("air_control", 0.9))
 	_wall_lock_left = maxf(_wall_lock_left - delta, 0.0)
@@ -846,6 +867,11 @@ func _free_move(delta: float) -> void:
 		Sfx.play("jump")
 	if input_enabled and controls.just_released("jump") and velocity.y > 0.0:
 		velocity.y *= 0.5
+	if slope != 0.0:
+		velocity.x += SlideZone.slide_accel(slope, float(_move.get("gravity", 30.0)), float(_slide_cfg.get("friction", 0.6))) * delta
+		var cap := float(_slide_cfg.get("max_slide_mps", 7.0))
+		if absf(_move_axis.x) <= 0.01:
+			velocity.x = clampf(velocity.x, -cap, cap)
 
 
 ## Kick off the wall just touched: away and up, with a short steering lock, and the air-dash back.

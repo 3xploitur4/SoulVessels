@@ -72,6 +72,12 @@ var rift_scars: Array[Vector2] = []
 var lights: Array[Dictionary] = []
 ## Water bodies (story 031): [{"id", "x": [left, right], "level": surface y, "floor": bottom y}].
 var water: Array[Dictionary] = []
+## Sliding floors (story 043): [{"x": [left, right], "y": [bottom, top], "angle": degrees}].
+var slides: Array[Dictionary] = []
+## A dark room (story 043): only the player's light, lamps and attack cues show.
+var dark: bool = false
+## Lamp positions in a dark room (world), from "lamps" [[x, y]] and the room's T/Y lights.
+var lamps: Array[Vector3] = []
 ## Raw JSON for features that read their own keys (altar, ward, arena, tutorials, lines).
 var raw: Dictionary = {}
 
@@ -179,6 +185,15 @@ func _read_cells(cells: Array[PackedStringArray], errors: Array[String]) -> void
 							lights.append({"pos": Vector3(pos.x, pos.y + 0.5, -1.5), "warm": c == "T"})
 						else:
 							errors.append("%s: more than 2 lights" % id)
+	for s: Variant in raw.get("slides", []):
+		if s is Dictionary and (s as Dictionary).has("x"):
+			slides.append(s)
+	dark = bool(raw.get("dark", false))
+	if dark:
+		for l: Dictionary in lights:
+			lamps.append(l["pos"])
+		for xy: Variant in raw.get("lamps", []):
+			lamps.append(Vector3(float(xy[0]), float(xy[1]), 0.0))
 	for w: Variant in raw.get("water", []):
 		if w is Dictionary and (w as Dictionary).has("x") and (w as Dictionary).has("level"):
 			water.append(w)

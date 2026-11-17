@@ -1,0 +1,4 @@
+PASS  the room goes dark with one lamp               {'dark': 1.0, 'lamps': 1}
+PASS  a Crawler's attack cue is caught on screen in the dark 
+PASS  standing on the slope carries Darius downhill  8.2 -> 14.6
+SUMMARY: 0 failed

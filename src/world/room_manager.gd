@@ -87,6 +87,7 @@ func enter_data(next: RoomData, exit: String = "", at: Vector2 = Vector2.INF) ->
 		player.set_room_platforms(builder.oneway_bodies)
 	_spawn_enemies()
 	_build_water()
+	_build_slides_and_dark()
 	for build: Callable in feature_builders:
 		build.call(self, data)
 	_place_player(exit, at)
@@ -312,3 +313,30 @@ func solid_rects() -> Array[Rect2]:
 			if builder.gate_active(kind):
 				out.append_array(data.gate_rects[kind])
 	return out
+
+
+# --- Sliding floors and darkness (story 043) --------------------------------------------------
+
+## The room's Darkness overlay, or null in a lit room.
+var darkness: Darkness
+
+
+func _build_slides_and_dark() -> void:
+	for s: Dictionary in data.slides:
+		var xs: Array = s.get("x", [0, 1])
+		var ys: Array = s.get("y", [0, 1])
+		var z := SlideZone.new()
+		z.name = "Slide"
+		z.setup(Vector2(float(xs[0]), float(xs[1])), Vector2(float(ys[0]), float(ys[1])), float(s.get("angle", 0.0)))
+		features_root.add_child(z)
+	if darkness != null and is_instance_valid(darkness):
+		darkness.queue_free()
+		darkness = null
+	if data.dark:
+		darkness = Darkness.new()
+		darkness.name = "Darkness"
+		darkness.player = player as Player
+		darkness.lamps = data.lamps.duplicate()
+		var c: Variant = Balance.combat("darkness")
+		darkness.lamp_radius_m = float((c as Dictionary).get("lamp_radius_m", 3.0)) if c is Dictionary else 3.0
+		features_root.add_child(darkness)

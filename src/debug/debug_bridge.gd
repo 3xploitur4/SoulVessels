@@ -200,6 +200,25 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 				return {"error": "no game state"}
 			gst.essence = int(args.get("value", gst.essence))
 			return {"essence": gst.essence}
+		"dark":
+			# Darken the current room (story 043 playtests); lamps: [[x, y], ...].
+			var rmd: RoomManager = sandbox.get("rooms")
+			if rmd.darkness == null:
+				rmd.darkness = Darkness.new()
+				rmd.darkness.player = player
+				rmd.features_root.add_child(rmd.darkness)
+			for xy: Array in args.get("lamps", []):
+				rmd.darkness.lamps.append(Vector3(float(xy[0]), float(xy[1]), 0.0))
+			rmd.darkness.fade(1.0 if bool(args.get("on", true)) else 0.0, 0.0)
+			return {"dark": rmd.darkness.amount, "lamps": rmd.darkness.lamps.size()}
+		"slide":
+			var rms: RoomManager = sandbox.get("rooms")
+			var z := SlideZone.new()
+			var xs: Array = args.get("x", [4, 16])
+			var ys: Array = args.get("y", [1.5, 3.0])
+			z.setup(Vector2(float(xs[0]), float(xs[1])), Vector2(float(ys[0]), float(ys[1])), float(args.get("angle", 15.0)))
+			rms.features_root.add_child(z)
+			return {"angle": z.angle}
 		"root_player":
 			player.snare.apply()
 			return {"rooted": player.snare.is_active()}
