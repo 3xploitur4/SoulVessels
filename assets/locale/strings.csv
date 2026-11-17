@@ -215,7 +215,7 @@ UI_POSSESS,Possess
 POSSESSED,You wear %s now.
 SPEAKER_VOICE,A voice in the walls
 BLOCKED_POSSESSED_CAELAN,Your light is too thin to go on alone. Take the fallen knight's body ({interact}).
-TUT_MOVE,{move_left} / {move_right} to drift. You are only light now.
+TUT_MOVE,{move} to drift. You are only light now.
 TUT_JUMP,{jump} to rise.
 TUT_POSSESS,"A knight fell here, guarding the door. Step into him: {interact}."
 TUT_ATTACK,{attack} to strike. Up to four blows chain together.
@@ -248,3 +248,6 @@ SOV_Z2_AMBUSH,Rise. All of you. Rise for your queen.
 SOV_Z2_MORE,More of them. There are always more of them.
 SOV_Z2_CLEAR,Even the stone ones. Is nothing of mine safe from you?
 SOV_Z2_PALACE,"Below the water is my palace. Come down, then. I will be waiting where he could not follow."
+TOUCH_STICK,the stick on the left
+PAD_LEFT_STICK,the left stick
+UI_SWAP_NEXT,Vessel wheel

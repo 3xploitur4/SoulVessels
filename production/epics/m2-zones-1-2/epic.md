@@ -1,5 +1,7 @@
 # Epic M2 — Zones 1–2
 
+**Status: Done (2026-11-17).** All 16 stories closed; the M2 playtest (`tools/playtest/drive_m2.py`) passes end to end and the APK runs on the Android emulator. Not verified: frame rate on a real phone.
+
 > Milestone: M2 (addendum "Production milestones" #3). Rooms, Soul Altars, saving, Soul Essence
 > and death, loot, Soul Core tree, Caelan/Nyra gates. Content: Zone 1 Whispering Cavern (14 rooms,
 > 2 altars, Caelan in room 2, attack/dodge/parry tutorial, Branded Warden set-piece) and Zone 2

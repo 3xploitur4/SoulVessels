@@ -152,6 +152,11 @@ static func link_focus(buttons: Array[Control], grab: bool = true) -> void:
 
 ## The control for `action` on `device` ("keyboard", "gamepad", "touch").
 static func action_name(action: String, device: String) -> String:
+	# "{move}" names the whole movement control: two keys, or the stick (story 024).
+	if action == "move":
+		if device == "keyboard":
+			return "%s / %s" % [action_name("move_left", device), action_name("move_right", device)]
+		return TranslationServer.translate("TOUCH_STICK" if device == "touch" else "PAD_LEFT_STICK")
 	if device == "touch":
 		return TranslationServer.translate("TOUCH_BUTTON") % TranslationServer.translate("UI_" + action.to_upper())
 	if not InputMap.has_action(action):
@@ -182,6 +187,9 @@ static func format_controls(text: String, device: String) -> String:
 		var name := action_name(action, device)
 		out = out.substr(0, start) + name + out.substr(end + 1)
 		start = out.find("{", start + name.length())
+	# A sentence that opens with a control name ("the stick on the left to drift") starts upper-case.
+	if out.length() > 0 and out[0] != out[0].to_upper():
+		out = out[0].to_upper() + out.substr(1)
 	return out
 
 
