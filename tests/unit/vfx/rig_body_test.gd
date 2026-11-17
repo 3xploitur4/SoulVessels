@@ -3,11 +3,31 @@ extends TestCase
 ## joints, and SpriteBody.create picks it when a rig exists.
 
 
-func test_create_picks_the_rig_when_one_exists() -> void:
-	var b := add_node(SpriteBody.create("caelan")) as SpriteBody
-	assert_true(b is RigBody, "Caelan has a rig")
-	var n := add_node(SpriteBody.create("nyra")) as SpriteBody
-	assert_false(n is RigBody, "Nyra is still a whole painting")
+func test_every_painted_figure_has_a_rig() -> void:
+	var sprites: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/sprites.json"))["sprites"]
+	for id: String in sprites.keys():
+		var b := add_node(SpriteBody.create(id)) as SpriteBody
+		assert_true(b is RigBody, "%s is rigged" % id)
+
+
+func test_the_stalker_borrows_the_husk_rig() -> void:
+	assert_eq(RigBody.rig_id("fungal_stalker"), "calcified_husk")
+	var b := add_node(SpriteBody.create("fungal_stalker")) as RigBody
+	assert_true(b.find_child("arm_l", true, false) != null)
+
+
+func test_borrowed_clips_are_merged_and_own_clips_win() -> void:
+	var def := RigBody.load_def("seris")
+	var base := RigBody.load_def("caelan")
+	assert_true((def["clips"] as Dictionary).has("dodge"), "borrowed from Caelan")
+	assert_ne(str(def["clips"]["attack_0"]), str(base["clips"]["attack_0"]), "her own attack replaces his")
+
+
+func test_an_aliased_part_follows_another_channel_scaled() -> void:
+	var b := add_node(SpriteBody.create("seris")) as RigBody
+	b.clips = {"t": {"keys": [[0.0, {"leg_l_thigh": 40.0}]]}}
+	b.pose_now("t", 0.0)
+	assert_almost(b.joint_deg("foot_l"), 40.0 * 0.25, 0.01, "foot follows the thigh channel at a quarter")
 
 
 func test_every_part_of_the_rig_becomes_a_bone() -> void:

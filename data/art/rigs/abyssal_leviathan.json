@@ -1,0 +1,333 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for abyssal_leviathan, cut from assets/art/sprites/abyssal_leviathan.png. Same format as caelan.json. Own clips: a serpent, the tail rolls as a wave from base to tip.",
+ "source": "res://assets/art/sprites/abyssal_leviathan.png",
+ "height_m": 6.5,
+ "ground_px": 462,
+ "rest_to": "body",
+ "clips": {
+  "idle": {
+   "loop": true,
+   "length_s": 3.6,
+   "keys": [
+    [
+     0,
+     {
+      "tail": -3,
+      "tail_tip": 6
+     }
+    ],
+    [
+     0.5,
+     {
+      "neck": 3,
+      "head": -4,
+      "tail": 4,
+      "tail_tip": -8,
+      "squash": -0.01
+     }
+    ],
+    [
+     1,
+     {
+      "tail": -3,
+      "tail_tip": 6
+     }
+    ]
+   ]
+  },
+  "run": {
+   "loop": true,
+   "length_s": 1.0,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "body": -2,
+      "neck": 4,
+      "head": -3,
+      "tail": -10,
+      "tail_tip": 14
+     }
+    ],
+    [
+     0.5,
+     {
+      "body": 2,
+      "neck": -3,
+      "head": 4,
+      "tail": 10,
+      "tail_tip": -16,
+      "root_y": 0.05
+     }
+    ],
+    [
+     1,
+     {
+      "body": -2,
+      "neck": 4,
+      "head": -3,
+      "tail": -10,
+      "tail_tip": 14
+     }
+    ]
+   ]
+  },
+  "telegraph": {
+   "keys": [
+    [
+     0,
+     {
+      "neck": -14,
+      "head": -20,
+      "tail": 8,
+      "tail_tip": -12,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 18,
+      "head": 14,
+      "tail": -10,
+      "tail_tip": 12,
+      "squash": -0.05
+     }
+    ]
+   ]
+  },
+  "hurt": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -10,
+      "head": -16,
+      "tail": 12
+     }
+    ]
+   ]
+  },
+  "staggered": {
+   "keys": [
+    [
+     0,
+     {
+      "neck": -16,
+      "head": -22,
+      "tail": 14,
+      "tail_tip": -18,
+      "squash": 0.05
+     }
+    ]
+   ]
+  },
+  "knockdown": {
+   "keys": [
+    [
+     0,
+     {
+      "neck": -30,
+      "head": -25,
+      "tail": 20,
+      "tail_tip": -25
+     }
+    ]
+   ]
+  }
+ },
+ "lean_bone": "neck",
+ "lean_scale": 0.2,
+ "kicks": {
+  "land": 0.1,
+  "turn": 0.04
+ },
+ "parts": [
+  {
+   "id": "tail",
+   "parent": "body",
+   "pivot": [
+    340,
+    345
+   ],
+   "joint_r": 20,
+   "poly": [
+    [
+     320,
+     240
+    ],
+    [
+     480,
+     236
+    ],
+    [
+     652,
+     90
+    ],
+    [
+     652,
+     430
+    ],
+    [
+     320,
+     385
+    ]
+   ]
+  },
+  {
+   "id": "tail_tip",
+   "parent": "tail",
+   "pivot": [
+    545,
+    330
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     478,
+     96
+    ],
+    [
+     652,
+     90
+    ],
+    [
+     652,
+     330
+    ],
+    [
+     478,
+     330
+    ]
+   ]
+  },
+  {
+   "id": "body",
+   "parent": "",
+   "pivot": [
+    240,
+    400
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     0,
+     295
+    ],
+    [
+     160,
+     280
+    ],
+    [
+     250,
+     330
+    ],
+    [
+     360,
+     330
+    ],
+    [
+     480,
+     330
+    ],
+    [
+     470,
+     420
+    ],
+    [
+     300,
+     466
+    ],
+    [
+     0,
+     466
+    ]
+   ]
+  },
+  {
+   "id": "neck",
+   "parent": "body",
+   "pivot": [
+    240,
+    390
+   ],
+   "joint_r": 26,
+   "poly": [
+    [
+     150,
+     58
+    ],
+    [
+     345,
+     48
+    ],
+    [
+     335,
+     200
+    ],
+    [
+     305,
+     300
+    ],
+    [
+     292,
+     425
+    ],
+    [
+     178,
+     432
+    ],
+    [
+     180,
+     300
+    ],
+    [
+     198,
+     200
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "parent": "neck",
+   "pivot": [
+    200,
+    165
+   ],
+   "joint_r": 22,
+   "poly": [
+    [
+     0,
+     30
+    ],
+    [
+     145,
+     0
+    ],
+    [
+     232,
+     18
+    ],
+    [
+     232,
+     185
+    ],
+    [
+     165,
+     285
+    ],
+    [
+     0,
+     285
+    ]
+   ]
+  }
+ ]
+}

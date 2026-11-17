@@ -1,0 +1,9 @@
+caelan: shots taken
+nyra: shots taken
+seris: shots taken
+darius: shots taken
+ilyr: shots taken
+watcher: room z1_07
+warden: room z1_12
+husk-stalker: room z2_06
+husk: room z2_02

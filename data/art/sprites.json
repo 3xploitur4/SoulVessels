@@ -1,5 +1,5 @@
 {
-  "_source": "Story 027, decision D-032. How each sprite cut from the concept sheets (tools/art/slice_concepts.gd) stands in the world. height_m: world height of the whole image, weapons and crests included (the body heights come from the bible: Caelan 1.88 m, Nyra 1.69, Seris 1.73, Darius 1.94, Ilyr 1.80, Warden 2.6). faces: +1 when the painting's front is to the right of the sheet, -1 when to the left (the Warden's shield, the Leviathan's head). anchor: 'feet' (origin on the ground) or 'centre' (hovering bodies). leg_height: share of the height that steps when walking. step_m: metres a foot lifts. wind: metres the outer edges sway. tell: where the enemy's own tell glows, as a share of the image from its top-left, with colour and size in metres. slash: colour and reach of the weapon arc. emission: self-light, so painted shading stays readable in dark rooms. portrait: the face square for the swap wheel, as shares of the image (left, top, right, bottom).",
+  "_source": "Story 027, decision D-032. How each sprite cut from the concept sheets (tools/art/slice_concepts.gd) stands in the world. height_m: world height of the whole image, weapons and crests included (the body heights come from the bible: Caelan 1.88 m, Nyra 1.69, Seris 1.73, Darius 1.94, Ilyr 1.80, Warden 2.6). faces: +1 when the painting's front is to the right of the sheet, -1 when to the left (the Warden's shield, the Leviathan's head). anchor: 'feet' (origin on the ground) or 'centre' (hovering bodies). leg_height: share of the height that steps when walking. step_m: metres a foot lifts. wind: metres the outer edges sway. tell: where the enemy's own tell glows, as a share of the image from its top-left, with colour and size in metres. slash: colour and reach of the weapon arc. emission: self-light, so painted shading stays readable in dark rooms. portrait: the face square for the swap wheel, as shares of the image (left, top, right, bottom). rig: borrow another sprite's cut-out rig (story 029) when two sprites share one painting.",
   "emission": 0.62,
   "sprites": {
     "caelan": {
@@ -147,7 +147,8 @@
         ],
         "color": "#c79bff",
         "size_m": 1.1
-      }
+      },
+      "rig": "calcified_husk"
     },
     "branded_warden": {
       "file": "res://assets/art/sprites/branded_warden.png",

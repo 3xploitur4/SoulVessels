@@ -1,0 +1,350 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for weeping_sovereign, cut from assets/art/sprites/weeping_sovereign.png. Same format as caelan.json. Clips from the Calcified Husk with her own telegraph and attack (both blades).",
+ "source": "res://assets/art/sprites/weeping_sovereign.png",
+ "height_m": 2.9,
+ "ground_px": 466,
+ "rest_to": "torso",
+ "clips_from": "calcified_husk",
+ "alias": {
+  "skirt": [
+   "leg_l",
+   0.2
+  ],
+  "blade_l": [
+   "arm_l",
+   0.2
+  ],
+  "blade_r": [
+   "arm_r",
+   0.2
+  ]
+ },
+ "clips": {
+  "telegraph": {
+   "keys": [
+    [
+     0,
+     {
+      "torso": 8,
+      "head": 6,
+      "arm_l": -120,
+      "arm_r": 110,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -14,
+      "head": -6,
+      "arm_l": 40,
+      "arm_r": -35,
+      "squash": -0.04
+     }
+    ]
+   ]
+  }
+ },
+ "lean_bone": "torso",
+ "lean_scale": 0.3,
+ "kicks": {
+  "land": 0.12,
+  "turn": 0.05
+ },
+ "parts": [
+  {
+   "id": "skirt",
+   "parent": "pelvis",
+   "pivot": [
+    320,
+    240
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     200,
+     230
+    ],
+    [
+     440,
+     230
+    ],
+    [
+     480,
+     330
+    ],
+    [
+     480,
+     468
+    ],
+    [
+     120,
+     468
+    ],
+    [
+     150,
+     330
+    ]
+   ]
+  },
+  {
+   "id": "pelvis",
+   "parent": "",
+   "pivot": [
+    320,
+    240
+   ],
+   "joint_r": 0,
+   "poly": []
+  },
+  {
+   "id": "torso",
+   "parent": "pelvis",
+   "pivot": [
+    320,
+    240
+   ],
+   "joint_r": 22,
+   "poly": [
+    [
+     240,
+     60
+    ],
+    [
+     400,
+     60
+    ],
+    [
+     410,
+     150
+    ],
+    [
+     395,
+     250
+    ],
+    [
+     245,
+     250
+    ],
+    [
+     230,
+     150
+    ]
+   ]
+  },
+  {
+   "id": "arm_r",
+   "parent": "torso",
+   "pivot": [
+    380,
+    120
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     365,
+     95
+    ],
+    [
+     410,
+     100
+    ],
+    [
+     440,
+     180
+    ],
+    [
+     452,
+     250
+    ],
+    [
+     425,
+     262
+    ],
+    [
+     400,
+     200
+    ],
+    [
+     370,
+     150
+    ]
+   ]
+  },
+  {
+   "id": "blade_r",
+   "parent": "arm_r",
+   "pivot": [
+    432,
+    245
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     418,
+     205
+    ],
+    [
+     470,
+     205
+    ],
+    [
+     530,
+     250
+    ],
+    [
+     596,
+     330
+    ],
+    [
+     596,
+     385
+    ],
+    [
+     540,
+     360
+    ],
+    [
+     460,
+     300
+    ],
+    [
+     420,
+     270
+    ]
+   ],
+   "grow_px": 3
+  },
+  {
+   "id": "head",
+   "parent": "torso",
+   "pivot": [
+    320,
+    115
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     278,
+     0
+    ],
+    [
+     365,
+     0
+    ],
+    [
+     375,
+     80
+    ],
+    [
+     350,
+     125
+    ],
+    [
+     300,
+     125
+    ],
+    [
+     282,
+     80
+    ]
+   ]
+  },
+  {
+   "id": "arm_l",
+   "parent": "torso",
+   "pivot": [
+    255,
+    120
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     235,
+     100
+    ],
+    [
+     275,
+     95
+    ],
+    [
+     268,
+     150
+    ],
+    [
+     240,
+     200
+    ],
+    [
+     185,
+     262
+    ],
+    [
+     155,
+     250
+    ],
+    [
+     180,
+     200
+    ],
+    [
+     225,
+     140
+    ]
+   ]
+  },
+  {
+   "id": "blade_l",
+   "parent": "arm_l",
+   "pivot": [
+    168,
+    245
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     150,
+     205
+    ],
+    [
+     188,
+     235
+    ],
+    [
+     178,
+     268
+    ],
+    [
+     120,
+     312
+    ],
+    [
+     40,
+     385
+    ],
+    [
+     0,
+     385
+    ],
+    [
+     0,
+     340
+    ],
+    [
+     50,
+     250
+    ],
+    [
+     100,
+     205
+    ]
+   ],
+   "grow_px": 3
+  }
+ ]
+}

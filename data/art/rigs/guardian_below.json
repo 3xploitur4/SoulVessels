@@ -1,0 +1,378 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for guardian_below, cut from assets/art/sprites/guardian_below.png. Same format as caelan.json. Clips from the Calcified Husk; the forearms bend with the arms.",
+ "source": "res://assets/art/sprites/guardian_below.png",
+ "height_m": 4.4,
+ "ground_px": 465,
+ "rest_to": "torso",
+ "clips_from": "calcified_husk",
+ "alias": {
+  "arm_l_fore": [
+   "arm_l",
+   0.35
+  ],
+  "arm_r_fore": [
+   "arm_r",
+   0.35
+  ]
+ },
+ "clips": {
+  "run": {
+   "loop": true,
+   "length_s": 1.1,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l": 12,
+      "leg_r": -12,
+      "arm_l": -6,
+      "arm_r": 6,
+      "torso": -2,
+      "squash": 0.05
+     }
+    ],
+    [
+     0.25,
+     {
+      "torso": -3,
+      "root_y": 0.05,
+      "squash": -0.01
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_l": -12,
+      "leg_r": 12,
+      "arm_l": 6,
+      "arm_r": -6,
+      "torso": -2,
+      "squash": 0.05
+     }
+    ],
+    [
+     0.75,
+     {
+      "torso": -3,
+      "root_y": 0.05,
+      "squash": -0.01
+     }
+    ],
+    [
+     1,
+     {
+      "leg_l": 12,
+      "leg_r": -12,
+      "arm_l": -6,
+      "arm_r": 6,
+      "torso": -2,
+      "squash": 0.05
+     }
+    ]
+   ]
+  }
+ },
+ "lean_bone": "torso",
+ "lean_scale": 0.2,
+ "kicks": {
+  "land": 0.15,
+  "turn": 0.03
+ },
+ "parts": [
+  {
+   "id": "leg_r",
+   "parent": "pelvis",
+   "pivot": [
+    310,
+    290
+   ],
+   "joint_r": 26,
+   "poly": [
+    [
+     255,
+     280
+    ],
+    [
+     380,
+     280
+    ],
+    [
+     385,
+     380
+    ],
+    [
+     395,
+     468
+    ],
+    [
+     265,
+     468
+    ],
+    [
+     260,
+     380
+    ]
+   ]
+  },
+  {
+   "id": "leg_l",
+   "parent": "pelvis",
+   "pivot": [
+    180,
+    290
+   ],
+   "joint_r": 26,
+   "poly": [
+    [
+     110,
+     280
+    ],
+    [
+     235,
+     280
+    ],
+    [
+     230,
+     380
+    ],
+    [
+     215,
+     468
+    ],
+    [
+     95,
+     468
+    ],
+    [
+     105,
+     380
+    ]
+   ]
+  },
+  {
+   "id": "pelvis",
+   "parent": "",
+   "pivot": [
+    240,
+    290
+   ],
+   "joint_r": 0,
+   "poly": []
+  },
+  {
+   "id": "torso",
+   "parent": "pelvis",
+   "pivot": [
+    240,
+    280
+   ],
+   "joint_r": 30,
+   "poly": [
+    [
+     110,
+     20
+    ],
+    [
+     370,
+     20
+    ],
+    [
+     385,
+     150
+    ],
+    [
+     360,
+     300
+    ],
+    [
+     120,
+     300
+    ],
+    [
+     95,
+     150
+    ]
+   ]
+  },
+  {
+   "id": "arm_r",
+   "parent": "torso",
+   "pivot": [
+    370,
+    90
+   ],
+   "joint_r": 26,
+   "poly": [
+    [
+     325,
+     15
+    ],
+    [
+     435,
+     30
+    ],
+    [
+     455,
+     160
+    ],
+    [
+     460,
+     260
+    ],
+    [
+     400,
+     265
+    ],
+    [
+     350,
+     200
+    ],
+    [
+     330,
+     120
+    ]
+   ]
+  },
+  {
+   "id": "arm_r_fore",
+   "parent": "arm_r",
+   "pivot": [
+    410,
+    250
+   ],
+   "joint_r": 22,
+   "poly": [
+    [
+     355,
+     235
+    ],
+    [
+     465,
+     235
+    ],
+    [
+     470,
+     330
+    ],
+    [
+     460,
+     410
+    ],
+    [
+     395,
+     412
+    ],
+    [
+     360,
+     330
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "parent": "torso",
+   "pivot": [
+    250,
+    100
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     205,
+     0
+    ],
+    [
+     290,
+     0
+    ],
+    [
+     295,
+     100
+    ],
+    [
+     250,
+     112
+    ],
+    [
+     205,
+     100
+    ]
+   ]
+  },
+  {
+   "id": "arm_l",
+   "parent": "torso",
+   "pivot": [
+    110,
+    90
+   ],
+   "joint_r": 26,
+   "poly": [
+    [
+     40,
+     15
+    ],
+    [
+     160,
+     20
+    ],
+    [
+     165,
+     150
+    ],
+    [
+     120,
+     260
+    ],
+    [
+     10,
+     262
+    ],
+    [
+     10,
+     160
+    ],
+    [
+     30,
+     90
+    ]
+   ]
+  },
+  {
+   "id": "arm_l_fore",
+   "parent": "arm_l",
+   "pivot": [
+    60,
+    250
+   ],
+   "joint_r": 22,
+   "poly": [
+    [
+     5,
+     235
+    ],
+    [
+     120,
+     235
+    ],
+    [
+     115,
+     330
+    ],
+    [
+     110,
+     410
+    ],
+    [
+     30,
+     412
+    ],
+    [
+     5,
+     330
+    ]
+   ]
+  }
+ ]
+}

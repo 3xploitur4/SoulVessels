@@ -1,0 +1,537 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for branded_warden, cut from assets/art/sprites/branded_warden.png. Same format as caelan.json. Own clips. The painting faces left and the rig is mirrored to face right, so every angle shows reversed on screen: here a negative angle swings a hanging limb forward, a positive one tips the halberd forward.",
+ "source": "res://assets/art/sprites/branded_warden.png",
+ "height_m": 3.1,
+ "ground_px": 462,
+ "rest_to": "torso",
+ "clips": {
+  "idle": {
+   "loop": true,
+   "length_s": 3.0,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.5,
+     {
+      "torso": -1.2,
+      "head": 2,
+      "arm_upper": -2,
+      "shield_arm": 1.5,
+      "squash": -0.01
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "run": {
+   "loop": true,
+   "length_s": 0.9,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": -18,
+      "leg_l_shin": 6,
+      "leg_r_thigh": 16,
+      "leg_r_shin": 20,
+      "torso": 4,
+      "shield_arm": -3,
+      "squash": 0.03
+     }
+    ],
+    [
+     0.25,
+     {
+      "leg_r_thigh": -4,
+      "leg_r_shin": 35,
+      "torso": 5,
+      "root_y": 0.04,
+      "squash": -0.01
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_l_thigh": 16,
+      "leg_l_shin": 20,
+      "leg_r_thigh": -18,
+      "leg_r_shin": 6,
+      "torso": 4,
+      "shield_arm": 3,
+      "squash": 0.03
+     }
+    ],
+    [
+     0.75,
+     {
+      "leg_l_thigh": -4,
+      "leg_l_shin": 35,
+      "torso": 5,
+      "root_y": 0.04,
+      "squash": -0.01
+     }
+    ],
+    [
+     1,
+     {
+      "leg_l_thigh": -18,
+      "leg_l_shin": 6,
+      "leg_r_thigh": 16,
+      "leg_r_shin": 20,
+      "torso": 4,
+      "shield_arm": -3,
+      "squash": 0.03
+     }
+    ]
+   ]
+  },
+  "telegraph": {
+   "keys": [
+    [
+     0,
+     {
+      "torso": -8,
+      "head": -4,
+      "arm_upper": 30,
+      "sword": -75,
+      "shield_arm": -6,
+      "leg_l_thigh": -8,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 14,
+      "head": 6,
+      "arm_upper": -70,
+      "sword": 190,
+      "shield_arm": 10,
+      "leg_l_thigh": -16,
+      "leg_l_shin": 10,
+      "leg_r_thigh": 10,
+      "squash": -0.04
+     }
+    ]
+   ]
+  },
+  "hurt": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -10,
+      "head": -10,
+      "arm_upper": 12,
+      "shield_arm": -10,
+      "squash": 0.03
+     }
+    ]
+   ]
+  },
+  "staggered": {
+   "keys": [
+    [
+     0,
+     {
+      "torso": -12,
+      "head": -12,
+      "arm_upper": 15,
+      "sword": -10,
+      "shield_arm": -25,
+      "squash": 0.06
+     }
+    ]
+   ]
+  },
+  "knockdown": {
+   "keys": [
+    [
+     0,
+     {
+      "torso": -30,
+      "head": -20,
+      "arm_upper": 30,
+      "shield_arm": -35,
+      "leg_l_thigh": 20
+     }
+    ]
+   ]
+  }
+ },
+ "lean_bone": "torso",
+ "lean_scale": 0.3,
+ "kicks": {
+  "land": 0.12,
+  "turn": 0.05
+ },
+ "parts": [
+  {
+   "id": "leg_r_thigh",
+   "parent": "pelvis",
+   "pivot": [
+    255,
+    295
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     215,
+     280
+    ],
+    [
+     300,
+     280
+    ],
+    [
+     300,
+     370
+    ],
+    [
+     220,
+     380
+    ]
+   ]
+  },
+  {
+   "id": "leg_r_shin",
+   "parent": "leg_r_thigh",
+   "pivot": [
+    260,
+    370
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     220,
+     360
+    ],
+    [
+     305,
+     360
+    ],
+    [
+     300,
+     420
+    ],
+    [
+     305,
+     458
+    ],
+    [
+     230,
+     460
+    ],
+    [
+     228,
+     420
+    ]
+   ]
+  },
+  {
+   "id": "leg_l_thigh",
+   "parent": "pelvis",
+   "pivot": [
+    160,
+    295
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     110,
+     280
+    ],
+    [
+     205,
+     280
+    ],
+    [
+     200,
+     370
+    ],
+    [
+     180,
+     380
+    ],
+    [
+     110,
+     380
+    ]
+   ]
+  },
+  {
+   "id": "leg_l_shin",
+   "parent": "leg_l_thigh",
+   "pivot": [
+    150,
+    370
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     90,
+     360
+    ],
+    [
+     195,
+     360
+    ],
+    [
+     190,
+     420
+    ],
+    [
+     200,
+     462
+    ],
+    [
+     95,
+     464
+    ],
+    [
+     100,
+     420
+    ]
+   ]
+  },
+  {
+   "id": "pelvis",
+   "parent": "",
+   "pivot": [
+    210,
+    290
+   ],
+   "joint_r": 0,
+   "poly": []
+  },
+  {
+   "id": "torso",
+   "parent": "pelvis",
+   "pivot": [
+    210,
+    290
+   ],
+   "joint_r": 24,
+   "poly": [
+    [
+     135,
+     100
+    ],
+    [
+     290,
+     100
+    ],
+    [
+     300,
+     200
+    ],
+    [
+     285,
+     300
+    ],
+    [
+     270,
+     420
+    ],
+    [
+     150,
+     420
+    ],
+    [
+     135,
+     300
+    ],
+    [
+     130,
+     200
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "parent": "torso",
+   "pivot": [
+    212,
+    150
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     175,
+     45
+    ],
+    [
+     245,
+     45
+    ],
+    [
+     250,
+     140
+    ],
+    [
+     210,
+     156
+    ],
+    [
+     178,
+     140
+    ]
+   ]
+  },
+  {
+   "id": "sword",
+   "parent": "arm_upper",
+   "pivot": [
+    322,
+    242
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     300,
+     0
+    ],
+    [
+     424,
+     0
+    ],
+    [
+     424,
+     190
+    ],
+    [
+     362,
+     190
+    ],
+    [
+     346,
+     250
+    ],
+    [
+     320,
+     466
+    ],
+    [
+     294,
+     466
+    ],
+    [
+     300,
+     300
+    ],
+    [
+     314,
+     240
+    ],
+    [
+     330,
+     190
+    ],
+    [
+     300,
+     170
+    ]
+   ],
+   "grow_px": 3
+  },
+  {
+   "id": "arm_upper",
+   "parent": "torso",
+   "pivot": [
+    265,
+    140
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     235,
+     110
+    ],
+    [
+     300,
+     115
+    ],
+    [
+     320,
+     180
+    ],
+    [
+     346,
+     225
+    ],
+    [
+     346,
+     272
+    ],
+    [
+     298,
+     272
+    ],
+    [
+     270,
+     220
+    ],
+    [
+     240,
+     180
+    ]
+   ]
+  },
+  {
+   "id": "shield_arm",
+   "parent": "torso",
+   "pivot": [
+    175,
+    160
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     0,
+     88
+    ],
+    [
+     162,
+     84
+    ],
+    [
+     178,
+     150
+    ],
+    [
+     168,
+     300
+    ],
+    [
+     152,
+     432
+    ],
+    [
+     60,
+     458
+    ],
+    [
+     18,
+     432
+    ],
+    [
+     0,
+     300
+    ]
+   ]
+  }
+ ]
+}

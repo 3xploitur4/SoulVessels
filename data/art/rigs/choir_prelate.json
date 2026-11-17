@@ -1,0 +1,252 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for choir_prelate, cut from assets/art/sprites/choir_prelate.png. Same format as caelan.json. Clips from the Calcified Husk; the censer swings against the arm like a pendulum.",
+ "source": "res://assets/art/sprites/choir_prelate.png",
+ "height_m": 2.3,
+ "ground_px": 345,
+ "rest_to": "torso",
+ "clips_from": "calcified_husk",
+ "alias": {
+  "censer": [
+   "arm_l",
+   -0.6
+  ],
+  "skirt": [
+   "leg_l",
+   0.25
+  ]
+ },
+ "clips": {
+  "idle": {
+   "loop": true,
+   "length_s": 2.4,
+   "keys": [
+    [
+     0,
+     {
+      "censer": 8
+     }
+    ],
+    [
+     0.5,
+     {
+      "censer": -8,
+      "torso": 1,
+      "arm_l": 2,
+      "squash": -0.01
+     }
+    ],
+    [
+     1,
+     {
+      "censer": 8
+     }
+    ]
+   ]
+  }
+ },
+ "lean_bone": "torso",
+ "lean_scale": 0.3,
+ "kicks": {
+  "land": 0.12,
+  "turn": 0.05
+ },
+ "parts": [
+  {
+   "id": "skirt",
+   "parent": "pelvis",
+   "pivot": [
+    150,
+    190
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     70,
+     185
+    ],
+    [
+     235,
+     185
+    ],
+    [
+     245,
+     300
+    ],
+    [
+     230,
+     350
+    ],
+    [
+     90,
+     350
+    ],
+    [
+     80,
+     300
+    ]
+   ]
+  },
+  {
+   "id": "pelvis",
+   "parent": "",
+   "pivot": [
+    150,
+    190
+   ],
+   "joint_r": 0,
+   "poly": []
+  },
+  {
+   "id": "torso",
+   "parent": "pelvis",
+   "pivot": [
+    150,
+    190
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     85,
+     15
+    ],
+    [
+     215,
+     15
+    ],
+    [
+     230,
+     90
+    ],
+    [
+     215,
+     200
+    ],
+    [
+     90,
+     200
+    ],
+    [
+     80,
+     90
+    ]
+   ]
+  },
+  {
+   "id": "arm_r",
+   "parent": "torso",
+   "pivot": [
+    205,
+    70
+   ],
+   "joint_r": 14,
+   "poly": [
+    [
+     190,
+     40
+    ],
+    [
+     240,
+     60
+    ],
+    [
+     252,
+     150
+    ],
+    [
+     250,
+     215
+    ],
+    [
+     215,
+     215
+    ],
+    [
+     200,
+     140
+    ]
+   ]
+  },
+  {
+   "id": "arm_l",
+   "parent": "torso",
+   "pivot": [
+    100,
+    70
+   ],
+   "joint_r": 14,
+   "poly": [
+    [
+     95,
+     40
+    ],
+    [
+     110,
+     90
+    ],
+    [
+     95,
+     150
+    ],
+    [
+     50,
+     160
+    ],
+    [
+     25,
+     140
+    ],
+    [
+     40,
+     90
+    ],
+    [
+     70,
+     55
+    ]
+   ]
+  },
+  {
+   "id": "censer",
+   "parent": "arm_l",
+   "pivot": [
+    40,
+    128
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     20,
+     115
+    ],
+    [
+     60,
+     115
+    ],
+    [
+     70,
+     200
+    ],
+    [
+     85,
+     240
+    ],
+    [
+     80,
+     295
+    ],
+    [
+     0,
+     295
+    ],
+    [
+     0,
+     235
+    ],
+    [
+     20,
+     200
+    ]
+   ]
+  }
+ ]
+}

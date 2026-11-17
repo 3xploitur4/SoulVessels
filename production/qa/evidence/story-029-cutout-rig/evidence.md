@@ -65,3 +65,36 @@ trail and settle, a teleport does not fling the cape, squash); full suite 210 pa
 New shots `15-jump-0.png` to `19-jump-4.png`: in the air (knee tucked, cape lifted), then the
 landing (body compressed, cape flaring). Tests: 14 in `rig_body_test.gd` (adds the landing squash
 peak and settle, and the turn squash).
+
+## The whole cast (2026-11-17)
+
+Every painted figure is now a cut-out rig: the five Vessels (Caelan, Nyra, Seris, Darius,
+Ilyr) and every enemy and boss (Echo Crawler, Subterranean Watcher, Calcified Husk, Fungal
+Stalker, Branded Warden, Choir Prelate, Weeping Sovereign, Guardian Below, Abyssal Leviathan).
+
+- Humanoid Vessels borrow Caelan's clips (`clips_from`) and map their own parts onto his
+  channels (`alias`): Nyra's second dagger and forearm follow his sword arm, scaled; Seris's feet
+  step under her robe on a quarter of his thigh swing and her skirt sways; Ilyr's blade arm takes
+  the sword channel. Seris has her own staff casts (the crystal is held high and aimed forward)
+  and a steadier run.
+- The Husk's clips are the shared enemy set (lumbering walk, arms raised to telegraph, a slam,
+  recoil, stagger, knockdown); the Guardian, Prelate and Sovereign borrow them, with forearms,
+  a pendulum censer, a swaying skirt and two blades following their arms. The Fungal Stalker
+  uses the Husk's rig (`rig` in sprites.json), as it uses its painting.
+- The Warden, Watcher and Leviathan have their own clips. The Warden's painting faces left and
+  its rig is mirrored, so its angles were worked out for the mirror: it holds the halberd back
+  to telegraph and chops forward over its shield. The Watcher rolls with its eye turning against
+  the roll; the Leviathan rears, strikes and ripples its tail from base to tip.
+
+Seen in the running game (`tools/playtest/rig_cast.py`, shots in `cast/`): every Vessel's run;
+Caelan's and Nyra's attacks; the Watcher, the Warden (telegraph and charge), the Husk room and
+the Stalker. Seris, Darius and Ilyr have no primary attack data yet (their kits are later-chapter
+work), so their attacks are checked in the pose sheets only, and the four bosses are not placed in
+Zones 1-2 yet, so they too are seen in their sheets (`poses/`, every clip of every figure).
+
+Tests: 17 in `rig_body_test.gd` (adds: every sprite is rigged; the Stalker borrows the Husk rig;
+borrowed clips merge with the rig's own winning; an aliased part follows a scaled channel).
+Full suite 215 pass, smoke boot ok, M1 combat playtest 44/44.
+
+Known limits, unchanged: painted 3/4 views show a flat cut edge when a limb turns far; areas
+hidden in the painting are filled with the part's own colours, not new detail.

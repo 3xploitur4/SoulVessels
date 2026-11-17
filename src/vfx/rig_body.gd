@@ -43,6 +43,9 @@ var _squash: float = 0.0
 var _kick: float = 0.0
 var _kick_vel: float = 0.0
 var _facing_sign: float = 0.0
+## Bone -> the clip channel it follows, and a scale on that channel (see `alias` in the data).
+var _channel: Dictionary[String, String] = {}
+var _channel_scale: Dictionary[String, float] = {}
 ## Squash amounts per event from the rig data ("land", "turn").
 var _kicks: Dictionary = {}
 ## Secondary motion (capes, tails): bone -> settings from the rig data, and spring state.
@@ -52,10 +55,30 @@ var _sec_vel: Dictionary[String, float] = {}
 var _last_pos: Vector3 = Vector3.INF
 
 
-## True when `id` has a cut rig and clips.
+## True when `id` has a cut rig and clips (its own, or the one named by `rig` in sprites.json).
 static func has_rig(id: String) -> bool:
-	return FileAccess.file_exists("res://assets/art/rigs/%s/rig.json" % id) \
-		and FileAccess.file_exists("res://data/art/rigs/%s.json" % id)
+	var r := rig_id(id)
+	return FileAccess.file_exists("res://assets/art/rigs/%s/rig.json" % r) \
+		and FileAccess.file_exists("res://data/art/rigs/%s.json" % r)
+
+
+## The rig a sprite uses: its own id unless its sprites.json entry borrows another painting's
+## rig (the Fungal Stalker uses the Calcified Husk's).
+static func rig_id(id: String) -> String:
+	return str(SpriteArt.spec(id).get("rig", id))
+
+
+## A rig's data with borrowed clips merged in: `clips_from` names another rig whose clips this
+## one starts from; its own `clips` replace any of the same name.
+static func load_def(id: String) -> Dictionary:
+	var def: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/rigs/%s.json" % id))
+	var merged: Dictionary = {}
+	var base := str(def.get("clips_from", ""))
+	if base != "" and base != id:
+		merged = (load_def(base).get("clips", {}) as Dictionary).duplicate(true)
+	merged.merge(def.get("clips", {}), true)
+	def["clips"] = merged
+	return def
 
 
 ## Play `name` (a clip in the rig's data). For one-shot clips `progress` is how far through it
@@ -116,7 +139,7 @@ func pose_now(name: String, t: float) -> void:
 	_loop_t = t
 	var pose := sample(name, t)
 	for j: String in _bones.keys():
-		_angle[j] = float(pose.get(j, 0.0))
+		_angle[j] = _pose_angle(pose, j)
 		_bones[j].rotation.z = deg_to_rad(_angle[j])
 	_root.position.y = float(pose.get("root_y", 0.0))
 	_squash = float(pose.get("squash", 0.0))
@@ -132,9 +155,20 @@ func _build(id: String) -> void:
 	super._build(id)
 	# The whole painting stays as the afterimage source but is not drawn.
 	_mesh.visible = false
-	rig = JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/rigs/%s/rig.json" % id))
-	var def: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/rigs/%s.json" % id))
+	var rid := rig_id(id)
+	rig = JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/rigs/%s/rig.json" % rid))
+	var def := load_def(rid)
 	clips = def.get("clips", {})
+	# A part may follow another clip channel, scaled: {"foot_l": ["leg_l_thigh", 0.3]} or
+	# {"dagger": "sword"}, so a rig can borrow clips made for different part names.
+	var alias: Dictionary = def.get("alias", {})
+	for b: String in alias.keys():
+		var a: Variant = alias[b]
+		if a is Array:
+			_channel[b] = str(a[0])
+			_channel_scale[b] = float(a[1])
+		else:
+			_channel[b] = str(a)
 	var size: Array = rig["image_size"]
 	var img_w := float(size[0])
 	var img_h := float(size[1])
@@ -231,7 +265,7 @@ func tick(delta: float) -> void:
 	var k := minf(delta * float(c.get("blend", BLEND_RATE)), 1.0)
 	_tick_secondary(delta)
 	for j: String in _bones.keys():
-		_angle[j] = lerpf(_angle[j], float(pose.get(j, 0.0)), k)
+		_angle[j] = lerpf(_angle[j], _pose_angle(pose, j), k)
 		_bones[j].rotation.z = deg_to_rad(_angle[j] + _sec_angle.get(j, 0.0))
 	# The body's lean (metres at the head, forward positive) tips the lean bone forward.
 	if _lean_bone != "" and _bones.has(_lean_bone):
@@ -315,3 +349,10 @@ func _tick_kick(delta: float) -> void:
 	var acc := -_kick * KICK_STIFFNESS - _kick_vel * KICK_DAMPING
 	_kick_vel += acc * delta
 	_kick += _kick_vel * delta
+
+
+## The angle bone `j` takes from `pose`: its own channel, unless it follows another.
+func _pose_angle(pose: Dictionary, j: String) -> float:
+	if pose.has(j) and not _channel.has(j):
+		return float(pose[j])
+	return float(pose.get(_channel.get(j, j), 0.0)) * _channel_scale.get(j, 1.0)

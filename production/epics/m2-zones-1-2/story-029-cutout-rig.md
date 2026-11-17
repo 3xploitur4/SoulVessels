@@ -1,6 +1,6 @@
-# Story 029: Cut-out rig pilot — Caelan and the Echo Crawler move limb by limb
+# Story 029: Cut-out rigs — every Vessel and enemy moves limb by limb
 
-> **Epic**: M2 — Zones 1–2 · **Status**: Done, pilot (2026-11-17) · **Layer**: Presentation · **Type**: Visual/Feel · **Estimate**: M
+> **Epic**: M2 — Zones 1–2 · **Status**: Done (2026-11-17) · **Layer**: Presentation · **Type**: Visual/Feel · **Estimate**: M
 
 ## Context
 
@@ -19,6 +19,7 @@ the rest of the cast is cut.
 - [x] Drop-in: `SpriteBody.create` returns the rig when one exists; flash, dissolve, stealth, afterimages, dust and the tell glow still work. Characters without a rig keep the whole painting.
 - [x] Facing left keeps the part order (sword in front of the body).
 - [x] Seen in the running game; screenshots retained.
+- [x] After two tweak passes on the pilot (user asked), the other 11 figures are cut and rigged: shared clips with per-rig aliases, own clips where a body differs (staff caster, mirrored Warden, sphere, serpent).
 
 ## Files
 
@@ -31,7 +32,6 @@ the rest of the cast is cut.
 
 ## Completion
 
-Evidence: `production/qa/evidence/story-029-cutout-rig/`. Waiting on the user's verdict before
-the other Vessels and enemies are cut. Known limits: the painting is a 3/4 front view, so a limb
+Evidence: `production/qa/evidence/story-029-cutout-rig/`. Known limits: the painting is a 3/4 front view, so a limb
 turned far from its painted angle shows its flat cut edge; hidden areas are painted in as smooth
 shadow, not detail.

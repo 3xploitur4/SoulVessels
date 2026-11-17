@@ -1,0 +1,188 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for subterranean_watcher, cut from assets/art/sprites/subterranean_watcher.png. Same format as caelan.json. A sphere: it rolls as it moves and its eye turns against the roll.",
+ "source": "res://assets/art/sprites/subterranean_watcher.png",
+ "height_m": 1.25,
+ "ground_px": 104,
+ "rest_to": "shell",
+ "clips": {
+  "idle": {
+   "loop": true,
+   "length_s": 3.0,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.5,
+     {
+      "shell": 6,
+      "eye": -10,
+      "squash": -0.02
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "run": {
+   "loop": true,
+   "length_s": 0.8,
+   "keys": [
+    [
+     0,
+     {
+      "shell": 0,
+      "eye": 0
+     }
+    ],
+    [
+     0.5,
+     {
+      "shell": -12,
+      "eye": 14,
+      "squash": 0.02
+     }
+    ],
+    [
+     1,
+     {
+      "shell": 0,
+      "eye": 0
+     }
+    ]
+   ]
+  },
+  "telegraph": {
+   "keys": [
+    [
+     0,
+     {
+      "shell": 10,
+      "eye": -6,
+      "squash": 0.1
+     }
+    ]
+   ]
+  },
+  "attack": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "shell": -6,
+      "eye": 4,
+      "squash": -0.08
+     }
+    ]
+   ]
+  },
+  "hurt": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "shell": 25,
+      "eye": -20,
+      "squash": 0.06
+     }
+    ]
+   ]
+  },
+  "staggered": {
+   "keys": [
+    [
+     0,
+     {
+      "shell": -30,
+      "eye": 25,
+      "squash": 0.08
+     }
+    ]
+   ]
+  },
+  "knockdown": {
+   "keys": [
+    [
+     0,
+     {
+      "shell": 60,
+      "eye": -40
+     }
+    ]
+   ]
+  }
+ },
+ "kicks": {
+  "land": 0.15,
+  "turn": 0.08
+ },
+ "parts": [
+  {
+   "id": "shell",
+   "parent": "",
+   "pivot": [
+    103,
+    104
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     0,
+     0
+    ],
+    [
+     206,
+     0
+    ],
+    [
+     206,
+     208
+    ],
+    [
+     0,
+     208
+    ]
+   ]
+  },
+  {
+   "id": "eye",
+   "parent": "shell",
+   "pivot": [
+    130,
+    105
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     80,
+     48
+    ],
+    [
+     180,
+     48
+    ],
+    [
+     188,
+     105
+    ],
+    [
+     180,
+     162
+    ],
+    [
+     80,
+     162
+    ],
+    [
+     72,
+     105
+    ]
+   ]
+  }
+ ]
+}
