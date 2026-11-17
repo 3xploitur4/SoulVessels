@@ -208,10 +208,12 @@ def b12(r):
     r.fill(1, 4, 2, 5, "#")
     r.put(12, 2, "*")
     r.put(18, 2, "*")
+    r.fill(19, 19, 2, 4, "K")
+    r.put(20, 2, "*")
     r.put(10, 8, "Y")
 rooms["z3_12"] = room("ROOM_Z3_12", [42, 0, 1, 1], 22, 12, b12,
     {"0": {"to": "z3_10", "exit": "2"}},
-    pickups=["echoing_relic", "faded_parchment"],
+    pickups=["echoing_relic", "faded_parchment", "polished_basalt_core"],
     story=[{"kind": "line", "key": "SERIS_STUDY", "speaker": "VESSEL_SERIS", "x": [8, 16], "needs": "vessel",
             "color": "#9fd8ff"}])
 

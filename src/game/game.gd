@@ -88,6 +88,7 @@ func _ready() -> void:
 	register_feature(_build_mushrooms)
 	register_feature(_build_gates)
 	register_feature(func(m: RoomManager, r: RoomData) -> void: RunePuzzle.build_for(m, r, state))
+	register_feature(func(m: RoomManager, r: RoomData) -> void: MasonryWall.build_for(m, r, state))
 	register_feature(_build_story)
 	rooms.fell_out.connect(_on_fell_out)
 	rooms.exit_blocked.connect(_on_exit_blocked)

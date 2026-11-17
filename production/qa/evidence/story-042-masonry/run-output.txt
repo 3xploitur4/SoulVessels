@@ -1,0 +1,12 @@
+PASS  a sword does not break masonry                 
+PASS  z1_14: Crushing Blow breaks the wall           
+PASS  z1_14: the standard_soul_shard behind it is taken 0 -> 1
+PASS  z1_06: Crushing Blow breaks the wall           
+PASS  z1_06: the polished_basalt_core behind it is taken 0 -> 1
+PASS  z2_05: Crushing Blow breaks the wall           
+PASS  z2_05: the greater_soul_shard behind it is taken 0 -> 1
+PASS  z2_14: Crushing Blow breaks the wall           
+PASS  z2_14: the echoing_relic behind it is taken    0 -> 1
+PASS  z3_12: Crushing Blow breaks the wall           
+PASS  z3_12: the polished_basalt_core behind it is taken 0 -> 2
+SUMMARY: 0 failed
