@@ -85,6 +85,7 @@ func enter_data(next: RoomData, exit: String = "", at: Vector2 = Vector2.INF) ->
 		player.fx_parent = transient_root
 		player.set_room_platforms(builder.oneway_bodies)
 	_spawn_enemies()
+	_build_water()
 	for build: Callable in feature_builders:
 		build.call(self, data)
 	_place_player(exit, at)
@@ -275,3 +276,25 @@ func _on_enemy_died(enemy: Node) -> void:
 		GameState.add_unique(state.killed_elites, e.spawn_id)
 	else:
 		GameState.add_unique(state.killed_commons, e.spawn_id)
+
+
+# --- Water (story 031) -----------------------------------------------------------------------
+
+## The room's Water node whose id is water_id, or null.
+func water(water_id: String) -> Water:
+	if features_root == null:
+		return null
+	for n in features_root.get_children():
+		if n is Water and (n as Water).id == water_id:
+			return n
+	return null
+
+
+func _build_water() -> void:
+	for w: Dictionary in data.water:
+		var xs: Array = w.get("x", [0, 1])
+		var node := Water.new()
+		node.name = "Water_%s" % str(w.get("id", "pool"))
+		node.setup(str(w.get("id", "pool")), Vector2(float(xs[0]), float(xs[1])), float(w.get("floor", 0.0)),
+			float(w.get("level", 1.0)))
+		features_root.add_child(node)

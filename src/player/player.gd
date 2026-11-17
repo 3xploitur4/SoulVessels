@@ -112,6 +112,9 @@ var _wall_coyote_left: float = 0.0
 var _wall_lock_left: float = 0.0
 var _wall_sliding: bool = false
 var _trav: Dictionary = {}
+var _water_cfg: Dictionary = {}
+## Metres under the surface of the water the player stands in (story 031); 0 on dry land.
+var water_depth: float = 0.0
 ## The Calcified Husk root-snare (story 022): while active the body cannot move, jump or dodge.
 var snare: RootSnare
 
@@ -139,6 +142,8 @@ func _ready() -> void:
 		fx_parent = get_parent()
 	_move = Balance.combat("movement")
 	_trav = Balance.combat("traversal")
+	var wc: Variant = Balance.combat("water")
+	_water_cfg = wc if wc is Dictionary else {}
 	var snare_cfg: Variant = Balance.combat("root_snare")
 	snare = RootSnare.from_data(snare_cfg if snare_cfg is Dictionary else {})
 	gauge = SoulGauge.from_balance()
@@ -316,6 +321,25 @@ func begin_block() -> void:
 func end_block() -> void:
 	if action != null and action.id == "block":
 		stop_action()
+
+
+## True while deep enough in water to swim (slower, strokes instead of jumps, no roll).
+func is_swimming() -> bool:
+	return water_depth >= float(_water_cfg.get("swim_depth_m", 0.5))
+
+
+## Read the depth of whatever water the player is in, and splash on a fast entry.
+func _update_water() -> void:
+	var was := water_depth
+	water_depth = 0.0
+	if not is_inside_tree():
+		return
+	var feet := Vector2(global_position.x, global_position.y)
+	for n in get_tree().get_nodes_in_group(Water.GROUP):
+		water_depth = maxf(water_depth, (n as Water).depth_at(feet))
+	if was <= 0.0 and water_depth > 0.0 and velocity.y < -3.0:
+		Sfx.play("splash")
+		GameEvents.ultimate_fx_requested.emit("splash", Vector3(global_position.x, global_position.y + water_depth, 0.0), 1.2)
 
 
 ## Raise Seris's Aether Shield for `seconds` with `radius` metres of reach.
@@ -600,6 +624,7 @@ func snapshot() -> Dictionary:
 		"rooted": snare.is_active(),
 		"shield": snappedf(aether_shield_left, 0.01),
 		"snare_taps_left": snare.taps_left(),
+		"water_depth": snappedf(water_depth, 0.01),
 	}
 
 
@@ -615,6 +640,7 @@ func _physics_process(delta: float) -> void:
 	stealth_left = maxf(stealth_left - delta, 0.0)
 	damage_reduction_left = maxf(damage_reduction_left - delta, 0.0)
 	_tick_aether_shield(delta)
+	_update_water()
 	if health.is_dead():
 		_dead_tick(delta)
 		return
@@ -701,6 +727,9 @@ func _start_primary() -> void:
 
 func _start_dodge() -> void:
 	var kit := loadout.active().kit
+	# No roll or flip under water; a blink (Rift Step) still works.
+	if is_swimming() and str(kit.data.get("dodge", {}).get("kind", "roll")) != "blink":
+		return
 	if _move_axis.x != 0.0:
 		set_facing(int(signf(_move_axis.x)))
 	var a: PlayerAction
@@ -744,6 +773,8 @@ func _run_action(delta: float) -> void:
 
 func _free_move(delta: float) -> void:
 	var speed := stat("move_speed")
+	if is_swimming():
+		speed *= float(_water_cfg.get("move_mult", 0.6))
 	var target_vx := _move_axis.x * speed
 	var accel := float(_move.get("ground_accel", 60.0)) if absf(target_vx) > 0.01 else float(_move.get("ground_decel", 80.0))
 	if not is_on_floor():
@@ -761,6 +792,13 @@ func _free_move(delta: float) -> void:
 		_drop_left = DROP_THROUGH_S
 		_jump_buffer_left = 0.0
 		_update_platforms(0.0)
+	elif _jump_buffer_left > 0.0 and is_swimming() and not is_on_floor():
+		# A stroke under water; near the surface, a jump out.
+		var near_top := water_depth <= float(_water_cfg.get("float_depth", 1.2)) + 0.3
+		var jump_out := float(_move.get("jump_velocity", 11.5)) * float(_water_cfg.get("surface_jump_mult", 0.95))
+		velocity.y = jump_out if near_top else float(_water_cfg.get("stroke_mps", 5.0))
+		_jump_buffer_left = 0.0
+		Sfx.play("jump")
 	elif _jump_buffer_left > 0.0 and (is_on_floor() or _coyote_left > 0.0):
 		velocity.y = float(_move.get("jump_velocity", 11.5))
 		_jump_buffer_left = 0.0
@@ -883,7 +921,12 @@ func _standing_on_platform() -> bool:
 
 
 func _apply_gravity(delta: float) -> void:
-	if is_on_floor() and velocity.y <= 0.0:
+	# In water deeper than the float depth, buoyancy lifts her even off the bottom.
+	var floating := water_depth > float(_water_cfg.get("float_depth", 1.2))
+	if is_on_floor() and velocity.y <= 0.0 and not floating:
+		return
+	if water_depth > 0.05 and (action == null or is_nan(action.velocity_y)):
+		velocity.y = Water.swim_vy(velocity.y, water_depth, delta, float(_move.get("gravity", 30.0)), _water_cfg)
 		return
 	var scale := action.gravity_scale if action != null else 1.0
 	if action != null and not is_nan(action.velocity_y):

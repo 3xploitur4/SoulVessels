@@ -112,7 +112,7 @@ func _on_ultimate_fx(kind: String, where: Vector3, size: float) -> void:
 			_next_ring = (_next_ring + 1) % RINGS
 			r.global_position = where + Vector3(0.0, 0.9, 0.0)
 			r.visible = true
-		"slash", "meteor":
+		"slash", "meteor", "splash":
 			_on_hit_fx(where + Vector3(0.0, 0.9, 0.4), 0.0, true, false)
 
 

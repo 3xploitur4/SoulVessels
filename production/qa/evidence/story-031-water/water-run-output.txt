@@ -1,0 +1,8 @@
+PASS  a pool is poured                               {'id': 'pool', 'level': 3.9, 'patches': 0}
+PASS  Seris swims in the pool                        depth 1.18 y 2.72
+PASS  she floats up off the bottom                   y 2.72 (floor 2.00)
+PASS  Frost Binding freezes the surface              {'id': 'pool', 'level': 3.9, 'patches': 1}
+PASS  Seris stands on the ice                        y 3.90 level 3.90 on_floor True
+PASS  the water rose 1.5 m in 2 s                    {'id': 'pool', 'level': 5.4, 'patches': 1}
+PASS  the ice melts after 8 s                        {'id': 'pool', 'level': 5.4, 'patches': 0}
+SUMMARY: 0 failed

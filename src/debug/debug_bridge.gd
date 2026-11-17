@@ -145,6 +145,23 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 		"kill_player":
 			player.kill()
 			return {"dead": not player.is_alive()}
+		"water":
+			# Pour a pool into the current room, or move an existing one's surface (story 031).
+			var rm: RoomManager = sandbox.get("rooms")
+			if rm == null:
+				return {"error": "no rooms"}
+			var wid := str(args.get("id", "debug_pool"))
+			var w := rm.water(wid)
+			if w == null:
+				w = Water.new()
+				w.name = "Water_" + wid
+				var xs: Array = args.get("x", [4, 12])
+				w.setup(wid, Vector2(float(xs[0]), float(xs[1])), float(args.get("floor", 0.0)),
+					float(args.get("level", 1.0)))
+				rm.features_root.add_child(w)
+			elif args.has("to"):
+				w.rise_to(float(args.get("to")), float(args.get("seconds", 0.0)))
+			return {"id": wid, "level": w.level, "patches": w.patches.size()}
 		"root_player":
 			player.snare.apply()
 			return {"rooted": player.snare.is_active()}

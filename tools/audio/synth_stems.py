@@ -453,6 +453,11 @@ def sfx_bank():
     s["frost"] = fr
     s["shield"] = additive(440.0, 0.45, [(1, 1.0), (1.5, 0.7), (2, 0.5), (3, 0.25)], attack=0.03, release=0.3,
                            vibrato=0.01, vib_rate=7.0)
+    sp = lowpass(noise(0.45, 7.0), 0.25)
+    blip = sweep(420, 160, 0.45, 9.0)
+    for i in range(len(sp)):
+        sp[i] = sp[i] * 0.8 + blip[i] * 0.3
+    s["splash"] = sp
     return s
 
 

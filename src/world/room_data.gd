@@ -66,6 +66,8 @@ var mushrooms: Array[Vector2] = []
 var rift_scars: Array[Vector2] = []
 ## [{"pos": Vector3, "warm": bool}].
 var lights: Array[Dictionary] = []
+## Water bodies (story 031): [{"id", "x": [left, right], "level": surface y, "floor": bottom y}].
+var water: Array[Dictionary] = []
 ## Raw JSON for features that read their own keys (altar, ward, arena, tutorials, lines).
 var raw: Dictionary = {}
 
@@ -169,6 +171,11 @@ func _read_cells(cells: Array[PackedStringArray], errors: Array[String]) -> void
 							lights.append({"pos": Vector3(pos.x, pos.y + 0.5, -1.5), "warm": c == "T"})
 						else:
 							errors.append("%s: more than 2 lights" % id)
+	for w: Variant in raw.get("water", []):
+		if w is Dictionary and (w as Dictionary).has("x") and (w as Dictionary).has("level"):
+			water.append(w)
+		else:
+			errors.append("%s: water needs x and level" % id)
 	if pickup_index < item_list.size():
 		errors.append("%s: %d pickups listed, %d placed" % [id, item_list.size(), pickup_index])
 	var exit_defs: Dictionary = raw.get("exits", {})

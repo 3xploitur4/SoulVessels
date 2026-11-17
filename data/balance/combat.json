@@ -101,5 +101,21 @@
     "icon_height_m": 2.4,
     "flash_duration_s": 0.15,
     "sfx_max_s": 0.15
+    },
+  "water": {
+    "_note": "Story 031, decision D-040. move_mult: run speed while swimming. stroke_mps: upward kick of a jump pressed under water. surface_jump_mult: jump out from the surface. gravity_mult, buoyancy (m/s2 upward below float_depth), drag, max_sink_mps, max_rise_mps: the swim_vy rule. swim_depth_m: depth at which the body counts as swimming. freeze_s: life of a Frost-frozen patch; freeze_reach_m: how far below a Frost field the surface may be and still freeze.",
+    "move_mult": 0.6,
+    "stroke_mps": 5.0,
+    "surface_jump_mult": 0.95,
+    "gravity_mult": 0.35,
+    "buoyancy": 16.0,
+    "float_depth": 1.2,
+    "drag": 2.0,
+    "max_sink_mps": 3.0,
+    "max_rise_mps": 4.0,
+    "swim_depth_m": 0.5,
+    "freeze_s": 8.0,
+    "freeze_reach_m": 2.0,
+    "patch_thickness_m": 0.4
   }
 }
