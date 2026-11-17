@@ -1,0 +1,2 @@
+start: z1_03
+end: room z1_03

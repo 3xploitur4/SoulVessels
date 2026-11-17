@@ -62,7 +62,8 @@ var _puff_left: float = 0.0
 static func create(id: String) -> SpriteBody:
 	if not SpriteArt.has(id):
 		return null
-	var b := SpriteBody.new()
+	# A cut-out rig (story 029) when the painting has been cut into parts, else the whole painting.
+	var b: SpriteBody = RigBody.new() if RigBody.has_rig(id) else SpriteBody.new()
 	b.name = "Sprite_%s" % id
 	b.spec = SpriteArt.spec(id)
 	b._build(id)

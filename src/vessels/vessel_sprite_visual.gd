@@ -150,9 +150,31 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 		if not _struck:
 			_struck = true
 			b.flash(Color(0.5, 0.95, 1.0), 0.6)
+	if b is RigBody:
+		(b as RigBody).play(_clip_for(state), progress)
 	_guard_mat.albedo_color.a = lerpf(_guard_mat.albedo_color.a, 0.75 * guard, minf(delta * 20.0, 1.0))
 	_guard.visible = _guard_mat.albedo_color.a > 0.02
 	b.tick(delta)
+
+
+## The rig clip (story 029) for a player state.
+static func _clip_for(state: String) -> String:
+	if state.begins_with("primary"):
+		return "attack_%d" % (int(state.get_slice("_", 1)) % 4)
+	match state:
+		"run", "jump", "fall", "wall_slide", "block", "dodge", "hurt", "rooted", "dead":
+			return state
+		"sync_guard":
+			return "block"
+		"guard_break":
+			return "hurt"
+		"air_dash", "shadowstep":
+			return "dash"
+		"counterstrike", "oathbreaker_lunge", "severing_arrival", "shadow_counter", "kings_judgment", "phantom_blades":
+			return "lunge"
+		"final_stand", "ultimate", "dance_of_shadows":
+			return "cast"
+	return "idle"
 
 
 ## The weapon arc for combo hit `idx`: swings alternate down and up; the last is the widest.

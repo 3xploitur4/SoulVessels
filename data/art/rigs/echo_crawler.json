@@ -1,0 +1,488 @@
+{
+ "_source": "Story 029, decision D-034. Cut-out rig parts for the Echo Crawler, cut from its concept painting (assets/art/sprites/echo_crawler.png, 422x336). Same format as caelan.json.",
+ "source": "res://assets/art/sprites/echo_crawler.png",
+ "height_m": 1.1,
+ "ground_px": 330,
+ "rest_to": "abdomen",
+ "parts": [
+  {
+   "id": "abdomen",
+   "parent": "",
+   "pivot": [
+    205,
+    170
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     55,
+     0
+    ],
+    [
+     275,
+     0
+    ],
+    [
+     300,
+     130
+    ],
+    [
+     262,
+     200
+    ],
+    [
+     200,
+     215
+    ],
+    [
+     80,
+     200
+    ],
+    [
+     50,
+     120
+    ]
+   ]
+  },
+  {
+   "id": "leg_g",
+   "parent": "abdomen",
+   "pivot": [
+    362,
+    122
+   ],
+   "joint_r": 12,
+   "poly": [
+    [
+     348,
+     108
+    ],
+    [
+     380,
+     104
+    ],
+    [
+     420,
+     198
+    ],
+    [
+     424,
+     300
+    ],
+    [
+     398,
+     302
+    ],
+    [
+     390,
+     214
+    ],
+    [
+     350,
+     150
+    ]
+   ]
+  },
+  {
+   "id": "leg_f",
+   "parent": "abdomen",
+   "pivot": [
+    338,
+    132
+   ],
+   "joint_r": 12,
+   "poly": [
+    [
+     322,
+     122
+    ],
+    [
+     358,
+     126
+    ],
+    [
+     372,
+     212
+    ],
+    [
+     358,
+     280
+    ],
+    [
+     336,
+     282
+    ],
+    [
+     332,
+     214
+    ],
+    [
+     314,
+     158
+    ]
+   ]
+  },
+  {
+   "id": "leg_a",
+   "parent": "abdomen",
+   "pivot": [
+    82,
+    126
+   ],
+   "joint_r": 12,
+   "poly": [
+    [
+     58,
+     112
+    ],
+    [
+     100,
+     124
+    ],
+    [
+     58,
+     202
+    ],
+    [
+     30,
+     252
+    ],
+    [
+     20,
+     290
+    ],
+    [
+     0,
+     284
+    ],
+    [
+     2,
+     228
+    ],
+    [
+     24,
+     180
+    ]
+   ]
+  },
+  {
+   "id": "leg_b",
+   "parent": "abdomen",
+   "pivot": [
+    114,
+    134
+   ],
+   "joint_r": 12,
+   "poly": [
+    [
+     96,
+     122
+    ],
+    [
+     130,
+     134
+    ],
+    [
+     98,
+     222
+    ],
+    [
+     82,
+     252
+    ],
+    [
+     76,
+     312
+    ],
+    [
+     52,
+     312
+    ],
+    [
+     48,
+     250
+    ],
+    [
+     58,
+     202
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "parent": "abdomen",
+   "pivot": [
+    232,
+    176
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     202,
+     132
+    ],
+    [
+     302,
+     128
+    ],
+    [
+     308,
+     200
+    ],
+    [
+     282,
+     256
+    ],
+    [
+     226,
+     256
+    ],
+    [
+     202,
+     212
+    ]
+   ]
+  },
+  {
+   "id": "leg_e",
+   "parent": "head",
+   "pivot": [
+    306,
+    202
+   ],
+   "joint_r": 8,
+   "poly": [
+    [
+     292,
+     192
+    ],
+    [
+     326,
+     192
+    ],
+    [
+     324,
+     258
+    ],
+    [
+     296,
+     258
+    ]
+   ]
+  },
+  {
+   "id": "leg_c",
+   "parent": "abdomen",
+   "pivot": [
+    166,
+    138
+   ],
+   "joint_r": 12,
+   "poly": [
+    [
+     148,
+     124
+    ],
+    [
+     184,
+     136
+    ],
+    [
+     174,
+     240
+    ],
+    [
+     168,
+     300
+    ],
+    [
+     164,
+     336
+    ],
+    [
+     136,
+     336
+    ],
+    [
+     132,
+     250
+    ],
+    [
+     138,
+     200
+    ]
+   ]
+  }
+ ],
+ "_clips": "Same format as caelan.json. Legs a-c are the rear legs (left of the painting), e-g the front ones.",
+ "lean_bone": "abdomen",
+ "lean_scale": 0.3,
+ "clips": {
+  "idle": {
+   "loop": true,
+   "length_s": 1.6,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.5,
+     {
+      "abdomen": 1.5,
+      "head": -2,
+      "leg_a": 2,
+      "leg_g": -2,
+      "leg_f": 1,
+      "root_y": 0.01
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "run": {
+   "loop": true,
+   "length_s": 0.34,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "leg_a": 14,
+      "leg_c": 14,
+      "leg_f": 14,
+      "leg_b": -14,
+      "leg_e": -10,
+      "leg_g": -14,
+      "abdomen": -2,
+      "head": 2
+     }
+    ],
+    [
+     0.25,
+     {
+      "root_y": 0.025
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_a": -14,
+      "leg_c": -14,
+      "leg_f": -14,
+      "leg_b": 14,
+      "leg_e": 10,
+      "leg_g": 14,
+      "abdomen": 2,
+      "head": -2
+     }
+    ],
+    [
+     0.75,
+     {
+      "root_y": 0.025
+     }
+    ],
+    [
+     1,
+     {
+      "leg_a": 14,
+      "leg_c": 14,
+      "leg_f": 14,
+      "leg_b": -14,
+      "leg_e": -10,
+      "leg_g": -14,
+      "abdomen": -2,
+      "head": 2
+     }
+    ]
+   ]
+  },
+  "telegraph": {
+   "keys": [
+    [
+     0,
+     {
+      "abdomen": 8,
+      "head": 14,
+      "leg_f": 22,
+      "leg_g": 28,
+      "leg_e": 15,
+      "leg_a": -10,
+      "leg_b": -8,
+      "leg_c": -6,
+      "root_y": 0.04
+     }
+    ]
+   ]
+  },
+  "attack": {
+   "keys": [
+    [
+     0,
+     {
+      "abdomen": -6,
+      "head": -12,
+      "leg_f": -25,
+      "leg_g": -32,
+      "leg_e": -22,
+      "leg_a": 15,
+      "leg_b": 12,
+      "leg_c": 10
+     }
+    ]
+   ]
+  },
+  "hurt": {
+   "keys": [
+    [
+     0,
+     {
+      "abdomen": 10,
+      "head": 16,
+      "leg_f": -8,
+      "leg_g": -8,
+      "leg_a": -8,
+      "leg_b": -8
+     }
+    ]
+   ]
+  },
+  "staggered": {
+   "keys": [
+    [
+     0,
+     {
+      "abdomen": 7,
+      "head": 12,
+      "leg_a": -14,
+      "leg_b": 10,
+      "leg_c": -12,
+      "leg_f": 12,
+      "leg_g": -10,
+      "leg_e": 8
+     }
+    ]
+   ]
+  },
+  "knockdown": {
+   "keys": [
+    [
+     0,
+     {
+      "leg_a": 30,
+      "leg_b": -25,
+      "leg_c": 35,
+      "leg_f": -30,
+      "leg_g": 28,
+      "leg_e": -20,
+      "head": 10
+     }
+    ]
+   ]
+  }
+ }
+}

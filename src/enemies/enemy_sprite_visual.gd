@@ -86,6 +86,13 @@ func animate(state: String, facing: int, speed: float, delta: float) -> void:
 	if shield != null and shield.rotation.z < -0.4:
 		b.lean = -0.18 * _h
 		b.crouch = 0.4
+	if b is RigBody:
+		var clip := state
+		if state == "approach":
+			clip = "run" if speed > 0.2 else "idle"
+		elif state == "recover":
+			clip = "idle"
+		(b as RigBody).play(clip)
 	b.tick(delta)
 
 

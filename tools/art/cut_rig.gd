@@ -1,0 +1,288 @@
+extends SceneTree
+## Cut a painted sprite into cut-out rig parts (story 029, decision D-034).
+##
+##   godot --headless --path . -s tools/art/cut_rig.gd -- caelan [echo_crawler ...]
+##
+## Reads `data/art/rigs/<id>.json`: the source sprite, its world height, the ground line, and
+## the parts in back-to-front draw order, each with an outline polygon (sprite pixels), a pivot,
+## a parent and an optional joint radius (an empty polygon makes a bone with no picture). Then, for every part:
+##   1. Ownership: each opaque pixel belongs to the front-most part whose polygon holds it;
+##      pixels no polygon holds go to `rest_to`.
+##   2. Completion: pixels inside the part's polygon that a part in front of it owns are the
+##      hidden area behind that front part. They are painted in from the part's own pixels with a
+##      pull-push fill, so a lifted arm reveals chest, not a hole.
+##   3. Joint overlap: pixels within `joint_r` of the pivot are added from the source too, so a
+##      rotating child always overlaps its parent and no seam opens.
+## Writes `assets/art/rigs/<id>/<part>.png` (cropped) and `assets/art/rigs/<id>/rig.json`, plus
+## two checks in `builds/art/`: an overlay that colours each part's pixels, and the reassembled
+## rig next to the source with the share of pixels that differ.
+## The source sprite is never modified.
+
+const MARGIN := 3
+## Fill colours are darkened by this much, so painted-in areas read as "behind".
+const FILL_SHADE := 0.82
+
+var _w: int
+var _h: int
+
+
+func _init() -> void:
+	var ids := OS.get_cmdline_user_args()
+	for id in ids:
+		_cut(id)
+	quit()
+
+
+func _cut(id: String) -> void:
+	var cfg: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/rigs/%s.json" % id))
+	var src := Image.load_from_file(ProjectSettings.globalize_path(str(cfg["source"])))
+	src.convert(Image.FORMAT_RGBA8)
+	_w = src.get_width()
+	_h = src.get_height()
+	var parts: Array = cfg["parts"]
+	var n := parts.size()
+	var ids: Array[String] = []
+	var polys: Array[PackedVector2Array] = []
+	for p: Dictionary in parts:
+		ids.append(str(p["id"]))
+		var poly := PackedVector2Array()
+		for pt: Array in p["poly"]:
+			poly.append(Vector2(float(pt[0]), float(pt[1])))
+		polys.append(poly)
+	var rest := ids.find(str(cfg.get("rest_to", ids[0])))
+	# 1. Ownership: front-most polygon wins (draw order is back to front).
+	var owner := PackedInt32Array()
+	owner.resize(_w * _h)
+	var inside: Array[PackedByteArray] = []
+	for i in range(n):
+		inside.append(_grow(_rasterise(polys[i]), int((parts[i] as Dictionary).get("grow_px", 0))))
+	for y in range(_h):
+		for x in range(_w):
+			var k := y * _w + x
+			owner[k] = -1
+			if src.get_pixel(x, y).a < 0.05:
+				continue
+			var o := rest
+			for i in range(n - 1, -1, -1):
+				if inside[i][k] == 1:
+					o = i
+					break
+			owner[k] = o
+	var out_dir := "res://assets/art/rigs/%s" % id
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
+	var rig_parts: Array = []
+	var images: Array[Image] = []
+	var offsets: Array[Vector2i] = []
+	for i in range(n):
+		var p: Dictionary = parts[i]
+		var img := Image.create(_w, _h, false, Image.FORMAT_RGBA8)
+		img.fill(Color(0, 0, 0, 0))
+		var own := PackedByteArray()
+		own.resize(_w * _h)
+		var hole := PackedByteArray()
+		hole.resize(_w * _h)
+		for k in range(_w * _h):
+			if owner[k] == i:
+				own[k] = 1
+				img.set_pixel(k % _w, k / _w, src.get_pixel(k % _w, k / _w))
+			elif owner[k] > i and inside[i][k] == 1:
+				hole[k] = 1
+		# 2. Completion behind front parts.
+		_pull_push(img, own, hole)
+		# 3. Joint overlap around the pivot (from the source, unshaded).
+		var jr := float(p.get("joint_r", 0.0))
+		if jr > 0.0:
+			var pv := Vector2(float(p["pivot"][0]), float(p["pivot"][1]))
+			for y in range(maxi(0, int(pv.y - jr)), mini(_h, int(pv.y + jr) + 1)):
+				for x in range(maxi(0, int(pv.x - jr)), mini(_w, int(pv.x + jr) + 1)):
+					if Vector2(x, y).distance_to(pv) <= jr and src.get_pixel(x, y).a > 0.05 and img.get_pixel(x, y).a < 0.5:
+						img.set_pixel(x, y, src.get_pixel(x, y))
+		var used := img.get_used_rect()
+		if polys[i].is_empty():
+			# A bone with no picture (e.g. the pelvis): it only carries children.
+			rig_parts.append({"id": ids[i], "file": "", "parent": str(p.get("parent", "")), "pivot": p["pivot"],
+				"offset": [0, 0], "size": [0, 0]})
+			continue
+		if used.size.x <= 0:
+			push_warning("cut_rig: %s/%s is empty" % [id, ids[i]])
+			used = Rect2i(0, 0, 1, 1)
+		used = used.grow(MARGIN).intersection(Rect2i(0, 0, _w, _h))
+		var crop := img.get_region(used)
+		crop.save_png(ProjectSettings.globalize_path("%s/%s.png" % [out_dir, ids[i]]))
+		images.append(crop)
+		offsets.append(used.position)
+		rig_parts.append({"id": ids[i], "file": "%s/%s.png" % [out_dir, ids[i]], "parent": str(p.get("parent", "")),
+			"pivot": p["pivot"], "offset": [used.position.x, used.position.y], "size": [used.size.x, used.size.y]})
+	var rig := {
+		"_source": "Generated by tools/art/cut_rig.gd from data/art/rigs/%s.json. Do not edit by hand." % id,
+		"id": id, "source": cfg["source"], "height_m": cfg["height_m"], "ground_px": cfg["ground_px"],
+		"image_size": [_w, _h], "parts": rig_parts,
+	}
+	var f := FileAccess.open("%s/rig.json" % out_dir, FileAccess.WRITE)
+	f.store_string(JSON.stringify(rig, "  ") + "\n")
+	f.close()
+	_checks(id, src, owner, ids, images, offsets)
+
+
+## Pixels inside `poly` (sprite pixels), as a byte mask.
+func _rasterise(poly: PackedVector2Array) -> PackedByteArray:
+	var m := PackedByteArray()
+	m.resize(_w * _h)
+	if poly.is_empty():
+		return m
+	var box := Rect2(poly[0], Vector2.ZERO)
+	for v in poly:
+		box = box.expand(v)
+	for y in range(maxi(0, int(box.position.y)), mini(_h, int(box.end.y) + 1)):
+		for x in range(maxi(0, int(box.position.x)), mini(_w, int(box.end.x) + 1)):
+			if Geometry2D.is_point_in_polygon(Vector2(x + 0.5, y + 0.5), poly):
+				m[y * _w + x] = 1
+	return m
+
+
+## Widen a mask by `px` pixels (square steps), so a thin part such as a blade also takes the soft
+## light edge the painter left just outside its outline.
+func _grow(m: PackedByteArray, px: int) -> PackedByteArray:
+	for _step in range(px):
+		var out := m.duplicate()
+		for y in range(1, _h - 1):
+			for x in range(1, _w - 1):
+				var k := y * _w + x
+				if m[k] == 0 and (m[k - 1] == 1 or m[k + 1] == 1 or m[k - _w] == 1 or m[k + _w] == 1):
+					out[k] = 1
+		m = out
+	return m
+
+
+## Fill `hole` pixels from `known` pixels: average down a pyramid of known colour, then pull
+## back up so every hole pixel gets a smooth blend of the nearest known colours.
+func _pull_push(img: Image, known: PackedByteArray, hole: PackedByteArray) -> void:
+	var any := false
+	for v in hole:
+		if v == 1:
+			any = true
+			break
+	if not any:
+		return
+	var levels: Array[Dictionary] = []
+	var w := _w
+	var h := _h
+	var col := PackedColorArray()
+	col.resize(w * h)
+	var wt := PackedFloat32Array()
+	wt.resize(w * h)
+	for k in range(w * h):
+		if known[k] == 1:
+			col[k] = img.get_pixel(k % w, k / w)
+			wt[k] = 1.0
+	levels.append({"w": w, "h": h, "c": col, "a": wt})
+	while w > 1 or h > 1:
+		var nw := maxi(1, (w + 1) / 2)
+		var nh := maxi(1, (h + 1) / 2)
+		var nc := PackedColorArray()
+		nc.resize(nw * nh)
+		var na := PackedFloat32Array()
+		na.resize(nw * nh)
+		for y in range(nh):
+			for x in range(nw):
+				var s := Color(0, 0, 0, 0)
+				var a := 0.0
+				for dy in range(2):
+					for dx in range(2):
+						var sx := mini(x * 2 + dx, w - 1)
+						var sy := mini(y * 2 + dy, h - 1)
+						var wa: float = wt[sy * w + sx]
+						s += col[sy * w + sx] * wa
+						a += wa
+				if a > 0.0:
+					nc[y * nw + x] = s / a
+				na[y * nw + x] = minf(a, 1.0)
+		w = nw
+		h = nh
+		col = nc
+		wt = na
+		levels.append({"w": w, "h": h, "c": col, "a": wt})
+	for li in range(levels.size() - 2, -1, -1):
+		var lv: Dictionary = levels[li]
+		var up: Dictionary = levels[li + 1]
+		var lw: int = lv["w"]
+		var lh: int = lv["h"]
+		var lc: PackedColorArray = lv["c"]
+		var la: PackedFloat32Array = lv["a"]
+		var uc: PackedColorArray = up["c"]
+		var uw: int = up["w"]
+		for y in range(lh):
+			for x in range(lw):
+				var k := y * lw + x
+				var cu := _bilinear(uc, uw, int(up["h"]), (x + 0.5) * 0.5 - 0.5, (y + 0.5) * 0.5 - 0.5)
+				lc[k] = lc[k] * la[k] + cu * (1.0 - la[k])
+		lv["c"] = lc
+	var full: PackedColorArray = levels[0]["c"]
+	for k in range(_w * _h):
+		if hole[k] == 1:
+			var c := full[k]
+			img.set_pixel(k % _w, k / _w, Color(c.r * FILL_SHADE, c.g * FILL_SHADE, c.b * FILL_SHADE, 1.0))
+
+
+## Bilinear sample of a colour grid (clamped at the edges), so the fill is smooth, not blocky.
+func _bilinear(c: PackedColorArray, w: int, h: int, fx: float, fy: float) -> Color:
+	fx = clampf(fx, 0.0, w - 1.0)
+	fy = clampf(fy, 0.0, h - 1.0)
+	var x0 := int(fx)
+	var y0 := int(fy)
+	var x1 := mini(x0 + 1, w - 1)
+	var y1 := mini(y0 + 1, h - 1)
+	var tx := fx - x0
+	var ty := fy - y0
+	var top := c[y0 * w + x0].lerp(c[y0 * w + x1], tx)
+	var bottom := c[y1 * w + x0].lerp(c[y1 * w + x1], tx)
+	return top.lerp(bottom, ty)
+
+
+## The overlay (each part in its own colour) and the reassembly check.
+func _checks(id: String, src: Image, owner: PackedInt32Array, ids: Array[String], images: Array[Image],
+		offsets: Array[Vector2i]) -> void:
+	var overlay := src.duplicate() as Image
+	var hues: Array[Color] = []
+	for i in range(ids.size()):
+		hues.append(Color.from_hsv(float(i) / float(ids.size()), 0.85, 1.0))
+	for k in range(_w * _h):
+		if owner[k] >= 0:
+			var c := src.get_pixel(k % _w, k / _w)
+			overlay.set_pixel(k % _w, k / _w, c.lerp(hues[owner[k]], 0.55))
+	var re := Image.create(_w, _h, false, Image.FORMAT_RGBA8)
+	re.fill(Color(0, 0, 0, 0))
+	for i in range(images.size()):
+		re.blend_rect(images[i], Rect2i(Vector2i.ZERO, images[i].get_size()), offsets[i])
+	var diff := 0
+	var total := 0
+	for y in range(_h):
+		for x in range(_w):
+			var a := src.get_pixel(x, y)
+			if a.a < 0.05:
+				continue
+			total += 1
+			var b := re.get_pixel(x, y)
+			if absf(a.r - b.r) + absf(a.g - b.g) + absf(a.b - b.b) > 0.08:
+				diff += 1
+	var sheet := Image.create(_w * 3, _h, false, Image.FORMAT_RGBA8)
+	sheet.fill(Color(0.85, 0.2, 0.75))
+	sheet.blend_rect(src, Rect2i(0, 0, _w, _h), Vector2i.ZERO)
+	sheet.blend_rect(overlay, Rect2i(0, 0, _w, _h), Vector2i(_w, 0))
+	sheet.blend_rect(re, Rect2i(0, 0, _w, _h), Vector2i(_w * 2, 0))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://builds/art"))
+	sheet.save_png(ProjectSettings.globalize_path("res://builds/art/rig_%s_check.png" % id))
+	# Every part alone, in a row, on a bright background.
+	var row_w := 0
+	var row_h := 0
+	for im in images:
+		row_w += im.get_width() + 10
+		row_h = maxi(row_h, im.get_height())
+	var row := Image.create(maxi(row_w, 1), maxi(row_h, 1), false, Image.FORMAT_RGBA8)
+	row.fill(Color(0.85, 0.2, 0.75))
+	var x0 := 0
+	for im in images:
+		row.blend_rect(im, Rect2i(Vector2i.ZERO, im.get_size()), Vector2i(x0, 0))
+		x0 += im.get_width() + 10
+	row.save_png(ProjectSettings.globalize_path("res://builds/art/rig_%s_parts.png" % id))
+	print("cut_rig: %s %d parts, reassembly differs on %.2f%% of pixels" % [id, ids.size(), 100.0 * diff / maxi(total, 1)])
