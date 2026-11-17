@@ -1,0 +1,24 @@
+PASS  the title offers save slots                      ['Slot0', 'Slot1', 'Slot2']
+PASS  a new game starts in room 1                      z1_01
+PASS  the move tutorial                                A / D to drift. You are only light now.
+PASS  the wisp possesses Caelan                        ['caelan']
+PASS  the altar menu opens                             ['Loadout', 'SoulCore', 'Upgrade', 'Reforge', 'Lore', 'Leave']
+PASS  resting sets the checkpoint                      {'room': 'z1_04', 'x': 12.7, 'y': 2.0}
+PASS  a Soul Core node is bought                       ['core_heart']
+PASS  a kill gives Soul Essence                        0 -> 12
+PASS  the kill drops loot                              {'crude_stone': 1}
+PASS  Caelan's block opens the shield ward             ['z1_08:ward']
+PASS  death leaves a Soul Echo with the Essence        {'essence': 12, 'room': 'z1_09', 'x': 8.0, 'y': 2.00019526481628}
+PASS  the player returns to the altar                  z1_04
+PASS  touching the echo returns the Essence            {}, essence 12
+PASS  Nyra is freed and joins                          ['caelan', 'nyra']
+PASS  Nyra Shadowsteps through the veil                x=19.5
+PASS  the gauntlet is cleared                          ['z2_13_gauntlet']
+PASS  continue keeps loadout                           ['caelan', 'nyra']
+PASS  continue keeps soul_core                         ['core_heart']
+PASS  continue keeps opened_gates                      ['z1_08:ward']
+PASS  continue keeps cleared_arenas                    ['z2_13_gauntlet']
+PASS  continue keeps unlocked_vessels                  ['caelan', 'nyra']
+PASS  continue keeps the story flags                   
+PASS  continue resumes where the player stood          z2_13
+SUMMARY: 0 failed

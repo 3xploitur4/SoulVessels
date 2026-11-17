@@ -85,6 +85,10 @@ func test_the_awakening_runs_to_the_chapter_end() -> void:
 	assert_true((game.get("saves") as SaveSystem).chapter_complete(), "Abyssal unlocks for new games")
 	var loaded := (game.get("saves") as SaveSystem).load_slot(0)
 	assert_eq(loaded.loadout, ["caelan", "darius", "seris"] as Array[String], "the real loadout is kept")
+	# Story 052: reaching the title any way (the pause menu, quitting) closes the screen too.
+	game.call("show_title")
+	await wait_frames(2)
+	assert_null(game.get("chapter_end"), "the chapter-end screen is gone at the title")
 
 
 func test_the_title_offers_abyssal_only_after_chapter_one() -> void:

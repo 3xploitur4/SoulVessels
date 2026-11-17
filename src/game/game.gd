@@ -165,6 +165,10 @@ func show_title() -> void:
 	if title != null:
 		title.queue_free()
 		title = null
+	# The chapter-end screen (story 047) goes too, however the title is reached.
+	if chapter_end != null:
+		chapter_end.queue_free()
+		chapter_end = null
 	close_pause()
 	_end_run()
 	prompts.clear()

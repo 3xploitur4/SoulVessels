@@ -2,7 +2,8 @@
 
 Installs builds/android/soulvessels-debug.apk with adb, starts it, forwards the playtest bridge
 port, checks the title screen, starts a new game and confirms room 1 is built, then a later
-room with the rigged Warden, then (story 040) Zone 3's throne hall with the Weeping Sovereign.
+room with the rigged Warden, then (story 040) Zone 3's throne hall with the Weeping Sovereign, then (story 052) both Zone 4
+boss arenas.
 --out <folder> writes the screenshots and log elsewhere (story 040 uses its own folder). Screenshots come from the device (adb screencap) into
 production/qa/evidence/story-026-m2/. Needs a booted emulator or a phone with USB debugging.
 
@@ -91,6 +92,16 @@ def main():
               str([e.get("id") for e in s.get("enemies", [])]))
         log.append("fps on device (throne hall): %s" % s.get("fps"))
         screencap("android-04-throne-hall.png")
+        # Story 052: both Zone 4 boss arenas.
+        for n, (room, boss) in enumerate((("z4_10", "guardian_below"), ("z4_13", "abyssal_leviathan"))):
+            st = b.call("goto", room=room, exit="0", instant=True)
+            time.sleep(12.0)
+            check(st.get("room") == room, "%s loads" % room, str(st.get("room")))
+            s = b.call("get_state")
+            check(any(e.get("id") == boss for e in s.get("enemies", [])), "%s is there" % boss,
+                  str([e.get("id") for e in s.get("enemies", [])]))
+            log.append("fps on device (%s): %s" % (room, s.get("fps")))
+            screencap("android-%02d-%s.png" % (5 + n, room))
         try:
             b.call("quit")
         except Exception:
