@@ -35,6 +35,14 @@ func num(key: String, fallback: float) -> float:
 ## Roll one enemy's drops. Updates `state.elite_pity` for elites.
 func roll(enemy: Dictionary, zone: String, rng: RandomNumberGenerator, state: GameState) -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
+	if str(enemy.get("tier", "")) == "boss":
+		# Bosses always drop their full list (addendum loot table).
+		var drops: Dictionary = enemy.get("drops", {})
+		for rarity: String in ["common", "rare", "epic", "legendary"]:
+			var table: Dictionary = drops.get(rarity, {})
+			for item: String in table.keys():
+				out.append({"item": item, "count": int(table[item]), "rarity": rarity})
+		return out
 	var tier := "elite" if str(enemy.get("tier", "common")) == "elite" else "common"
 	var chance := float((config.get("drop_chance", {}) as Dictionary).get(tier, 0.0))
 	if rng.randf() >= chance:

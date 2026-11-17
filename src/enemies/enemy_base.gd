@@ -124,7 +124,7 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	var echo: Dictionary = p.tags.get("echo", {})
 	var echo_on := _echo_applies(echo)
 	var crit := p.force_crit or (echo_on and bool(echo.get("guaranteed_crit", false))) or CombatMath.roll_crit(p.crit_chance, rng)
-	var riposte := p.is_primary and posture.is_staggered()
+	var riposte := p.is_primary and posture.is_staggered() and _riposte_allowed()
 	var element_mult := CombatMath.element_multiplier(p.element, data.get("weaknesses", []), data.get("resists", []),
 		Balance.combat_f("damage.weakness_multiplier"), Balance.combat_f("damage.resist_multiplier"))
 	var def := float(data.get("def", 0.0)) * status.def_multiplier() * buff_multiplier()
@@ -378,6 +378,12 @@ func _make_attack_hit(attack: Dictionary) -> ActionHit:
 	var reach := float(attack.get("range_m", 2.0))
 	return ActionHit.new(0.0, float(attack.get("active_s", 0.2)) + 0.01,
 		Vector2(reach * 0.5 + 0.2, 0.9), Vector2(reach, 1.6), _make_packet(attack))
+
+
+## May a primary hit on a staggered enemy be a Riposte (2x, ends the stagger)? Bosses say no:
+## their break is a timed vulnerable window instead.
+func _riposte_allowed() -> bool:
+	return true
 
 
 func _can_flinch() -> bool:

@@ -273,7 +273,7 @@ func _on_enemy_died(enemy: Node) -> void:
 	var e := enemy as EnemyBase
 	if e.spawn_id == "":
 		return
-	if e.tier == "elite":
+	if e.tier == "elite" or e.tier == "boss":
 		GameState.add_unique(state.killed_elites, e.spawn_id)
 	else:
 		GameState.add_unique(state.killed_commons, e.spawn_id)

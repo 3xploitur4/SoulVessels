@@ -203,6 +203,15 @@ static func next_boundary_time(now: float, tempo_bpm: float, beats_bar: int, bar
 	return maxf(k, 0.0) * span
 
 
+## Seconds from now to the first 4-bar boundary at least `after` seconds away; -1 with no music
+## (a boss phase change lands on it, story 034).
+func seconds_to_boundary(after: float) -> float:
+	if not is_playing():
+		return -1.0
+	var now := song_time()
+	return next_boundary_time(now + after, bpm, beats_per_bar, int(_num("boundary_bars", 4))) - now
+
+
 func _process(_delta: float) -> void:
 	# Real time, not game time: hitstop slows Engine.time_scale but the music keeps going.
 	var now := Time.get_ticks_usec()

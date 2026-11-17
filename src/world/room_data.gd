@@ -17,6 +17,7 @@ extends RefCounted
 ##   c  Echo Crawler   w  Subterranean Watcher   W  Branded Warden
 ##   h  Calcified Husk t  Fungal Stalker (hangs under the ceiling)
 ##   d  Drowned Courtier (place it in water)   p  Choir Prelate
+##   B  the room's boss (its id in the room's "boss" key)
 ##   M  bounce mushroom (stands on the cell below)
 ##   V  shadow veil curtain (solid except to a Shadowstep)
 ##   G  shield-ward bars   S  ward statue (beam origin)   O  receiver crystal
@@ -132,14 +133,18 @@ func _read_cells(cells: Array[PackedStringArray], errors: Array[String]) -> void
 			if c.is_valid_int():
 				var cell_rect := Rect2(float(col), float(rows - 1 - row), 1.0, 1.0)
 				exit_cells[c] = exit_cells[c].merge(cell_rect) if exit_cells.has(c) else cell_rect
-			elif ENEMY_CODES.has(c):
-				var eid: String = ENEMY_CODES[c]
+			elif ENEMY_CODES.has(c) or c == "B":
+				var eid: String = str(raw.get("boss", "")) if c == "B" else str(ENEMY_CODES[c])
+				if eid == "":
+					errors.append("%s: a B cell but no \"boss\" key" % id)
+					continue
+				var tier := str(Balance.enemy(eid).get("tier", "common"))
 				spawns.append({
 					"id": eid,
 					"pos": pos,
 					"ceiling_y": float(rows - row),
 					"spawn_id": "%s:%d" % [id, enemy_index],
-					"elite": c == "W",
+					"elite": tier == "elite" or tier == "boss",
 				})
 				enemy_index += 1
 			elif c == "*":

@@ -1,0 +1,8 @@
+PASS  she is up, phase 1                             {'attack': 'falling_tears', 'hp': 4500.0, 'phase': 0, 'state': 'recover', 'transition': False}
+PASS  she attacks in phase 1                         ['grief_wave', 'veil_sweep']
+PASS  below 60 %: phase 2 begins                     {'attack': 'veil_sweep', 'hp': 2581.06557377049, 'phase': 1, 'state': 'recover', 'transition': True}
+PASS  the water rose 1.5 m                           3.75
+PASS  below 25 %: phase 3                            {'attack': 'veil_sweep', 'hp': 1006.06557377049, 'phase': 2, 'state': 'recover', 'transition': True}
+PASS  phase 3 uses Ember attacks                     {'attack': 'ember_sweep', 'hp': 1006.06557377049, 'phase': 2, 'state': 'telegraph', 'transition': False}
+PASS  she falls                                      []
+SUMMARY: 0 failed

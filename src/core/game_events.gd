@@ -34,3 +34,9 @@ signal stealth_changed(hidden: bool)
 signal hit_fx_requested(where: Vector3, amount: float, crit: bool, blocked: bool)
 ## Seris's Frost Binding landed on `rect` (world X/Y) for `seconds`: water under it freezes (story 030/031).
 signal frost_field_cast(rect: Rect2, seconds: float)
+## A boss fight began (story 034): the HUD shows its bars, the music director its track.
+signal boss_started(boss: Node)
+## A boss moved to `phase` (0-based); the music moves to the next clip.
+signal boss_phase_changed(boss: Node, phase: int)
+## A boss fell.
+signal boss_defeated(boss: Node)

@@ -179,6 +179,21 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 				return {"error": "no rune puzzle here"}
 			return {"lit": pz.sequence.lit_count(), "size": pz.sequence.size(), "solved": pz.sequence.solved,
 				"door": rmr.builder.gate_active(pz.door_kind)}
+		"boss":
+			# Set the boss's health to a fraction and strike it once, so a playtest can walk its phases.
+			for e: EnemyBase in sandbox.call("enemies"):
+				if e is Boss:
+					var bb := e as Boss
+					bb.boundary_source = func(_a: float) -> float: return -1.0
+					if args.has("fraction"):
+						bb.health.current = maxf(bb.health.max_value * float(args["fraction"]), 1.0)
+						var hit := DamagePacket.new()
+						hit.atk = float(args.get("strike", 50.0))
+						hit.source_x = bb.global_position.x - 2.0
+						bb.receive_hit(hit)
+					return {"phase": bb.phase, "hp": bb.health.current, "transition": bb.in_transition(),
+						"state": bb.state, "attack": str(bb.current_attack.get("id", ""))}
+			return {"error": "no boss"}
 		"root_player":
 			player.snare.apply()
 			return {"rooted": player.snare.is_active()}

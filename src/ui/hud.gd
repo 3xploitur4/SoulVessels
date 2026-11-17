@@ -34,6 +34,8 @@ var _font: Font
 var _wheel_centres: Array[Vector2] = []
 var _wheel_radius: float = 46.0
 var _scratch: Array[Node3D] = []
+## The boss whose bars show at the top (set by GameEvents.boss_started).
+var boss: Boss
 
 
 func _ready() -> void:
@@ -47,6 +49,7 @@ func _ready() -> void:
 	_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_canvas.draw.connect(_draw_hud)
 	add_child(_canvas)
+	GameEvents.boss_started.connect(func(b: Node) -> void: boss = b as Boss)
 
 
 func _process(_delta: float) -> void:
@@ -92,6 +95,7 @@ func _draw_hud() -> void:
 	_draw_vitals(r.position)
 	_draw_wheel(Vector2(r.end.x, r.position.y))
 	_draw_enemy_bars()
+	_draw_boss_bar()
 	if player.state == "dead":
 		var msg := tr("UI_SOUL_LOST")
 		var w := _font.get_string_size(msg, HORIZONTAL_ALIGNMENT_LEFT, -1, 48).x
@@ -99,6 +103,33 @@ func _draw_hud() -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 48, 8, Color.BLACK)
 		_canvas.draw_string(_font, Vector2(_canvas.size.x * 0.5 - w * 0.5, _canvas.size.y * 0.4), msg,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 48, Color(0.9, 0.85, 0.8))
+
+
+## The boss's name, health and posture across the top centre while a boss fight runs (story 034).
+func _draw_boss_bar() -> void:
+	if boss == null or not is_instance_valid(boss) or not boss.is_alive():
+		return
+	var w := minf(_canvas.size.x * 0.5, 760.0)
+	var x := _canvas.size.x * 0.5 - w * 0.5
+	var y := safe_rect().position.y + 64.0
+	var gold := Color(0.86, 0.7, 0.36)
+	var name := tr(str(boss.data.get("name_key", "")))
+	var nw := _font.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, 26).x
+	_canvas.draw_string_outline(_font, Vector2(_canvas.size.x * 0.5 - nw * 0.5, y - 10.0), name,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, 26, 6, Color.BLACK)
+	_canvas.draw_string(_font, Vector2(_canvas.size.x * 0.5 - nw * 0.5, y - 10.0), name,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color(0.92, 0.88, 0.8))
+	_canvas.draw_rect(Rect2(x - 3.0, y - 3.0, w + 6.0, 22.0), Color(0, 0, 0, 0.7))
+	_canvas.draw_rect(Rect2(x, y, w * boss.health.ratio(), 16.0), Color(0.72, 0.12, 0.14))
+	_canvas.draw_rect(Rect2(x - 3.0, y - 3.0, w + 6.0, 22.0), gold, false, 2.0)
+	var phases: Array = boss.data.get("phases", [])
+	for ph: Dictionary in phases.slice(1):
+		var px := x + w * float(ph.get("at", 0.0))
+		_canvas.draw_line(Vector2(px, y - 3.0), Vector2(px, y + 19.0), gold, 2.0)
+	var py := y + 24.0
+	_canvas.draw_rect(Rect2(x + w * 0.2, py, w * 0.6, 6.0), Color(0, 0, 0, 0.6))
+	var pc := Color(1.0, 0.85, 0.4) if boss.posture.is_staggered() else Color(0.95, 0.75, 0.3, 0.85)
+	_canvas.draw_rect(Rect2(x + w * 0.2, py, w * 0.6 * boss.posture.ratio(), 6.0), pc)
 
 
 func _draw_vitals(origin: Vector2) -> void:
@@ -237,7 +268,7 @@ func _draw_enemy_bars() -> void:
 	world.members_of(CombatWorld.TEAM_ENEMY, _scratch)
 	for e in _scratch:
 		var enemy := e as EnemyBase
-		if enemy == null:
+		if enemy == null or enemy is Boss:
 			continue
 		var head := enemy.global_position + Vector3(0.0, enemy.hurt_rect().size.y + enemy._hurt_offset_y() + 0.35, 0.0)
 		if camera.is_position_behind(head):

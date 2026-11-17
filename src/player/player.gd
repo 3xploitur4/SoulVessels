@@ -115,6 +115,8 @@ var _trav: Dictionary = {}
 var _water_cfg: Dictionary = {}
 ## Metres under the surface of the water the player stands in (story 031); 0 on dry land.
 var water_depth: float = 0.0
+## Element statuses on the player (story 034: the Sovereign's Ember burns).
+var status: StatusEffects
 ## Set by the room: returns the room's solid rects, so bolts stop at rock (story 032).
 var solid_source: Callable
 ## The Calcified Husk root-snare (story 022): while active the body cannot move, jump or dodge.
@@ -148,6 +150,7 @@ func _ready() -> void:
 	_water_cfg = wc if wc is Dictionary else {}
 	var snare_cfg: Variant = Balance.combat("root_snare")
 	snare = RootSnare.from_data(snare_cfg if snare_cfg is Dictionary else {})
+	status = StatusEffects.from_balance()
 	gauge = SoulGauge.from_balance()
 	health = Health.new(Balance.combat_f("soul_hp_base"))
 	var levels: Dictionary = affinity_levels
@@ -227,6 +230,8 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 			and _try_sync_guard("magic_hit_over_fraction", p):
 		return DamagePacket.Result.BLOCKED
 	var taken := health.damage(dmg)
+	if p.element_buildup > 0.0 and status.add_buildup(p.element, p.element_buildup):
+		Sfx.play("hurt")
 	if bool(p.tags.get("snare", false)) and not health.is_dead():
 		stop_action()
 		snare.apply()
@@ -323,6 +328,19 @@ func begin_block() -> void:
 func end_block() -> void:
 	if action != null and action.id == "block":
 		stop_action()
+
+
+## Burning and other damage over time; water puts a burn out.
+func _tick_status(delta: float) -> void:
+	status.tick(delta)
+	if is_swimming() and status.has_status("burning"):
+		status.active.erase("burning")
+	var dot := status.dot_per_s(health.max_value)
+	if dot > 0.0 and not health.is_dead():
+		health.damage(dot * delta)
+		GameEvents.player_hp_changed.emit(health.current, health.max_value)
+		if health.is_dead():
+			_die()
 
 
 ## True while deep enough in water to swim (slower, strokes instead of jumps, no roll).
@@ -560,6 +578,7 @@ func rest() -> void:
 ## Back to full at the spawn point (sandbox death, debug, altar rest).
 func respawn() -> void:
 	snare.break_now()
+	status.clear()
 	health.reset(max_hp())
 	flask_charges = flask_max()
 	stop_action()
@@ -627,6 +646,7 @@ func snapshot() -> Dictionary:
 		"shield": snappedf(aether_shield_left, 0.01),
 		"snare_taps_left": snare.taps_left(),
 		"water_depth": snappedf(water_depth, 0.01),
+		"burning": status.has_status("burning"),
 	}
 
 
@@ -643,6 +663,7 @@ func _physics_process(delta: float) -> void:
 	damage_reduction_left = maxf(damage_reduction_left - delta, 0.0)
 	_tick_aether_shield(delta)
 	_update_water()
+	_tick_status(delta)
 	if health.is_dead():
 		_dead_tick(delta)
 		return

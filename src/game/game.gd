@@ -448,9 +448,27 @@ func _on_enemy_died(enemy: Node) -> void:
 		return
 	state.essence += amount
 	fx.popup("+%d" % amount, e.global_position + Vector3(0, 1.2, 0), Color(0.6, 0.92, 1.0))
-	_award_xp("elite_kill" if e.tier == "elite" else "kill")
+	_award_xp("elite_kill" if e.tier == "elite" or e.tier == "boss" else "kill")
+	if e.tier == "boss":
+		_on_boss_defeated(e)
 	for d: Dictionary in loot.roll(e.data, _zone, loot_rng, state):
 		spawn_pickup(str(d["item"]), int(d["count"]), "", Vector2(e.global_position.x, e.global_position.y))
+
+
+## A boss fell (story 034): its flag, Affinity gifts and closing line from data `on_defeat`,
+## then a save. The Sovereign gives Caelan his goodbye (+1 Affinity).
+func _on_boss_defeated(e: EnemyBase) -> void:
+	var od: Dictionary = e.data.get("on_defeat", {})
+	if od.has("flag"):
+		state.set_flag(str(od["flag"]))
+	var gifts: Dictionary = od.get("affinity_bonus", {})
+	for v: String in gifts.keys():
+		state.affinity_bonus[v] = int(state.affinity_bonus.get(v, 0)) + int(gifts[v])
+		_on_affinity_changed(v, Affinity.level(state, v))
+	if od.has("line"):
+		prompts.subtitle(tr(str(od.get("speaker", "SPEAKER_VOICE"))), tr(str(od["line"])), Color(0.75, 0.85, 1.0))
+	camera.add_trauma(0.6)
+	save_now()
 
 
 func _build_echo(manager: RoomManager, room: RoomData) -> void:
