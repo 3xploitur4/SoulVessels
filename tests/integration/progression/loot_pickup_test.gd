@@ -45,7 +45,11 @@ func test_placed_pickup_is_taken_once_and_remembered() -> void:
 	var p := _pickups()
 	assert_eq(p.size(), 1, "the veil pocket shard")
 	player.teleport(p[0].global_position.x, p[0].global_position.y)
-	await wait_frames(4)
+	# Pickups move on render frames, the test waits on physics frames: allow up to 1 s.
+	for i in range(60):
+		await wait_frames(1)
+		if state.item_count("lesser_soul_shard") > 0:
+			break
 	assert_eq(state.item_count("lesser_soul_shard"), 1)
 	assert_true(state.taken_pickups.has("z1_05:0"))
 	rooms.enter("z1_05", "0")
