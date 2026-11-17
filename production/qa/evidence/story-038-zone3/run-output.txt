@@ -1,0 +1,13 @@
+PASS  the flooded stair leads into the palace          z3_01
+PASS  Track 05 plays                                   zone3
+PASS  told to break the crystal                        Someone sleeps in the crystal. Break it: J.
+PASS  the crystal breaks and Free is offered           [W]  Free
+PASS  Seris joins the loadout                          ['caelan', 'nyra', 'seris']
+PASS  Seris speaks                                     Seris: Cold... so cold. You are not one of them. I know what you are. Not yet - later. Walk with me.
+PASS  puzzle 1: the sequence opens the door            {'door': False, 'lit': 3, 'size': 3, 'solved': True}
+PASS  puzzle 2: the mirror lifts the bolt into the rune {'door': False, 'lit': 1, 'size': 1, 'solved': True}
+PASS  from the bank the bolt passes over the rune      {'door': True, 'lit': 0, 'size': 1, 'solved': False}
+PASS  puzzle 3: from the ice the rune is in line       {'door': False, 'lit': 1, 'size': 1, 'solved': True}
+PASS  the throne hall wakes the Sovereign and her music boss_sovereign
+PASS  all 18 rooms visited and screenshotted           
+SUMMARY: 0 failed

@@ -53,6 +53,11 @@ const PALETTE := {
 	"z1_ruin_far": {"albedo": Color(0.1, 0.12, 0.16), "roughness": 0.95, "tex": "stone_blocks", "tile_m": 4.5},
 	"z1_pool": {"albedo": Color(0.04, 0.3, 0.32), "emission": Color(0.2, 0.95, 0.88), "emission_energy": 1.5, "roughness": 0.1},
 	"silhouette": {"albedo": Color(0.008, 0.01, 0.018), "roughness": 1.0},
+	# Zone 3, The Sunken Palace (story 038): pale veined marble, gold trim, drowned teal light.
+	"z3_rock": {"albedo": Color(0.36, 0.4, 0.46), "roughness": 0.7, "tex": "stone_blocks", "tile_m": 5.0},
+	"z3_ledge": {"albedo": Color(0.7, 0.72, 0.76), "roughness": 0.45, "tex": "slab", "tile_m": 2.5},
+	"z3_top": {"albedo": Color(0.86, 0.78, 0.56), "roughness": 0.35, "tex": "slab", "tile_m": 2.0,
+		"emission": Color(0.45, 0.36, 0.12), "emission_energy": 0.18},
 	# Zone 2, The Luminous Mycelium Forest: violet-dark rock, glowing moss, teal and violet caps.
 	"z2_rock": {"albedo": Color(0.2, 0.17, 0.3), "roughness": 0.95, "tex": "cave_rock", "tile_m": 7.0},
 	"z2_ledge": {"albedo": Color(0.4, 0.34, 0.5), "roughness": 0.9, "tex": "myc_bark", "tile_m": 3.0},

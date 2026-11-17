@@ -686,15 +686,17 @@ func _build_story(manager: RoomManager, room: RoomData) -> void:
 			b.vessel = vid
 			manager.features_root.add_child(b)
 			b.global_position = Vector3(pos.x, pos.y, -0.1)
-		elif v == "roots" and not (state != null and state.flag("freed_" + vid)):
-			# Story 025: a Vessel bound in roots; cut them, then free her.
+		elif (v == "roots" or v == "crystal") and not (state != null and state.flag("freed_" + vid)):
+			# Story 025: a Vessel bound in roots (Nyra); story 038: sealed in crystal (Seris).
+			# Break the bonds, then free her.
 			var r := RootPrison.new()
-			r.name = "Roots_" + vid
+			r.name = ("Roots_" if v == "roots" else "Crystal_") + vid
 			r.vessel = vid
+			r.look = v
 			r.world = world
 			r.roots_cut.connect(func(left: int) -> void:
 				if left == 0 and story != null:
-					story.event("roots_cut"))
+					story.event(v + "_cut"))
 			manager.features_root.add_child(r)
 			r.global_position = Vector3(pos.x, pos.y, -0.1)
 	if room.raw.has("arena") and room.gate_rects.has("lock"):

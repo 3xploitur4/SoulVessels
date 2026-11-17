@@ -52,5 +52,31 @@
     "mist": "#4fc0b0",
     "shaft": "#7fffd8",
     "mist_density": 0.6
+  },
+  "palace": {
+    "background": "#03070c",
+    "ambient": "#7fa6b8",
+    "ambient_energy": 0.8,
+    "fog": "#062028",
+    "fog_begin": 14.0,
+    "fog_end": 50.0,
+    "key_color": "#d8ecff",
+    "key_energy": 1.25,
+    "key_rotation": [
+      -40.0,
+      -20.0,
+      0.0
+    ],
+    "rock": "z3_rock",
+    "trim": "z3_top",
+    "decor": "aqueduct",
+    "warm_light": "#ffc46a",
+    "cool_light": "#5fd8ff",
+    "ledge": "z3_ledge",
+    "backdrop": "res://assets/art/backdrops/zone3.png",
+    "backdrop_tint": "#9fb4c8",
+    "glow": 0.6,
+    "mist": "#5fa8c0",
+    "shaft": "#a8e6ff"
   }
 }

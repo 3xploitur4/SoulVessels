@@ -1,5 +1,5 @@
 {
-  "_source": "Stories 017/019/024/025. Addendum Narrative: 24 Faded Parchments, 10 Echoing Relics, 5 Vessel Memories, 1 Primeval Truth in Chapter I; Zones 1-2 hold the first 12 parchments, 3 relics and the Caelan and Nyra memories. Parchments are found in this order whatever drop or pickup gives them. kind: parchment | relic | memory | truth. A memory names its Vessel and is unlocked at Affinity 1.",
+  "_source": "Stories 017/019/024/025. Addendum Narrative: 24 Faded Parchments, 10 Echoing Relics, 5 Vessel Memories, 1 Primeval Truth in Chapter I; Zones 1-2 hold the first 12 parchments, 3 relics and the Caelan and Nyra memories; Zone 3 (story 038) adds parchments 13-18, relics 4-5 and the Seris memory. Parchments are found in this order whatever drop or pickup gives them. kind: parchment | relic | memory | truth. A memory names its Vessel and is unlocked at Affinity 1.",
   "entries": [
     { "id": "parchment_01", "kind": "parchment" },
     { "id": "parchment_02", "kind": "parchment" },
@@ -17,6 +17,15 @@
     { "id": "relic_02", "kind": "relic" },
     { "id": "relic_03", "kind": "relic" },
     { "id": "memory_caelan", "kind": "memory", "vessel": "caelan" },
-    { "id": "memory_nyra", "kind": "memory", "vessel": "nyra" }
+    { "id": "memory_nyra", "kind": "memory", "vessel": "nyra" },
+    { "id": "parchment_13", "kind": "parchment" },
+    { "id": "parchment_14", "kind": "parchment" },
+    { "id": "parchment_15", "kind": "parchment" },
+    { "id": "parchment_16", "kind": "parchment" },
+    { "id": "parchment_17", "kind": "parchment" },
+    { "id": "parchment_18", "kind": "parchment" },
+    { "id": "relic_04", "kind": "relic" },
+    { "id": "relic_05", "kind": "relic" },
+    { "id": "memory_seris", "kind": "memory", "vessel": "seris" }
   ]
 }

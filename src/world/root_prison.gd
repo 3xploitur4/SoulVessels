@@ -18,6 +18,8 @@ var world: CombatWorld
 ## Combat-world team: the roots are hit by the player's attacks.
 var team: int = CombatWorld.TEAM_ENEMY
 var hits_left: int = 3
+## "roots" (Nyra, Zone 2) or "crystal" (Seris, Zone 3: she sealed herself in ice).
+var look: String = "roots"
 
 var _cfg: Dictionary = {}
 var _body: SpriteBody
@@ -35,7 +37,7 @@ func _ready() -> void:
 	_body = SpriteBody.create(vessel)
 	if _body != null:
 		add_child(_body)
-		_body.set_tint(Color(0.62, 0.7, 0.66))
+		_body.set_tint(Color(0.62, 0.7, 0.66) if look == "roots" else Color(0.7, 0.85, 1.0))
 	_build_roots()
 	if world != null:
 		world.register(self)
@@ -92,8 +94,11 @@ func _process(delta: float) -> void:
 	_body.tick(delta)
 
 
-## Thick glowing roots wound around the body; one disappears per blow.
+## Thick glowing roots wound around the body (or shards of crystal); one goes per blow.
 func _build_roots() -> void:
+	if look == "crystal":
+		_build_crystal()
+		return
 	var mat := ArenaMaterials.get_material("z2_ledge")
 	for i in range(hits_left):
 		var m := MeshInstance3D.new()
@@ -106,6 +111,24 @@ func _build_roots() -> void:
 		m.material_override = mat
 		m.position = Vector3(-0.45 + 0.45 * float(i), 1.0, 0.25)
 		m.rotation_degrees.z = -35.0 + 35.0 * float(i)
+		m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(m)
+		_roots.append(m)
+
+
+## Story 038: tall shards of pale crystal standing around her; one breaks per blow.
+func _build_crystal() -> void:
+	var mat := ArenaMaterials.flat(Color(0.72, 0.9, 1.0, 0.55), 1.2, false, true)
+	var shards := [[-0.55, 2.4, -8.0], [0.0, 2.9, 2.0], [0.55, 2.3, 9.0]]
+	for i in range(hits_left):
+		var s: Array = shards[i % shards.size()]
+		var m := MeshInstance3D.new()
+		var p := PrismMesh.new()
+		p.size = Vector3(0.7, float(s[1]), 0.7)
+		m.mesh = p
+		m.material_override = mat
+		m.position = Vector3(float(s[0]), float(s[1]) * 0.5, 0.3)
+		m.rotation_degrees = Vector3(0.0, 45.0, float(s[2]))
 		m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(m)
 		_roots.append(m)

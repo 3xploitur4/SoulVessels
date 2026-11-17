@@ -310,3 +310,60 @@ PASSIVE_LONG_VANISH,Long Vanish: Vanishing Act lasts half again as long
 PASSIVE_WARD_ECHO,Ward Echo: Sync Guard also heals 15 %
 PASSIVE_DEEP_FROST,Deep Frost: the Frost field lasts half again as long
 PASSIVE_RESONANT_MIND,Resonant Mind: the crowd passive rises to +45 %
+ZONE_3_TITLE,The Sunken Palace
+ROOM_Z3_01,The Flooded Stair
+ROOM_Z3_02,The Drowned Gallery
+ROOM_Z3_03,The Antechamber
+ROOM_Z3_04,The Crystal Sanctum
+ROOM_Z3_05,The Hall of Murals
+ROOM_Z3_06,The Tide Pool
+ROOM_Z3_07,The Mirror Hall
+ROOM_Z3_08,The Choir Nave
+ROOM_Z3_09,The Tide Gate
+ROOM_Z3_10,The Cloister
+ROOM_Z3_11,The Litany
+ROOM_Z3_12,The Arcanist's Study
+ROOM_Z3_13,The Reflecting Pool
+ROOM_Z3_14,The Choir Loft
+ROOM_Z3_15,The Drowned Courtyard
+ROOM_Z3_16,The Throne Door
+ROOM_Z3_17,The Throne Hall
+ROOM_Z3_18,The Breach
+ALTAR_Z3_A,Altar of the Antechamber
+ALTAR_Z3_B,Altar of the Cloister
+SOV_Z3_ENTER,You came down after all. Then see what you made of my house.
+SOV_Z3_COURT,My court still waits on me. They do not know the water came.
+SOV_Z3_CRYSTAL,She shut herself away rather than kneel. Leave her in her glass.
+SOV_Z3_CHOIR,"Sing, Prelate. Sing them strong for me."
+SOV_Z3_DOOR,Every light you kindle is a door you cannot close again.
+SOV_Z3_THRONE,He swore to keep the door. He kept it. And you wear him like a cloak.
+SERIS_FREED,Cold... so cold. You are not one of them. I know what you are. Not yet - later. Walk with me.
+SERIS_STUDY,My notes. I hid the worst of them from her. I should have hidden them from myself.
+SERIS_BREACH,Below this is the Rift. Something heavy enough to break the stone could open it. Not us. Not yet.
+TUT_SWIM,Water slows you. {jump} under water to swim up; near the surface it lifts you out.
+TUT_CRYSTAL,Someone sleeps in the crystal. Break it: {attack}.
+TUT_FREE_CRYSTAL,The crystal splits. {interact} to free her.
+TUT_BOLT,Seris casts Arcane Bolts with {attack}: they fly far and light the old runes.
+TUT_RUNES,Dark runes open the palace doors. Light them in the order the mural shows; a wrong rune puts them all out.
+TUT_FROST_WATER,{ability_1} with Seris: Frost Binding. Cast it over water and the surface freezes into a platform for a while.
+TUT_MIRROR,{interact} to turn a mirror-shield. A bolt that strikes it leaves at the mirrored angle.
+TUT_PRELATE,The Prelate's golden aura makes its allies stronger. Aether bolts unravel it.
+TUT_TIDE,Some runes can only be seen from the water's height. Freeze the surface and stand on it.
+LORE_PARCHMENT_13_TITLE,"Court Roll, Last Page"
+LORE_PARCHMENT_13_BODY,"The names stop mid-line. The ink runs down the page as if the page itself was weeping, or wet."
+LORE_PARCHMENT_14_TITLE,Order of the Choir
+LORE_PARCHMENT_14_BODY,The Prelates are to sing the court calm as the water rises. Calm subjects do not climb.
+LORE_PARCHMENT_15_TITLE,A Courtier's Note
+LORE_PARCHMENT_15_BODY,We were told to wait in the gallery for the Queen. We are still waiting. The Queen is still weeping.
+LORE_PARCHMENT_16_TITLE,Rune Primer
+LORE_PARCHMENT_16_BODY,"A rune is a sentence of the Architects' tongue. Light reads it aloud. Read in the wrong order, it says nothing at all."
+LORE_PARCHMENT_17_TITLE,"Seris, to Herself"
+LORE_PARCHMENT_17_BODY,"The sigil on the Descent order is not a name. It is a shape. I have seen that shape before, moving."
+LORE_PARCHMENT_18_TITLE,The Breach Survey
+LORE_PARCHMENT_18_BODY,"Below the throne the stone is hollow, and something under it keeps time. Seal it. Tell no one."
+LORE_RELIC_04_TITLE,The Weeping Crown
+LORE_RELIC_04_BODY,"A circlet of drowned silver. Held to the ear, it hums one low note, the same note the walls hum."
+LORE_RELIC_05_TITLE,The Arcanist's Lens
+LORE_RELIC_05_BODY,"Through it the runes on every wall are lit, all at once, saying one word over and over: contain."
+LORE_MEMORY_SERIS_TITLE,Memory of Seris: The Glass
+LORE_MEMORY_SERIS_BODY,"She read the order before the Queen did, and knew whose sigil closed it. She could not tell her, and she could not lie to her, so she poured the crystal over herself and waited for the one the sigil meant."
