@@ -29,6 +29,10 @@ static func create(enemy_id: String) -> EnemyBase:
 			return GuardianBelow.new()
 		"abyssal_leviathan":
 			return AbyssalLeviathan.new()
+	if enemy_id.begins_with("echo_") and enemy_id != "echo_crawler":
+		var e := ErasedEcho.new()
+		e.enemy_id = enemy_id
+		return e
 	push_error("EnemyFactory: unknown enemy %s" % enemy_id)
 	return null
 

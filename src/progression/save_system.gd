@@ -77,6 +77,22 @@ func summary(slot: int) -> Dictionary:
 	}
 
 
+## Has any run finished Chapter I? (Abyssal difficulty unlocks for new games; story 047.)
+func chapter_complete() -> bool:
+	if not FileAccess.file_exists(dir.path_join("profile.json")):
+		return false
+	var d: Variant = JSON.parse_string(FileAccess.get_file_as_string(dir.path_join("profile.json")))
+	return d is Dictionary and bool((d as Dictionary).get("chapter1_complete", false))
+
+
+## Record that Chapter I was finished, beside the save slots.
+func mark_chapter_complete() -> void:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dir))
+	var f := FileAccess.open(dir.path_join("profile.json"), FileAccess.WRITE)
+	if f != null:
+		f.store_string(JSON.stringify({"chapter1_complete": true}))
+
+
 func delete(slot: int) -> void:
 	if exists(slot):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path(slot)))

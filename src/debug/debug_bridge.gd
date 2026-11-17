@@ -221,6 +221,18 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 			z.setup(Vector2(float(xs[0]), float(xs[1])), Vector2(float(ys[0]), float(ys[1])), float(args.get("angle", 15.0)))
 			rms.features_root.add_child(z)
 			return {"angle": z.angle}
+		"awakening":
+			# Enter a stand-in awakening room (story 047 playtests; Zone 4's real one comes in story 049).
+			var rma: RoomManager = sandbox.get("rooms")
+			var grid: Array = ["##############################"]
+			for i in range(10):
+				grid.append("#............................#")
+			grid.append("##############################")
+			grid.append("##############################")
+			rma.enter_data(RoomData.parse("dev_awakening", "zone4", {"grid": grid, "theme": "cavern",
+				"awakening": {"echoes": ["echo_caelan", "echo_nyra", "echo_seris", "echo_darius"], "spawn_x": 20.0}}),
+				"", Vector2(8.0, 2.05))
+			return {"room": "dev_awakening"}
 		"overdrive":
 			player.overdrive_unlocked = bool(args.get("on", true))
 			return {"unlocked": player.overdrive_unlocked, "ready": player.overdrive_ready()}

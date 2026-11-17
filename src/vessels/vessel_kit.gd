@@ -24,6 +24,8 @@ static func create(vessel_id: String, vessel_data: Dictionary) -> VesselKit:
 			kit = SerisKit.new()
 		"darius":
 			kit = DariusKit.new()
+		"ilyr":
+			kit = IlyrKit.new()
 		"wisp":
 			kit = WispKit.new()
 		_:
@@ -173,6 +175,11 @@ func on_perfect_parry(_player: Player, _attacker: Node3D, _p: DamagePacket) -> v
 ## Multiplier on the ATK of this Vessel's hits (Darius's Last Survivor).
 func damage_dealt_multiplier(_player: Player) -> float:
 	return 1.0
+
+
+## A primary hit of this Vessel landed on `target` (Ilyr's Echo counts them).
+func on_primary_landed(_player: Player, _target: Node3D, _p: DamagePacket) -> void:
+	pass
 
 
 ## Advance kit timers (called every physics frame for the active Vessel).

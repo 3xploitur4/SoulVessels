@@ -1,0 +1,56 @@
+{
+  "_source": "Story 047, decision D-054. Narrative 6: in Ilyr's awakening the Intruder fights erased echoes of the other four Vessels: pale, glitching versions using their Vessel's moves. Tuned so the four take about 90 seconds together.",
+  "id": "echo_seris",
+  "name_key": "ENEMY_ECHO_SERIS",
+  "tier": "elite",
+  "vessel": "seris",
+  "style": "caster",
+  "essence": 0,
+  "hp": 560,
+  "atk": 30,
+  "def": 10,
+  "posture": 100,
+  "move_speed": 2.8,
+  "aggro_range_m": 30.0,
+  "leash_range_m": 60.0,
+  "preferred_range_m": 6.5,
+  "weaknesses": [],
+  "resists": [],
+  "aoe_multiplier": 1.0,
+  "group_size": 1,
+  "attacks": [
+    {
+      "id": "echo_bolt",
+      "kind": "magic",
+      "telegraph_s": 0.6,
+      "range_m": 12.0,
+      "motion": 0.8,
+      "posture": 6,
+      "active_s": 0.3,
+      "recover_s": 0.7,
+      "cooldown_s": 1.6,
+      "orbs": 3,
+      "orb_speed_mps": 11.0,
+      "orb_spread_deg": 10.0
+    },
+    {
+      "id": "echo_frost",
+      "kind": "unblockable",
+      "telegraph_s": 0.8,
+      "range_m": 3.0,
+      "motion": 1.2,
+      "posture": 14,
+      "active_s": 0.2,
+      "recover_s": 0.8,
+      "cooldown_s": 4.0
+    }
+  ],
+  "drops": {},
+  "silhouette": {
+    "kind": "humanoid",
+    "height_m": 1.9,
+    "width_m": 0.9,
+    "primary_color": "#e8ecf2",
+    "accent_color": "#9fd8ff"
+  }
+}

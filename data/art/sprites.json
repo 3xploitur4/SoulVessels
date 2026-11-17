@@ -167,7 +167,23 @@
         "size_m": 0.9
       }
     },
-    "drowned_courtier": {"file": "res://assets/art/sprites/calcified_husk.png", "height_m": 1.8, "faces": 1, "wind": 0.04, "tint": "#7fc8d4", "_note": "No concept art for the Drowned Courtier (new in the addendum): the Husk painting, smaller and tinted sea-green, stands in until story 039.", "tell": {"pos": [0.45, 0.22], "color": "#f2c14e", "size_m": 1.0}, "rig": "calcified_husk"},
+    "drowned_courtier": {
+      "file": "res://assets/art/sprites/calcified_husk.png",
+      "height_m": 1.8,
+      "faces": 1,
+      "wind": 0.04,
+      "tint": "#7fc8d4",
+      "_note": "No concept art for the Drowned Courtier (new in the addendum): the Husk painting, smaller and tinted sea-green, stands in until story 039.",
+      "tell": {
+        "pos": [
+          0.45,
+          0.22
+        ],
+        "color": "#f2c14e",
+        "size_m": 1.0
+      },
+      "rig": "calcified_husk"
+    },
     "choir_prelate": {
       "file": "res://assets/art/sprites/choir_prelate.png",
       "height_m": 2.3,
@@ -229,6 +245,78 @@
         "color": "#6fe8ff",
         "size_m": 2.0
       }
+    },
+    "echo_caelan": {
+      "file": "res://assets/art/sprites/caelan.png",
+      "height_m": 1.95,
+      "faces": 1,
+      "wind": 0.035,
+      "tint": "#d8e4f4",
+      "erased": true,
+      "_note": "Story 047: an erased echo of caelan - the Vessel's own painting and rig, pale and glitching.",
+      "tell": {
+        "pos": [
+          0.5,
+          0.3
+        ],
+        "color": "#9fd8ff",
+        "size_m": 1.0
+      },
+      "rig": "caelan"
+    },
+    "echo_nyra": {
+      "file": "res://assets/art/sprites/nyra.png",
+      "height_m": 1.76,
+      "faces": 1,
+      "wind": 0.04,
+      "tint": "#d8e4f4",
+      "erased": true,
+      "_note": "Story 047: an erased echo of nyra - the Vessel's own painting and rig, pale and glitching.",
+      "tell": {
+        "pos": [
+          0.5,
+          0.3
+        ],
+        "color": "#9fd8ff",
+        "size_m": 1.0
+      },
+      "rig": "nyra"
+    },
+    "echo_seris": {
+      "file": "res://assets/art/sprites/seris.png",
+      "height_m": 1.9,
+      "faces": 1,
+      "wind": 0.04,
+      "tint": "#d8e4f4",
+      "erased": true,
+      "_note": "Story 047: an erased echo of seris - the Vessel's own painting and rig, pale and glitching.",
+      "tell": {
+        "pos": [
+          0.5,
+          0.3
+        ],
+        "color": "#9fd8ff",
+        "size_m": 1.0
+      },
+      "rig": "seris"
+    },
+    "echo_darius": {
+      "file": "res://assets/art/sprites/darius.png",
+      "height_m": 2.02,
+      "faces": 1,
+      "wind": 0.01,
+      "tint": "#d8e4f4",
+      "erased": true,
+      "_note": "Story 047: an erased echo of darius - the Vessel's own painting and rig, pale and glitching.",
+      "tell": {
+        "pos": [
+          0.5,
+          0.3
+        ],
+        "color": "#9fd8ff",
+        "size_m": 1.0
+      },
+      "rig": "darius"
     }
   }
 }

@@ -142,6 +142,8 @@ func spawn(enemy_id: String, x: float, y: float, spawn_id: String = "", ceiling_
 	e.spawn_id = spawn_id
 	var diff := state.difficulty if state != null else "normal"
 	e.damage_scale = float(Balance.combat("difficulty.%s.enemy_damage" % diff))
+	var cd: Variant = Balance.combat("difficulty.%s.enemy_cooldown" % diff)
+	e.cooldown_scale = float(cd) if cd != null else 1.0
 	e.name = "%s_%d" % [enemy_id, _spawn_seed]
 	if not is_nan(ceiling_y) and e.has_method("set_ceiling"):
 		e.call("set_ceiling", ceiling_y)

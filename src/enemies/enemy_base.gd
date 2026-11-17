@@ -44,6 +44,8 @@ var aggro: bool = false
 var current_attack: Dictionary = {}
 ## Difficulty multiplier on this enemy's damage.
 var damage_scale: float = 1.0
+## Attack cooldowns are multiplied by this (Abyssal attacks more often; story 047).
+var cooldown_scale: float = 1.0
 ## Turn delay: seconds the enemy keeps its facing after the player crosses behind it.
 var turn_delay_s: float = 0.0
 
@@ -487,7 +489,7 @@ func _begin_attack() -> void:
 	visual.tell(0.0)
 	telegraph.hide_cue()
 	_attack_hit = _make_attack_hit(current_attack)
-	_cooldowns[str(current_attack.get("id", ""))] = float(current_attack.get("cooldown_s", 1.5))
+	_cooldowns[str(current_attack.get("id", ""))] = float(current_attack.get("cooldown_s", 1.5)) * cooldown_scale
 
 
 func _end_attack() -> void:

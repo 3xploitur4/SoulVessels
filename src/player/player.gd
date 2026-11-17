@@ -1107,6 +1107,8 @@ func _on_hit_landed(target: Node3D, p: DamagePacket) -> void:
 			GameEvents.hitstop_requested.emit(Balance.combat_f("hitstop.hit_s"))
 			GameEvents.camera_shake_requested.emit(0.12 if not p.was_crit else 0.25)
 			Sfx.play("hit")
+			if p.is_primary:
+				loadout.active().kit.on_primary_landed(self, target, p)
 	hit_landed.emit(target, p)
 
 

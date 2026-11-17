@@ -1,0 +1,7 @@
+PASS  the Intruder is Ilyr                           ilyr
+PASS  the four echoes come in order                  ['echo_caelan', 'echo_nyra', 'echo_seris', 'echo_darius']
+PASS  Ilyr speaks                                    Ilyr: You've worn this face before.
+PASS  the chapter-end screen shows                   ['ToTitle']
+PASS  Chapter I is complete in the save              
+PASS  the title now offers Abyssal                   ['Difficulty_story', 'Difficulty_normal', 'Difficulty_abyssal', '@Button@574', 'ToTitle']
+SUMMARY: 0 failed

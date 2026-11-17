@@ -92,7 +92,7 @@
   "difficulty": {
     "story": { "enemy_damage": 0.5, "window_scale": 1.8, "echo_lost_on_second_death": false },
     "normal": { "enemy_damage": 1.0, "window_scale": 1.0, "echo_lost_on_second_death": true },
-    "abyssal": { "enemy_damage": 1.4, "window_scale": 0.8, "echo_lost_on_second_death": true }
+    "abyssal": { "enemy_damage": 1.4, "window_scale": 0.8, "echo_lost_on_second_death": true, "enemy_cooldown": 0.75 }
   },
   "telegraph": {
     "parryable": { "color": "#f2c14e", "icon": "ring", "sfx": "telegraph_chime" },

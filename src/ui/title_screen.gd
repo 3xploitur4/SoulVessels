@@ -10,6 +10,8 @@ extends CanvasLayer
 ##     add_child(t)
 
 signal new_game_requested(slot: int, difficulty: String)
+## Chapter I finished in some run: Abyssal may be chosen (story 047).
+var abyssal_unlocked: bool = false
 signal continue_requested(slot: int)
 signal delete_requested(slot: int)
 
@@ -91,9 +93,14 @@ func _show_difficulty(i: int) -> void:
 		col.add_child(UiKit.label(tr("DIFFICULTY_%s_DESC" % d.to_upper()), 22, UiKit.COL_DIM))
 		buttons.append(b)
 	var abyssal := UiKit.button(tr("DIFFICULTY_ABYSSAL"), 560.0)
-	abyssal.disabled = true
+	abyssal.name = "Difficulty_abyssal"
+	abyssal.disabled = not abyssal_unlocked
+	abyssal.pressed.connect(func() -> void: new_game_requested.emit(i, "abyssal"))
 	col.add_child(abyssal)
-	col.add_child(UiKit.label(tr("DIFFICULTY_ABYSSAL_LOCKED"), 22, UiKit.COL_DIM))
+	col.add_child(UiKit.label(tr("DIFFICULTY_ABYSSAL_DESC" if abyssal_unlocked else "DIFFICULTY_ABYSSAL_LOCKED"), 22,
+		UiKit.COL_DIM))
+	if abyssal_unlocked:
+		buttons.append(abyssal)
 	var back := UiKit.button(tr("UI_BACK"), 560.0)
 	back.pressed.connect(show_slots)
 	col.add_child(back)

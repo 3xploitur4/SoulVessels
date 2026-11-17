@@ -47,6 +47,8 @@ var bridge_handler: Node
 var soul_core: SoulCore
 ## Weapon reforging and Censer Core crafting rules (story 036).
 var reforge: Reforge
+## The chapter-end screen while it shows (story 047).
+var chapter_end: ChapterEnd
 ## Ability ranks and Sync passives (story 037).
 var ranks: AbilityRanks
 var passives: SyncPassives
@@ -89,6 +91,7 @@ func _ready() -> void:
 	register_feature(_build_gates)
 	register_feature(func(m: RoomManager, r: RoomData) -> void: RunePuzzle.build_for(m, r, state))
 	register_feature(func(m: RoomManager, r: RoomData) -> void: MasonryWall.build_for(m, r, state))
+	register_feature(func(m: RoomManager, r: RoomData) -> void: IlyrAwakening.build_for(self, m, r))
 	register_feature(_build_story)
 	rooms.fell_out.connect(_on_fell_out)
 	rooms.exit_blocked.connect(_on_exit_blocked)
@@ -167,6 +170,7 @@ func show_title() -> void:
 	camera.snap()
 	_play_music("title")
 	title = TitleScreen.new()
+	title.abyssal_unlocked = saves.chapter_complete()
 	title.name = "Title"
 	title.summaries = _summaries()
 	title.new_game_requested.connect(start_new)
@@ -353,6 +357,19 @@ func choose_passive(vessel_id: String, passive_id: String) -> void:
 
 func _rebind_vessels() -> void:
 	player.equip(player.vessel_ids.duplicate(), affinity_levels())
+
+
+## Ilyr's awakening is over: the chapter-end screen, then the title.
+func show_chapter_end() -> void:
+	if chapter_end != null:
+		return
+	chapter_end = ChapterEnd.new()
+	chapter_end.state = state
+	chapter_end.title_requested.connect(func() -> void:
+		chapter_end.queue_free()
+		chapter_end = null
+		show_title())
+	add_child(chapter_end)
 
 
 ## Craft an item from its recipe at an altar (the Censer Core).
@@ -1097,7 +1114,7 @@ func bridge_resume(_args: Dictionary) -> Dictionary:
 ## {"name"}: press the visible menu button with this node name (title, pause, altar menus).
 func bridge_ui_press(args: Dictionary) -> Dictionary:
 	var wanted := str(args.get("name", ""))
-	for root: Node in [title, pause_menu, altar_menu]:
+	for root: Node in [title, pause_menu, altar_menu, chapter_end]:
 		if root == null:
 			continue
 		var b := root.find_child(wanted, true, false) as BaseButton
@@ -1112,7 +1129,7 @@ func bridge_ui_press(args: Dictionary) -> Dictionary:
 ## Names of the visible buttons in open menus (to drive menus by name).
 func bridge_ui_buttons(_args: Dictionary) -> Dictionary:
 	var out: Array[String] = []
-	for root: Node in [title, pause_menu, altar_menu]:
+	for root: Node in [title, pause_menu, altar_menu, chapter_end]:
 		if root == null:
 			continue
 		for b in root.find_children("*", "BaseButton", true, false):

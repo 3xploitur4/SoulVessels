@@ -384,3 +384,15 @@ BOSS_ABYSSAL_LEVIATHAN,The Abyssal Leviathan
 DARIUS_LEVIATHAN,Twenty years I hunted the thing that ate my people. ...I was wrong about you. Whatever you are.
 OVERDRIVE_UNLOCKED,"Overdrive awakened: with a full Soul Gauge, your Ultimate chains two Vessels."
 UI_OVERDRIVE_READY,OVERDRIVE
+ILYR_WAKES,...Where is this? Who is fighting me? They have my... no. They have your faces.
+ILYR_FACE,You've worn this face before.
+ENEMY_ECHO_CAELAN,Erased Caelan
+ENEMY_ECHO_NYRA,Erased Nyra
+ENEMY_ECHO_SERIS,Erased Seris
+ENEMY_ECHO_DARIUS,Erased Darius
+CHAPTER_ONE_END,End of Chapter I
+CHAPTER_STATS,Play time %s    Deaths %d    Lore found %d
+CHAPTER_TWO_TEASE,The rift is open. Ilyr will remember. Chapter II continues the story.
+CHAPTER_ABYSSAL_UNLOCKED,Abyssal difficulty is now open for new games.
+CHAPTER_TO_TITLE,Return to the title
+DIFFICULTY_ABYSSAL_DESC,Enemies hit 40 % harder and attack more often; parry and dodge windows are tighter.
