@@ -37,7 +37,7 @@ fi
 
 case "$tool" in
   opencode) if [ -n "$model" ]; then opencode run -m "$model" "$full"; else opencode run "$full"; fi ;;
-  codex)    codex exec --full-auto "$full" ;;
+  codex)    codex exec --approve-for-me "$full" ;;  # workspace-write sandbox; --full-auto was removed
   copilot)  copilot -p "$full" --allow-all-tools ;;
   agy)      agy -p "$full" ;;
   *) echo "unknown tool: $tool"; exit 2 ;;

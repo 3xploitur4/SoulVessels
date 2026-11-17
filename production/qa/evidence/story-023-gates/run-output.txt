@@ -1,0 +1,8 @@
+standing in the beam unguarded: hp 400.0
+opened gates: ['z1_08:ward']
+walked past the bars to x 26.0
+walking into the veil stops at x 10.35
+after Shadowstep x 4.52
+near rift scar: 
+{'used': 'UI_EXAMINE'}
+examine rune door: A circle of dead runes. It wants light, not force.

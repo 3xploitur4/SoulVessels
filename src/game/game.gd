@@ -81,6 +81,7 @@ func _ready() -> void:
 	register_feature(_build_echo)
 	register_feature(_build_pickups)
 	register_feature(_build_mushrooms)
+	register_feature(_build_gates)
 	rooms.fell_out.connect(_on_fell_out)
 	loot = LootTable.from_data()
 	soul_core = SoulCore.from_data()
@@ -522,6 +523,32 @@ func _on_fell_out() -> void:
 	player.grant_invulnerability(1.0)
 	camera.snap()
 	camera.add_trauma(0.3)
+
+
+# --- Gates (story 023) -----------------------------------------------------------------------
+
+func _build_gates(manager: RoomManager, room: RoomData) -> void:
+	if room.markers.has("statue") and room.gate_rects.has("ward"):
+		var w := ShieldWard.new()
+		w.name = "ShieldWard"
+		w.room = room
+		w.manager = manager
+		w.player = player
+		w.state = state
+		manager.features_root.add_child(w)
+	for kind: String in ["rune", "masonry", "flood"]:
+		for r: Rect2 in room.gate_rects.get(kind, []):
+			_add_sealed(manager, kind, Vector2(r.get_center().x, r.position.y))
+	for pos: Vector2 in room.rift_scars:
+		_add_sealed(manager, "rift", pos)
+
+
+func _add_sealed(manager: RoomManager, kind: String, at: Vector2) -> void:
+	var g := SealedGate.new()
+	g.name = "Sealed_" + kind
+	g.kind = kind
+	manager.features_root.add_child(g)
+	g.global_position = Vector3(at.x, at.y, 0.0)
 
 
 # --- Loot and pickups (story 019) -------------------------------------------------------------

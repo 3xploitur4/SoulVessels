@@ -572,6 +572,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		_free_move(delta)
 	_apply_gravity(delta)
+	# Shadow veils (story 023) stop everything except a Shadowstep.
+	set_collision_mask_value(10, not (action != null and action.id == "shadowstep"))
 	move_and_slide()
 	if global_position.z != 0.0:
 		global_position.z = 0.0
