@@ -115,8 +115,9 @@ func test_one_way_platform_passes_up_holds_and_drops() -> void:
 		"######",
 	]), "", Vector2(3.0, 1.0))
 	await wait_frames(10)
-	await _tap_jump()
-	await wait_frames(70)
+	# A full-height jump (2.2 m) is needed to clear a platform 2 m up: hold to the apex.
+	await _tap_jump(30)
+	await wait_frames(60)
 	assert_almost(player.global_position.y, 3.0, 0.1, "jumped up through and stands on the platform")
 	Input.action_press("move_down")
 	await wait_frames(2)
@@ -140,3 +141,20 @@ func test_falling_out_of_a_room_is_reported_once() -> void:
 	await wait_frames(60)
 	assert_eq(fell[0], 1)
 	assert_almost(rooms.last_safe.x, 1.5, 0.2, "safe ground is still the ledge")
+
+
+## Regression: a body that is over a pit for a frame while still flagged "on floor" (a teleport,
+## a platform that vanished) must not move the safe ground over the pit.
+func test_safe_ground_needs_floor_under_the_feet() -> void:
+	rooms.enter_data(_room([
+		"......",
+		"......",
+		"###...",
+	]), "", Vector2(1.5, 1.0))
+	await wait_frames(10)
+	player.teleport(4.5, 1.0)
+	await wait_frames(2)
+	assert_almost(rooms.last_safe.x, 1.5, 0.2, "the pit never becomes safe ground")
+	assert_true(rooms.has_ground(Vector2(1.5, 1.0)))
+	assert_false(rooms.has_ground(Vector2(4.5, 1.0)))
+	assert_false(rooms.has_ground(Vector2(2.95, 1.0)), "the very edge is not safe to return to")

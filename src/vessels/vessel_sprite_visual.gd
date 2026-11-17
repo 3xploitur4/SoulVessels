@@ -91,6 +91,10 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	elif state == "jump":
 		b.stretch = -0.25
 		b.lean = 0.04 * _h
+	elif state == "wall_slide":
+		# Braced against the wall: leaning back into it, knees bent.
+		b.lean = -0.06 * _h
+		b.crouch = 0.35
 	elif state == "fall":
 		b.crouch = -0.3
 		b.lean = -0.03 * _h

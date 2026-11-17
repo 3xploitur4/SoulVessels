@@ -1,0 +1,3 @@
+mushroom at floor 2.0, cap top 2.9; peak feet height: 9.17 (data: cap + 6.5 = 9.4)
+void fall: hp 460 -> 414 (max 460), back at x=15.0 y=2.0
+chimney: started at y=11.0, climbed to y=21.2 by wall-jumps (walls reach y=21)

@@ -163,6 +163,21 @@ func respawn_enemies() -> void:
 		_spawn_enemies()
 
 
+## Is there floor (rock top or one-way platform) right under a body standing at `feet`, at
+## least `margin` metres in from the edge? Safe ground must pass this, so a fall never
+## returns the player to a ledge lip or over a pit.
+func has_ground(feet: Vector2, margin: float = 0.3) -> bool:
+	if data == null:
+		return false
+	for r in data.solids:
+		if absf(r.end.y - feet.y) <= 0.25 and feet.x >= r.position.x + margin and feet.x <= r.end.x - margin:
+			return true
+	for o in data.oneway:
+		if absf(o.position.y - feet.y) <= 0.25 and feet.x >= o.position.x + margin and feet.x <= o.end.x - margin:
+			return true
+	return false
+
+
 ## Is `p` (room metres) inside rock?
 func is_solid(p: Vector2) -> bool:
 	if data == null:
@@ -176,8 +191,9 @@ func is_solid(p: Vector2) -> bool:
 func _physics_process(_delta: float) -> void:
 	if data == null or player == null or transitioning or not player.is_alive():
 		return
-	if player.is_on_floor() and player.velocity.y <= 0.01:
-		last_safe = Vector2(player.global_position.x, player.global_position.y)
+	var feet := Vector2(player.global_position.x, player.global_position.y)
+	if player.is_on_floor() and player.velocity.y <= 0.01 and has_ground(feet):
+		last_safe = feet
 		_fell = false
 	if not _fell and player.global_position.y < -float(Balance.combat("traversal.void_depth_m")):
 		_fell = true
