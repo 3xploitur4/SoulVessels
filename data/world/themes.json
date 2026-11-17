@@ -78,5 +78,57 @@
     "glow": 0.6,
     "mist": "#5fa8c0",
     "shaft": "#a8e6ff"
+  },
+  "rift": {
+    "background": "#030305",
+    "ambient": "#6e7088",
+    "ambient_energy": 0.6,
+    "fog": "#08080e",
+    "fog_begin": 12.0,
+    "fog_end": 44.0,
+    "key_color": "#c9cfe8",
+    "key_energy": 1.05,
+    "key_rotation": [
+      -42.0,
+      -24.0,
+      0.0
+    ],
+    "rock": "z4_rock",
+    "trim": "z4_top",
+    "decor": "aqueduct",
+    "warm_light": "#ff7a35",
+    "cool_light": "#b8d8ff",
+    "ledge": "z4_ledge",
+    "backdrop": "res://assets/art/backdrops/zone4.png",
+    "backdrop_tint": "#7c8296",
+    "glow": 0.6,
+    "mist": "#5a6078",
+    "shaft": "#cfe0ff"
+  },
+  "shore": {
+    "background": "#030305",
+    "ambient": "#7891a8",
+    "ambient_energy": 0.6,
+    "fog": "#06101a",
+    "fog_begin": 12.0,
+    "fog_end": 56.0,
+    "key_color": "#c9cfe8",
+    "key_energy": 1.05,
+    "key_rotation": [
+      -42.0,
+      -24.0,
+      0.0
+    ],
+    "rock": "z4_rock",
+    "trim": "z4_shore_top",
+    "decor": "aqueduct",
+    "warm_light": "#ffb070",
+    "cool_light": "#7fd8ff",
+    "ledge": "z4_ledge",
+    "backdrop": "res://assets/art/backdrops/zone4.png",
+    "backdrop_tint": "#8a9cb4",
+    "glow": 0.6,
+    "mist": "#6a8cac",
+    "shaft": "#b8e8ff"
   }
 }

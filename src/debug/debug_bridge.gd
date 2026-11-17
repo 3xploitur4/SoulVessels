@@ -202,6 +202,13 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 				return {"error": "no game state"}
 			gst.essence = int(args.get("value", gst.essence))
 			return {"essence": gst.essence}
+		"flag":
+			# Set (or clear) a save flag (story 049 playtests: a boss already fallen, the rift open).
+			var gsf: GameState = sandbox.get("state")
+			if gsf == null:
+				return {"error": "no game state"}
+			gsf.set_flag(str(args.get("key", "")), bool(args.get("value", true)))
+			return {"key": str(args.get("key", "")), "value": gsf.flag(str(args.get("key", "")))}
 		"dark":
 			# Darken the current room (story 043 playtests); lamps: [[x, y], ...].
 			var rmd: RoomManager = sandbox.get("rooms")

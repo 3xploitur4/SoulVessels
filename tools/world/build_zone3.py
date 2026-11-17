@@ -294,15 +294,18 @@ rooms["z3_17"] = room("ROOM_Z3_17", [48, 1, 1, 1], 34, 12, b17,
     water=[{"id": "arena", "x": [3, 31], "level": 2.3, "floor": 1.95}],
     story=[{"kind": "line", "key": "SOV_Z3_THRONE", "speaker": "SPEAKER_VOICE", "on": "arena_start"}])
 
-# z3_18 The Breach: the way down to Zone 4, sealed by cracked masonry until Darius (M4).
+# z3_18 The Breach: the way down to Zone 4 (z4_01), behind cracked masonry that gives way when the
+# Sovereign falls (story 049).
 def b18(r):
     r.exit("left", "0", 2)
+    r.exit("right", "1", 2)
     r.fill(20, 21, 2, 6, "K")
     r.put(12, 2, "*")
     r.put(6, 8, "T")
 rooms["z3_18"] = room("ROOM_Z3_18", [49, 1, 1, 1], 26, 12, b18,
-    {"0": {"to": "z3_17", "exit": "1"}},
+    {"0": {"to": "z3_17", "exit": "1"}, "1": {"to": "z4_01", "exit": "0"}},
     pickups=["faded_parchment"],
+    masonry_opens_on="boss_weeping_sovereign",
     story=[{"kind": "line", "key": "SERIS_BREACH", "speaker": "VESSEL_SERIS", "x": [8, 18], "color": "#9fd8ff"}])
 
 for k, v in rooms.items():

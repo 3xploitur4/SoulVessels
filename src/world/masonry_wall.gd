@@ -20,6 +20,13 @@ var broken: bool = false
 ## One MasonryWall per masonry rect in the room; already-broken ones are removed at once.
 static func build_for(m: RoomManager, room: RoomData, game_state: GameState) -> void:
 	var rects: Array = room.gate_rects.get("masonry", [])
+	# Story 049: some masonry gives way to an event instead (the Breach in z3_18 cracks open when
+	# the Sovereign falls, so Zone 4, where Darius is found, can be reached without him).
+	# Room JSON: "masonry_opens_on": "<save flag>".
+	var opens_on := str(room.raw.get("masonry_opens_on", ""))
+	if opens_on != "" and game_state != null and game_state.flag(opens_on):
+		for i in range(rects.size()):
+			GameState.add_unique(game_state.opened_gates, "%s:masonry:%d" % [room.id, i])
 	var bodies: Array = m.builder.gate_bodies.get("masonry", [])
 	for i in range(rects.size()):
 		var w := MasonryWall.new()

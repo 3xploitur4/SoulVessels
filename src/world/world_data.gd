@@ -7,7 +7,7 @@ extends RefCounted
 ##     for id in WorldData.room_ids("zone1"): ...
 
 const ROOT := "res://data/world"
-const ZONES: Array[String] = ["zone1", "zone2", "zone3"]
+const ZONES: Array[String] = ["zone1", "zone2", "zone3", "zone4"]
 
 static var _zones: Dictionary[String, Dictionary] = {}
 static var _rooms: Dictionary[String, RoomData] = {}

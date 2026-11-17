@@ -1,0 +1,22 @@
+PASS  the Breach is sealed while the Sovereign lives     
+PASS  her fall cracks the Breach open                    
+PASS  the Breach leads down into the Rift                z4_01
+PASS  Zone 4                                             zone4
+PASS  Track 09 plays                                     zone4
+PASS  the Ember Hall: a swarm of 8 Crawlers in the dark  8
+PASS  Darius distrusts the Intruder                      Darius: Another one wearing a dead man's face. Stay back. I've buried better things than you down here.
+PASS  the rubble breaks and Free is offered              [W]  Free
+PASS  Darius joins the loadout                           ['caelan', 'nyra', 'darius']
+PASS  Darius speaks as he joins                          Darius: Twenty years I've looked for my people. If you're going down, I'm going with you. Not for you.
+PASS  his Crushing Blow breaks the masonry               
+PASS  standing on the incline slides you downhill        8.4 -> 15.4
+PASS  the landing is a checkpoint                        {'altar': '', 'room': 'z4_09'}
+PASS  the lift wakes the Guardian and Track 10           boss_guardian
+PASS  the Starless Shore plays Track 12                  zone4_shore
+PASS  the shore wakes the Leviathan and Track 13         boss_leviathan
+PASS  no rift while the Leviathan lives                  
+PASS  its fall opens the rift                            UI_ENTER
+PASS  the rift leads beyond                              z4_14
+PASS  beyond the rift the Intruder is Ilyr               ilyr
+PASS  all 14 rooms visited and screenshotted             
+SUMMARY: 0 failed

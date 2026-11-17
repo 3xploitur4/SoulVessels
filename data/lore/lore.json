@@ -1,5 +1,5 @@
 {
-  "_source": "Stories 017/019/024/025. Addendum Narrative: 24 Faded Parchments, 10 Echoing Relics, 5 Vessel Memories, 1 Primeval Truth in Chapter I; Zones 1-2 hold the first 12 parchments, 3 relics and the Caelan and Nyra memories; Zone 3 (story 038) adds parchments 13-18, relics 4-5 and the Seris memory. Parchments are found in this order whatever drop or pickup gives them. kind: parchment | relic | memory | truth. A memory names its Vessel and is unlocked at Affinity 1.",
+  "_source": "Stories 017/019/024/025. Addendum Narrative: 24 Faded Parchments, 10 Echoing Relics, 5 Vessel Memories, 1 Primeval Truth in Chapter I; Zones 1-2 hold the first 12 parchments, 3 relics and the Caelan and Nyra memories; Zone 3 (story 038) adds parchments 13-18, relics 4-5 and the Seris memory. Parchments are found in this order whatever drop or pickup gives them. kind: parchment | relic | memory | truth. A memory names its Vessel and is unlocked at Affinity 1. Zone 4 (story 049) adds parchments 19-24, relics 6-10, the Darius memory and the Primeval Truth (the Leviathan's drop).",
   "entries": [
     { "id": "parchment_01", "kind": "parchment" },
     { "id": "parchment_02", "kind": "parchment" },
@@ -26,6 +26,19 @@
     { "id": "parchment_18", "kind": "parchment" },
     { "id": "relic_04", "kind": "relic" },
     { "id": "relic_05", "kind": "relic" },
-    { "id": "memory_seris", "kind": "memory", "vessel": "seris" }
+    { "id": "memory_seris", "kind": "memory", "vessel": "seris" },
+    { "id": "parchment_19", "kind": "parchment" },
+    { "id": "parchment_20", "kind": "parchment" },
+    { "id": "parchment_21", "kind": "parchment" },
+    { "id": "parchment_22", "kind": "parchment" },
+    { "id": "parchment_23", "kind": "parchment" },
+    { "id": "parchment_24", "kind": "parchment" },
+    { "id": "relic_06", "kind": "relic" },
+    { "id": "relic_07", "kind": "relic" },
+    { "id": "relic_08", "kind": "relic" },
+    { "id": "relic_09", "kind": "relic" },
+    { "id": "relic_10", "kind": "relic" },
+    { "id": "memory_darius", "kind": "memory", "vessel": "darius" },
+    { "id": "truth_01", "kind": "truth" }
   ]
 }

@@ -92,6 +92,7 @@ func _ready() -> void:
 	register_feature(func(m: RoomManager, r: RoomData) -> void: RunePuzzle.build_for(m, r, state))
 	register_feature(func(m: RoomManager, r: RoomData) -> void: MasonryWall.build_for(m, r, state))
 	register_feature(func(m: RoomManager, r: RoomData) -> void: IlyrAwakening.build_for(self, m, r))
+	register_feature(func(m: RoomManager, r: RoomData) -> void: RiftPortal.build_for(m, r, state))
 	register_feature(_build_story)
 	rooms.fell_out.connect(_on_fell_out)
 	rooms.exit_blocked.connect(_on_exit_blocked)
@@ -434,11 +435,20 @@ func _on_room_entered(room_id: String) -> void:
 		var first := _zone == ""
 		_zone = zone
 		prompts.title_card(tr(str(WorldData.zone(zone).get("title", ""))))
-		_play_music(str(WorldData.zone(zone).get("music", zone)))
 		if not first and state != null:
 			# Zone-entry autosave: Continue starts at this door.
 			state.checkpoint = {"room": room_id, "x": player.global_position.x, "y": player.global_position.y}
 			save_now()
+	# The zone's track, or the room's own (story 049: the Starless Shore has its own).
+	var track := str(WorldData.zone(zone).get("music", zone))
+	if rooms.data != null:
+		track = str(rooms.data.raw.get("music", track))
+	_play_music(track)
+	# Story 049: a checkpoint before a boss. Death returns here, not to the last altar.
+	if state != null and rooms.data != null and bool(rooms.data.raw.get("checkpoint", false)):
+		state.rested_altar = {"room": room_id, "altar": ""}
+		state.checkpoint = {"room": room_id, "x": player.global_position.x, "y": player.global_position.y}
+		save_now()
 
 
 func _play_music(zone_id: String) -> void:
@@ -712,11 +722,11 @@ func _build_story(manager: RoomManager, room: RoomData) -> void:
 			b.vessel = vid
 			manager.features_root.add_child(b)
 			b.global_position = Vector3(pos.x, pos.y, -0.1)
-		elif (v == "roots" or v == "crystal") and not (state != null and state.flag("freed_" + vid)):
+		elif (v == "roots" or v == "crystal" or v == "rubble") and not (state != null and state.flag("freed_" + vid)):
 			# Story 025: a Vessel bound in roots (Nyra); story 038: sealed in crystal (Seris).
 			# Break the bonds, then free her.
 			var r := RootPrison.new()
-			r.name = ("Roots_" if v == "roots" else "Crystal_") + vid
+			r.name = v.capitalize() + "_" + vid
 			r.vessel = vid
 			r.look = v
 			r.world = world
@@ -781,6 +791,14 @@ func free_vessel(vessel: String, prison: Node3D = null) -> void:
 		return
 	state.unlock_vessel(vessel)
 	state.set_flag("freed_" + vessel)
+	# Story 049 (D-055): a freed Vessel always joins. With three already carried, she or he takes
+	# the last slot that is not the one in hand; the one set aside waits at the altars.
+	if not state.loadout.has(vessel):
+		var in_hand := player.loadout.active().id
+		for i in range(state.loadout.size() - 1, -1, -1):
+			if state.loadout[i] != in_hand:
+				state.loadout[i] = vessel
+				break
 	player.equip(state.loadout, affinity_levels())
 	var at := player.global_position + Vector3(0.0, 1.0, 0.4)
 	GameEvents.hit_fx_requested.emit(at, 0.0, true, false)

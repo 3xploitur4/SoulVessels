@@ -330,6 +330,8 @@ func _build_slides_and_dark() -> void:
 		var z := SlideZone.new()
 		z.name = "Slide"
 		z.setup(Vector2(float(xs[0]), float(xs[1])), Vector2(float(ys[0]), float(ys[1])), float(s.get("angle", 0.0)))
+		# "strip": false hides the polished strip (a lift floor that only tilts in a boss phase).
+		z.show_strip = bool(s.get("strip", true))
 		features_root.add_child(z)
 	if darkness != null and is_instance_valid(darkness):
 		darkness.queue_free()

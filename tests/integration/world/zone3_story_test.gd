@@ -106,4 +106,22 @@ func test_the_throne_hall_holds_the_sovereign_in_water() -> void:
 func test_the_way_to_zone_four_is_sealed() -> void:
 	var r := WorldData.room("z3_18")
 	assert_true(r.gate_rects.has("masonry"))
-	assert_eq(r.exits.size(), 1, "only the way back")
+	# Story 049: the way on to Zone 4 lies behind the masonry.
+	assert_eq(r.exits.size(), 2, "the way back, and the way down behind the masonry")
+	assert_eq(str(r.exits["1"]["to"]), "z4_01")
+	var wall: Rect2 = r.gate_rects["masonry"][0]
+	assert_true(wall.position.x < (r.exits["1"]["rect"] as Rect2).position.x, "the masonry stands before the exit")
+	assert_eq(str(r.raw.get("masonry_opens_on", "")), "boss_weeping_sovereign", "the Sovereign's fall cracks it open")
+
+
+func test_the_breach_gives_way_once_the_sovereign_falls() -> void:
+	var gs := GameState.new_game("normal")
+	gs.unlock_vessel("caelan")
+	gs.set_flag("possessed_caelan")
+	gs.set_flag("boss_weeping_sovereign")
+	gs.checkpoint = {"room": "z3_18", "x": -1.0, "y": -1.0}
+	game.call("begin_run", 0, gs)
+	await wait_frames(3)
+	var state: GameState = game.get("state")
+	assert_true(state.opened_gates.has("z3_18:masonry:0"))
+	assert_false((game.get("rooms") as RoomManager).builder.gate_active("masonry"))

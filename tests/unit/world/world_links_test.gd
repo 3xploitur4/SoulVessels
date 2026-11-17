@@ -6,6 +6,7 @@ extends TestCase
 func test_zone_room_counts_match_the_addendum() -> void:
 	assert_eq(WorldData.room_ids("zone1").size(), 14, "Zone 1: 14 rooms")
 	assert_eq(WorldData.room_ids("zone2").size(), 16, "Zone 2: 16 rooms")
+	assert_eq(WorldData.room_ids("zone4").size(), 14, "Zone 4: 14 rooms")
 
 
 func test_every_room_parses_without_errors() -> void:

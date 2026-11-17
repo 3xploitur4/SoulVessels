@@ -396,3 +396,62 @@ CHAPTER_TWO_TEASE,The rift is open. Ilyr will remember. Chapter II continues the
 CHAPTER_ABYSSAL_UNLOCKED,Abyssal difficulty is now open for new games.
 CHAPTER_TO_TITLE,Return to the title
 DIFFICULTY_ABYSSAL_DESC,Enemies hit 40 % harder and attack more often; parry and dodge windows are tighter.
+ZONE_4_TITLE,The Sealed Rift
+ROOM_Z4_01,The Breach Stair
+ROOM_Z4_02,The Ember Hall
+ROOM_Z4_03,The Fallen Camp
+ROOM_Z4_04,The Rift Altar
+ROOM_Z4_05,The Long Incline
+ROOM_Z4_06,The Lightless Gallery
+ROOM_Z4_07,The Expedition Cache
+ROOM_Z4_08,The Basalt Chute
+ROOM_Z4_09,The Elevator Landing
+ROOM_Z4_10,The Guardian's Lift
+ROOM_Z4_11,The Starless Shore
+ROOM_Z4_12,The Drowned Expedition
+ROOM_Z4_13,The Abyssal Shore
+ROOM_Z4_14,Beyond the Rift
+ALTAR_Z4_A,Altar of the Rift
+UI_ENTER,Enter
+VOICE_Z4_ENTER,Deeper. You never could leave a door shut. Not even your own.
+VOICE_Z4_GUARDIAN,It was built to keep the lift. It was not built to stop you. Nothing was.
+VOICE_Z4_LEVIATHAN,"Twelve eyes, and every one of them has seen your face before."
+TUT_DARK,No light reaches this deep. Your soul-light shows the way; lamps show more. Enemies flash before they strike.
+TUT_SLIDE,Polished basalt: stand still and you slide downhill. Running uphill is slow.
+TUT_RUBBLE,Someone is pinned under the basalt. Break it: {attack}.
+TUT_FREE_RUBBLE,The last slab cracks. {interact} to pull him free.
+TUT_CRUSH,"Darius's Crushing Blow ({ability_1}) breaks shields, armour and the orange-veined masonry."
+DARIUS_FOUND,Another one wearing a dead man's face. Stay back. I've buried better things than you down here.
+DARIUS_DOUBT,"...You're not leaving. Fine. Lift, then. I won't thank you for it."
+DARIUS_JOINS,"Twenty years I've looked for my people. If you're going down, I'm going with you. Not for you."
+DARIUS_ALTAR,Rest if you need it. I don't sleep near things I don't understand.
+DARIUS_CACHE,"Our cache. Rations, maps, Hale's spare boots. They got this far. Keep moving."
+DARIUS_LIFT,The lift down to the shore. Something guards it. It took Hale's arm the first time we tried.
+DARIUS_SHORE,There's no sky over this water. There never was. Hale said the sea was breathing.
+DARIUS_EXPEDITION,"...These are them. All of them. I knew. I knew for years, and I kept walking."
+LORE_PARCHMENT_19_TITLE,"Expedition Log, Day One"
+LORE_PARCHMENT_19_BODY,"Twelve of us through the surface shaft. Ropes hold. The city below is real, and it is lit. Darius says it is lit for someone."
+LORE_PARCHMENT_20_TITLE,Hale's Map
+LORE_PARCHMENT_20_BODY,"A careful map of the Rift with every wall marked. One wall is marked twice, and beside it: ""this one breathes."""
+LORE_PARCHMENT_21_TITLE,"Lift Mechanism, Annotated"
+LORE_PARCHMENT_21_BODY,"The lift does not run on water or weights. It runs on a sentence carved under the cage, and the sentence ends: ""until it wakes."""
+LORE_PARCHMENT_22_TITLE,"Expedition Log, Last Day"
+LORE_PARCHMENT_22_BODY,The sea opened an eye. Then eleven more. Tell Darius we waited. Tell him not to come.
+LORE_PARCHMENT_23_TITLE,An Architect's Draft
+LORE_PARCHMENT_23_BODY,"Sink the Foundation to the depth where nothing is written. What is not written cannot be read, and what cannot be read cannot wake."
+LORE_PARCHMENT_24_TITLE,A Letter Never Sent
+LORE_PARCHMENT_24_BODY,"Darius, if this reaches the surface: do not follow us. Whatever lives down here already knows your name."
+LORE_RELIC_06_TITLE,The Ember Lantern
+LORE_RELIC_06_BODY,"A surface lamp, still warm after twenty years. Its flame bends away from the Rift, as if it is afraid."
+LORE_RELIC_07_TITLE,Hale's Compass
+LORE_RELIC_07_BODY,"The needle does not point north. It points down, and when you carry it to the shore it points at you."
+LORE_RELIC_08_TITLE,A Broken Rope
+LORE_RELIC_08_BODY,"Surface hemp, cut clean. Not frayed. Somebody chose to stay."
+LORE_RELIC_09_TITLE,The Guardian's Rivet
+LORE_RELIC_09_BODY,"A rivet as large as a fist, stamped with a sigil of a small, bright flame."
+LORE_RELIC_10_TITLE,A Child's Drawing
+LORE_RELIC_10_BODY,"A city on a pillar, a sea underneath, and above it all a little light with a smiling face."
+LORE_MEMORY_DARIUS_TITLE,Memory of Darius: The Rope
+LORE_MEMORY_DARIUS_BODY,"He was the last one up the rope when the shaft caved in, and the only one who could climb back down. It took him three years to dig through. By then the camp was cold, and the tracks led to the sea."
+LORE_TRUTH_01_TITLE,Primeval Truth: The Descent Was Not a Fall
+LORE_TRUTH_01_BODY,"An Architect's order, in a hand that sets the stone: sink Vael-Sora, every street and soul, to contain the Unwritten. Below it, where a name should be, a sigil: a small, bright wisp. Your shape."

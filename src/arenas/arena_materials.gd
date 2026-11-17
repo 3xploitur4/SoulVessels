@@ -58,6 +58,12 @@ const PALETTE := {
 	"z3_ledge": {"albedo": Color(0.7, 0.72, 0.76), "roughness": 0.45, "tex": "slab", "tile_m": 2.5},
 	"z3_top": {"albedo": Color(0.86, 0.78, 0.56), "roughness": 0.35, "tex": "slab", "tile_m": 2.0,
 		"emission": Color(0.45, 0.36, 0.12), "emission_energy": 0.18},
+	# Zone 4, The Sealed Rift and the Starless Shore (story 049): black basalt, ember seams, wet slate.
+	"z4_rock": {"albedo": Color(0.13, 0.13, 0.16), "roughness": 0.9, "tex": "cave_rock", "tile_m": 6.0},
+	"z4_ledge": {"albedo": Color(0.3, 0.29, 0.32), "roughness": 0.8, "tex": "stone_blocks", "tile_m": 3.0},
+	"z4_top": {"albedo": Color(0.3, 0.31, 0.35), "roughness": 0.6, "tex": "slab", "tile_m": 2.5},
+	"z4_shore_top": {"albedo": Color(0.3, 0.34, 0.38), "roughness": 0.2, "tex": "slab", "tile_m": 2.5,
+		"metallic": 0.2},
 	# Zone 2, The Luminous Mycelium Forest: violet-dark rock, glowing moss, teal and violet caps.
 	"z2_rock": {"albedo": Color(0.2, 0.17, 0.3), "roughness": 0.95, "tex": "cave_rock", "tile_m": 7.0},
 	"z2_ledge": {"albedo": Color(0.4, 0.34, 0.5), "roughness": 0.9, "tex": "myc_bark", "tile_m": 3.0},
