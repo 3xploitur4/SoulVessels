@@ -32,6 +32,8 @@ var loadout: Array[String] = []
 var affinity_xp: Dictionary[String, float] = {}
 ## Vessel id -> extra Affinity levels from read Vessel memories.
 var affinity_bonus: Dictionary[String, int] = {}
+## Vessel id -> weapon reforge level, 0-5 (story 036). Older saves have none: every weapon +0.
+var weapon_levels: Dictionary[String, int] = {}
 ## The altar you respawn at: {"room": id, "altar": id}. Empty before the first rest.
 var rested_altar: Dictionary = {}
 ## Altar ids lit so far (fast travel needs all 7).
@@ -150,6 +152,7 @@ func to_dict() -> Dictionary:
 		"loadout": loadout.duplicate(),
 		"affinity_xp": affinity_xp.duplicate(),
 		"affinity_bonus": affinity_bonus.duplicate(),
+		"weapon_levels": weapon_levels.duplicate(),
 		"rested_altar": rested_altar.duplicate(),
 		"lit_altars": lit_altars.duplicate(),
 		"checkpoint": checkpoint.duplicate(),
@@ -194,6 +197,10 @@ static func from_dict(d: Dictionary) -> GameState:
 	if bonus is Dictionary:
 		for k: Variant in (bonus as Dictionary).keys():
 			gs.affinity_bonus[str(k)] = int((bonus as Dictionary)[k])
+	var wl: Variant = d.get("weapon_levels", {})
+	if wl is Dictionary:
+		for k: Variant in (wl as Dictionary).keys():
+			gs.weapon_levels[str(k)] = int((wl as Dictionary)[k])
 	gs.rested_altar = _dict(d.get("rested_altar"))
 	gs.lit_altars = _strings(d.get("lit_altars"))
 	gs.checkpoint = _dict(d.get("checkpoint"))

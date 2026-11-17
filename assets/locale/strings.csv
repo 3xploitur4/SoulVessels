@@ -259,3 +259,12 @@ ENEMY_CHOIR_PRELATE,Choir Prelate
 BOSS_WEEPING_SOVEREIGN,The Weeping Sovereign
 SPEAKER_CAELAN,Caelan
 CAELAN_GOODBYE,"Rest now, my Queen. I kept the door. I kept it as long as I could."
+ALTAR_REFORGE,Reforge
+REFORGE_ESSENCE,Soul Essence: %d
+REFORGE_ROW,%s's weapon  +%d
+REFORGE_COATING,(coating slot)
+REFORGE_NEXT,"Next +%d: %d Essence and %s"
+REFORGE_OR," or "
+REFORGE_MAX,Fully reforged.
+REFORGE_BUTTON,Reforge %s to +%d
+CRAFT_CENSER,"Craft a Censer Core (3 Tarnished Censer Shards; you have %d)"

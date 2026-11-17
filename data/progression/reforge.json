@@ -1,0 +1,48 @@
+{
+  "_source": "Design addendum v1, section 'Progression, upgrades and loot': weapon reforging at Soul Altars costs Soul Essence + materials, +0 to +5 with +8% ATK per level and a coating slot from +3; each level lists one-or-more material options where paying any single option is enough, and Censer Core is crafted from 3 Tarnished Censer Shards.",
+  "atk_per_level": 0.08,
+  "coating_slot_level": 3,
+  "max_level": 5,
+  "levels": [
+    {
+      "level": 1,
+      "essence": 300,
+      "materials": [
+        { "crude_stone": 3 }
+      ]
+    },
+    {
+      "level": 2,
+      "essence": 700,
+      "materials": [
+        { "crude_stone": 6 }
+      ]
+    },
+    {
+      "level": 3,
+      "essence": 1500,
+      "materials": [
+        { "polished_basalt_core": 2 },
+        { "luminous_root_resin": 2 }
+      ]
+    },
+    {
+      "level": 4,
+      "essence": 3000,
+      "materials": [
+        { "polished_basalt_core": 4, "censer_core": 1 }
+      ]
+    },
+    {
+      "level": 5,
+      "essence": 6000,
+      "materials": [
+        { "sovereigns_crown_fragment": 1 },
+        { "heart_of_the_guardian": 1 }
+      ]
+    }
+  ],
+  "craft": {
+    "censer_core": { "tarnished_censer_shard": 3 }
+  }
+}

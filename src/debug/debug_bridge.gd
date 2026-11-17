@@ -194,6 +194,12 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 					return {"phase": bb.phase, "hp": bb.health.current, "transition": bb.in_transition(),
 						"state": bb.state, "attack": str(bb.current_attack.get("id", ""))}
 			return {"error": "no boss"}
+		"essence":
+			var gst: GameState = sandbox.get("state")
+			if gst == null:
+				return {"error": "no game state"}
+			gst.essence = int(args.get("value", gst.essence))
+			return {"essence": gst.essence}
 		"root_player":
 			player.snare.apply()
 			return {"rooted": player.snare.is_active()}

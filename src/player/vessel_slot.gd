@@ -14,6 +14,8 @@ var posture: Posture
 var affinity: int = 0
 var sync_guard_left: float = 0.0
 var cooldowns: Dictionary[String, float] = {}
+## Weapon reforge ATK multiplier (story 036): 1.0 at +0, 1.4 at +5.
+var atk_mult: float = 1.0
 ## Built by the player; shown only while active.
 var visual: Node3D
 
@@ -36,6 +38,8 @@ func stat(key: String) -> float:
 	var v := float(stats.get(key, 0.0))
 	if affinity >= 3 and (key == "atk" or key == "def"):
 		v *= 1.05
+	if key == "atk":
+		v *= atk_mult
 	return v
 
 

@@ -13,10 +13,15 @@ signal loadout_requested(vessel_ids: Array[String])
 signal lore_read_requested(lore_id: String)
 signal core_buy_requested(node_id: String)
 signal leave_requested
+## Reforge this Vessel's weapon (story 036).
+signal reforge_requested(vessel_id: String)
+## Craft one of this item.
+signal craft_requested(item: String)
 
 var state: GameState
 ## The Soul Core tree, to draw (never to change).
 var soul_core: SoulCore
+var reforge: Reforge
 var altar_name: String = ""
 
 var _root: Control
@@ -49,7 +54,7 @@ func show_main() -> void:
 	col.add_child(UiKit.label(tr("ALTAR_RESTED"), 26, UiKit.COL_DIM))
 	var items: Array[Control] = []
 	var pages := [["ALTAR_LOADOUT", "Loadout", show_loadout], ["ALTAR_SOUL_CORE", "SoulCore", show_core],
-		["ALTAR_LORE", "Lore", show_lore], ["ALTAR_LEAVE", "Leave", func() -> void: leave_requested.emit()]]
+		["ALTAR_REFORGE", "Reforge", show_reforge], ["ALTAR_LORE", "Lore", show_lore], ["ALTAR_LEAVE", "Leave", func() -> void: leave_requested.emit()]]
 	for p: Array in pages:
 		var b := UiKit.button(tr(str(p[0])), 520.0)
 		b.name = str(p[1])
@@ -132,6 +137,59 @@ func show_core() -> void:
 func refresh_core() -> void:
 	if _core_view != null and is_instance_valid(_core_view):
 		_core_view.refresh()
+
+
+# --- Reforge (story 036) ------------------------------------------------------------------
+
+## Each held Vessel's weapon: its level, the next level's cost against what is held, and a
+## button; then the Censer Core recipe. The game applies a press and calls this again.
+func show_reforge() -> void:
+	var col := _new_page()
+	col.add_child(UiKit.heading(tr("ALTAR_REFORGE"), 48))
+	col.add_child(UiKit.label(tr("REFORGE_ESSENCE") % state.essence, 26, UiKit.COL_GOLD))
+	var items: Array[Control] = []
+	for v: String in state.unlocked_vessels:
+		var lvl := reforge.level(state, v) if reforge != null else 0
+		var name := tr("VESSEL_" + v.to_upper())
+		var cost := reforge.next_cost(state, v) if reforge != null else {}
+		var line := tr("REFORGE_ROW") % [name, lvl]
+		if reforge != null and reforge.has_coating_slot(lvl):
+			line += "   " + tr("REFORGE_COATING")
+		col.add_child(UiKit.label(line, 28, UiKit.COL_TEXT))
+		if cost.is_empty():
+			col.add_child(UiKit.label(tr("REFORGE_MAX"), 24, UiKit.COL_DIM))
+			continue
+		var options: Array[String] = []
+		for opt: Dictionary in cost.get("materials", []):
+			var parts: Array[String] = []
+			for item: String in opt.keys():
+				parts.append("%s x%d (%d)" % [tr("ITEM_" + item.to_upper()), int(opt[item]), state.item_count(item)])
+			options.append(", ".join(parts))
+		col.add_child(UiKit.label(tr("REFORGE_NEXT") % [int(cost["level"]), int(cost["essence"]),
+			tr("REFORGE_OR").join(options)], 22, UiKit.COL_DIM))
+		var b := UiKit.button(tr("REFORGE_BUTTON") % [name, int(cost["level"])], 560.0)
+		b.name = "Reforge_" + v
+		b.disabled = not reforge.can_reforge(state, v)
+		b.pressed.connect(func() -> void: reforge_requested.emit(v))
+		col.add_child(b)
+		items.append(b)
+	if reforge != null and reforge.craft_recipes.has("censer_core"):
+		var cb := UiKit.button(tr("CRAFT_CENSER") % state.item_count("tarnished_censer_shard"), 560.0)
+		cb.name = "Craft_censer_core"
+		cb.disabled = not reforge.can_craft(state, "censer_core")
+		cb.pressed.connect(func() -> void: craft_requested.emit("censer_core"))
+		col.add_child(cb)
+		items.append(cb)
+	var back := UiKit.button(tr("UI_BACK"), 560.0)
+	back.name = "ReforgeBack"
+	back.pressed.connect(show_main)
+	col.add_child(back)
+	items.append(back)
+	var enabled: Array[Control] = []
+	for c in items:
+		if not (c as Button).disabled:
+			enabled.append(c)
+	UiKit.link_focus(enabled)
 
 
 # --- Lore -----------------------------------------------------------------------------------

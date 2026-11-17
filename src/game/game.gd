@@ -45,6 +45,8 @@ var bridge_handler: Node
 
 ## The Soul Core tree (story 020).
 var soul_core: SoulCore
+## Weapon reforging and Censer Core crafting rules (story 036).
+var reforge: Reforge
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -88,6 +90,7 @@ func _ready() -> void:
 	rooms.exit_blocked.connect(_on_exit_blocked)
 	loot = LootTable.from_data()
 	soul_core = SoulCore.from_data()
+	reforge = Reforge.from_data()
 	GameEvents.perfect_parry.connect(func(_a: Node3D) -> void: _award_xp("perfect_parry"))
 	GameEvents.perfect_dodge.connect(func(_a: Node3D) -> void: _award_xp("perfect_dodge"))
 	GameEvents.enemy_died.connect(_on_enemy_died)
@@ -209,6 +212,7 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 	player.vessel_ids = state.loadout.duplicate()
 	player.difficulty = state.difficulty
 	player.affinity_levels = affinity_levels()
+	player.weapon_mults = weapon_mults()
 	player.auto_respawn = false
 	add_child(player)
 	player.apply_bonuses(soul_core.modifiers(state.soul_core))
@@ -281,6 +285,35 @@ func buy_core(id: String) -> void:
 	save_now()
 	if altar_menu != null:
 		altar_menu.refresh_core()
+
+
+## Vessel id -> weapon ATK multiplier from the save's reforge levels.
+func weapon_mults() -> Dictionary:
+	var out := {}
+	for v: String in state.weapon_levels.keys():
+		out[v] = reforge.atk_multiplier(int(state.weapon_levels[v]))
+	return out
+
+
+## Reforge a Vessel's weapon at an altar (story 036).
+func reforge_weapon(vessel_id: String) -> void:
+	if state == null or not reforge.reforge(state, vessel_id):
+		return
+	player.set_weapon_mult(vessel_id, reforge.atk_multiplier(reforge.level(state, vessel_id)))
+	Sfx.play("gate_open")
+	save_now()
+	if altar_menu != null:
+		altar_menu.show_reforge()
+
+
+## Craft an item from its recipe at an altar (the Censer Core).
+func craft_item(item: String) -> void:
+	if state == null or not reforge.craft(state, item):
+		return
+	Sfx.play("altar_kindle")
+	save_now()
+	if altar_menu != null:
+		altar_menu.show_reforge()
 
 
 ## Save the slot now. `resume` also records where the player stands, so Continue starts there.
@@ -390,6 +423,9 @@ func open_altar_menu(altar: Altar) -> void:
 	altar_menu.state = state
 	altar_menu.soul_core = soul_core
 	altar_menu.core_buy_requested.connect(buy_core)
+	altar_menu.reforge = reforge
+	altar_menu.reforge_requested.connect(reforge_weapon)
+	altar_menu.craft_requested.connect(craft_item)
 	altar_menu.altar_name = tr(altar.name_key)
 	altar_menu.loadout_requested.connect(apply_loadout)
 	altar_menu.lore_read_requested.connect(read_lore)

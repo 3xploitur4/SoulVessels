@@ -1,0 +1,5 @@
+PASS  the altar is in reach                          UI_REST
+PASS  the altar menu has a Reforge page              ['Loadout', 'SoulCore', 'Reforge', 'Lore', 'Leave']
+PASS  Caelan's weapon to +1 for 300 Essence and 3 stones {'caelan': 1} / 1700
+PASS  three shards become a Censer Core              {'censer_core': 1, 'crude_stone': 1}
+SUMMARY: 0 failed

@@ -49,6 +49,8 @@ var affinity_levels: Dictionary = {}
 ## Soul Core and other progression bonuses (story 020): "max_hp", "gauge_cap",
 ## "flask_charges", "stamina_regen" (a fraction, 0.05 = +5 %).
 var bonuses: Dictionary = {}
+## Vessel id -> weapon ATK multiplier from reforging (story 036), applied on equip.
+var weapon_mults: Dictionary = {}
 ## Difficulty row in combat.json `difficulty`.
 var difficulty: String = "normal"
 ## Where the sandbox respawns the player.
@@ -362,6 +364,14 @@ func _update_water() -> void:
 		GameEvents.ultimate_fx_requested.emit("splash", Vector3(global_position.x, global_position.y + water_depth, 0.0), 1.2)
 
 
+## Set a Vessel's weapon multiplier now (after a reforge) and for later equips.
+func set_weapon_mult(vessel_id: String, mult: float) -> void:
+	weapon_mults[vessel_id] = mult
+	var i := loadout.index_of(vessel_id)
+	if i >= 0:
+		loadout.slots[i].atk_mult = mult
+
+
 ## Raise Seris's Aether Shield for `seconds` with `radius` metres of reach.
 func raise_aether_shield(seconds: float, radius: float) -> void:
 	aether_shield_left = maxf(aether_shield_left, seconds)
@@ -505,6 +515,7 @@ func equip(ids: Array[String], levels: Dictionary = {}) -> void:
 	loadout = Loadout.from_balance()
 	for vid in list:
 		var slot := VesselSlot.create(vid, int(levels.get(vid, 0)))
+		slot.atk_mult = float(weapon_mults.get(vid, 1.0))
 		slot.visual = VesselVisual.build(slot.data)
 		slot.visual.visible = false
 		_visual_root.add_child(slot.visual)
