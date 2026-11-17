@@ -161,6 +161,10 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 ## casts her bolts with "bolt", plants Frost Binding with "frost", swims with "swim"; story 039),
 ## else the shared clip from `_clip_for`.
 static func clip_for_rig(state: String, clips: Dictionary) -> String:
+	# Story 051: a Vessel's own clip named after the action (Darius's "crushing_blow", Ilyr's
+	# "fracture", a hammer's "primary_2") comes first.
+	if clips.has(state):
+		return state
 	var own := ""
 	if state.begins_with("primary"):
 		own = "bolt"

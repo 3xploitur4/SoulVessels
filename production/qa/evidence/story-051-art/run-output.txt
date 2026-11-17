@@ -1,0 +1,7 @@
+PASS  Darius in ability_1                                crushing_blow
+PASS  Darius in ability_2                                groundbreaker
+PASS  Darius in attack                                   primary_0
+PASS  guardian caught in its attack poses                [('attack', 'chest_laser'), ('attack', 'seismic_wave'), ('telegraph', 'chest_laser'), ('telegraph', 'seismic_wave')]
+PASS  leviathan caught in its attack poses               [('attack', 'breaker_wave'), ('attack', 'sonar_orbs'), ('telegraph', 'breaker_wave'), ('telegraph', 'sonar_orbs')]
+PASS  an erased echo shown                               
+SUMMARY: 0 failed

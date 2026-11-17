@@ -302,6 +302,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if global_position.z != 0.0:
 		global_position.z = 0.0
+	visual.move_id = str(current_attack.get("id", ""))
 	visual.animate(state, facing, absf(velocity.x), delta)
 
 

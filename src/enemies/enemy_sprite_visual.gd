@@ -92,6 +92,10 @@ func animate(state: String, facing: int, speed: float, delta: float) -> void:
 			clip = "run" if speed > 0.2 else "idle"
 		elif state == "recover":
 			clip = "idle"
+		# Story 051: an attack's own clip when the rig has one (the Guardian's laser, the
+		# Leviathan's tail-whip), else the shared telegraph/attack clip.
+		if move_id != "" and (state == "telegraph" or state == "attack") 				and (b as RigBody).clips.has("%s_%s" % [state, move_id]):
+			clip = "%s_%s" % [state, move_id]
 		(b as RigBody).play(clip)
 	b.tick(delta)
 

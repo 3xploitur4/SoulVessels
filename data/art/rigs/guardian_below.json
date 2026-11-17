@@ -71,6 +71,226 @@
      }
     ]
    ]
+  },
+  "telegraph_fist_slam": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 12,
+      "head": 6,
+      "arm_r": 168,
+      "arm_l": 20,
+      "leg_l": -6,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack_fist_slam": {
+   "blend": 30,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -24,
+      "head": -8,
+      "arm_r": 18,
+      "arm_l": 10,
+      "leg_l": 14,
+      "leg_r": -10,
+      "root_y": -0.12,
+      "squash": -0.06
+     }
+    ]
+   ]
+  },
+  "telegraph_backhand": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 16,
+      "head": 4,
+      "arm_l": -70,
+      "arm_r": 30,
+      "squash": 0.03
+     }
+    ]
+   ]
+  },
+  "attack_backhand": {
+   "blend": 30,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -16,
+      "head": -6,
+      "arm_l": 115,
+      "arm_r": -10,
+      "leg_l": 10
+     }
+    ]
+   ]
+  },
+  "telegraph_ground_pound": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 14,
+      "head": 8,
+      "arm_l": 172,
+      "arm_r": 168,
+      "leg_l": -6,
+      "leg_r": 6,
+      "squash": 0.05
+     }
+    ]
+   ]
+  },
+  "attack_ground_pound": {
+   "blend": 28,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -28,
+      "head": -10,
+      "arm_l": 12,
+      "arm_r": 8,
+      "leg_l": 16,
+      "leg_r": -14,
+      "root_y": -0.18,
+      "squash": -0.08
+     }
+    ]
+   ]
+  },
+  "telegraph_seismic_wave": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 8,
+      "head": 6,
+      "arm_l": 140,
+      "arm_r": 145,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack_seismic_wave": {
+   "blend": 30,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -22,
+      "head": -8,
+      "arm_l": 0,
+      "arm_r": -4,
+      "leg_l": 12,
+      "root_y": -0.1,
+      "squash": -0.06
+     }
+    ]
+   ]
+  },
+  "telegraph_chest_laser": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -12,
+      "head": 12,
+      "arm_l": -35,
+      "arm_r": -30,
+      "squash": 0.02
+     }
+    ]
+   ]
+  },
+  "attack_chest_laser": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -16,
+      "head": 14,
+      "arm_l": -45,
+      "arm_r": -42,
+      "leg_l": -6
+     }
+    ]
+   ]
+  },
+  "telegraph_core_shockwave": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 22,
+      "head": -6,
+      "arm_l": 70,
+      "arm_r": 75,
+      "squash": 0.06
+     }
+    ]
+   ]
+  },
+  "attack_core_shockwave": {
+   "blend": 28,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -18,
+      "head": 10,
+      "arm_l": -75,
+      "arm_r": -70,
+      "squash": -0.04
+     }
+    ]
+   ]
+  },
+  "telegraph_core_beam": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 10,
+      "head": -4,
+      "arm_l": 60,
+      "arm_r": 62,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack_core_beam": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -14,
+      "head": 8,
+      "arm_l": -65,
+      "arm_r": -62
+     }
+    ]
+   ]
   }
  },
  "lean_bone": "torso",

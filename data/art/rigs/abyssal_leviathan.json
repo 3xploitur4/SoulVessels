@@ -141,6 +141,267 @@
      }
     ]
    ]
+  },
+  "telegraph_tail_whip": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "tail": 34,
+      "tail_tip": -34,
+      "neck": -6,
+      "head": -6,
+      "squash": 0.03
+     }
+    ]
+   ]
+  },
+  "attack_tail_whip": {
+   "blend": 28,
+   "keys": [
+    [
+     0,
+     {
+      "tail": -42,
+      "tail_tip": 44,
+      "neck": 6,
+      "head": 4,
+      "squash": -0.03
+     }
+    ]
+   ]
+  },
+  "telegraph_lunge_bite": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -24,
+      "head": -28,
+      "tail": 10,
+      "tail_tip": -12,
+      "squash": 0.05
+     }
+    ]
+   ]
+  },
+  "attack_lunge_bite": {
+   "blend": 28,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 28,
+      "head": 26,
+      "tail": -12,
+      "tail_tip": 14,
+      "squash": -0.06
+     }
+    ]
+   ]
+  },
+  "telegraph_blindside_bite": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -28,
+      "head": -30,
+      "tail": 12,
+      "squash": 0.06
+     }
+    ]
+   ]
+  },
+  "attack_blindside_bite": {
+   "blend": 26,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 30,
+      "head": 28,
+      "tail": -14,
+      "squash": -0.07
+     }
+    ]
+   ]
+  },
+  "telegraph_tidal_slam": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -32,
+      "head": -12,
+      "tail": 6,
+      "root_y": 0.35,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack_tidal_slam": {
+   "blend": 28,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 32,
+      "head": 22,
+      "tail": -8,
+      "root_y": -0.2,
+      "squash": -0.07
+     }
+    ]
+   ]
+  },
+  "telegraph_abyss_slam": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -36,
+      "head": -16,
+      "tail": 10,
+      "root_y": 0.45,
+      "squash": 0.05
+     }
+    ]
+   ]
+  },
+  "attack_abyss_slam": {
+   "blend": 26,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 36,
+      "head": 26,
+      "tail": -10,
+      "root_y": -0.25,
+      "squash": -0.08
+     }
+    ]
+   ]
+  },
+  "telegraph_breaker_wave": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -8,
+      "head": -6,
+      "tail": 40,
+      "tail_tip": -30
+     }
+    ]
+   ]
+  },
+  "attack_breaker_wave": {
+   "blend": 30,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 8,
+      "head": 6,
+      "tail": -40,
+      "tail_tip": 36
+     }
+    ]
+   ]
+  },
+  "telegraph_sonic_roar": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -8,
+      "head": -24,
+      "tail": 6,
+      "squash": 0.04
+     }
+    ]
+   ]
+  },
+  "attack_sonic_roar": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -16,
+      "head": -40,
+      "tail": 10,
+      "tail_tip": -10,
+      "squash": 0.07
+     }
+    ]
+   ]
+  },
+  "telegraph_sonar_orbs": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 4,
+      "head": -14,
+      "tail": 4
+     }
+    ]
+   ]
+  },
+  "attack_sonar_orbs": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": 8,
+      "head": 10,
+      "tail": -4
+     }
+    ]
+   ]
+  },
+  "telegraph_rift_beams": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -20,
+      "head": -34,
+      "tail": 14,
+      "tail_tip": -14,
+      "squash": 0.05
+     }
+    ]
+   ]
+  },
+  "attack_rift_beams": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {
+      "neck": -22,
+      "head": -38,
+      "tail": 16,
+      "tail_tip": -16,
+      "squash": 0.06
+     }
+    ]
+   ]
   }
  },
  "lean_bone": "neck",

@@ -8,15 +8,43 @@ extends RefCounted
 
 ## A glowing ground wave (King's Judgment).
 static func shockwave(color: Color) -> Node3D:
+	# Story 051: a rolling crest of light and grit instead of a solid wedge. Soft additive blobs
+	# rise to a crest at the leading edge (+x) and trail off behind it, with a hot core line.
 	var root := Node3D.new()
-	var mi := MeshInstance3D.new()
-	var prism := PrismMesh.new()
-	prism.size = Vector3(0.9, 1.2, 0.9)
-	prism.left_to_right = 1.0
-	mi.mesh = prism
-	mi.material_override = ArenaMaterials.flat(color, 3.5)
-	mi.position.y = 0.0
-	root.add_child(mi)
+	var tex := SpriteArt.blob()
+	var crest := [[0.25, 0.55, 1.3, 1.0], [-0.1, 0.45, 1.1, 0.8], [-0.45, 0.32, 0.95, 0.6],
+		[-0.8, 0.22, 0.8, 0.4], [-1.1, 0.14, 0.65, 0.25]]
+	for c: Array in crest:
+		var mi := MeshInstance3D.new()
+		var q := QuadMesh.new()
+		q.size = Vector2(float(c[2]), float(c[2]) * 1.15)
+		mi.mesh = q
+		var mat := StandardMaterial3D.new()
+		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		mat.albedo_texture = tex
+		mat.albedo_color = Color(color.r, color.g, color.b, 0.75 * float(c[3]))
+		mat.disable_fog = true
+		mi.material_override = mat
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mi.position = Vector3(float(c[0]), float(c[1]), 0.05)
+		root.add_child(mi)
+	var core := MeshInstance3D.new()
+	var cq := QuadMesh.new()
+	cq.size = Vector2(0.35, 1.1)
+	core.mesh = cq
+	var cm := StandardMaterial3D.new()
+	cm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	cm.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	cm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	cm.albedo_texture = tex
+	cm.albedo_color = color.lerp(Color.WHITE, 0.45)
+	cm.disable_fog = true
+	core.material_override = cm
+	core.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	core.position = Vector3(0.3, 0.5, 0.08)
+	root.add_child(core)
 	return root
 
 

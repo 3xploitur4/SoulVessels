@@ -9,6 +9,9 @@ extends Node3D
 ##     var vis := EnemyVisual.build(Balance.enemy("echo_crawler"))
 
 var kind: String = ""
+## The attack being telegraphed or struck (its id in the enemy's data), so a rig can play that
+## attack's own clip ("telegraph_<id>", "attack_<id>"; story 051). Empty between attacks.
+var move_id: String = ""
 ## Parts that animate.
 var legs: Array[Node3D] = []
 var shield: Node3D
