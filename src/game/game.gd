@@ -221,6 +221,7 @@ func begin_run(run_slot: int, gs: GameState) -> void:
 	player.affinity_levels = affinity_levels()
 	player.weapon_mults = weapon_mults()
 	player.data_patcher = _patch_vessel
+	player.overdrive_unlocked = state.flag("unlock_overdrive")
 	player.auto_respawn = false
 	add_child(player)
 	player.apply_bonuses(soul_core.modifiers(state.soul_core))
@@ -551,6 +552,9 @@ func _on_boss_defeated(e: EnemyBase) -> void:
 		state.set_flag(str(od["flag"]))
 	for f: Variant in od.get("flags", []):
 		state.set_flag(str(f))
+	if state.flag("unlock_overdrive") and not player.overdrive_unlocked:
+		player.overdrive_unlocked = true
+		prompts.toast(tr("OVERDRIVE_UNLOCKED"), UiKit.COL_GOLD)
 	camera.roll_to(0.0, 1.5)
 	var gifts: Dictionary = od.get("affinity_bonus", {})
 	for v: String in gifts.keys():

@@ -51,6 +51,10 @@ var affinity_levels: Dictionary = {}
 var bonuses: Dictionary = {}
 ## Vessel id -> weapon ATK multiplier from reforging (story 036), applied on equip.
 var weapon_mults: Dictionary = {}
+## Overdrive (story 046): unlocked by the Pure Soul Matrix; the stage of a running one (0: none,
+## 1: the first Ultimate, 2: the second, 3: the finisher).
+var overdrive_unlocked: bool = false
+var overdrive_stage: int = 0
 ## Optional (vessel_id, data) -> data: patches a Vessel's balance data on equip (ranks, passives).
 var data_patcher: Callable
 ## Difficulty row in combat.json `difficulty`.
@@ -389,6 +393,90 @@ func set_weapon_mult(vessel_id: String, mult: float) -> void:
 		loadout.slots[i].atk_mult = mult
 
 
+## May Overdrive start: unlocked, a full gauge of `bars`, at least two Vessels bound?
+static func overdrive_allowed(unlocked: bool, bars: int, vessels: int) -> bool:
+	return unlocked and bars >= int(Balance.combat_f("overdrive.cost_bars")) and vessels >= 2
+
+
+## Would pressing the Ultimate now start Overdrive?
+func overdrive_ready() -> bool:
+	return overdrive_stage == 0 and overdrive_allowed(overdrive_unlocked, gauge.bars(), loadout.size())
+
+
+## Overdrive: the gauge empties; this Vessel's Ultimate, a free swap, the next one's, a finisher.
+func _start_overdrive() -> bool:
+	var first := loadout.active().kit.ultimate_action(self)
+	if first == null:
+		return false
+	gauge.spend_bars(int(Balance.combat_f("overdrive.cost_bars")))
+	overdrive_stage = 1
+	_overdrive_guard()
+	start_action(first)
+	state = "ultimate"
+	ultimate_started.emit(loadout.active().id)
+	GameEvents.ultimate_fx_requested.emit("final_stand", global_position, 3.0)
+	Sfx.play("ultimate")
+	return true
+
+
+func _overdrive_guard() -> void:
+	grant_invulnerability(Balance.combat_f("overdrive.guard_s"))
+
+
+func _advance_overdrive() -> void:
+	_overdrive_guard()
+	match overdrive_stage:
+		1:
+			overdrive_stage = 2
+			var next := loadout.neighbour(1)
+			state = "overdrive"  # not "ultimate", which refuses a swap
+			try_swap(next, true)
+			var second := loadout.active().kit.ultimate_action(self)
+			if second != null:
+				start_action(second)
+				state = "ultimate"
+				ultimate_started.emit(loadout.active().id)
+			else:
+				_advance_overdrive()
+		2:
+			overdrive_stage = 3
+			start_action(_overdrive_finisher())
+		_:
+			overdrive_stage = 0
+
+
+## The combined finisher: one wide blow carrying both Vessels' elements.
+func _overdrive_finisher() -> PlayerAction:
+	var od: Dictionary = Balance.combat("overdrive")
+	var a := PlayerAction.new("overdrive_finisher", float(od.get("finisher_s", 0.7)))
+	a.hyper_armor = true
+	a.data["fired"] = false
+	a.on_tick = func(pl: Player, act: PlayerAction, _dt: float) -> void:
+		if act.data["fired"] or act.elapsed < float(od.get("finisher_windup_s", 0.3)):
+			return
+		act.data["fired"] = true
+		var targets: Array[Node3D] = []
+		var centre := Vector2(pl.global_position.x, pl.global_position.y + 0.9)
+		pl.world.query_radius(centre, float(od.get("finisher_radius_m", 9.0)), CombatWorld.TEAM_ENEMY, targets)
+		var elements: Array[String] = []
+		for s in pl.loadout.slots:
+			elements.append(str(s.data.get("primary", {}).get("element", "physical")))
+		for i in range(targets.size()):
+			var t := targets[i]
+			var p := pl.make_packet(float(od.get("finisher_motion", 4.0)), float(od.get("finisher_posture", 120.0)))
+			p.aoe = true
+			p.element = elements[i % elements.size()]
+			p.element_buildup = float(od.get("finisher_buildup", 60.0))
+			p.source_x = pl.global_position.x
+			p.tags["ability"] = "overdrive_finisher"
+			p.result = t.call("receive_hit", p)
+			pl.report_hit(t, p)
+		GameEvents.ultimate_fx_requested.emit("final_stand", pl.global_position, float(od.get("finisher_radius_m", 9.0)))
+		GameEvents.camera_shake_requested.emit(1.0)
+		Sfx.play("posture_break")
+	return a
+
+
 ## Raise Seris's Aether Shield for `seconds` with `radius` metres of reach.
 func raise_aether_shield(seconds: float, radius: float) -> void:
 	aether_shield_left = maxf(aether_shield_left, seconds)
@@ -485,6 +573,8 @@ func try_swap(index: int, free: bool = false) -> bool:
 
 ## Fire the active Vessel's Sync Ultimate when bars and Affinity allow. Returns true on start.
 func try_ultimate() -> bool:
+	if overdrive_ready():
+		return _start_overdrive()
 	var slot := loadout.active()
 	var cost := int(Balance.combat_f("sync_ultimate.cost_bars"))
 	if slot.affinity < int(Balance.combat_f("sync_ultimate.min_affinity")) or not gauge.has_bars(cost):
@@ -693,6 +783,9 @@ func _physics_process(delta: float) -> void:
 	stealth_left = maxf(stealth_left - delta, 0.0)
 	damage_reduction_left = maxf(damage_reduction_left - delta, 0.0)
 	_tick_aether_shield(delta)
+	# Overdrive moves to its next step whenever the current one has ended, however it ended.
+	if overdrive_stage > 0 and action == null and not health.is_dead():
+		_advance_overdrive()
 	_update_water()
 	loadout.active().kit.tick(delta)
 	_tick_status(delta)

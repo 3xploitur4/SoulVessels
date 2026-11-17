@@ -132,5 +132,16 @@
     "friction": 0.6,
     "uphill_penalty": 1.6,
     "max_slide_mps": 7.0
+  },
+  "overdrive": {
+    "_note": "Story 046, decision D-053. With Overdrive unlocked (the Pure Soul Matrix) and a full gauge (cost_bars), the Ultimate input starts Overdrive: the active Vessel's Ultimate, a free swap, the next Vessel's Ultimate, then a finisher of finisher_radius_m with both Vessels' elements. guard_s: invulnerability refreshed at each step.",
+    "cost_bars": 3,
+    "guard_s": 6.0,
+    "finisher_s": 0.7,
+    "finisher_windup_s": 0.3,
+    "finisher_radius_m": 9.0,
+    "finisher_motion": 4.0,
+    "finisher_posture": 120,
+    "finisher_buildup": 60
   }
 }

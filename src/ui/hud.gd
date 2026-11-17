@@ -178,8 +178,14 @@ func _draw_vitals(origin: Vector2) -> void:
 			_canvas.draw_colored_polygon(filled, COL_GAUGE_FULL if fill_k >= 1.0 else COL_GAUGE)
 		shape.append(shape[0])
 		_canvas.draw_polyline(shape, gold if fill_k >= 1.0 else gold_dim, 1.5)
-	_canvas.draw_string(_font, Vector2(origin.x, gy + 38), tr("HUD_SOUL_GAUGE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16,
-		Color(0.75, 0.9, 0.95, 0.85))
+	var gauge_label := tr("HUD_SOUL_GAUGE")
+	var gauge_col := Color(0.75, 0.9, 0.95, 0.85)
+	if player.overdrive_ready():
+		# Story 046: a full gauge with Overdrive unlocked; the label pulses gold.
+		gauge_label = tr("UI_OVERDRIVE_READY")
+		var pulse := 0.6 + 0.4 * sin(float(Time.get_ticks_msec()) * 0.008)
+		gauge_col = Color(1.0, 0.8, 0.35, pulse)
+	_canvas.draw_string(_font, Vector2(origin.x, gy + 38), gauge_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, gauge_col)
 	if state != null:
 		# Soul Essence: a small soul-light diamond and the carried amount.
 		var ep := Vector2(origin.x + 3.0 * (seg_w + gap) + 22.0, gy + 8.0)

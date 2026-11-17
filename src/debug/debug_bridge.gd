@@ -221,6 +221,9 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 			z.setup(Vector2(float(xs[0]), float(xs[1])), Vector2(float(ys[0]), float(ys[1])), float(args.get("angle", 15.0)))
 			rms.features_root.add_child(z)
 			return {"angle": z.angle}
+		"overdrive":
+			player.overdrive_unlocked = bool(args.get("on", true))
+			return {"unlocked": player.overdrive_unlocked, "ready": player.overdrive_ready()}
 		"root_player":
 			player.snare.apply()
 			return {"rooted": player.snare.is_active()}
