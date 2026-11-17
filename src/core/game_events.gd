@@ -32,3 +32,5 @@ signal ultimate_fx_requested(kind: String, where: Vector3, size: float)
 signal stealth_changed(hidden: bool)
 ## A hit landed somewhere: for sparks and damage numbers. `crit` and `blocked` style the effect.
 signal hit_fx_requested(where: Vector3, amount: float, crit: bool, blocked: bool)
+## Seris's Frost Binding landed on `rect` (world X/Y) for `seconds`: water under it freezes (story 030/031).
+signal frost_field_cast(rect: Rect2, seconds: float)

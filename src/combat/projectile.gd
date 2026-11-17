@@ -10,6 +10,9 @@ extends Node3D
 ## Called with (target, packet) after each hit.
 signal hit_landed(target: Node3D, packet: DamagePacket)
 
+## Projectiles aimed at the player are in this group (Seris's Aether Shield destroys them).
+const ENEMY_GROUP := &"enemy_projectile"
+
 var world: CombatWorld
 var packet: DamagePacket
 var velocity: Vector2 = Vector2.ZERO
@@ -41,6 +44,8 @@ static func spawn(parent: Node, combat_world: CombatWorld, p: DamagePacket, orig
 
 
 func _physics_process(delta: float) -> void:
+	if target_team == CombatWorld.TEAM_PLAYER and not is_in_group(ENEMY_GROUP):
+		add_to_group(ENEMY_GROUP)
 	_age += delta
 	var step := velocity * delta
 	global_position += Vector3(step.x, step.y, 0.0)

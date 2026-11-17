@@ -145,6 +145,13 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 		"kill_player":
 			player.kill()
 			return {"dead": not player.is_alive()}
+		"root_player":
+			player.snare.apply()
+			return {"rooted": player.snare.is_active()}
+		"set_affinity":
+			var vid := str(args.get("id", player.loadout.active().id))
+			player.set_affinity(vid, int(args.get("level", 3)))
+			return {"vessel": vid, "level": int(args.get("level", 3))}
 		"set_stamina":
 			player.loadout.active().stamina.value = float(args.get("value", 100.0))
 			return {"stamina": player.loadout.active().stamina.value}

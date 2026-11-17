@@ -20,6 +20,8 @@ static func create(vessel_id: String, vessel_data: Dictionary) -> VesselKit:
 			kit = CaelanKit.new()
 		"nyra":
 			kit = NyraKit.new()
+		"seris":
+			kit = SerisKit.new()
 		"wisp":
 			kit = WispKit.new()
 		_:
@@ -148,6 +150,17 @@ func sync_guard(_player: Player, _p: DamagePacket) -> bool:
 ## What triggers this kit's Sync Guard ("lethal_blow", "unblockable_hit", ...).
 func sync_guard_trigger() -> String:
 	return str(data.get("sync_guard", {}).get("trigger", ""))
+
+
+## True when pressing `action_name` ("dodge", "ability_1") while rooted breaks the snare at once
+## (Nyra's Shadowstep, Seris's Rift Step). Other Vessels mash out of it.
+func breaks_snare_on(_action_name: String) -> bool:
+	return false
+
+
+## For a "magic_hit_over_fraction" Sync Guard: the share of max HP a magic hit must reach.
+func sync_guard_fraction() -> float:
+	return float(data.get("sync_guard", {}).get("fraction", 1.0))
 
 
 ## Called after a perfect parry by this Vessel.

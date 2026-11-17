@@ -162,5 +162,10 @@ func ultimate_action(player: Player) -> PlayerAction:
 	return a
 
 
+## Shadowstep breaks a root-snare at once (addendum "Resolved contradictions").
+func breaks_snare_on(action_name: String) -> bool:
+	return action_name == "ability_1"
+
+
 func ability_cooldown_keys() -> PackedStringArray:
 	return PackedStringArray(["shadowstep", "phantom_blades"])

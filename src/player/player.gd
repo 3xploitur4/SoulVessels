@@ -81,6 +81,10 @@ var damage_reduction_left: float = 0.0
 var damage_reduction: float = 0.0
 ## Id of the Vessel whose Sync Guard fired last ("" before any), for the HUD and the bridge.
 var last_sync_guard: String = ""
+## Seconds left on Seris's Aether Shield (absorbs magic hits, destroys enemy projectiles).
+var aether_shield_left: float = 0.0
+var aether_shield_radius: float = 1.6
+var _shield_fx: Node3D
 
 var _combo_index: int = 0
 var _combo_timer: float = 0.0
@@ -185,6 +189,10 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 		return DamagePacket.Result.DODGED
 	if p.kind == DamagePacket.KIND_UNBLOCKABLE and _try_sync_guard("unblockable_hit", p):
 		return DamagePacket.Result.DODGED
+	if aether_shield_left > 0.0 and p.kind == DamagePacket.KIND_MAGIC:
+		Sfx.play("block")
+		GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, 1.0, 0.3), 0.0, false, true)
+		return DamagePacket.Result.BLOCKED
 	var slot := loadout.active()
 	var from_front := CombatMath.hits_frontal_arc(p.source_x, global_position.x, facing, 180.0)
 	var blockable := p.kind != DamagePacket.KIND_UNBLOCKABLE and (p.kind != DamagePacket.KIND_MAGIC or p.can_reflect)
@@ -207,6 +215,9 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	if damage_reduction_left > 0.0:
 		dmg *= 1.0 - damage_reduction
 	if dmg >= health.current and _try_sync_guard("lethal_blow", p):
+		return DamagePacket.Result.BLOCKED
+	if p.kind == DamagePacket.KIND_MAGIC and dmg >= max_hp() * _magic_guard_fraction() \
+			and _try_sync_guard("magic_hit_over_fraction", p):
 		return DamagePacket.Result.BLOCKED
 	var taken := health.damage(dmg)
 	if bool(p.tags.get("snare", false)) and not health.is_dead():
@@ -305,6 +316,50 @@ func begin_block() -> void:
 func end_block() -> void:
 	if action != null and action.id == "block":
 		stop_action()
+
+
+## Raise Seris's Aether Shield for `seconds` with `radius` metres of reach.
+func raise_aether_shield(seconds: float, radius: float) -> void:
+	aether_shield_left = maxf(aether_shield_left, seconds)
+	aether_shield_radius = radius
+	if _shield_fx == null:
+		var mi := MeshInstance3D.new()
+		var s := SphereMesh.new()
+		s.radius = radius
+		s.height = radius * 2.0
+		mi.mesh = s
+		mi.material_override = ArenaMaterials.flat(Color(0.55, 0.78, 1.0, 0.22), 1.2, false, true)
+		# A close-fitting bubble around her body; the hit reach (radius) stays wider than it looks.
+		mi.scale = Vector3(0.5, 0.62, 0.3)
+		_shield_fx = mi
+		add_child(_shield_fx)
+		_shield_fx.position = Vector3(0.0, 1.0, 0.0)
+	_shield_fx.visible = true
+	Sfx.play("shield")
+
+
+func _magic_guard_fraction() -> float:
+	var f := 1.0
+	for s in loadout.slots:
+		if s.kit.sync_guard_trigger() == "magic_hit_over_fraction":
+			f = minf(f, s.kit.sync_guard_fraction())
+	return f
+
+
+func _tick_aether_shield(delta: float) -> void:
+	if aether_shield_left <= 0.0:
+		return
+	aether_shield_left = maxf(aether_shield_left - delta, 0.0)
+	if aether_shield_left <= 0.0:
+		if _shield_fx != null:
+			_shield_fx.visible = false
+		return
+	var centre := global_position + Vector3(0.0, 1.0, 0.0)
+	for n in get_tree().get_nodes_in_group(Projectile.ENEMY_GROUP):
+		var proj := n as Node3D
+		if proj != null and not proj.is_queued_for_deletion() \
+				and proj.global_position.distance_to(centre) <= aether_shield_radius:
+			proj.queue_free()
 
 
 ## Move instantly (Shadowstep, Severing Arrival, respawn).
@@ -543,6 +598,7 @@ func snapshot() -> Dictionary:
 		"last_sync_guard": last_sync_guard,
 		"cooldowns": slot.cooldowns.duplicate(),
 		"rooted": snare.is_active(),
+		"shield": snappedf(aether_shield_left, 0.01),
 		"snare_taps_left": snare.taps_left(),
 	}
 
@@ -558,6 +614,7 @@ func _physics_process(delta: float) -> void:
 	_invulnerable_left = maxf(_invulnerable_left - delta, 0.0)
 	stealth_left = maxf(stealth_left - delta, 0.0)
 	damage_reduction_left = maxf(damage_reduction_left - delta, 0.0)
+	_tick_aether_shield(delta)
 	if health.is_dead():
 		_dead_tick(delta)
 		return
@@ -759,9 +816,10 @@ func _rooted_tick(delta: float) -> void:
 		for a: String in ["attack", "jump", "dodge"]:
 			if controls.just_pressed(a) and snare.tap():
 				Sfx.play("root_break")
-		if controls.just_pressed("ability_1") and loadout.active().id == "nyra":
-			snare.break_now()
-			Sfx.play("root_break")
+		for a: String in ["ability_1", "dodge"]:
+			if controls.just_pressed(a) and snare.is_active() and loadout.active().kit.breaks_snare_on(a):
+				snare.break_now()
+				Sfx.play("root_break")
 	_apply_gravity(delta)
 	move_and_slide()
 	if global_position.z != 0.0:

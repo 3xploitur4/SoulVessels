@@ -1,0 +1,10 @@
+PASS  Seris is the active Vessel                     seris
+PASS  Arcane Bolts hurt a Crawler 9 m away           90 -> 0
+PASS  a Crawler stands in the Frost field            [{"attack": "lunge", "facing": -1, "hp": 32.1, "hp_max": 90.0, "id": "echo_crawler", "posture": 2.5, "posture_max": 40.0
+PASS  Aether Shield is up                            2.75
+PASS  the shield drops after 3 s                     0.0
+PASS  Rift Step breaks a root-snare at once          False
+PASS  swap back to Seris plays Aether Burst          {'swapped': True, 'vessel': 'seris'}
+state after ultimate: {"bars": 1, "blocking": false, "cooldowns": {"aether_shield": 1.75166666666659, "frost_binding": 0.0}, "exhausted": false, "facing": 1, "flasks": 3, "gauge": 116.0, "hidden": false, "hp": 448.7, "hp_max": 480.0, "invulnerable": true, "last_sync_guard": "", "on_floor": true, "posture": 0.0, "rooted":
+PASS  Cataclysm meteors hit the Crawlers             12 hp left of 180
+SUMMARY: 0 failed

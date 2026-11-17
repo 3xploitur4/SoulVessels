@@ -105,14 +105,14 @@ func popup(text: String, where: Vector3, color: Color) -> void:
 
 func _on_ultimate_fx(kind: String, where: Vector3, size: float) -> void:
 	match kind:
-		"final_stand", "dance_of_shadows":
+		"final_stand", "dance_of_shadows", "aether_burst", "cataclysm_fused":
 			var r := _rings[_next_ring]
 			_ring_t[_next_ring] = 0.0
 			_ring_size[_next_ring] = size
 			_next_ring = (_next_ring + 1) % RINGS
 			r.global_position = where + Vector3(0.0, 0.9, 0.0)
 			r.visible = true
-		"slash":
+		"slash", "meteor":
 			_on_hit_fx(where + Vector3(0.0, 0.9, 0.4), 0.0, true, false)
 
 

@@ -443,6 +443,16 @@ def sfx_bank():
     s["gate_open"] = sweep(70, 160, 0.7, 2.5)
     s["ward_hum"] = additive(196.0, 0.5, [(1, 1.0), (2, 0.6), (3, 0.3)], attack=0.05, release=0.2, vibrato=0.01,
                              vib_rate=12.0)
+    # M3 (story 030): Seris.
+    s["bolt"] = additive(1320.0, 0.22, [(1, 1.0), (1.5, 0.5), (2.01, 0.35)], attack=0.004, release=0.12, decay=6.0,
+                         vibrato=0.02, vib_rate=30.0)
+    fr = noise(0.5, 6.0, highpass=True)
+    tone = additive(1760.0, 0.5, [(1, 1.0), (2.76, 0.4)], attack=0.01, release=0.3, decay=4.0)
+    for i in range(len(fr)):
+        fr[i] = fr[i] * 0.35 + tone[i] * 0.6
+    s["frost"] = fr
+    s["shield"] = additive(440.0, 0.45, [(1, 1.0), (1.5, 0.7), (2, 0.5), (3, 0.25)], attack=0.03, release=0.3,
+                           vibrato=0.01, vib_rate=7.0)
     return s
 
 

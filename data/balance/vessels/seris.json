@@ -2,7 +2,6 @@
   "id": "seris",
   "name_key": "VESSEL_SERIS",
   "role": "Range, control",
-  "_status": "stats and resonance only in M1; kit arrives in M3",
   "stats": {
     "hp_bonus": 60,
     "atk": 45,
@@ -14,7 +13,73 @@
     "backstab_multiplier": 1.3,
     "magic": true
   },
-  "dodge": { "kind": "blink", "stamina_cost": 20, "distance_m": 5.0 },
+  "dodge": {
+    "kind": "blink",
+    "stamina_cost": 20,
+    "distance_m": 5.0,
+    "breaks_snare": true
+  },
+  "primary": {
+    "name": "Arcane Bolt",
+    "kind": "bolt",
+    "element": "aether",
+    "speed_mps": 24.0,
+    "range_m": 20.0,
+    "hits": [
+      {
+        "motion": 0.9,
+        "windup_s": 0.16,
+        "active_s": 0.06,
+        "recover_s": 0.22,
+        "posture": 4,
+        "buildup": 12
+      },
+      {
+        "motion": 0.9,
+        "windup_s": 0.14,
+        "active_s": 0.06,
+        "recover_s": 0.22,
+        "posture": 4,
+        "buildup": 12
+      },
+      {
+        "motion": 1.3,
+        "windup_s": 0.22,
+        "active_s": 0.06,
+        "recover_s": 0.34,
+        "posture": 8,
+        "buildup": 20,
+        "heavy": true
+      }
+    ],
+    "combo_reset_s": 0.7
+  },
+  "ability_1": {
+    "id": "frost_binding",
+    "cooldown_s": 8.0,
+    "stamina_cost": 15,
+    "windup_s": 0.25,
+    "width_m": 4.0,
+    "height_m": 1.4,
+    "duration_s": 3.0,
+    "element": "frost",
+    "buildup": 60,
+    "motion": 0.4,
+    "posture": 5,
+    "freezes_water": true
+  },
+  "ability_2": {
+    "id": "aether_shield",
+    "cooldown_s": 10.0,
+    "duration_s": 3.0,
+    "radius_m": 1.6
+  },
+  "passive": {
+    "id": "arcane_resonance",
+    "per_enemy": 0.1,
+    "cap": 0.3,
+    "range_m": 10.0
+  },
   "resonance": {
     "id": "aether_burst",
     "radius_m": 3.0,
@@ -23,17 +88,41 @@
     "element": "aether",
     "build_up": 40,
     "knockback_m": 2.5,
-    "echo": { "against": "poisoned", "spread_status": "venom" }
+    "echo": {
+      "against": "poisoned",
+      "spread_status": "venom"
+    },
+    "windup_s": 0.12
   },
-  "sync_guard": { "id": "aether_shield_auto", "trigger": "magic_hit_over_fraction", "fraction": 0.25 },
-  "ultimate": { "id": "cataclysm_fused", "duration_s": 5.0, "elements": ["aether", "frost"] },
+  "sync_guard": {
+    "id": "aether_shield_auto",
+    "trigger": "magic_hit_over_fraction",
+    "fraction": 0.25,
+    "shield_s": 1.0
+  },
+  "ultimate": {
+    "id": "cataclysm_fused",
+    "duration_s": 5.0,
+    "elements": [
+      "aether",
+      "frost"
+    ],
+    "meteors": 10,
+    "radius_m": 7.0,
+    "motion": 1.0,
+    "posture": 15,
+    "buildup": 25
+  },
   "silhouette": {
     "height_m": 1.73,
     "build": "graceful",
     "primary_color": "#e9e4d8",
     "secondary_color": "#1b2a5e",
     "accent_color": "#d4af37",
-    "props": ["staff", "runes_left_forearm"]
+    "props": [
+      "staff",
+      "runes_left_forearm"
+    ]
   },
   "leitmotif": "lead_seris"
 }
