@@ -16,5 +16,12 @@
     "elite_kill": 40,
     "perfect_parry": 6,
     "perfect_dodge": 4
+  },
+  "distrust": {
+    "_note": "Story 041: Narrative 4, Darius distrusts the Intruder; Affinity XP -25 % until the Leviathan falls.",
+    "darius": {
+      "multiplier": 0.75,
+      "until_flag": "boss_abyssal_leviathan"
+    }
   }
 }

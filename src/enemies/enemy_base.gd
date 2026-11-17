@@ -128,11 +128,16 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	var element_mult := CombatMath.element_multiplier(p.element, data.get("weaknesses", []), data.get("resists", []),
 		Balance.combat_f("damage.weakness_multiplier"), Balance.combat_f("damage.resist_multiplier"))
 	var def := float(data.get("def", 0.0)) * status.def_multiplier() * buff_multiplier()
+	if bool(p.tags.get("ignore_def", false)):
+		def = 0.0
 	var dmg := CombatMath.damage(p.atk, p.motion, def, p.crit_multiplier if crit else 1.0, element_mult,
 		p.backstab_multiplier if backstab else 1.0)
 	if p.aoe:
 		dmg *= float(data.get("aoe_multiplier", 1.0))
 	dmg *= status.damage_taken_multiplier()
+	# Darius's AoE kills Echo Crawlers outright (addendum "Resolved contradictions"; story 041).
+	if p.aoe and bool(p.tags.get("heavy_aoe", false)) and bool(data.get("dies_to_heavy_aoe", false)):
+		dmg = maxf(dmg, health.current)
 	var posture_amt := p.posture
 	if echo_on:
 		posture_amt *= float(echo.get("posture_multiplier", 1.0))

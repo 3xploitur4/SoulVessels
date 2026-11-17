@@ -273,7 +273,7 @@ func make_packet(motion: float, posture: float) -> DamagePacket:
 	var p := DamagePacket.new()
 	p.attacker = self
 	p.team = team
-	p.atk = slot.stat("atk")
+	p.atk = slot.stat("atk") * slot.kit.damage_dealt_multiplier(self)
 	p.motion = motion
 	p.posture = CombatMath.posture_damage(posture, slot.stat("posture_multiplier"))
 	p.crit_chance = slot.stat("crit_chance")
@@ -679,6 +679,7 @@ func _physics_process(delta: float) -> void:
 	damage_reduction_left = maxf(damage_reduction_left - delta, 0.0)
 	_tick_aether_shield(delta)
 	_update_water()
+	loadout.active().kit.tick(delta)
 	_tick_status(delta)
 	if health.is_dead():
 		_dead_tick(delta)

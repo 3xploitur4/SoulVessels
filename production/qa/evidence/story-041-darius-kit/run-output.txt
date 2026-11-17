@@ -1,0 +1,6 @@
+PASS  Darius is active                               
+PASS  Crushing Blow lands 150 posture through the shield {'attack': 'halberd_thrust', 'buffed': False, 'facing': -1, 'frozen': False, 'hp': 778.1, 'hp_max': 900.0, 'id': 'brande
+PASS  Groundbreaker kills every Crawler in reach outright 0 left
+PASS  swapping back plays Meteor Drop                {'swapped': True, 'vessel': 'darius'}
+PASS  Worldbreaker breaks every guard on screen      [('branded_warden', True)]
+SUMMARY: 0 failed

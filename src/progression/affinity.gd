@@ -57,7 +57,8 @@ static func add_xp(state: GameState, vessel: String, source: String, amount: flo
 	if vessel == "" or vessel == "wisp":
 		return -1
 	var before := level(state, vessel)
-	state.affinity_xp[vessel] = float(state.affinity_xp.get(vessel, 0.0)) + xp_for(source) * amount
+	state.affinity_xp[vessel] = float(state.affinity_xp.get(vessel, 0.0)) + xp_for(source) * amount \
+		* xp_multiplier(state, vessel)
 	var after := level(state, vessel)
 	return after if after != before else -1
 
@@ -74,3 +75,12 @@ static func xp_to_next(xp: float) -> float:
 ## The level at which the memory of a Vessel becomes lore.
 static func memory_level() -> int:
 	return int(config().get("memory_level", 1))
+
+
+## Story 041: a Vessel who distrusts the Intruder earns XP slower until a flag is set (Darius, x0.75
+## until the Leviathan falls; affinity.json "distrust").
+static func xp_multiplier(state: GameState, vessel: String) -> float:
+	var d: Dictionary = (config().get("distrust", {}) as Dictionary).get(vessel, {})
+	if d.is_empty() or (state != null and state.flag(str(d.get("until_flag", "")))):
+		return 1.0
+	return float(d.get("multiplier", 1.0))

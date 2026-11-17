@@ -189,8 +189,12 @@ static func _clip_for(state: String) -> String:
 			return "block"
 		"guard_break":
 			return "hurt"
-		"air_dash", "shadowstep":
+		"air_dash", "shadowstep", "shoulder_charge":
 			return "dash"
+		"crushing_blow", "groundbreaker", "meteor_drop":
+			return "lunge"
+		"worldbreaker_override":
+			return "cast"
 		"counterstrike", "oathbreaker_lunge", "severing_arrival", "shadow_counter", "kings_judgment", "phantom_blades":
 			return "lunge"
 		"final_stand", "ultimate", "dance_of_shadows":

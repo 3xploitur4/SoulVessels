@@ -367,3 +367,14 @@ LORE_RELIC_05_TITLE,The Arcanist's Lens
 LORE_RELIC_05_BODY,"Through it the runes on every wall are lit, all at once, saying one word over and over: contain."
 LORE_MEMORY_SERIS_TITLE,Memory of Seris: The Glass
 LORE_MEMORY_SERIS_BODY,"She read the order before the Queen did, and knew whose sigil closed it. She could not tell her, and she could not lie to her, so she poured the crystal over herself and waited for the one the sigil meant."
+ABILITY_CRUSHING_BLOW,Crushing Blow
+ABILITY_GROUNDBREAKER,Groundbreaker
+ABILITY_METEOR_DROP,Meteor Drop
+ABILITY_WORLDBREAKER,Worldbreaker Override
+RANK3_CRUSHING_BLOW,Rank 3: the blow breaks half again as much posture.
+RANK3_GROUNDBREAKER,Rank 3: the slam reaches 7 metres.
+RANK3_METEOR_DROP,Rank 3: the landing reaches 4.5 metres.
+RANK3_WORLDBREAKER,Rank 3: the charge is much shorter.
+PASSIVE_IRON_HIDE,Iron Hide: +10 defence
+PASSIVE_LAST_STAND,Last Stand: the Sync Guard's fury lasts 6 seconds
+PASSIVE_QUAKE,Quake: Groundbreaker breaks half again as much posture

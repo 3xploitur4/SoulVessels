@@ -22,6 +22,8 @@ static func create(vessel_id: String, vessel_data: Dictionary) -> VesselKit:
 			kit = NyraKit.new()
 		"seris":
 			kit = SerisKit.new()
+		"darius":
+			kit = DariusKit.new()
 		"wisp":
 			kit = WispKit.new()
 		_:
@@ -165,6 +167,16 @@ func sync_guard_fraction() -> float:
 
 ## Called after a perfect parry by this Vessel.
 func on_perfect_parry(_player: Player, _attacker: Node3D, _p: DamagePacket) -> void:
+	pass
+
+
+## Multiplier on the ATK of this Vessel's hits (Darius's Last Survivor).
+func damage_dealt_multiplier(_player: Player) -> float:
+	return 1.0
+
+
+## Advance kit timers (called every physics frame for the active Vessel).
+func tick(_delta: float) -> void:
 	pass
 
 

@@ -4,19 +4,123 @@
   "cost": 1,
   "vessels": {
     "caelan": [
-      {"id": "kings_mercy", "name_key": "PASSIVE_KINGS_MERCY", "patch": {"set": {"sync_guard.heal_fraction": 0.2}}},
-      {"id": "unbowed", "name_key": "PASSIVE_UNBOWED", "patch": {"mul": {"passive.blocking_damage_taken_multiplier": 0.8}}},
-      {"id": "oath_unbroken", "name_key": "PASSIVE_OATH_UNBROKEN", "patch": {"mul": {"resonance.posture": 1.5}}}
+      {
+        "id": "kings_mercy",
+        "name_key": "PASSIVE_KINGS_MERCY",
+        "patch": {
+          "set": {
+            "sync_guard.heal_fraction": 0.2
+          }
+        }
+      },
+      {
+        "id": "unbowed",
+        "name_key": "PASSIVE_UNBOWED",
+        "patch": {
+          "mul": {
+            "passive.blocking_damage_taken_multiplier": 0.8
+          }
+        }
+      },
+      {
+        "id": "oath_unbroken",
+        "name_key": "PASSIVE_OATH_UNBROKEN",
+        "patch": {
+          "mul": {
+            "resonance.posture": 1.5
+          }
+        }
+      }
     ],
     "nyra": [
-      {"id": "second_shadow", "name_key": "PASSIVE_SECOND_SHADOW", "patch": {"set": {"sync_guard.heal_fraction": 0.1}, "mul": {"sync_guard.counter_motion": 1.5}}},
-      {"id": "knifes_edge", "name_key": "PASSIVE_KNIFES_EDGE", "patch": {"add": {"stats.crit_chance": 0.1}}},
-      {"id": "long_vanish", "name_key": "PASSIVE_LONG_VANISH", "patch": {"mul": {"ability_1.hold_ability.duration_s": 1.5}}}
+      {
+        "id": "second_shadow",
+        "name_key": "PASSIVE_SECOND_SHADOW",
+        "patch": {
+          "set": {
+            "sync_guard.heal_fraction": 0.1
+          },
+          "mul": {
+            "sync_guard.counter_motion": 1.5
+          }
+        }
+      },
+      {
+        "id": "knifes_edge",
+        "name_key": "PASSIVE_KNIFES_EDGE",
+        "patch": {
+          "add": {
+            "stats.crit_chance": 0.1
+          }
+        }
+      },
+      {
+        "id": "long_vanish",
+        "name_key": "PASSIVE_LONG_VANISH",
+        "patch": {
+          "mul": {
+            "ability_1.hold_ability.duration_s": 1.5
+          }
+        }
+      }
     ],
     "seris": [
-      {"id": "ward_echo", "name_key": "PASSIVE_WARD_ECHO", "patch": {"set": {"sync_guard.heal_fraction": 0.15}}},
-      {"id": "deep_frost", "name_key": "PASSIVE_DEEP_FROST", "patch": {"mul": {"ability_1.duration_s": 1.5}}},
-      {"id": "resonant_mind", "name_key": "PASSIVE_RESONANT_MIND", "patch": {"set": {"passive.cap": 0.45}}}
+      {
+        "id": "ward_echo",
+        "name_key": "PASSIVE_WARD_ECHO",
+        "patch": {
+          "set": {
+            "sync_guard.heal_fraction": 0.15
+          }
+        }
+      },
+      {
+        "id": "deep_frost",
+        "name_key": "PASSIVE_DEEP_FROST",
+        "patch": {
+          "mul": {
+            "ability_1.duration_s": 1.5
+          }
+        }
+      },
+      {
+        "id": "resonant_mind",
+        "name_key": "PASSIVE_RESONANT_MIND",
+        "patch": {
+          "set": {
+            "passive.cap": 0.45
+          }
+        }
+      }
+    ],
+    "darius": [
+      {
+        "id": "iron_hide",
+        "name_key": "PASSIVE_IRON_HIDE",
+        "patch": {
+          "add": {
+            "stats.def": 10
+          }
+        }
+      },
+      {
+        "id": "last_stand",
+        "name_key": "PASSIVE_LAST_STAND",
+        "patch": {
+          "set": {
+            "sync_guard.last_survivor_s": 6.0
+          }
+        }
+      },
+      {
+        "id": "quake",
+        "name_key": "PASSIVE_QUAKE",
+        "patch": {
+          "mul": {
+            "ability_2.posture": 1.5
+          }
+        }
+      }
     ]
   }
 }

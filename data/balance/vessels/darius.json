@@ -2,7 +2,7 @@
   "id": "darius",
   "name_key": "VESSEL_DARIUS",
   "role": "Break, AoE",
-  "_status": "stats and resonance only in M1; kit arrives in M4",
+  "_note": "Story 041, decision D-049. Posture values here are before Darius's 2.5x posture multiplier (Crushing Blow 60 x 2.5 = the addendum's 150). Last Survivor: +1 % damage per 2 % HP missing, max +50 %.",
   "stats": {
     "hp_bonus": 160,
     "atk": 60,
@@ -13,23 +13,111 @@
     "crit_chance": 0.05,
     "backstab_multiplier": 1.3
   },
-  "dodge": { "kind": "shoulder_charge", "stamina_cost": 20, "distance_m": 3.0, "knockback_m": 2.0 },
+  "dodge": {
+    "kind": "shoulder_charge",
+    "stamina_cost": 20,
+    "distance_m": 3.2,
+    "knockback_m": 2.5,
+    "motion": 0.5,
+    "posture": 8,
+    "iframe_s": 0.15
+  },
+  "primary": {
+    "name": "Hammer swings",
+    "element": "physical",
+    "hyper_armor": true,
+    "hits": [
+      {
+        "motion": 1.1,
+        "windup_s": 0.16,
+        "active_s": 0.12,
+        "recover_s": 0.2,
+        "range_m": 2.4,
+        "posture": 9
+      },
+      {
+        "motion": 1.2,
+        "windup_s": 0.15,
+        "active_s": 0.12,
+        "recover_s": 0.22,
+        "range_m": 2.4,
+        "posture": 10
+      },
+      {
+        "motion": 1.7,
+        "windup_s": 0.22,
+        "active_s": 0.14,
+        "recover_s": 0.32,
+        "range_m": 2.7,
+        "posture": 16,
+        "heavy": true
+      }
+    ],
+    "combo_reset_s": 0.7
+  },
+  "ability_1": {
+    "id": "crushing_blow",
+    "cooldown_s": 7.0,
+    "stamina_cost": 15,
+    "windup_s": 0.42,
+    "motion": 2.2,
+    "posture": 60,
+    "range_m": 2.6,
+    "breaks_shield": true,
+    "breaks_masonry": true
+  },
+  "ability_2": {
+    "id": "groundbreaker",
+    "cooldown_s": 9.0,
+    "stamina_cost": 20,
+    "windup_s": 0.35,
+    "radius_m": 5.0,
+    "motion": 1.6,
+    "posture": 24,
+    "heavy_aoe": true,
+    "breaks_masonry": true
+  },
+  "passive": {
+    "id": "unbreakable_last_survivor",
+    "per_step": 0.01,
+    "step": 0.02,
+    "cap": 0.5
+  },
   "resonance": {
     "id": "meteor_drop",
     "radius_m": 3.0,
     "motion": 1.5,
-    "posture": 90,
-    "echo": { "against": "unraveled", "shatter_armor": true }
+    "posture": 36,
+    "echo": {
+      "against": "unraveled",
+      "shatter_armor": true
+    },
+    "windup_s": 0.3,
+    "heavy_aoe": true
   },
-  "sync_guard": { "id": "survive_at_one", "trigger": "lethal_blow", "last_survivor_s": 3.0 },
-  "ultimate": { "id": "worldbreaker_override", "charge_s": 1.2, "motion": 3.0, "break_all_posture": true },
+  "sync_guard": {
+    "id": "survive_at_one",
+    "trigger": "lethal_blow",
+    "last_survivor_s": 3.0
+  },
+  "ultimate": {
+    "id": "worldbreaker_override",
+    "charge_s": 1.2,
+    "motion": 3.0,
+    "radius_m": 14.0,
+    "break_all_posture": true,
+    "heavy_aoe": true
+  },
   "silhouette": {
     "height_m": 1.94,
     "build": "massive",
     "primary_color": "#4a2f1e",
     "secondary_color": "#8a4b1f",
     "accent_color": "#d9742b",
-    "props": ["warhammer", "eyepatch_left"]
+    "props": [
+      "warhammer",
+      "eyepatch_left"
+    ]
   },
   "leitmotif": "lead_darius"
 }

@@ -40,3 +40,5 @@ signal boss_started(boss: Node)
 signal boss_phase_changed(boss: Node, phase: int)
 ## A boss fell.
 signal boss_defeated(boss: Node)
+## A heavy slam landed over `rect` (world X/Y); `info` says what it can break ("breaks_masonry"). Story 041/042.
+signal slam_landed(rect: Rect2, info: Dictionary)
