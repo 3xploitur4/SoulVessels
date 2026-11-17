@@ -1,0 +1,30 @@
+# Story 038: Zone 3 — Sunken Palace
+
+> **Epic**: M3 — Zone 3 and the Weeping Sovereign · **Status**: Ready · **Layer**: Content · **Type**: Integration · **Estimate**: L
+
+## Context
+
+**Design**: addendum zone table (Zone 3: 18 rooms, 2 altars, Seris in room 4 frozen in crystal,
+water levels and light-rune puzzles, the Weeping Sovereign as Zone Boss, Track 05) and Narrative 3
+(Seris, the court arcanist, sealed herself in crystal: the only partly-living Vessel; she knows
+what the Intruder is and hides it; the Sovereign is Caelan's queen, mad with grief). Six
+light-rune puzzles; the last opens the throne room and combines all three kinds.
+
+Builds on the M2 story systems: room `story` entries, `exit_needs`, possess/free events, arenas
+with waves (decisions D-035, D-036). Needs stories 030–035.
+
+## Acceptance Criteria
+
+- [ ] 18 rooms with a zone map and 2 altars; a drowned marble palace theme with real water.
+- [ ] The flooded stair at the end of Zone 2 opens into Zone 3; zone-entry autosave.
+- [ ] Room 4: a crystal that cracks under attacks (as Nyra's roots do), then interact to free Seris; she joins the loadout; Arcane Bolt and rune tutorials follow; her first line.
+- [ ] 6 light-rune puzzles (2 sequence, 2 reflection, 1 tide, and the combined throne-room door), placed so each kind is taught before it is mixed.
+- [ ] Drowned Courtiers in the water rooms, at least 2 Choir Prelate encounters with allies to buff, a Branded Warden.
+- [ ] The Sovereign's voice lines through the zone, the throne-hall fight, Caelan's goodbye, and the exit to Zone 4 sealed until M4.
+- [ ] Lore: the zone's share of Parchments and Relics, and Seris's Vessel Memory.
+- [ ] Every room screenshotted; a walk script crosses the zone end to end with the bridge.
+
+## Files
+
+- `data/world/zone3.json`, `data/world/themes.json`, `data/lore/lore.json`, `assets/locale/strings.csv`
+- `src/game/game.gd` (Seris event), `tests/integration/world/zone3_story_test.gd`, `tools/playtest/zone3_walk.py`
