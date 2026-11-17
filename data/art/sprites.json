@@ -217,7 +217,7 @@
     },
     "abyssal_leviathan": {
       "file": "res://assets/art/sprites/abyssal_leviathan.png",
-      "height_m": 6.5,
+      "height_m": 5.0,
       "faces": -1,
       "wind": 0.0,
       "step_m": 0.0,

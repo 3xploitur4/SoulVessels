@@ -27,6 +27,8 @@ static func create(enemy_id: String) -> EnemyBase:
 			return WeepingSovereign.new()
 		"guardian_below":
 			return GuardianBelow.new()
+		"abyssal_leviathan":
+			return AbyssalLeviathan.new()
 	push_error("EnemyFactory: unknown enemy %s" % enemy_id)
 	return null
 

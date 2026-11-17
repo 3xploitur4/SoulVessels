@@ -1,0 +1,347 @@
+{
+  "_source": "Story 045, decision D-052. Addendum boss table: The Abyssal Leviathan, 12,000 HP, posture 1,200, phases at 65 % / 30 %; 12 eyes of 300 HP each, every 3 destroyed = 5 s stagger; shoreline 40 m. Bible: P1 rises from black water with tail-whips and lunge bites; P2 plunges the arena into darkness with only its 12 glowing eyes visible before blindside strikes; P3 tears open rifts firing energy beams and sonic roars. Drops: Pure Soul Matrix, Abyssal Scale, Primeval Truth (all Legendary); unlocks Overdrive. ATK/DEF not in the addendum. eye_damage_share: share of eye damage that also wounds it. shore_half_m: how far along the shore it may resurface from its spawn. eyes: the painted eyes on its head and neck (sprite pixels mapped to metres at its 5 m height), offsets when facing right. eye_px: each eye's pixel on the painting; the eye rides its rig part (eye_bones) at that point.",
+  "id": "abyssal_leviathan",
+  "name_key": "BOSS_ABYSSAL_LEVIATHAN",
+  "tier": "boss",
+  "music": "boss_leviathan",
+  "essence": 5000,
+  "hp": 12000,
+  "atk": 70,
+  "def": 34,
+  "posture": 1200,
+  "move_speed": 2.4,
+  "aggro_range_m": 22.0,
+  "leash_range_m": 60.0,
+  "preferred_range_m": 3.6,
+  "weaknesses": [
+    "frost"
+  ],
+  "resists": [
+    "venom"
+  ],
+  "aoe_multiplier": 1.0,
+  "group_size": 1,
+  "transition_s": 1.5,
+  "transition_max_shift_s": 1.0,
+  "vulnerable_s": 5.0,
+  "vulnerable_damage_mult": 2.0,
+  "attack_gap_s": 0.8,
+  "eye_hp": 300,
+  "eyes_per_stagger": 3,
+  "eye_damage_share": 1.0,
+  "eye_glow_m": 0.9,
+  "eyes": [
+    [
+      3.18,
+      3.38
+    ],
+    [
+      2.95,
+      3.43
+    ],
+    [
+      2.73,
+      3.27
+    ],
+    [
+      3.21,
+      3.08
+    ],
+    [
+      2.99,
+      3.06
+    ],
+    [
+      2.7,
+      3.0
+    ],
+    [
+      3.07,
+      2.81
+    ],
+    [
+      2.51,
+      3.24
+    ],
+    [
+      1.63,
+      3.6
+    ],
+    [
+      1.23,
+      3.6
+    ],
+    [
+      0.91,
+      3.33
+    ],
+    [
+      0.62,
+      2.81
+    ]
+  ],
+  "resurface_s": 14.0,
+  "resurface_gap_m": 6.0,
+  "shore_half_m": 18.0,
+  "phases": [
+    {
+      "at": 1.0
+    },
+    {
+      "at": 0.65,
+      "dark": true
+    },
+    {
+      "at": 0.3,
+      "dark": false,
+      "speed": 1.2,
+      "tint": "#c8b0ff"
+    }
+  ],
+  "on_defeat": {
+    "flag": "boss_abyssal_leviathan",
+    "flags": [
+      "unlock_overdrive",
+      "rift_open"
+    ],
+    "line": "DARIUS_LEVIATHAN",
+    "speaker": "VESSEL_DARIUS"
+  },
+  "attacks": [
+    {
+      "id": "tail_whip",
+      "phases": [
+        0,
+        1,
+        2
+      ],
+      "style": "melee",
+      "kind": "parryable",
+      "telegraph_s": 0.75,
+      "range_m": 4.2,
+      "motion": 1.2,
+      "posture": 24,
+      "active_s": 0.22,
+      "recover_s": 0.8,
+      "cooldown_s": 2.4
+    },
+    {
+      "id": "lunge_bite",
+      "phases": [
+        0,
+        2
+      ],
+      "style": "dash",
+      "kind": "parryable",
+      "telegraph_s": 0.8,
+      "range_m": 9.0,
+      "motion": 1.4,
+      "posture": 26,
+      "active_s": 0.45,
+      "recover_s": 1.0,
+      "cooldown_s": 4.0,
+      "dash_mps": 14.0
+    },
+    {
+      "id": "tidal_slam",
+      "phases": [
+        0,
+        1
+      ],
+      "style": "melee",
+      "kind": "unblockable",
+      "telegraph_s": 1.0,
+      "range_m": 3.8,
+      "motion": 1.8,
+      "posture": 30,
+      "active_s": 0.25,
+      "recover_s": 1.1,
+      "cooldown_s": 4.5,
+      "heavy": true
+    },
+    {
+      "id": "breaker_wave",
+      "phases": [
+        0,
+        1
+      ],
+      "style": "wave",
+      "kind": "unblockable",
+      "telegraph_s": 0.9,
+      "range_m": 18.0,
+      "motion": 1.2,
+      "posture": 16,
+      "active_s": 0.3,
+      "recover_s": 0.9,
+      "cooldown_s": 5.0,
+      "speed_mps": 10.0
+    },
+    {
+      "id": "sonar_orbs",
+      "phases": [
+        0,
+        1
+      ],
+      "style": "orbs",
+      "kind": "magic",
+      "telegraph_s": 0.8,
+      "range_m": 18.0,
+      "motion": 0.9,
+      "posture": 8,
+      "active_s": 0.4,
+      "recover_s": 0.8,
+      "cooldown_s": 5.0,
+      "orbs": 4,
+      "orb_speed_mps": 9.0,
+      "orb_spread_deg": 24.0
+    },
+    {
+      "id": "blindside_bite",
+      "phases": [
+        1
+      ],
+      "style": "blindside",
+      "kind": "parryable",
+      "telegraph_s": 0.7,
+      "range_m": 20.0,
+      "motion": 1.4,
+      "posture": 26,
+      "active_s": 0.2,
+      "recover_s": 0.9,
+      "cooldown_s": 3.5,
+      "gap_m": 3.0,
+      "reach_m": 3.4
+    },
+    {
+      "id": "rift_beams",
+      "phases": [
+        2
+      ],
+      "style": "rain",
+      "kind": "magic",
+      "telegraph_s": 0.8,
+      "range_m": 18.0,
+      "motion": 1.0,
+      "posture": 8,
+      "active_s": 0.4,
+      "recover_s": 0.8,
+      "cooldown_s": 4.0,
+      "orbs": 5,
+      "orb_speed_mps": 16.0,
+      "rain_spread_m": 7.0
+    },
+    {
+      "id": "sonic_roar",
+      "phases": [
+        2
+      ],
+      "style": "shockwave",
+      "kind": "unblockable",
+      "telegraph_s": 0.9,
+      "range_m": 18.0,
+      "motion": 1.3,
+      "posture": 18,
+      "active_s": 0.3,
+      "recover_s": 0.9,
+      "cooldown_s": 4.5,
+      "speed_mps": 12.0
+    },
+    {
+      "id": "abyss_slam",
+      "phases": [
+        2
+      ],
+      "style": "melee",
+      "kind": "unblockable",
+      "telegraph_s": 0.9,
+      "range_m": 3.8,
+      "motion": 1.9,
+      "posture": 30,
+      "active_s": 0.25,
+      "recover_s": 1.0,
+      "cooldown_s": 4.5,
+      "heavy": true
+    }
+  ],
+  "drops": {
+    "epic": {
+      "greater_soul_shard": 2
+    },
+    "legendary": {
+      "pure_soul_matrix": 1,
+      "abyssal_scale": 1,
+      "primeval_truth": 1
+    }
+  },
+  "silhouette": {
+    "kind": "beast",
+    "height_m": 6.5,
+    "width_m": 5.0,
+    "primary_color": "#1d2a36",
+    "accent_color": "#6fe8ff"
+  },
+  "eye_bones": [
+    "head",
+    "head",
+    "head",
+    "head",
+    "head",
+    "head",
+    "head",
+    "head",
+    "neck",
+    "neck",
+    "neck",
+    "neck"
+  ],
+  "eye_px": [
+    [
+      50,
+      125
+    ],
+    [
+      72,
+      120
+    ],
+    [
+      92,
+      135
+    ],
+    [
+      47,
+      153
+    ],
+    [
+      68,
+      155
+    ],
+    [
+      95,
+      160
+    ],
+    [
+      60,
+      178
+    ],
+    [
+      113,
+      138
+    ],
+    [
+      195,
+      104
+    ],
+    [
+      232,
+      104
+    ],
+    [
+      262,
+      130
+    ],
+    [
+      289,
+      178
+    ]
+  ]
+}

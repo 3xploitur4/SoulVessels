@@ -31,6 +31,8 @@ var clip: String = "idle"
 var clip_t: float = 0.0
 
 var _bones: Dictionary[String, Node3D] = {}
+## Part id -> its pivot in painting pixels (for `part_point`).
+var _pivots: Dictionary[String, Vector2] = {}
 var _lean_bone: String = ""
 var _lean_scale: float = 1.0
 var _angle: Dictionary[String, float] = {}
@@ -147,6 +149,20 @@ func pose_now(name: String, t: float) -> void:
 
 
 ## Current angle of joint `bone` in degrees (for tests and debugging).
+## The node of part `name` (null when the rig has none); things that ride a part follow it (story 045).
+func bone(name: String) -> Node3D:
+	return _bones.get(name, null)
+
+
+## Where the painting's pixel `px` lies in part `name`'s own space (a point that rides the part,
+## like the Leviathan's eyes; story 045). Zero when the part is unknown.
+func part_point(name: String, px: Vector2) -> Vector3:
+	if not _pivots.has(name):
+		return Vector3.ZERO
+	var pv := _pivots[name]
+	return Vector3((px.x - pv.x) * _px, (pv.y - px.y) * _px, 0.3)
+
+
 func joint_deg(bone: String) -> float:
 	return _angle.get(bone, 0.0)
 
@@ -202,6 +218,7 @@ func _build(id: String) -> void:
 			bone.position = Vector3((float(pv[0]) - origin.x) * _px, (origin.y - float(pv[1])) * _px, 0.0)
 			parent.add_child(bone)
 			_bones[pid] = bone
+			_pivots[pid] = Vector2(float(pv[0]), float(pv[1]))
 			_angle[pid] = 0.0
 			placed += 1
 		if placed == before:

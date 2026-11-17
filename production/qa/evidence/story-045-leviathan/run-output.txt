@@ -1,0 +1,7 @@
+PASS  the Leviathan rises, phase 1                   {'attack': 'breaker_wave', 'eyes': 12, 'hp': 12000.0, 'phase': 0, 'rocks': 0, 'state': 'recover', 'transition': False}
+PASS  a jump attack bursts an eye                    10 eyes left
+PASS  below 65 %: phase 2                            {'attack': 'sonar_orbs', 'eyes': 10, 'hp': 7605.37313432836, 'phase': 1, 'rocks': 0, 'state': 'recover', 'transition': True}
+PASS  in the dark it strikes from behind (cue shown) 
+PASS  below 30 %: phase 3, the dark lifts            {'attack': 'blindside_bite', 'eyes': 10, 'hp': 3382.98507462687, 'phase': 2, 'rocks': 0, 'state': 'recover', 'transition': True}
+PASS  it falls: Overdrive unlocked, the rift opens   {'unlock_overdrive': True, 'rift_open': True}
+SUMMARY: 0 failed

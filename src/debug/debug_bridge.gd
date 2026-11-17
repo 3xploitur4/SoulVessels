@@ -193,7 +193,8 @@ func run_command(cmd: String, args: Dictionary) -> Variant:
 						bb.receive_hit(hit)
 					return {"phase": bb.phase, "hp": bb.health.current, "transition": bb.in_transition(),
 						"state": bb.state, "attack": str(bb.current_attack.get("id", "")),
-						"rocks": int(bb.get("rocks_rolled")) if bb.get("rocks_rolled") != null else 0}
+						"rocks": int(bb.get("rocks_rolled")) if bb.get("rocks_rolled") != null else 0,
+						"eyes": int(bb.call("eyes_left")) if bb.has_method("eyes_left") else -1}
 			return {"error": "no boss"}
 		"essence":
 			var gst: GameState = sandbox.get("state")
