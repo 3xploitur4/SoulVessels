@@ -64,6 +64,11 @@ def main():
         wait(b, 0.16)
         shot(b, os.path.join(out, "action-attack.png"))
         wait(b, 0.6)
+        # Story 055: the dodge is a fast low step, not a roll.
+        b.call("sim_input", action="dodge", seconds=0.0)
+        wait(b, 0.12)
+        shot(b, os.path.join(out, "action-dodge.png"))
+        wait(b, 0.6)
         b.call("pause")
         wait(b, 0.8)
         shot(b, os.path.join(out, "map.png"))

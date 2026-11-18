@@ -37,6 +37,8 @@ var _last_facing: int = 0
 var _land_left: float = 0.0
 var _land_depth: float = 0.0
 var _turn_left: float = 0.0
+## Seconds to the next puff of dust under a dodge step.
+var _skid_left: float = 0.0
 const LAND_HOLD_S := 0.14
 const TURN_LEAN_S := 0.12
 ## Story 055: footsteps sit well under the rest of the mix.
@@ -212,10 +214,15 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 		b.lean = -0.03 * _h
 		guard = 1.0
 	elif state == "dodge":
-		var t := clampf(progress / 0.75, 0.0, 1.0)
-		b.roll = -TAU * t
-		b.crouch = 0.6
-		b.lift = 0.15 * sin(t * PI)
+		# Story 055 (D-066): a fast low step, after Blasphemous, not a roll. The body drops into a
+		# sliding lunge (the rig's "dodge" clip) and leans into the move; dust skids under it.
+		var t := clampf(progress, 0.0, 1.0)
+		b.lean = 0.1 * _h * sin(minf(t * 1.6, 1.0) * PI * 0.5) * (1.0 - t * 0.6)
+		b.stretch = 0.35 * (1.0 - absf(t - 0.25) * 2.0) if t < 0.75 else 0.0
+		_skid_left -= get_process_delta_time()
+		if _skid_left <= 0.0 and t < 0.7 and not _was_air:
+			_skid_left = 0.06
+			DustFx.spawn(self, "step", global_position, -float(facing), 0.8)
 	elif state == "air_dash" or state == "shadowstep":
 		b.stretch = 1.0
 		b.lean = 0.2 * _h

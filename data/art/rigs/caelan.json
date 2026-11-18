@@ -614,7 +614,7 @@
    ]
   }
  ],
- "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own). Story 054 (D-063): idle is a burdened stance (head bowed, shoulders loaded, a slow heavy breath); fall keeps the arms down and the knees ready, dragged rather than flailing. kicks.jump squashes the body for a push-off as it leaves the ground.",
+ "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own). Story 054 (D-063): idle is a burdened stance (head bowed, shoulders loaded, a slow heavy breath); fall keeps the arms down and the knees ready, dragged rather than flailing. kicks.jump squashes the body for a push-off as it leaves the ground. Story 055 (D-066): dodge is a fast low step, not a roll: a dip, then a lunge sliding along the ground (front leg out, back knee down, cape trailing), held, then rising out of it.",
  "lean_bone": "torso",
  "lean_scale": 0.4,
  "clips": {
@@ -1267,19 +1267,79 @@
    ]
   },
   "dodge": {
+   "blend": 34,
    "keys": [
     [
      0,
      {
-      "leg_l_thigh": 70,
-      "leg_l_shin": -110,
-      "leg_r_thigh": 55,
-      "leg_r_shin": -100,
-      "arm_upper": 50,
-      "arm_fore": 40,
-      "torso": -20,
-      "head": -10,
-      "cape": 3.0
+      "torso": -12,
+      "head": 4.0,
+      "leg_l_thigh": 25,
+      "leg_l_shin": -30,
+      "leg_r_thigh": -15,
+      "leg_r_shin": -35,
+      "arm_upper": -12,
+      "arm_fore": 10,
+      "sword": -20,
+      "shield_arm": 8,
+      "cape": -4.0,
+      "root_y": -0.1,
+      "squash": 0.04
+     }
+    ],
+    [
+     0.16,
+     {
+      "torso": -22,
+      "head": 9.0,
+      "leg_l_thigh": 58,
+      "leg_l_shin": -8,
+      "leg_r_thigh": -42,
+      "leg_r_shin": -60,
+      "arm_upper": -26,
+      "arm_fore": 12,
+      "sword": -48,
+      "shield_arm": 16,
+      "cape": -10.0,
+      "root_y": -0.28,
+      "squash": 0.03
+     },
+     "out"
+    ],
+    [
+     0.62,
+     {
+      "torso": -20.240000000000002,
+      "head": 8.280000000000001,
+      "leg_l_thigh": 53.36,
+      "leg_l_shin": -7.36,
+      "leg_r_thigh": -38.64,
+      "leg_r_shin": -55.2,
+      "arm_upper": -23.92,
+      "arm_fore": 11.040000000000001,
+      "sword": -44,
+      "shield_arm": 14.72,
+      "cape": -9.200000000000001,
+      "root_y": -0.25760000000000005,
+      "squash": 0.0276
+     }
+    ],
+    [
+     1,
+     {
+      "torso": -8,
+      "head": 3.0,
+      "leg_l_thigh": 18,
+      "leg_l_shin": -14,
+      "leg_r_thigh": -12,
+      "leg_r_shin": -22,
+      "arm_upper": -8,
+      "arm_fore": 8,
+      "sword": -12,
+      "shield_arm": 5,
+      "cape": -4.0,
+      "root_y": -0.06,
+      "squash": 0.01
      }
     ]
    ]
