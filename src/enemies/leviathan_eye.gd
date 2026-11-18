@@ -23,7 +23,8 @@ var _local: Vector3
 
 
 func _ready() -> void:
-	_glow = VfxShapes.bolt(Color(0.45, 0.95, 1.0), 0.11, 1.4)
+	# Story 053: small glints over the painted eyes (the v2 painting draws them itself).
+	_glow = VfxShapes.bolt(Color(0.45, 0.95, 1.0), 0.05, 1.1)
 	add_child(_glow)
 	if leviathan != null and leviathan.world != null:
 		leviathan.world.register(self)

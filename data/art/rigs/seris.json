@@ -1,911 +1,979 @@
 {
-  "_source": "Story 029, decision D-034. Cut-out rig parts for seris, cut from assets/art/sprites/seris.png. Same format as caelan.json; clips start from Caelan's (clips_from) and alias maps this rig's parts onto his clip channels (a list adds a scale).",
-  "source": "res://assets/art/sprites/seris.png",
-  "height_m": 1.9,
-  "ground_px": 880,
-  "rest_to": "torso",
-  "lean_bone": "torso",
-  "lean_scale": 0.4,
-  "kicks": {
-    "land": 0.11,
-    "turn": 0.05
-  },
-  "clips_from": "caelan",
-  "alias": {
-    "foot_l": [
-      "leg_l_thigh",
-      0.25
-    ],
-    "foot_r": [
-      "leg_r_thigh",
-      0.25
-    ],
-    "skirt": [
-      "leg_l_thigh",
-      -0.08
-    ]
-  },
-  "secondary": {
-    "cape": {
-      "drag": 3.0,
-      "fall": 3.0,
-      "min": -22,
-      "max": 6,
-      "stiffness": 90,
-      "damping": 9
-    }
-  },
-  "parts": [
-    {
-      "id": "cape",
-      "parent": "torso",
-      "pivot": [
-        100,
-        210
-      ],
-      "joint_r": 0,
-      "poly": [
-        [
-          20,
-          280
-        ],
-        [
-          100,
-          200
-        ],
-        [
-          110,
-          400
-        ],
-        [
-          95,
-          790
-        ],
-        [
-          40,
-          790
-        ],
-        [
-          18,
-          700
-        ]
-      ],
-      "fill_mean": 0.6
-    },
-    {
-      "id": "foot_r",
-      "parent": "pelvis",
-      "pivot": [
-        215,
-        400
-      ],
-      "joint_r": 0,
-      "poly": [
-        [
-          190,
-          740
-        ],
-        [
-          262,
-          740
-        ],
-        [
-          262,
-          862
-        ],
-        [
-          190,
-          862
-        ]
-      ]
-    },
-    {
-      "id": "foot_l",
-      "parent": "pelvis",
-      "pivot": [
-        150,
-        400
-      ],
-      "joint_r": 0,
-      "poly": [
-        [
-          62,
-          758
-        ],
-        [
-          140,
-          758
-        ],
-        [
-          140,
-          884
-        ],
-        [
-          62,
-          884
-        ]
-      ]
-    },
-    {
-      "id": "skirt",
-      "parent": "pelvis",
-      "pivot": [
-        180,
-        390
-      ],
-      "joint_r": 0,
-      "poly": [
-        [
-          85,
-          380
-        ],
-        [
-          270,
-          380
-        ],
-        [
-          290,
-          520
-        ],
-        [
-          302,
-          760
-        ],
-        [
-          262,
-          792
-        ],
-        [
-          110,
-          792
-        ],
-        [
-          60,
-          772
-        ],
-        [
-          80,
-          560
-        ]
-      ]
-    },
-    {
-      "id": "pelvis",
-      "parent": "",
-      "pivot": [
-        180,
-        390
-      ],
-      "joint_r": 0,
-      "poly": []
-    },
-    {
-      "id": "torso",
-      "parent": "pelvis",
-      "pivot": [
-        180,
-        390
-      ],
-      "joint_r": 22,
-      "poly": [
-        [
-          105,
-          170
-        ],
-        [
-          255,
-          170
-        ],
-        [
-          265,
-          250
-        ],
-        [
-          255,
-          400
-        ],
-        [
-          110,
-          400
-        ],
-        [
-          95,
-          250
-        ]
-      ]
-    },
-    {
-      "id": "shield_arm",
-      "parent": "torso",
-      "pivot": [
-        250,
-        200
-      ],
-      "joint_r": 18,
-      "poly": [
-        [
-          235,
-          180
-        ],
-        [
-          275,
-          200
-        ],
-        [
-          285,
-          300
-        ],
-        [
-          326,
-          350
-        ],
-        [
-          326,
-          452
-        ],
-        [
-          270,
-          467
-        ],
-        [
-          250,
-          400
-        ],
-        [
-          240,
-          300
-        ]
-      ]
-    },
-    {
-      "id": "head",
-      "parent": "torso",
-      "pivot": [
-        190,
-        185
-      ],
-      "joint_r": 16,
-      "poly": [
-        [
-          115,
-          40
-        ],
-        [
-          230,
-          40
-        ],
-        [
-          245,
-          180
-        ],
-        [
-          160,
-          186
-        ],
-        [
-          120,
-          170
-        ]
-      ]
-    },
-    {
-      "id": "sword",
-      "parent": "arm_upper",
-      "pivot": [
-        45,
-        240
-      ],
-      "joint_r": 0,
-      "poly": [
-        [
-          10,
-          0
-        ],
-        [
-          42,
-          0
-        ],
-        [
-          66,
-          100
-        ],
-        [
-          62,
-          230
-        ],
-        [
-          82,
-          400
-        ],
-        [
-          112,
-          700
-        ],
-        [
-          130,
-          884
-        ],
-        [
-          108,
-          884
-        ],
-        [
-          84,
-          700
-        ],
-        [
-          58,
-          400
-        ],
-        [
-          38,
-          240
-        ],
-        [
-          14,
-          100
-        ]
-      ],
-      "grow_px": 3
-    },
-    {
-      "id": "arm_upper",
-      "parent": "torso",
-      "pivot": [
-        100,
-        195
-      ],
-      "joint_r": 18,
-      "poly": [
-        [
-          30,
-          190
-        ],
-        [
-          110,
-          180
-        ],
-        [
-          115,
-          260
-        ],
-        [
-          95,
-          345
-        ],
-        [
-          55,
-          350
-        ],
-        [
-          28,
-          300
-        ],
-        [
-          30,
-          240
-        ]
-      ]
-    }
+ "_source": "Story 029, decision D-034. Cut-out rig parts for seris, cut from assets/art/sprites/seris.png. Same format as caelan.json; clips start from Caelan's (clips_from) and alias maps this rig's parts onto his clip channels (a list adds a scale). Story 053: outlines redrawn for the v2 painting (tools/art/rig_parts_v2.py).",
+ "source": "res://assets/art/sprites/seris.png",
+ "height_m": 1.9,
+ "ground_px": 965,
+ "rest_to": "torso",
+ "lean_bone": "torso",
+ "lean_scale": 0.4,
+ "kicks": {
+  "land": 0.11,
+  "turn": 0.05
+ },
+ "clips_from": "caelan",
+ "alias": {
+  "foot_l": [
+   "leg_l_thigh",
+   0.25
   ],
-  "clips": {
-    "attack_0": {
-      "blend": 45,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.28,
-          {
-            "torso": 6,
-            "head": 4,
-            "shield_arm": -8,
-            "arm_upper": 150,
-            "sword": -150
-          },
-          "out"
-        ],
-        [
-          0.42,
-          {
-            "torso": -12,
-            "head": -4,
-            "shield_arm": 14,
-            "arm_upper": 110,
-            "sword": -200
-          },
-          "in"
-        ],
-        [
-          0.55,
-          {
-            "torso": -14,
-            "head": -5,
-            "shield_arm": 14,
-            "arm_upper": 106,
-            "sword": -206
-          },
-          "out"
-        ],
-        [
-          0.85,
-          {
-            "torso": -4,
-            "arm_upper": 44.0,
-            "sword": -80.0
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "attack_1": {
-      "blend": 45,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.28,
-          {
-            "torso": 6,
-            "head": 4,
-            "shield_arm": -8,
-            "arm_upper": -20,
-            "sword": 20
-          },
-          "out"
-        ],
-        [
-          0.42,
-          {
-            "torso": -12,
-            "head": -4,
-            "shield_arm": 14,
-            "arm_upper": 80,
-            "sword": -170
-          },
-          "in"
-        ],
-        [
-          0.55,
-          {
-            "torso": -14,
-            "head": -5,
-            "shield_arm": 14,
-            "arm_upper": 76,
-            "sword": -176
-          },
-          "out"
-        ],
-        [
-          0.85,
-          {
-            "torso": -4,
-            "arm_upper": 32.0,
-            "sword": -68.0
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "attack_2": {
-      "blend": 45,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.28,
-          {
-            "torso": 6,
-            "head": 4,
-            "shield_arm": -8,
-            "arm_upper": 160,
-            "sword": -130
-          },
-          "out"
-        ],
-        [
-          0.42,
-          {
-            "torso": -12,
-            "head": -4,
-            "shield_arm": 14,
-            "arm_upper": 90,
-            "sword": -210,
-            "squash": -0.02
-          },
-          "in"
-        ],
-        [
-          0.55,
-          {
-            "torso": -14,
-            "head": -5,
-            "shield_arm": 14,
-            "arm_upper": 86,
-            "sword": -216,
-            "squash": -0.02
-          },
-          "out"
-        ],
-        [
-          0.85,
-          {
-            "torso": -4,
-            "arm_upper": 36.0,
-            "sword": -84.0
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "attack_3": {
-      "blend": 45,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.28,
-          {
-            "torso": 6,
-            "head": 4,
-            "shield_arm": -8,
-            "arm_upper": 170,
-            "sword": -170,
-            "root_y": 0.05,
-            "squash": -0.04
-          },
-          "out"
-        ],
-        [
-          0.42,
-          {
-            "torso": -12,
-            "head": -4,
-            "shield_arm": 14,
-            "arm_upper": 40,
-            "sword": -40,
-            "root_y": -0.03,
-            "squash": 0.06
-          },
-          "in"
-        ],
-        [
-          0.55,
-          {
-            "torso": -14,
-            "head": -5,
-            "shield_arm": 14,
-            "arm_upper": 38,
-            "sword": -38,
-            "root_y": -0.03,
-            "squash": 0.06
-          },
-          "out"
-        ],
-        [
-          0.85,
-          {
-            "torso": -4,
-            "arm_upper": 16.0,
-            "sword": -16.0
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "cast": {
-      "keys": [
-        [
-          0,
-          {
-            "arm_upper": 150,
-            "sword": -150,
-            "shield_arm": 35,
-            "head": 8,
-            "torso": 4
-          }
-        ]
-      ]
-    },
-    "block": {
-      "keys": [
-        [
-          0,
-          {
-            "shield_arm": 30,
-            "torso": -4,
-            "arm_upper": 10,
-            "sword": -15
-          }
-        ]
-      ]
-    },
-    "run": {
-      "loop": true,
-      "length_s": 0.62,
-      "stride_scaled": true,
-      "keys": [
-        [
-          0,
-          {
-            "leg_l_thigh": 28,
-            "leg_l_shin": -8,
-            "leg_r_thigh": -26,
-            "leg_r_shin": -40,
-            "arm_upper": -4.2,
-            "shield_arm": 9,
-            "torso": -6,
-            "cape": -3.0,
-            "squash": 0.035,
-            "head": 4.0
-          }
-        ],
-        [
-          0.25,
-          {
-            "leg_l_thigh": 0,
-            "leg_l_shin": -5,
-            "leg_r_thigh": 10,
-            "leg_r_shin": -75,
-            "arm_upper": 0.0,
-            "torso": -7,
-            "cape": -3.0,
-            "root_y": 0.05,
-            "squash": -0.02,
-            "head": 5.0
-          }
-        ],
-        [
-          0.5,
-          {
-            "leg_l_thigh": -26,
-            "leg_l_shin": -40,
-            "leg_r_thigh": 28,
-            "leg_r_shin": -8,
-            "arm_upper": 4.2,
-            "shield_arm": -9,
-            "torso": -6,
-            "cape": -2.5,
-            "squash": 0.035,
-            "head": 4.0
-          }
-        ],
-        [
-          0.75,
-          {
-            "leg_l_thigh": 10,
-            "leg_l_shin": -75,
-            "leg_r_thigh": 0,
-            "leg_r_shin": -5,
-            "arm_upper": 0.0,
-            "torso": -7,
-            "cape": -3.0,
-            "root_y": 0.05,
-            "squash": -0.02,
-            "head": 5.0
-          }
-        ],
-        [
-          1,
-          {
-            "leg_l_thigh": 28,
-            "leg_l_shin": -8,
-            "leg_r_thigh": -26,
-            "leg_r_shin": -40,
-            "arm_upper": -4.2,
-            "shield_arm": 9,
-            "torso": -6,
-            "cape": -3.0,
-            "squash": 0.035,
-            "head": 4.0
-          }
-        ]
-      ]
-    },
-    "lunge": {
-      "blend": 45,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.28,
-          {
-            "torso": 6,
-            "head": 4,
-            "shield_arm": -8,
-            "arm_upper": 150,
-            "sword": -150
-          },
-          "out"
-        ],
-        [
-          0.42,
-          {
-            "torso": -12,
-            "head": -4,
-            "shield_arm": 14,
-            "arm_upper": 95,
-            "sword": -195
-          },
-          "in"
-        ],
-        [
-          0.55,
-          {
-            "torso": -14,
-            "head": -5,
-            "shield_arm": 14,
-            "arm_upper": 92,
-            "sword": -198
-          },
-          "out"
-        ],
-        [
-          0.85,
-          {
-            "torso": -4,
-            "arm_upper": 38.0,
-            "sword": -78.0
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "bolt": {
-      "blend": 35,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.3,
-          {
-            "arm_upper": 82,
-            "sword": -170,
-            "torso": -5,
-            "head": -2,
-            "shield_arm": -12
-          },
-          "out"
-        ],
-        [
-          0.45,
-          {
-            "arm_upper": 58,
-            "sword": -148,
-            "torso": 7,
-            "head": 4,
-            "shield_arm": 10
-          },
-          "in"
-        ],
-        [
-          0.7,
-          {
-            "arm_upper": 62,
-            "sword": -150,
-            "torso": 5,
-            "head": 3
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "frost": {
-      "blend": 40,
-      "keys": [
-        [
-          0,
-          {}
-        ],
-        [
-          0.35,
-          {
-            "arm_upper": 150,
-            "sword": -150,
-            "torso": -4,
-            "head": -6,
-            "shield_arm": 25
-          },
-          "out"
-        ],
-        [
-          0.55,
-          {
-            "arm_upper": 30,
-            "sword": -30,
-            "torso": 14,
-            "head": 8,
-            "shield_arm": -20,
-            "root_y": -0.08
-          },
-          "in"
-        ],
-        [
-          0.8,
-          {
-            "arm_upper": 32,
-            "sword": -32,
-            "torso": 12,
-            "head": 6,
-            "root_y": -0.06
-          }
-        ],
-        [
-          1,
-          {}
-        ]
-      ]
-    },
-    "swim": {
-      "loop": true,
-      "length_s": 1.1,
-      "keys": [
-        [
-          0,
-          {
-            "torso": 16,
-            "head": -6,
-            "arm_upper": 60,
-            "sword": -60,
-            "shield_arm": -35,
-            "root_y": 0.05
-          },
-          "smooth"
-        ],
-        [
-          0.5,
-          {
-            "torso": 20,
-            "head": -8,
-            "arm_upper": 112,
-            "sword": -112,
-            "shield_arm": 30,
-            "root_y": -0.05
-          },
-          "smooth"
-        ],
-        [
-          1,
-          {
-            "torso": 16,
-            "head": -6,
-            "arm_upper": 60,
-            "sword": -60,
-            "shield_arm": -35,
-            "root_y": 0.05
-          }
-        ]
-      ]
-    }
+  "foot_r": [
+   "leg_r_thigh",
+   0.25
+  ],
+  "skirt": [
+   "leg_l_thigh",
+   -0.08
+  ]
+ },
+ "secondary": {
+  "cape": {
+   "drag": 3.0,
+   "fall": 3.0,
+   "min": -22,
+   "max": 6,
+   "stiffness": 90,
+   "damping": 9
   }
+ },
+ "parts": [
+  {
+   "id": "cape",
+   "parent": "torso",
+   "pivot": [
+    392,
+    205
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     400,
+     380
+    ],
+    [
+     452,
+     420
+    ],
+    [
+     522,
+     560
+    ],
+    [
+     546,
+     700
+    ],
+    [
+     522,
+     862
+    ],
+    [
+     480,
+     882
+    ],
+    [
+     470,
+     700
+    ],
+    [
+     430,
+     560
+    ],
+    [
+     400,
+     450
+    ]
+   ],
+   "fill_mean": 0.6
+  },
+  {
+   "id": "foot_r",
+   "parent": "pelvis",
+   "pivot": [
+    382,
+    880
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     348,
+     898
+    ],
+    [
+     432,
+     902
+    ],
+    [
+     432,
+     948
+    ],
+    [
+     348,
+     948
+    ]
+   ]
+  },
+  {
+   "id": "foot_l",
+   "parent": "pelvis",
+   "pivot": [
+    236,
+    880
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     204,
+     898
+    ],
+    [
+     266,
+     898
+    ],
+    [
+     266,
+     972
+    ],
+    [
+     204,
+     972
+    ]
+   ]
+  },
+  {
+   "id": "skirt",
+   "parent": "pelvis",
+   "pivot": [
+    300,
+    335
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     220,
+     330
+    ],
+    [
+     390,
+     330
+    ],
+    [
+     420,
+     450
+    ],
+    [
+     470,
+     600
+    ],
+    [
+     512,
+     750
+    ],
+    [
+     482,
+     882
+    ],
+    [
+     420,
+     946
+    ],
+    [
+     220,
+     946
+    ],
+    [
+     118,
+     882
+    ],
+    [
+     78,
+     780
+    ],
+    [
+     140,
+     600
+    ],
+    [
+     190,
+     450
+    ]
+   ]
+  },
+  {
+   "id": "pelvis",
+   "parent": "",
+   "pivot": [
+    300,
+    340
+   ],
+   "joint_r": 0,
+   "poly": []
+  },
+  {
+   "id": "torso",
+   "parent": "pelvis",
+   "pivot": [
+    300,
+    322
+   ],
+   "joint_r": 22,
+   "poly": [
+    [
+     205,
+     170
+    ],
+    [
+     300,
+     158
+    ],
+    [
+     392,
+     185
+    ],
+    [
+     402,
+     260
+    ],
+    [
+     392,
+     342
+    ],
+    [
+     320,
+     362
+    ],
+    [
+     250,
+     352
+    ],
+    [
+     214,
+     280
+    ]
+   ]
+  },
+  {
+   "id": "shield_arm",
+   "parent": "torso",
+   "pivot": [
+    386,
+    205
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     358,
+     188
+    ],
+    [
+     412,
+     198
+    ],
+    [
+     432,
+     250
+    ],
+    [
+     472,
+     258
+    ],
+    [
+     472,
+     362
+    ],
+    [
+     432,
+     392
+    ],
+    [
+     394,
+     382
+    ],
+    [
+     374,
+     300
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "parent": "torso",
+   "pivot": [
+    300,
+    172
+   ],
+   "joint_r": 16,
+   "poly": [
+    [
+     238,
+     28
+    ],
+    [
+     300,
+     18
+    ],
+    [
+     346,
+     50
+    ],
+    [
+     352,
+     120
+    ],
+    [
+     336,
+     162
+    ],
+    [
+     300,
+     182
+    ],
+    [
+     254,
+     172
+    ],
+    [
+     234,
+     110
+    ]
+   ]
+  },
+  {
+   "id": "sword",
+   "parent": "arm_upper",
+   "pivot": [
+    105,
+    300
+   ],
+   "joint_r": 0,
+   "poly": [
+    [
+     28,
+     8
+    ],
+    [
+     122,
+     8
+    ],
+    [
+     120,
+     140
+    ],
+    [
+     106,
+     260
+    ],
+    [
+     132,
+     320
+    ],
+    [
+     166,
+     520
+    ],
+    [
+     206,
+     780
+    ],
+    [
+     230,
+     974
+    ],
+    [
+     198,
+     976
+    ],
+    [
+     170,
+     790
+    ],
+    [
+     134,
+     600
+    ],
+    [
+     100,
+     420
+    ],
+    [
+     82,
+     622
+    ],
+    [
+     44,
+     622
+    ],
+    [
+     50,
+     350
+    ],
+    [
+     60,
+     180
+    ],
+    [
+     34,
+     122
+    ]
+   ],
+   "grow_px": 3
+  },
+  {
+   "id": "arm_upper",
+   "parent": "torso",
+   "pivot": [
+    222,
+    202
+   ],
+   "joint_r": 18,
+   "poly": [
+    [
+     158,
+     178
+    ],
+    [
+     246,
+     178
+    ],
+    [
+     232,
+     262
+    ],
+    [
+     152,
+     334
+    ],
+    [
+     94,
+     334
+    ],
+    [
+     78,
+     292
+    ],
+    [
+     118,
+     250
+    ]
+   ]
+  }
+ ],
+ "clips": {
+  "attack_0": {
+   "blend": 45,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.28,
+     {
+      "torso": 6,
+      "head": 4,
+      "shield_arm": -8,
+      "arm_upper": 150,
+      "sword": -150
+     },
+     "out"
+    ],
+    [
+     0.42,
+     {
+      "torso": -12,
+      "head": -4,
+      "shield_arm": 14,
+      "arm_upper": 110,
+      "sword": -200
+     },
+     "in"
+    ],
+    [
+     0.55,
+     {
+      "torso": -14,
+      "head": -5,
+      "shield_arm": 14,
+      "arm_upper": 106,
+      "sword": -206
+     },
+     "out"
+    ],
+    [
+     0.85,
+     {
+      "torso": -4,
+      "arm_upper": 44.0,
+      "sword": -80.0
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "attack_1": {
+   "blend": 45,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.28,
+     {
+      "torso": 6,
+      "head": 4,
+      "shield_arm": -8,
+      "arm_upper": -20,
+      "sword": 20
+     },
+     "out"
+    ],
+    [
+     0.42,
+     {
+      "torso": -12,
+      "head": -4,
+      "shield_arm": 14,
+      "arm_upper": 80,
+      "sword": -170
+     },
+     "in"
+    ],
+    [
+     0.55,
+     {
+      "torso": -14,
+      "head": -5,
+      "shield_arm": 14,
+      "arm_upper": 76,
+      "sword": -176
+     },
+     "out"
+    ],
+    [
+     0.85,
+     {
+      "torso": -4,
+      "arm_upper": 32.0,
+      "sword": -68.0
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "attack_2": {
+   "blend": 45,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.28,
+     {
+      "torso": 6,
+      "head": 4,
+      "shield_arm": -8,
+      "arm_upper": 160,
+      "sword": -130
+     },
+     "out"
+    ],
+    [
+     0.42,
+     {
+      "torso": -12,
+      "head": -4,
+      "shield_arm": 14,
+      "arm_upper": 90,
+      "sword": -210,
+      "squash": -0.02
+     },
+     "in"
+    ],
+    [
+     0.55,
+     {
+      "torso": -14,
+      "head": -5,
+      "shield_arm": 14,
+      "arm_upper": 86,
+      "sword": -216,
+      "squash": -0.02
+     },
+     "out"
+    ],
+    [
+     0.85,
+     {
+      "torso": -4,
+      "arm_upper": 36.0,
+      "sword": -84.0
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "attack_3": {
+   "blend": 45,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.28,
+     {
+      "torso": 6,
+      "head": 4,
+      "shield_arm": -8,
+      "arm_upper": 170,
+      "sword": -170,
+      "root_y": 0.05,
+      "squash": -0.04
+     },
+     "out"
+    ],
+    [
+     0.42,
+     {
+      "torso": -12,
+      "head": -4,
+      "shield_arm": 14,
+      "arm_upper": 40,
+      "sword": -40,
+      "root_y": -0.03,
+      "squash": 0.06
+     },
+     "in"
+    ],
+    [
+     0.55,
+     {
+      "torso": -14,
+      "head": -5,
+      "shield_arm": 14,
+      "arm_upper": 38,
+      "sword": -38,
+      "root_y": -0.03,
+      "squash": 0.06
+     },
+     "out"
+    ],
+    [
+     0.85,
+     {
+      "torso": -4,
+      "arm_upper": 16.0,
+      "sword": -16.0
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "cast": {
+   "keys": [
+    [
+     0,
+     {
+      "arm_upper": 150,
+      "sword": -150,
+      "shield_arm": 35,
+      "head": 8,
+      "torso": 4
+     }
+    ]
+   ]
+  },
+  "block": {
+   "keys": [
+    [
+     0,
+     {
+      "shield_arm": 30,
+      "torso": -4,
+      "arm_upper": 10,
+      "sword": -15
+     }
+    ]
+   ]
+  },
+  "run": {
+   "loop": true,
+   "length_s": 0.62,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": 28,
+      "leg_l_shin": -8,
+      "leg_r_thigh": -26,
+      "leg_r_shin": -40,
+      "arm_upper": -4.2,
+      "shield_arm": 9,
+      "torso": -6,
+      "cape": -3.0,
+      "squash": 0.035,
+      "head": 4.0
+     }
+    ],
+    [
+     0.25,
+     {
+      "leg_l_thigh": 0,
+      "leg_l_shin": -5,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -75,
+      "arm_upper": 0.0,
+      "torso": -7,
+      "cape": -3.0,
+      "root_y": 0.05,
+      "squash": -0.02,
+      "head": 5.0
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_l_thigh": -26,
+      "leg_l_shin": -40,
+      "leg_r_thigh": 28,
+      "leg_r_shin": -8,
+      "arm_upper": 4.2,
+      "shield_arm": -9,
+      "torso": -6,
+      "cape": -2.5,
+      "squash": 0.035,
+      "head": 4.0
+     }
+    ],
+    [
+     0.75,
+     {
+      "leg_l_thigh": 10,
+      "leg_l_shin": -75,
+      "leg_r_thigh": 0,
+      "leg_r_shin": -5,
+      "arm_upper": 0.0,
+      "torso": -7,
+      "cape": -3.0,
+      "root_y": 0.05,
+      "squash": -0.02,
+      "head": 5.0
+     }
+    ],
+    [
+     1,
+     {
+      "leg_l_thigh": 28,
+      "leg_l_shin": -8,
+      "leg_r_thigh": -26,
+      "leg_r_shin": -40,
+      "arm_upper": -4.2,
+      "shield_arm": 9,
+      "torso": -6,
+      "cape": -3.0,
+      "squash": 0.035,
+      "head": 4.0
+     }
+    ]
+   ]
+  },
+  "lunge": {
+   "blend": 45,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.28,
+     {
+      "torso": 6,
+      "head": 4,
+      "shield_arm": -8,
+      "arm_upper": 150,
+      "sword": -150
+     },
+     "out"
+    ],
+    [
+     0.42,
+     {
+      "torso": -12,
+      "head": -4,
+      "shield_arm": 14,
+      "arm_upper": 95,
+      "sword": -195
+     },
+     "in"
+    ],
+    [
+     0.55,
+     {
+      "torso": -14,
+      "head": -5,
+      "shield_arm": 14,
+      "arm_upper": 92,
+      "sword": -198
+     },
+     "out"
+    ],
+    [
+     0.85,
+     {
+      "torso": -4,
+      "arm_upper": 38.0,
+      "sword": -78.0
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "bolt": {
+   "blend": 35,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.3,
+     {
+      "arm_upper": 82,
+      "sword": -170,
+      "torso": -5,
+      "head": -2,
+      "shield_arm": -12
+     },
+     "out"
+    ],
+    [
+     0.45,
+     {
+      "arm_upper": 58,
+      "sword": -148,
+      "torso": 7,
+      "head": 4,
+      "shield_arm": 10
+     },
+     "in"
+    ],
+    [
+     0.7,
+     {
+      "arm_upper": 62,
+      "sword": -150,
+      "torso": 5,
+      "head": 3
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "frost": {
+   "blend": 40,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.35,
+     {
+      "arm_upper": 150,
+      "sword": -150,
+      "torso": -4,
+      "head": -6,
+      "shield_arm": 25
+     },
+     "out"
+    ],
+    [
+     0.55,
+     {
+      "arm_upper": 30,
+      "sword": -30,
+      "torso": 14,
+      "head": 8,
+      "shield_arm": -20,
+      "root_y": -0.08
+     },
+     "in"
+    ],
+    [
+     0.8,
+     {
+      "arm_upper": 32,
+      "sword": -32,
+      "torso": 12,
+      "head": 6,
+      "root_y": -0.06
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "swim": {
+   "loop": true,
+   "length_s": 1.1,
+   "keys": [
+    [
+     0,
+     {
+      "torso": 16,
+      "head": -6,
+      "arm_upper": 60,
+      "sword": -60,
+      "shield_arm": -35,
+      "root_y": 0.05
+     },
+     "smooth"
+    ],
+    [
+     0.5,
+     {
+      "torso": 20,
+      "head": -8,
+      "arm_upper": 112,
+      "sword": -112,
+      "shield_arm": 30,
+      "root_y": -0.05
+     },
+     "smooth"
+    ],
+    [
+     1,
+     {
+      "torso": 16,
+      "head": -6,
+      "arm_upper": 60,
+      "sword": -60,
+      "shield_arm": -35,
+      "root_y": 0.05
+     }
+    ]
+   ]
+  }
+ }
 }

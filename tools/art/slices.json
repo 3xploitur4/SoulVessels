@@ -1,15 +1,223 @@
 {
-  "_source": "Story 027. Which figures to cut from each concept sheet, in reading order. 'rows' are y bands (top, bottom) that hold one row of figures; 'names' lists the figures of each row left to right; 'erase' rectangles (x, y, w, h) are text labels to ignore. 'panels' cuts the zone paintings (x, y, w, h).",
+  "_source": "Story 027. Which figures to cut from each concept sheet, in reading order. 'rows' are y bands (top, bottom) that hold one row of figures; 'names' lists the figures of each row left to right; 'erase' rectangles (x, y, w, h) are text labels to ignore. 'panels' cuts the zone paintings (x, y, w, h). Story 053: the v2 art (docs/design/concept-art/v2/, one figure per file) replaces the Vessels and the three bosses; 'upscale' below 1 scales the large new art down; 'erase' clears the scale silhouettes.",
   "sheets": [
     {
-      "file": "docs/design/concept-art/vessels.webp",
+      "file": "docs/design/concept-art/v2/caelan.png",
       "out": "assets/art/sprites",
-      "min_area": 5000,
-      "attach_px": 34,
-      "upscale": 2,
-      "rows": [[0, 559]],
-      "names": [["caelan", "nyra", "seris", "darius", "ilyr"]],
-      "protect": [[19, 51, 262, 475]]
+      "min_area": 20000,
+      "attach_px": 30,
+      "upscale": 0.65,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "caelan"
+        ]
+      ],
+      "range": 0.07,
+      "step": 0.025
+    },
+    {
+      "file": "docs/design/concept-art/v2/nyra.png",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 30,
+      "upscale": 0.65,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "nyra"
+        ]
+      ],
+      "range": 0.07,
+      "step": 0.025
+    },
+    {
+      "file": "docs/design/concept-art/v2/seris.png",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 30,
+      "upscale": 0.65,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "seris"
+        ]
+      ],
+      "range": 0.07,
+      "step": 0.025
+    },
+    {
+      "file": "docs/design/concept-art/v2/darius.png",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 30,
+      "upscale": 0.65,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "darius"
+        ]
+      ],
+      "range": 0.07,
+      "step": 0.025
+    },
+    {
+      "file": "docs/design/concept-art/v2/ilyr.png",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 30,
+      "upscale": 0.65,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "ilyr"
+        ]
+      ],
+      "range": 0.07,
+      "step": 0.025
+    },
+    {
+      "file": "docs/design/concept-art/v2/weeping_sovereign.webp",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 40,
+      "upscale": 1.0,
+      "rows": [
+        [
+          0,
+          1024
+        ]
+      ],
+      "names": [
+        [
+          "weeping_sovereign"
+        ]
+      ],
+      "erase": [
+        [
+          0,
+          690,
+          150,
+          334
+        ]
+      ]
+    },
+    {
+      "file": "docs/design/concept-art/v2/guardian_below_sheet.png",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 30,
+      "upscale": 1.0,
+      "rows": [
+        [
+          0,
+          1024
+        ]
+      ],
+      "names": [
+        [
+          "guardian_below"
+        ]
+      ],
+      "erase": [
+        [
+          0,
+          820,
+          125,
+          204
+        ]
+      ],
+      "clear_at": [
+        [
+          460,
+          722
+        ],
+        [
+          455,
+          800
+        ],
+        [
+          470,
+          860
+        ]
+      ]
+    },
+    {
+      "file": "docs/design/concept-art/v2/abyssal_leviathan.png",
+      "out": "assets/art/sprites",
+      "min_area": 20000,
+      "attach_px": 40,
+      "upscale": 1.0,
+      "rows": [
+        [
+          0,
+          1024
+        ]
+      ],
+      "names": [
+        [
+          "abyssal_leviathan"
+        ]
+      ],
+      "erase": [
+        [
+          0,
+          870,
+          135,
+          154
+        ]
+      ],
+      "clear_at": [
+        [
+          1125,
+          749
+        ],
+        [
+          1275,
+          869
+        ],
+        [
+          1200,
+          800
+        ],
+        [
+          1211,
+          831
+        ],
+        [
+          1190,
+          845
+        ],
+        [
+          1230,
+          820
+        ]
+      ]
     },
     {
       "file": "docs/design/concept-art/enemies.webp",
@@ -17,12 +225,153 @@
       "min_area": 4000,
       "attach_px": 22,
       "upscale": 2,
-      "rows": [[0, 246], [290, 524]],
-      "names": [
-        ["echo_crawler", "subterranean_watcher", "calcified_husk", "branded_warden", "choir_prelate"],
-        ["weeping_sovereign", "guardian_below", "abyssal_leviathan"]
+      "rows": [
+        [
+          0,
+          246
+        ],
+        [
+          290,
+          524
+        ]
       ],
-      "erase": [[0, 243, 1024, 50], [0, 523, 1024, 36]]
+      "names": [
+        [
+          "echo_crawler",
+          "subterranean_watcher",
+          "calcified_husk",
+          "branded_warden",
+          "choir_prelate"
+        ],
+        []
+      ],
+      "erase": [
+        [
+          0,
+          243,
+          1024,
+          50
+        ],
+        [
+          0,
+          523,
+          1024,
+          36
+        ]
+      ]
+    },
+    {
+      "file": "docs/design/concept-art/v2/altar.png",
+      "out": "assets/art/props",
+      "min_area": 20000,
+      "attach_px": 40,
+      "upscale": 0.6,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "altar"
+        ]
+      ],
+      "range": 0.035,
+      "merge_all": true,
+      "step": 0.015
+    },
+    {
+      "file": "docs/design/concept-art/v2/masonry.png",
+      "out": "assets/art/props",
+      "min_area": 20000,
+      "attach_px": 40,
+      "upscale": 0.5,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "masonry"
+        ]
+      ],
+      "range": 0.035,
+      "merge_all": true,
+      "step": 0.015
+    },
+    {
+      "file": "docs/design/concept-art/v2/rune_door.png",
+      "out": "assets/art/props",
+      "min_area": 20000,
+      "attach_px": 40,
+      "upscale": 0.5,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "rune_door"
+        ]
+      ],
+      "range": 0.035,
+      "merge_all": true,
+      "step": 0.015
+    },
+    {
+      "file": "docs/design/concept-art/v2/portcullis.png",
+      "out": "assets/art/props",
+      "min_area": 20000,
+      "attach_px": 40,
+      "upscale": 0.5,
+      "rows": [
+        [
+          0,
+          1536
+        ]
+      ],
+      "names": [
+        [
+          "portcullis"
+        ]
+      ],
+      "range": 0.035,
+      "merge_all": true,
+      "step": 0.015
+    },
+    {
+      "file": "docs/design/concept-art/v2/items.png",
+      "out": "assets/art/props",
+      "min_area": 8000,
+      "attach_px": 60,
+      "upscale": 0.5,
+      "rows": [
+        [
+          0,
+          500
+        ],
+        [
+          500,
+          1024
+        ]
+      ],
+      "names": [
+        [
+          "item_parchment",
+          "item_relic"
+        ],
+        [
+          "item_shard",
+          "item_core"
+        ]
+      ],
+      "range": 0.035,
+      "step": 0.015
     }
   ],
   "panels": [
@@ -30,10 +379,30 @@
       "file": "docs/design/concept-art/zones.webp",
       "out": "assets/art/backdrops",
       "rects": {
-        "zone1": [3, 3, 506, 272],
-        "zone2": [516, 3, 505, 272],
-        "zone3": [3, 284, 506, 272],
-        "zone4": [516, 284, 505, 272]
+        "zone1": [
+          3,
+          3,
+          506,
+          272
+        ],
+        "zone2": [
+          516,
+          3,
+          505,
+          272
+        ],
+        "zone3": [
+          3,
+          284,
+          506,
+          272
+        ],
+        "zone4": [
+          516,
+          284,
+          505,
+          272
+        ]
       }
     }
   ]

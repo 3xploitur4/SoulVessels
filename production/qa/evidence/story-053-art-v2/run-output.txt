@@ -1,0 +1,9 @@
+PASS  the painted altar, cold and kindled                
+PASS  caelan takes the field                             caelan
+PASS  darius takes the field                             darius
+PASS  seris takes the field                              seris
+PASS  weeping_sovereign fights with its new art          2 shots
+PASS  guardian_below fights with its new art             2 shots
+PASS  abyssal_leviathan fights with its new art          2 shots
+PASS  Ilyr's new art                                     
+SUMMARY: 0 failed

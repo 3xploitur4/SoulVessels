@@ -15,6 +15,10 @@ const RANGE := 0.15      # max channel distance from the sheet's border colour
 const POCKET := 0.02     # max distance from the local background for an enclosed pocket
 const POCKET_MIN := 40   # px: smaller enclosed patches are left alone (eyes, highlights)
 
+## Per-sheet tolerances ("range", "step" in slices.json; story 053: the v2 art has dark capes
+## close to its slate background, so it needs a tighter range).
+var _range: float = RANGE
+var _step: float = STEP
 var _w: int
 var _h: int
 var _px: PackedColorArray
@@ -63,6 +67,8 @@ func _contact_sheet(manifest: Dictionary) -> void:
 func _slice_sheet(sheet: Dictionary, manifest: Dictionary) -> void:
 	var img := Image.load_from_file(ProjectSettings.globalize_path("res://" + str(sheet["file"])))
 	img.convert(Image.FORMAT_RGBA8)
+	_range = float(sheet.get("range", RANGE))
+	_step = float(sheet.get("step", STEP))
 	_w = img.get_width()
 	_h = img.get_height()
 	_px = PackedColorArray()
@@ -85,6 +91,10 @@ func _slice_sheet(sheet: Dictionary, manifest: Dictionary) -> void:
 	var ref := _border_mean()
 	_grow_background(ref)
 	_clear_pockets()
+	# Story 053: background trapped where the automatic pass misses it (between the Guardian's
+	# legs, inside the Leviathan's coil): flood from named points, colour-matched to the seed.
+	for s: Array in sheet.get("clear_at", []):
+		_flood_from(int(s[0]), int(s[1]))
 	var labels := PackedInt32Array()
 	labels.resize(_w * _h)
 	var comps := _label(labels)
@@ -110,6 +120,20 @@ func _slice_sheet(sheet: Dictionary, manifest: Dictionary) -> void:
 				mains.append(in_row[i])
 		if in_row.size() != row_names.size():
 			push_warning("slice: %s row %d has %d figures, %d names" % [sheet["file"], ri, in_row.size(), row_names.size()])
+	# Story 053: a prop painted on black falls apart along its dark grooves; "merge_all" keeps
+	# every piece of the image as one figure (named by the first name).
+	if bool(sheet.get("merge_all", false)) and not comps.is_empty():
+		var all := {"name": str((names[0] as Array)[0]), "members": [], "x0": _w, "y0": _h, "x1": 0, "y1": 0}
+		for c in comps:
+			if int(c["area"]) < 30:
+				continue
+			(all["members"] as Array).append(int(c["id"]))
+			all["x0"] = mini(int(all["x0"]), int(c["x0"]))
+			all["y0"] = mini(int(all["y0"]), int(c["y0"]))
+			all["x1"] = maxi(int(all["x1"]), int(c["x1"]))
+			all["y1"] = maxi(int(all["y1"]), int(c["y1"]))
+		mains = [all]
+		comps = []
 	# Loose pieces join the nearest figure.
 	for c in comps:
 		if int(c["area"]) >= min_area or int(c["area"]) < 6:
@@ -129,7 +153,8 @@ func _slice_sheet(sheet: Dictionary, manifest: Dictionary) -> void:
 			best["y1"] = maxi(int(best["y1"]), int(c["y1"]))
 	var out_dir := "res://" + str(sheet.get("out", "assets/art/sprites"))
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	var scale := int(sheet.get("upscale", 2))
+	# "upscale" scales the cut figure: 2 for the small first sheets, below 1 for the large v2 art.
+	var scale := float(sheet.get("upscale", 2))
 	for m in mains:
 		var member := {}
 		for id: int in m["members"]:
@@ -149,8 +174,9 @@ func _slice_sheet(sheet: Dictionary, manifest: Dictionary) -> void:
 					c.a = 1.0
 					sprite.set_pixel(x + pad, y + pad, c)
 		_soften_edge(sprite, ref)
-		if scale > 1:
-			sprite.resize(sprite.get_width() * scale, sprite.get_height() * scale, Image.INTERPOLATE_CUBIC)
+		if not is_equal_approx(scale, 1.0):
+			sprite.resize(int(sprite.get_width() * scale), int(sprite.get_height() * scale),
+				Image.INTERPOLATE_LANCZOS if scale < 1.0 else Image.INTERPOLATE_CUBIC)
 		sprite.fix_alpha_edges()
 		var path := "%s/%s.png" % [out_dir, m["name"]]
 		sprite.save_png(ProjectSettings.globalize_path(path))
@@ -195,7 +221,7 @@ func _grow_background(ref: Color) -> void:
 		if _bg[i] == 1:
 			queue.append(i)
 	for i in queue:
-		if _dist(_px[i], ref) <= RANGE:
+		if _dist(_px[i], ref) <= _range:
 			_bg[i] = 1
 	var head := 0
 	while head < queue.size():
@@ -213,7 +239,31 @@ func _grow_background(ref: Color) -> void:
 			var j := ny * _w + nx
 			if _bg[j] == 1:
 				continue
-			if _dist(_px[j], _px[i]) <= STEP and _dist(_px[j], ref) <= RANGE:
+			if _dist(_px[j], _px[i]) <= _step and _dist(_px[j], ref) <= _range:
+				_bg[j] = 1
+				queue.append(j)
+
+
+## Mark as background everything connected to (sx, sy) whose colour stays near the seed's.
+func _flood_from(sx: int, sy: int) -> void:
+	if sx < 0 or sy < 0 or sx >= _w or sy >= _h:
+		return
+	var seed := _px[sy * _w + sx]
+	var queue := PackedInt32Array([sy * _w + sx])
+	_bg[sy * _w + sx] = 1
+	var head := 0
+	while head < queue.size():
+		var i := queue[head]
+		head += 1
+		var x := i % _w
+		var y := i / _w
+		for d: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+			var nx := x + d.x
+			var ny := y + d.y
+			if nx < 0 or ny < 0 or nx >= _w or ny >= _h:
+				continue
+			var j := ny * _w + nx
+			if _bg[j] == 0 and _dist(_px[j], _px[i]) <= _step and _dist(_px[j], seed) <= _range * 0.6:
 				_bg[j] = 1
 				queue.append(j)
 

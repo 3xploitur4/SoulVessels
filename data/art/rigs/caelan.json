@@ -1,78 +1,74 @@
 {
- "_source": "Story 029, decision D-034. Cut-out rig parts for Caelan, cut from his concept painting (assets/art/sprites/caelan.png, 520x946). Parts are in back-to-front draw order. poly: outline in sprite pixels (generous: overlaps are resolved by draw order). pivot: the joint the part turns around. parent: the part it hangs from (the first part with no parent is the root). joint_r: radius of source pixels kept around the pivot so a turning joint never shows a gap. grow_px: extra pixels a part claims around its outline (thin parts like a blade). fill_mean: 0..1, how far painted-in hidden areas lean toward the part average colour (default 0.5). rest_to: the part that takes pixels no polygon holds.",
+ "_source": "Story 029, decision D-034. Cut-out rig parts for Caelan, cut from his concept painting (assets/art/sprites/caelan.png, 520x946). Parts are in back-to-front draw order. poly: outline in sprite pixels (generous: overlaps are resolved by draw order). pivot: the joint the part turns around. parent: the part it hangs from (the first part with no parent is the root). joint_r: radius of source pixels kept around the pivot so a turning joint never shows a gap. grow_px: extra pixels a part claims around its outline (thin parts like a blade). fill_mean: 0..1, how far painted-in hidden areas lean toward the part average colour (default 0.5). rest_to: the part that takes pixels no polygon holds. Story 053: outlines redrawn for the v2 painting (tools/art/rig_parts_v2.py).",
  "source": "res://assets/art/sprites/caelan.png",
  "height_m": 1.95,
- "ground_px": 935,
+ "ground_px": 926,
  "rest_to": "torso",
  "parts": [
   {
    "id": "cape",
    "parent": "torso",
    "pivot": [
-    120,
-    285
+    230,
+    160
    ],
    "joint_r": 0,
    "poly": [
     [
-     48,
-     285
+     200,
+     110
     ],
     [
-     100,
-     262
+     240,
+     130
     ],
     [
-     150,
-     240
+     232,
+     300
     ],
     [
      205,
-     236
+     450
     ],
     [
-     212,
-     330
-    ],
-    [
-     208,
-     470
-    ],
-    [
-     180,
+     165,
      560
     ],
     [
-     150,
-     640
+     135,
+     700
     ],
     [
-     125,
-     870
-    ],
-    [
-     50,
-     870
-    ],
-    [
-     0,
-     780
-    ],
-    [
-     8,
-     640
+     95,
+     795
     ],
     [
      40,
-     500
+     795
     ],
     [
-     64,
-     420
+     0,
+     700
+    ],
+    [
+     8,
+     600
     ],
     [
      60,
-     370
+     520
+    ],
+    [
+     100,
+     420
+    ],
+    [
+     138,
+     300
+    ],
+    [
+     160,
+     200
     ]
    ],
    "fill_mean": 0.7
@@ -81,34 +77,34 @@
    "id": "leg_r_thigh",
    "parent": "pelvis",
    "pivot": [
-    330,
-    500
+    382,
+    470
    ],
    "joint_r": 26,
    "poly": [
     [
-     292,
-     468
+     335,
+     440
     ],
     [
-     375,
-     468
+     432,
+     440
     ],
     [
-     392,
-     600
+     442,
+     560
     ],
     [
-     380,
-     668
+     432,
+     662
     ],
     [
-     290,
-     668
+     345,
+     662
     ],
     [
-     282,
-     600
+     334,
+     560
     ]
    ]
   },
@@ -116,45 +112,45 @@
    "id": "leg_r_shin",
    "parent": "leg_r_thigh",
    "pivot": [
-    335,
-    652
+    386,
+    648
    ],
    "joint_r": 24,
    "poly": [
     [
-     286,
-     636
+     340,
+     628
     ],
     [
-     388,
-     636
+     436,
+     628
     ],
     [
-     384,
+     432,
      760
     ],
     [
-     398,
-     846
+     442,
+     838
     ],
     [
-     450,
-     870
+     532,
+     878
     ],
     [
-     450,
-     912
+     536,
+     908
     ],
     [
-     316,
-     912
+     378,
+     908
     ],
     [
-     296,
-     860
+     368,
+     840
     ],
     [
-     296,
+     350,
      760
     ]
    ]
@@ -163,38 +159,34 @@
    "id": "leg_l_thigh",
    "parent": "pelvis",
    "pivot": [
-    208,
-    500
+    245,
+    470
    ],
    "joint_r": 26,
    "poly": [
     [
-     176,
-     468
+     192,
+     448
     ],
     [
-     262,
-     478
+     292,
+     452
     ],
     [
-     258,
-     600
-    ],
-    [
-     244,
-     672
-    ],
-    [
-     146,
-     676
-    ],
-    [
-     142,
-     600
-    ],
-    [
-     166,
+     302,
      520
+    ],
+    [
+     292,
+     642
+    ],
+    [
+     200,
+     652
+    ],
+    [
+     184,
+     560
     ]
    ]
   },
@@ -202,42 +194,50 @@
    "id": "leg_l_shin",
    "parent": "leg_l_thigh",
    "pivot": [
-    190,
-    655
+    236,
+    640
    ],
    "joint_r": 24,
    "poly": [
     [
-     136,
-     638
+     188,
+     618
     ],
     [
-     244,
-     638
+     292,
+     618
     ],
     [
-     254,
-     760
+     282,
+     720
     ],
     [
-     234,
+     258,
+     800
+    ],
+    [
+     218,
+     878
+    ],
+    [
+     214,
+     932
+    ],
+    [
+     138,
+     932
+    ],
+    [
+     148,
      860
     ],
     [
-     230,
-     944
+     164,
+     780
     ],
     [
-     104,
-     944
-    ],
-    [
-     112,
-     860
-    ],
-    [
-     128,
-     760
+     178,
+     700
     ]
    ]
   },
@@ -245,8 +245,8 @@
    "id": "pelvis",
    "parent": "",
    "pivot": [
-    270,
-    490
+    312,
+    470
    ],
    "joint_r": 0,
    "poly": []
@@ -255,50 +255,70 @@
    "id": "torso",
    "parent": "pelvis",
    "pivot": [
-    272,
-    470
+    314,
+    452
    ],
    "joint_r": 30,
    "poly": [
     [
-     205,
-     92
+     228,
+     100
     ],
     [
-     338,
-     92
+     300,
+     88
     ],
     [
-     380,
-     175
+     402,
+     98
     ],
     [
-     378,
+     442,
+     150
+    ],
+    [
+     446,
+     250
+    ],
+    [
+     440,
      330
     ],
     [
-     365,
-     430
+     450,
+     450
     ],
     [
-     352,
-     615
+     446,
+     600
     ],
     [
-     230,
-     620
+     402,
+     642
     ],
     [
-     208,
-     480
+     340,
+     622
     ],
     [
-     196,
-     330
+     300,
+     522
     ],
     [
-     194,
-     180
+     255,
+     502
+    ],
+    [
+     234,
+     420
+    ],
+    [
+     224,
+     300
+    ],
+    [
+     214,
+     200
     ]
    ]
   },
@@ -306,58 +326,58 @@
    "id": "shield_arm",
    "parent": "torso",
    "pivot": [
-    352,
-    165
+    414,
+    142
    ],
    "joint_r": 28,
    "poly": [
     [
-     318,
-     98
+     380,
+     100
     ],
     [
-     392,
-     136
+     442,
+     120
     ],
     [
-     412,
-     226
+     456,
+     180
     ],
     [
-     472,
-     228
+     532,
+     178
     ],
     [
-     508,
-     288
-    ],
-    [
-     504,
-     402
-    ],
-    [
-     474,
-     562
-    ],
-    [
-     424,
-     618
-    ],
-    [
-     388,
-     614
-    ],
-    [
-     372,
-     500
-    ],
-    [
-     358,
+     538,
      300
     ],
     [
-     334,
-     180
+     532,
+     640
+    ],
+    [
+     506,
+     662
+    ],
+    [
+     470,
+     560
+    ],
+    [
+     450,
+     450
+    ],
+    [
+     440,
+     330
+    ],
+    [
+     420,
+     250
+    ],
+    [
+     394,
+     190
     ]
    ]
   },
@@ -365,42 +385,42 @@
    "id": "head",
    "parent": "torso",
    "pivot": [
-    278,
-    138
+    346,
+    120
    ],
    "joint_r": 22,
    "poly": [
     [
-     230,
-     8
+     294,
+     4
     ],
     [
-     306,
-     2
+     376,
+     0
     ],
     [
-     330,
+     402,
      40
     ],
     [
-     328,
+     398,
      100
     ],
     [
-     312,
-     142
+     382,
+     122
     ],
     [
-     276,
-     152
+     340,
+     128
     ],
     [
-     244,
-     134
+     304,
+     102
     ],
     [
-     230,
-     80
+     292,
+     50
     ]
    ]
   },
@@ -408,46 +428,46 @@
    "id": "arm_upper",
    "parent": "torso",
    "pivot": [
-    168,
-    172
+    236,
+    150
    ],
    "joint_r": 30,
    "poly": [
     [
-     108,
-     92
+     168,
+     98
     ],
     [
-     208,
-     92
+     272,
+     94
     ],
     [
-     218,
-     180
+     287,
+     160
     ],
     [
-     198,
-     252
+     262,
+     250
     ],
     [
-     152,
+     232,
      332
     ],
     [
-     120,
-     356
+     190,
+     347
     ],
     [
-     78,
+     148,
      332
     ],
     [
-     68,
-     262
+     138,
+     260
     ],
     [
-     94,
-     150
+     148,
+     170
     ]
    ]
   },
@@ -455,70 +475,62 @@
    "id": "sword",
    "parent": "arm_fore",
    "pivot": [
-    118,
-    468
+    178,
+    425
    ],
    "joint_r": 0,
    "poly": [
     [
-     22,
-     390
+     104,
+     358
     ],
     [
-     44,
-     388
+     126,
+     352
     ],
     [
-     100,
-     435
+     176,
+     398
     ],
     [
-     150,
+     232,
+     418
+    ],
+    [
+     242,
+     440
+    ],
+    [
+     216,
      470
     ],
     [
-     184,
-     446
-    ],
-    [
-     197,
-     452
-    ],
-    [
-     172,
-     488
+     502,
+     820
     ],
     [
      492,
-     790
+     836
     ],
     [
-     482,
-     802
+     194,
+     492
     ],
     [
-     150,
-     508
+     160,
+     502
     ],
     [
-     127,
-     562
+     148,
+     480
     ],
     [
-     115,
-     553
+     164,
+     455
     ],
     [
-     138,
-     500
-    ],
-    [
-     85,
-     456
-    ],
-    [
-     25,
-     413
+     118,
+     396
     ]
    ],
    "grow_px": 7
@@ -527,37 +539,33 @@
    "id": "arm_fore",
    "parent": "arm_upper",
    "pivot": [
-    110,
-    342
+    182,
+    330
    ],
    "joint_r": 26,
    "poly": [
     [
-     68,
-     328
+     138,
+     312
     ],
     [
-     142,
-     318
+     228,
+     312
     ],
     [
-     158,
-     420
+     232,
+     400
     ],
     [
-     152,
-     502
+     212,
+     452
     ],
     [
-     122,
-     524
+     160,
+     458
     ],
     [
-     84,
-     508
-    ],
-    [
-     68,
+     133,
      420
     ]
    ]

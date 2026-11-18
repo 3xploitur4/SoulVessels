@@ -24,6 +24,9 @@ static func dress(body: Node3D, kind: String, r: Rect2) -> void:
 	holder.position.z = -body.position.z
 	holder.set_meta("dynamic", true)
 	body.add_child(holder)
+	# Story 053: the painted gates, where the painting exists.
+	if _painted(holder, kind, w, h):
+		return
 	match kind:
 		"lock":
 			_bars(holder, w, h, "iron_dark", 0.07, 0.34)
@@ -92,6 +95,39 @@ static func dress(body: Node3D, kind: String, r: Rect2) -> void:
 			_glow(holder, Vector2(w + 1.0, 0.8), Color(0.4, 0.95, 1.0, 0.3), h * 0.5)
 		_:
 			_box(holder, Vector3.ZERO, Vector3(w, h, 1.0), "slate")
+
+
+## The painted look for `kind` ("lock" portcullis, "rune" door, "masonry" wall). A tall gate
+## repeats the painting upward rather than stretching it. False when there is no painting.
+static func _painted(holder: Node3D, kind: String, w: float, h: float) -> bool:
+	var art := {"lock": "portcullis", "rune": "rune_door", "masonry": "masonry"}.get(kind, "") as String
+	if art == "" or not PropArt.has(art):
+		return false
+	var a := PropArt.aspect(art)
+	var qw := w + (0.5 if kind == "masonry" else 0.3)
+	# How many paintings stack up the gate at their own proportions.
+	var n := maxf(1.0, roundf(h / (qw / a)))
+	if kind == "rune":
+		n = 1.0
+	var q := PropArt.quad(art, Vector2(qw, h + 0.25), Vector2(1.0, n), 0.75 if kind != "masonry" else 0.85)
+	q.position = Vector3(0.0, -h * 0.5 - 0.05, 0.3)
+	holder.add_child(q)
+	if kind == "rune":
+		# The rune circle still glows over the painted door.
+		var ring := MeshInstance3D.new()
+		var torus := TorusMesh.new()
+		var radius := minf(w, h) * 0.36
+		torus.inner_radius = radius * 0.9
+		torus.outer_radius = radius
+		torus.rings = 24
+		torus.ring_segments = 6
+		ring.mesh = torus
+		ring.rotation_degrees.x = 90.0
+		ring.position = Vector3(0.0, 0.05, 0.36)
+		ring.material_override = ArenaMaterials.get_material("rune_glow")
+		ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		holder.add_child(ring)
+	return true
 
 
 ## Evenly spaced vertical bars across the gate.

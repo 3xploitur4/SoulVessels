@@ -33,10 +33,28 @@ func _ready() -> void:
 	var big := pickup_id != ""
 	_orb = _sphere(0.2 if big else 0.13, ArenaMaterials.flat(c, 3.5, true))
 	_halo = _sphere(0.45 if big else 0.28, ArenaMaterials.flat(Color(c.r, c.g, c.b, 0.22), 1.2, true, true))
+	# Story 053: a painted icon for the kind of item; the orb stays as its glow.
+	var art := icon_for(item)
+	if PropArt.has(art):
+		var icon := PropArt.icon(art, 0.62 if big else 0.42)
+		icon.position.y = 0.0
+		_orb.add_child(icon)
+		_orb.material_override = ArenaMaterials.flat(Color(c.r, c.g, c.b, 0.0), 0.0, true, true)
 	_base_y = global_position.y
 	if pickup_id == "":
 		# A drop pops up out of the body first.
 		_vel = Vector3(randf_range(-2.0, 2.0), 5.0, 0.0)
+
+
+## The painted icon for item `id`: a scroll for parchments and truths, a keepsake for relics,
+## a crystal for soul shards, a basalt core for every other material.
+static func icon_for(id: String) -> String:
+	var d := ItemDb.item(id)
+	if str(d.get("kind", "")) == "lore":
+		return "item_relic" if str(d.get("lore_kind", "")) == "relic" else "item_parchment"
+	if id.contains("shard") or id.contains("matrix"):
+		return "item_shard"
+	return "item_core"
 
 
 func _sphere(radius: float, mat: Material) -> MeshInstance3D:
