@@ -56,6 +56,8 @@ var passives: SyncPassives
 var weapons: Weapons
 ## The pixel-art pass over the world (story 054).
 var pixel_look: PixelLook
+## Story 055: wind, drips, bells and chains under the music, by room theme.
+var ambience: Ambience
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -128,6 +130,9 @@ func _ready() -> void:
 	pixel_look = PixelLook.new()
 	pixel_look.name = "PixelLook"
 	add_child(pixel_look)
+	ambience = Ambience.new()
+	ambience.name = "Ambience"
+	add_child(ambience)
 	fader = Fader.new()
 	fader.name = "Fader"
 	add_child(fader)
@@ -457,6 +462,8 @@ func _end_run() -> void:
 	touch = null
 	rooms.player = null
 	rooms.state = null
+	if ambience != null:
+		ambience.set_theme("")
 	if was_running():
 		run_ended.emit()
 
@@ -477,6 +484,8 @@ func _on_room_entered(room_id: String) -> void:
 			# Zone-entry autosave: Continue starts at this door.
 			state.checkpoint = {"room": room_id, "x": player.global_position.x, "y": player.global_position.y}
 			save_now()
+	if rooms.data != null and ambience != null:
+		ambience.set_theme(rooms.data.theme)
 	# The zone's track, or the room's own (story 049: the Starless Shore has its own).
 	var track := str(WorldData.zone(zone).get("music", zone))
 	if rooms.data != null:

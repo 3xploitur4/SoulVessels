@@ -1109,7 +1109,8 @@ func _on_hit_landed(target: Node3D, p: DamagePacket) -> void:
 			next_hit_backstab = false
 			GameEvents.hitstop_requested.emit(Balance.combat_f("hitstop.hit_s"))
 			GameEvents.camera_shake_requested.emit(0.12 if not p.was_crit else 0.25)
-			Sfx.play("hit")
+			# Story 055: a killing blow lands heavier than a hit.
+			Sfx.play("kill" if p.result == DamagePacket.Result.KILLED else "hit", randf_range(0.94, 1.06))
 			if p.is_primary:
 				loadout.active().kit.on_primary_landed(self, target, p)
 	hit_landed.emit(target, p)

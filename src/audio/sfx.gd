@@ -30,8 +30,9 @@ func _ready() -> void:
 		_pool.append(p)
 
 
-## Play `sound_name` once. `pitch` varies it slightly for repeats.
-func play(sound_name: String, pitch: float = 1.0) -> void:
+## Play `sound_name` once. `pitch` varies it slightly for repeats; `gain_db` sets it quieter or
+## louder than the rest (footsteps sit under everything).
+func play(sound_name: String, pitch: float = 1.0, gain_db: float = 0.0) -> void:
 	play_counts[sound_name] = play_counts.get(sound_name, 0) + 1
 	var stream := _stream(sound_name)
 	if stream == null:
@@ -42,7 +43,7 @@ func play(sound_name: String, pitch: float = 1.0) -> void:
 	p.bus = bus if AudioServer.get_bus_index(bus) >= 0 else "Master"
 	p.stream = stream
 	p.pitch_scale = pitch
-	p.volume_db = volume_db
+	p.volume_db = volume_db + gain_db
 	p.play()
 
 

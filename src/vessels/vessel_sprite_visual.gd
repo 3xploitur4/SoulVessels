@@ -22,6 +22,8 @@ var _struck: bool = false
 var _slash_color: Color = Color.WHITE
 var _reach: float = 2.0
 var _dagger_user: bool = false
+## Story 055: a caster's primary is a bolt with its own sound, not a blade.
+var _blade: bool = true
 var _h: float = 1.9
 var _was_air: bool = false
 ## Story 054 (D-062): ground dust. Time in the air (a longer fall lands harder), time to the next
@@ -37,6 +39,8 @@ var _land_depth: float = 0.0
 var _turn_left: float = 0.0
 const LAND_HOLD_S := 0.14
 const TURN_LEAN_S := 0.12
+## Story 055: footsteps sit well under the rest of the mix.
+const STEP_DB := -9.0
 ## Moves that slam the ground: a burst of dust and grit when they land.
 const SLAMS := ["crushing_blow", "groundbreaker", "meteor_drop", "worldbreaker_override"]
 ## Story 053: shards orbiting a point on a part (Seris's Floating Focus); see `weapon.look.orbit`.
@@ -58,6 +62,7 @@ static func build_sprite(vessel_data: Dictionary) -> VesselSpriteVisual:
 	v.body.trail_color = v._slash_color
 	v._reach = float(slash.get("reach_m", 2.0))
 	v._dagger_user = (vessel_data.get("primary", {}).get("hits", []) as Array).size() >= 6
+	v._blade = str((vessel_data.get("primary", {}) as Dictionary).get("kind", "")) != "bolt"
 	v._arc = SlashArc.new()
 	v._arc.position = Vector3(0.25, v._h * 0.55, 0.3)
 	v.add_child(v._arc)
@@ -196,6 +201,7 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 		if progress >= 0.2 and not _struck:
 			_struck = true
 			_arc.play(_slash_color, _reach * 1.25, 95.0, -55.0, 0.2)
+			Sfx.play("slash_heavy", randf_range(0.9, 1.0))
 	elif state == "final_stand" or state == "ultimate" or state == "dance_of_shadows":
 		b.crouch = -0.25
 		b.lean = 0.05 * _h
@@ -252,6 +258,7 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 	if _was_air and not air and state not in ["dead", "swim", "wall_slide"]:
 		var hard := clampf(0.7 + _air_t * 0.6, 0.7, 1.6)
 		body.puff(hard)
+		Sfx.play("land", randf_range(0.92, 1.05), linear_to_db(clampf(hard / 1.3, 0.45, 1.0)))
 		_land_left = LAND_HOLD_S
 		_land_depth = clampf(0.25 + (hard - 0.7) * 0.45, 0.25, 0.65)
 	_air_t = _air_t + delta if air else 0.0
@@ -265,6 +272,7 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 					if body is RigBody:
 						(body as RigBody).push_off()
 			"dodge":
+				Sfx.play("dodge", randf_range(0.95, 1.08))
 				if not _was_air:
 					DustFx.spawn(self, "skid", feet, -f)
 	if state == "run":
@@ -276,6 +284,7 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 		if _step_left <= 0.0:
 			_step_left = DustFx.step_interval(speed)
 			DustFx.spawn(self, "step", feet - Vector3(f * 0.2, 0.0, 0.0), -f)
+			Sfx.play("step", randf_range(0.85, 1.15), STEP_DB)
 	else:
 		_step_left = 0.06
 	if state == "wall_slide":
@@ -340,6 +349,9 @@ static func _clip_for(state: String) -> String:
 ## The weapon arc for combo hit `idx`: swings alternate down and up; the last is the widest.
 ## On the ground the front foot scuffs dust forward; the finisher throws grit.
 func _strike(idx: int) -> void:
+	if _blade:
+		var heavy := idx % 4 == 3 or (_dagger_user and idx >= 5)
+		Sfx.play("slash_heavy" if heavy else "slash", randf_range(0.92, 1.08) * (1.15 if _dagger_user else 1.0))
 	if not _was_air:
 		var fwd := 1.0 if rotation.y == 0.0 else -1.0
 		var last := idx % 4 == 3 or (_dagger_user and idx >= 5)

@@ -128,6 +128,8 @@ func _dust(state: String, facing: int, speed: float, delta: float) -> void:
 		if _step_left <= 0.0:
 			_step_left = HEAVY_STEP_S
 			DustFx.spawn(self, "step", global_position - Vector3(f * 0.3, 0.0, 0.0), -f, size)
+			# Story 055: a heavy body's step is a low thud.
+			Sfx.play("step", randf_range(0.55, 0.7), -5.0)
 	else:
 		_step_left = 0.1
 

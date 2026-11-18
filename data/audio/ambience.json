@@ -1,0 +1,28 @@
+{
+  "_source": "Story 055, decision D-065. Exploration ambience per room theme (keys of data/world/themes.json), played by Ambience (src/audio/ambience.gd) under the music. folder: where the sounds live (made by tools/audio/synth_v2.py). bed: a 20 s loop always under the room, bed_db its level. oneshots: sounds that happen now and then, each with a weight (how often it is picked against the others); every_s: seconds between them, picked at random in the range; oneshot_db: their level, varied by up to oneshot_spread_db quieter, as if near or far. fade_s: crossfade when the theme changes.",
+  "folder": "res://assets/audio/ambience/",
+  "fade_s": 2.0,
+  "oneshot_spread_db": 8.0,
+  "themes": {
+    "cavern": {
+      "bed": "amb_cavern", "bed_db": -16.0, "every_s": [4.0, 11.0], "oneshot_db": -13.0,
+      "oneshots": { "amb_drip": 4, "amb_stones": 2, "amb_chain": 1.5, "amb_bell": 1, "amb_wind": 1.5, "amb_choir": 0.6 }
+    },
+    "mycelium": {
+      "bed": "amb_forest", "bed_db": -16.0, "every_s": [5.0, 12.0], "oneshot_db": -14.0,
+      "oneshots": { "amb_creak": 2, "amb_drip": 2, "amb_wind": 2, "amb_choir": 1, "amb_stones": 0.5 }
+    },
+    "palace": {
+      "bed": "amb_palace", "bed_db": -15.0, "every_s": [4.0, 10.0], "oneshot_db": -13.0,
+      "oneshots": { "amb_drip": 4, "amb_bell": 1.5, "amb_choir": 1.5, "amb_chain": 1, "amb_stones": 0.5 }
+    },
+    "rift": {
+      "bed": "amb_rift", "bed_db": -15.0, "every_s": [4.0, 10.0], "oneshot_db": -12.0,
+      "oneshots": { "amb_stones": 3, "amb_chain": 2, "amb_wind": 2, "amb_creak": 1, "amb_bell": 0.5 }
+    },
+    "shore": {
+      "bed": "amb_shore", "bed_db": -14.0, "every_s": [6.0, 14.0], "oneshot_db": -14.0,
+      "oneshots": { "amb_wind": 3, "amb_bell": 1, "amb_drip": 1, "amb_choir": 0.8, "amb_stones": 1 }
+    }
+  }
+}
