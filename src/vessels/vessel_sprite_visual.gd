@@ -30,6 +30,13 @@ var _air_t: float = 0.0
 var _step_left: float = 0.0
 var _scrape_left: float = 0.0
 var _last_facing: int = 0
+## Story 054 (D-063): weight. Seconds left of the crouch after a landing and of the lean back
+## against the old momentum after a turn, and how deep that landing was.
+var _land_left: float = 0.0
+var _land_depth: float = 0.0
+var _turn_left: float = 0.0
+const LAND_HOLD_S := 0.14
+const TURN_LEAN_S := 0.12
 ## Moves that slam the ground: a burst of dust and grit when they land.
 const SLAMS := ["crushing_blow", "groundbreaker", "meteor_drop", "worldbreaker_override"]
 ## Story 053: shards orbiting a point on a part (Seris's Floating Focus); see `weapon.look.orbit`.
@@ -220,6 +227,15 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	elif state in SLAMS and progress >= 0.4 and not _struck:
 		_struck = true
 		DustFx.spawn(self, "slam", global_position, float(facing), 1.2)
+	# Weight: a landing is taken in the knees for a beat; a turn leans back against the momentum.
+	if _land_left > 0.0:
+		_land_left = maxf(_land_left - delta, 0.0)
+		if state in ["idle", "run"]:
+			b.crouch = maxf(b.crouch, _land_depth * _land_left / LAND_HOLD_S)
+	if _turn_left > 0.0:
+		_turn_left = maxf(_turn_left - delta, 0.0)
+		if state == "run":
+			b.lean = -0.06 * _h * _turn_left / TURN_LEAN_S
 	if b is RigBody:
 		(b as RigBody).play(clip_for_rig(state, (b as RigBody).clips), progress)
 	_guard_mat.albedo_color.a = lerpf(_guard_mat.albedo_color.a, 0.75 * guard, minf(delta * 20.0, 1.0))
@@ -234,7 +250,10 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 	var feet := global_position
 	var f := float(facing)
 	if _was_air and not air and state not in ["dead", "swim", "wall_slide"]:
-		body.puff(clampf(0.7 + _air_t * 0.6, 0.7, 1.6))
+		var hard := clampf(0.7 + _air_t * 0.6, 0.7, 1.6)
+		body.puff(hard)
+		_land_left = LAND_HOLD_S
+		_land_depth = clampf(0.25 + (hard - 0.7) * 0.45, 0.25, 0.65)
 	_air_t = _air_t + delta if air else 0.0
 	if state != prev:
 		match state:
@@ -243,13 +262,16 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 					DustFx.spawn(self, "wall", feet + Vector3(-f * 0.4, 0.4, 0.0), -f, 1.4)
 				elif not _was_air:
 					DustFx.spawn(self, "jump", feet)
+					if body is RigBody:
+						(body as RigBody).push_off()
 			"dodge":
 				if not _was_air:
 					DustFx.spawn(self, "skid", feet, -f)
 	if state == "run":
 		if _last_facing != 0 and facing != _last_facing:
-			# Turning: the dust carries on the old way.
+			# Turning: the dust carries on the old way and the body leans back against it.
 			DustFx.spawn(self, "skid", feet, -f, 0.8)
+			_turn_left = TURN_LEAN_S
 		_step_left -= delta
 		if _step_left <= 0.0:
 			_step_left = DustFx.step_interval(speed)

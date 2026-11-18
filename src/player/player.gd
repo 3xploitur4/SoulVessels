@@ -1090,6 +1090,9 @@ func _apply_gravity(delta: float) -> void:
 	var scale := action.gravity_scale if action != null else 1.0
 	if action != null and not is_nan(action.velocity_y):
 		return
+	# Story 054 (D-063): falling pulls harder than rising, so a jump comes down with weight.
+	if velocity.y < 0.0 and action == null:
+		scale *= float(_move.get("fall_gravity_mult", 1.0))
 	velocity.y = maxf(velocity.y - float(_move.get("gravity", 30.0)) * scale * delta,
 		-float(_move.get("max_fall_speed", 30.0)))
 

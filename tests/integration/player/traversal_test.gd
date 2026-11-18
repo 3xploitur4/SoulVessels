@@ -115,7 +115,7 @@ func test_one_way_platform_passes_up_holds_and_drops() -> void:
 		"######",
 	]), "", Vector2(3.0, 1.0))
 	await wait_frames(10)
-	# A full-height jump (2.2 m) is needed to clear a platform 2 m up: hold to the apex.
+	# A full-height jump (about 3.3 m) easily clears to clear a platform 2 m up: hold to the apex.
 	await _tap_jump(30)
 	await wait_frames(60)
 	assert_almost(player.global_position.y, 3.0, 0.1, "jumped up through and stands on the platform")

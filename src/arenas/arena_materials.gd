@@ -97,6 +97,12 @@ const PALETTE := {
 	"door_stone": {"albedo": Color(0.3, 0.32, 0.4), "roughness": 0.85, "tex": "stone_blocks", "tile_m": 2.2},
 	"rune_glow": {"albedo": Color(0.3, 0.3, 0.6), "emission": Color(0.42, 0.4, 0.95), "emission_energy": 1.6},
 	"vein_orange": {"albedo": Color(1.0, 0.5, 0.15), "emission": Color(1.0, 0.45, 0.1), "emission_energy": 2.6},
+	# Story 054 (D-062): single stones of the ground, tinted stone by stone through vertex colour.
+	"z1_stone": {"albedo": Color(0.66, 0.67, 0.72), "roughness": 0.9, "tex": "cave_rock", "tile_m": 2.2},
+	"z2_stone": {"albedo": Color(0.5, 0.47, 0.58), "roughness": 0.95, "tex": "cave_rock", "tile_m": 2.6},
+	"z3_stone": {"albedo": Color(0.84, 0.84, 0.86), "roughness": 0.55, "tex": "slab", "tile_m": 1.6},
+	"z4_stone": {"albedo": Color(0.42, 0.41, 0.44), "roughness": 0.85, "tex": "cave_rock", "tile_m": 2.0},
+	"bone": {"albedo": Color(0.76, 0.72, 0.62), "roughness": 0.8},
 	"flood_water": {"albedo": Color(0.05, 0.3, 0.38), "roughness": 0.08, "metallic": 0.3,
 		"emission": Color(0.08, 0.5, 0.55), "emission_energy": 0.6},
 }
@@ -134,6 +140,19 @@ static func get_material(name: String) -> StandardMaterial3D:
 			mat.emission_texture = tex
 			mat.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
 	_cache[name] = mat
+	return mat
+
+
+## `name` with each vertex's colour multiplied in (stones tinted one by one in a single mesh).
+## Double-sided, since code-built stones are not wound for culling. Cached.
+static func tinted(name: String) -> StandardMaterial3D:
+	var key := "tinted_" + name
+	if _cache.has(key):
+		return _cache[key]
+	var mat := get_material(name).duplicate() as StandardMaterial3D
+	mat.vertex_color_use_as_albedo = true
+	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_cache[key] = mat
 	return mat
 
 

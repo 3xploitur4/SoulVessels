@@ -339,8 +339,8 @@ func _deep_tops() -> Array[Rect2]:
 
 ## Layers that make the taller, zoomed-out rooms read as deep gothic spaces: a second tier of far
 ## arches (or towering mushrooms) and full-height columns where the room is tall, chains with
-## cages hanging from the ceiling, dark pillars in front framing the room's ends, and candles on
-## ledges.
+## cages hanging from the ceiling and dark pillars in front framing the room's ends (candles are
+## the ground's, see GroundDresser).
 func _depth_layers() -> void:
 	var forest := str(theme.get("decor", "")) == "mushrooms"
 	if _h > 14.0:
@@ -361,8 +361,6 @@ func _depth_layers() -> void:
 				x += rng.randf_range(10.0, 16.0)
 	_chains()
 	_front_pillars(forest)
-	if not forest:
-		_candles()
 
 
 ## Chains from the ceiling, some ending in a cage or a lantern; most behind the play plane, a few
@@ -403,19 +401,6 @@ func _front_pillars(forest: bool) -> void:
 			_box(Vector3(x, _h * 0.5, Z_FRONT + 0.8), Vector3(0.7, _h + 2.0, 0.6), "silhouette")
 			for y: float in [0.25, _h * 0.55, _h - 0.6]:
 				_box(Vector3(x, y, Z_FRONT + 0.8), Vector3(1.1, 0.35, 0.8), "silhouette")
-
-
-## Candles on ledges and floors: little warm flames on wax stubs.
-func _candles() -> void:
-	for t in data.trims:
-		if t.size.x < 2.0 or rng.randf() > 0.35:
-			continue
-		var x := rng.randf_range(t.position.x + 0.4, t.end.x - 0.4)
-		for k in range(rng.randi_range(1, 3)):
-			var cx := x + float(k) * 0.22
-			var h := rng.randf_range(0.18, 0.4)
-			_cylinder(Vector3(cx, t.position.y + h * 0.5, -0.5), 0.05, 0.06, h, "candle_wax", 6)
-			_sphere(Vector3(cx, t.position.y + h + 0.06, -0.5), 0.05, "flame_glow")
 
 
 ## Stone teeth under the ceiling: small ones just behind the play plane, black ones in front.

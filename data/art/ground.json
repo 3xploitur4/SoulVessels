@@ -1,27 +1,69 @@
 {
-  "_source": "Story 054, decision D-062. How a room's ground is dressed by GroundDresser (src/world/ground_dresser.gd). 'default' applies to every theme; a theme's own block (keys from data/world/themes.json) overrides single keys. margin_cells: rock drawn around the room (cells) so a zoomed-out camera never shows a void past the room's edge. shade: darkness laid over solid rock by distance from open air in cells (index 0 = the surface, the last value for anything deeper), so every walkable edge is lit and the mass below falls into black. shade_z: how far in front of the rock face that darkness sits. top_shade: darkness on the top of the rock behind the walkable slabs, [front, back]. cap_back_z: how far back the walkable slab strip reaches (the play plane is z 0, the rock face z 1.2). slab_len: slab lengths (m). chip_chance: share of slabs with a broken front. block_w / block_h: carved stone blocks on the face under each edge (m), block_skip the share left out, block_row2 the share of the second row. accent: what hangs off or runs along the edge ('moss' strands, 'roots' with glowing drips, 'gold' moulding, 'embers' in the joints), accent_every its spacing (m). teeth_every / teeth_len: rock teeth under every overhang (m), at most teeth_room of the free space below. pebbles_every: loose stones on the lip (m).",
+  "_source": "Story 054, decision D-062 (stones: D-064). How a room's ground is built by GroundDresser (src/world/ground_dresser.gd). 'default' applies to every theme; a theme's own block (keys from data/world/themes.json) overrides single keys. margin_cells: rock drawn around the room (cells) so a zoomed-out camera never shows a void past the room's edge. shade: darkness laid over solid rock by distance from open air in cells (index 0 = the surface, the last value for anything deeper). shade_z: how far in front of the rock face that darkness sits. top_shade: darkness on the rock top behind the walkable slabs, [front, back]. cap_back_z: how far back the walkable slabs reach (play plane z 0, rock face z 1.2). slab_len: slab lengths (m); chip_chance: share of slabs with a broken front; slab_cut: how much a slab's top corners are knocked off (m). stone: the material every face stone is cut from; tints: the colours stones are picked from, one per stone, so no two neighbours match; tint_jitter: extra brightness spread. style: 'masonry' (courses of cut stone, two per metre) or 'rock' (rough chunks, one per metre). stone_w: stone widths (m); stone_cut: corner chipping (m); stone_out: how far a stone stands out of the face (m); skin_cells: how deep into the rock stones are laid (deeper is in darkness anyway); missing: share of stones fallen out. stains_every / cracks_every: water stains running down from an edge and cracks in the face (m between them). clutter_every: metres between pieces of clutter on a walkable top; clutter: weights of what lies there (candles, skull, bones, rubble, stub = a broken column, grave). accent: what hangs off or runs along the edge ('moss', 'roots' with glowing drips, 'gold' moulding, 'embers' in the joints), accent_every its spacing (m). teeth_every / teeth_len: rock teeth under every overhang (m), at most teeth_room of the free space below. pebbles_every: loose stones on the lip (m).",
   "default": {
     "margin_cells": 8,
-    "shade": [0.0, 0.52, 0.8, 0.92, 0.97],
+    "shade": [0.0, 0.5, 0.8, 0.92, 0.97],
     "shade_z": 0.34,
     "top_shade": [0.35, 0.88],
     "cap_back_z": -0.75,
-    "slab_len": [0.8, 2.1],
-    "chip_chance": 0.16,
-    "block_w": [0.45, 1.3],
-    "block_h": [0.26, 0.5],
-    "block_skip": 0.12,
-    "block_row2": 0.55,
+    "slab_len": [0.6, 1.6],
+    "chip_chance": 0.18,
+    "slab_cut": 0.08,
+    "stone": "z1_stone",
+    "tints": ["#d2ccbf", "#bdb8ae", "#a7a9ad", "#9196a0", "#c8c0ad", "#7c7f87", "#e0dace", "#b3a99a", "#8a8790"],
+    "tint_jitter": 0.1,
+    "style": "masonry",
+    "stone_w": [0.35, 1.15],
+    "stone_cut": 0.09,
+    "stone_out": [0.02, 0.13],
+    "skin_cells": 2,
+    "missing": 0.05,
+    "stains_every": [1.4, 3.6],
+    "cracks_every": [0.9, 2.6],
+    "clutter_every": [1.1, 3.2],
+    "clutter": { "candles": 3, "skull": 1.5, "bones": 1.5, "rubble": 3, "stub": 1, "grave": 1 },
     "accent": "moss",
-    "accent_every": [1.4, 4.2],
+    "accent_every": [1.6, 4.5],
     "teeth_every": [0.45, 1.25],
     "teeth_len": [0.2, 0.8],
     "teeth_room": 0.35,
-    "pebbles_every": [1.8, 4.5]
+    "pebbles_every": [1.4, 3.5]
   },
   "cavern": { "accent": "moss" },
-  "mycelium": { "accent": "roots", "accent_every": [0.9, 2.6], "block_skip": 0.35 },
-  "palace": { "accent": "gold", "chip_chance": 0.08 },
-  "rift": { "accent": "embers", "accent_every": [1.0, 2.8], "chip_chance": 0.24 },
-  "shore": { "accent": "moss", "chip_chance": 0.2 }
+  "mycelium": {
+    "stone": "z2_stone",
+    "style": "rock",
+    "tints": ["#a99fbf", "#8f879f", "#7b8a8c", "#b2a8c4", "#6e7486", "#9aa59c", "#c0b6cc"],
+    "stone_w": [0.6, 1.5],
+    "stone_cut": 0.22,
+    "accent": "roots",
+    "accent_every": [0.9, 2.6],
+    "clutter": { "skull": 1, "bones": 2, "rubble": 3, "stub": 0.5, "grave": 0.5, "candles": 0.5 }
+  },
+  "palace": {
+    "stone": "z3_stone",
+    "tints": ["#e6e2d8", "#d4d2cc", "#c9c4b6", "#bfc6cc", "#e0d6bf", "#aeb3b8", "#d9cfb0"],
+    "accent": "gold",
+    "chip_chance": 0.1,
+    "missing": 0.03,
+    "clutter": { "candles": 3, "skull": 0.5, "bones": 0.5, "rubble": 2, "stub": 2, "grave": 0.5 }
+  },
+  "rift": {
+    "stone": "z4_stone",
+    "style": "rock",
+    "tints": ["#8c8790", "#77737b", "#6a6268", "#9a8f8c", "#5e5a60", "#866f6c", "#a39a96"],
+    "stone_w": [0.5, 1.3],
+    "stone_cut": 0.18,
+    "accent": "embers",
+    "accent_every": [1.0, 2.8],
+    "chip_chance": 0.26,
+    "clutter": { "skull": 2, "bones": 2.5, "rubble": 3, "stub": 0.5, "grave": 1.5, "candles": 1 }
+  },
+  "shore": {
+    "stone": "z4_stone",
+    "tints": ["#9aa3ab", "#868f98", "#7a8088", "#a8adb2", "#6d747c", "#b4b7b6"],
+    "accent": "moss",
+    "chip_chance": 0.2,
+    "clutter": { "skull": 1.5, "bones": 2, "rubble": 3, "stub": 0.5, "grave": 2, "candles": 1 }
+  }
 }

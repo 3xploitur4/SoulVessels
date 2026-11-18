@@ -26,3 +26,12 @@ Tests: `tests/unit/world/ground_dresser_test.gd` (5), `tests/unit/vfx/dust_fx_te
 the shadow on the floor and shrinking with height); full suite 443 passed; smoke ok; drive (44),
 drive_m2, drive_m3, drive_m4, zone4_walk, weapons_check and art_v2_check all pass.
 Run cycle checked with `tools/art/rig_preview.gd` (caelan, darius).
+
+## Third pass (2026-11-18, decisions D-063, D-064): reach, weight, stone-by-stone ground
+
+- room-*.png / upper-*.png: the ground as single stones (own colour, depth and chipped corners,
+  courses or rough chunks per zone, fallen stones, cracks, water stains) with candle clusters,
+  skulls, bones, rubble, column stumps and gravestones on the walkable tops.
+- Jump raised to about 3.3 m (was 2.2): a level-walker audit of every room, upper levels merged,
+  finds only intended unreachable spots (a mushroom shaft, a water room, the door-less arena).
+- Poses checked with `tools/art/rig_preview.gd`: burdened idle, low-carried sword in jump and fall.

@@ -41,15 +41,22 @@ func test_runs_at_caelan_speed() -> void:
 	assert_almost(player.global_position.z, 0.0, 0.0001, "locked to the play plane")
 
 
-func test_jump_reaches_about_2_2_m() -> void:
+func test_jump_reaches_the_height_its_data_gives() -> void:
 	await wait_frames(10)
-	var peak := 0.0
+	var y0 := player.global_position.y
+	var peak := y0
 	Input.action_press("jump")
 	for _i in range(40):
 		await wait_frames(1)
 		peak = maxf(peak, player.global_position.y)
 	Input.action_release("jump")
-	assert_almost(peak, 2.2, 0.15, "apex %.2f m" % peak)
+	# v^2 / 2g from data/balance/combat.json (story 054: about 3.3 m, clearing 3-cell ledges with room).
+	var v := Balance.combat_f("movement.jump_velocity")
+	var want := v * v / (2.0 * Balance.combat_f("movement.gravity"))
+	# Stepping at 60 Hz loses a little of the ideal height.
+	assert_almost(peak - y0, want, 0.3, "apex %.2f m" % (peak - y0))
+	assert_gt(peak - y0, 3.2, "a 3-cell ledge is cleared with room to spare")
+	assert_lt(peak - y0, 3.8, "a 4-cell wall still blocks")
 	await wait_frames(40)
 	assert_true(player.is_on_floor(), "lands")
 

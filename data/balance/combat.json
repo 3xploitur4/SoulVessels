@@ -66,8 +66,10 @@
   "sync_guard": { "cost_bars": 1, "min_affinity": 2, "cooldown_s": 90 },
   "sync_ultimate": { "cost_bars": 2, "min_affinity": 3 },
   "movement": {
+    "_note": "Story 054 (D-063): jump_velocity 14.5 m/s with gravity 30 rises about 3.3 m in play (3.5 m by v^2/2g, less at 60 physics steps a second; was 2.2), so a ledge 3 cells up is reached with room to spare and a 4-cell wall still needs a wall-jump or a mushroom. fall_gravity_mult: gravity is this much stronger while falling, so the body is pulled back down with weight.",
     "gravity": 30.0,
-    "jump_velocity": 11.5,
+    "jump_velocity": 14.5,
+    "fall_gravity_mult": 1.3,
     "coyote_s": 0.08,
     "jump_buffer_s": 0.1,
     "air_control": 0.9,

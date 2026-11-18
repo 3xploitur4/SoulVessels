@@ -390,10 +390,16 @@ func kick(amount: float) -> void:
 	_kick_vel += amount * KICK_SPEED
 
 
-## Landing dust also squashes the body.
+## Landing dust also squashes the body, harder after a longer fall (story 054: the knees take
+## the weight).
 func puff(strength: float = 1.0) -> void:
 	super.puff(strength)
-	kick(float(_kicks.get("land", 0.0)))
+	kick(float(_kicks.get("land", 0.0)) * clampf(strength, 0.7, 1.6))
+
+
+## A push-off squash as the body leaves the ground (the rig's `kicks.jump`).
+func push_off() -> void:
+	kick(float(_kicks.get("jump", 0.0)))
 
 
 func _tick_kick(delta: float) -> void:
