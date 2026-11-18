@@ -38,6 +38,7 @@ static func build(builder: Node3D, room: RoomData, room_theme: Dictionary, rando
 			d._mycelium()
 		_:
 			d._cavern()
+	d._depth_layers()
 
 
 # --- Backdrop ---------------------------------------------------------------------------------
@@ -334,6 +335,89 @@ func _deep_tops() -> Array[Rect2]:
 	return out
 
 
+# --- Depth (story 054) ---------------------------------------------------------------------
+
+## Layers that make the taller, zoomed-out rooms read as deep gothic spaces: a second tier of far
+## arches (or towering mushrooms) and full-height columns where the room is tall, chains with
+## cages hanging from the ceiling, dark pillars in front framing the room's ends, and candles on
+## ledges.
+func _depth_layers() -> void:
+	var forest := str(theme.get("decor", "")) == "mushrooms"
+	if _h > 14.0:
+		var x := -18.0 + rng.randf_range(0.0, 8.0)
+		while x < _w + 18.0:
+			if forest:
+				var violet := rng.randf() < 0.45
+				_mushroom(Vector3(x, _h * 0.35, Z_FAR + 2.0), rng.randf_range(6.0, 12.0), rng.randf_range(2.6, 4.4),
+					"z2_stalk_far", "z2_cap_far_violet" if violet else "z2_cap_far_teal")
+				x += rng.randf_range(9.0, 14.0)
+			else:
+				_arch(Vector3(x, _h * 0.42, Z_FAR + 1.5), 6.5, clampf(_h * 0.3, 4.0, 9.0), "z1_ruin_far", rng.randf() < 0.35)
+				x += 6.5 * float(rng.randi_range(2, 4))
+		if not forest:
+			x = rng.randf_range(3.0, 9.0)
+			while x < _w - 2.0:
+				_column(Vector3(x, 0.0, Z_MID - 1.6), _h - 0.8, rng.randf() < 0.25)
+				x += rng.randf_range(10.0, 16.0)
+	_chains()
+	_front_pillars(forest)
+	if not forest:
+		_candles()
+
+
+## Chains from the ceiling, some ending in a cage or a lantern; most behind the play plane, a few
+## black ones in front.
+func _chains() -> void:
+	var x := rng.randf_range(2.0, 7.0)
+	while x < _w - 1.0:
+		var length := rng.randf_range(2.0, minf(7.0, _h * 0.45))
+		var front := rng.randf() < 0.3
+		var z := Z_FRONT - 0.4 if front else rng.randf_range(-2.8, -1.6)
+		var mat := "silhouette" if front else "iron_dark"
+		for i in range(int(length / 0.32)):
+			var link := _box(Vector3(x, _h - 0.2 - 0.32 * float(i) - 0.16, z), Vector3(0.07, 0.26, 0.05 if i % 2 == 0 else 0.12), mat)
+			link.rotation_degrees.y = 90.0 * float(i % 2)
+		var end_y := _h - 0.2 - length
+		var roll := rng.randf()
+		if roll < 0.3:
+			# A hanging cage: a ring top and bottom, four bars.
+			for k in range(4):
+				var a := TAU * float(k) / 4.0
+				_box(Vector3(x + cos(a) * 0.32, end_y - 0.55, z + sin(a) * 0.32), Vector3(0.05, 1.1, 0.05), mat)
+			_cylinder(Vector3(x, end_y - 0.02, z), 0.38, 0.38, 0.06, mat, 10)
+			_cylinder(Vector3(x, end_y - 1.1, z), 0.38, 0.38, 0.06, mat, 10)
+		elif roll < 0.55 and not front:
+			# A lantern: an iron frame round a warm glow.
+			_box(Vector3(x, end_y - 0.25, z), Vector3(0.3, 0.45, 0.3), "iron_dark")
+			_sphere(Vector3(x, end_y - 0.25, z + 0.18), 0.12, "flame_glow")
+		x += rng.randf_range(5.0, 11.0)
+
+
+## Dark pillars (or giant stalks) just in front of the play plane at the room's two ends, framing
+## the view without crossing the play.
+func _front_pillars(forest: bool) -> void:
+	for x: float in [rng.randf_range(0.2, 0.9), _w - rng.randf_range(0.2, 0.9)]:
+		if forest:
+			_cylinder(Vector3(x, _h * 0.5, Z_FRONT + 0.8), 0.32, 0.5, _h + 2.0, "silhouette", 8)
+		else:
+			_box(Vector3(x, _h * 0.5, Z_FRONT + 0.8), Vector3(0.7, _h + 2.0, 0.6), "silhouette")
+			for y: float in [0.25, _h * 0.55, _h - 0.6]:
+				_box(Vector3(x, y, Z_FRONT + 0.8), Vector3(1.1, 0.35, 0.8), "silhouette")
+
+
+## Candles on ledges and floors: little warm flames on wax stubs.
+func _candles() -> void:
+	for t in data.trims:
+		if t.size.x < 2.0 or rng.randf() > 0.35:
+			continue
+		var x := rng.randf_range(t.position.x + 0.4, t.end.x - 0.4)
+		for k in range(rng.randi_range(1, 3)):
+			var cx := x + float(k) * 0.22
+			var h := rng.randf_range(0.18, 0.4)
+			_cylinder(Vector3(cx, t.position.y + h * 0.5, -0.5), 0.05, 0.06, h, "candle_wax", 6)
+			_sphere(Vector3(cx, t.position.y + h + 0.06, -0.5), 0.05, "flame_glow")
+
+
 ## Stone teeth under the ceiling: small ones just behind the play plane, black ones in front.
 func _stalactites(mat: String) -> void:
 	var x := rng.randf_range(1.5, 5.0)
@@ -354,8 +438,6 @@ func _stalactites(mat: String) -> void:
 ## Black rocks toward the camera along the bottom edge. Only in rooms about one screen tall:
 ## in a shaft they would sit in front of the lower platforms.
 func _silhouettes() -> void:
-	if _h > 14.0:
-		return
 	var x := rng.randf_range(-2.0, 4.0)
 	while x < _w + 2.0:
 		# A clump of two or three black stalagmites.

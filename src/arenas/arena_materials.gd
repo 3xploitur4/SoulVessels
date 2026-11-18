@@ -89,6 +89,8 @@ const PALETTE := {
 	# Altars and gates (story 028).
 	"altar_ashlar": {"albedo": Color(0.7, 0.72, 0.8), "roughness": 0.7, "tex": "stone_blocks", "tile_m": 1.6},
 	"altar_basin": {"albedo": Color(0.5, 0.52, 0.6), "roughness": 0.45, "metallic": 0.3},
+	"flame_glow": {"albedo": Color(1.0, 0.72, 0.32), "emission": Color(1.0, 0.62, 0.25), "emission_energy": 2.6},
+	"candle_wax": {"albedo": Color(0.86, 0.82, 0.7), "roughness": 0.6, "emission": Color(0.5, 0.35, 0.15), "emission_energy": 0.3},
 	"iron_dark": {"albedo": Color(0.1, 0.1, 0.12), "roughness": 0.45, "metallic": 0.8},
 	"ember_glow": {"albedo": Color(0.8, 0.15, 0.1), "emission": Color(1.0, 0.2, 0.12), "emission_energy": 2.2},
 	"gold_light": {"albedo": Color(1.0, 0.8, 0.35), "emission": Color(1.0, 0.78, 0.3), "emission_energy": 3.2},

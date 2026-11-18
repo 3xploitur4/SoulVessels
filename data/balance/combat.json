@@ -76,14 +76,15 @@
     "max_fall_speed": 30.0
   },
   "traversal": {
-    "_note": "Story 021, decision D-029. wall_slide_max_fall_mps: fall speed while pressing into a wall. wall_jump_velocity: [away from the wall, up] in m/s. wall_jump_lock_s: seconds steering is ignored after a wall-jump, so the kick carries. wall_coyote_s: seconds after leaving a wall a wall-jump still works. bounce_height_m: apex above a bounce mushroom's cap. void_damage_fraction: share of max HP lost on falling out of a room. void_depth_m: metres below the room bottom that counts as out.",
+    "_note": "Story 021, decision D-029. wall_slide_max_fall_mps: fall speed while pressing into a wall. wall_jump_velocity: [away from the wall, up] in m/s. wall_jump_lock_s: seconds steering is ignored after a wall-jump, so the kick carries. wall_coyote_s: seconds after leaving a wall a wall-jump still works. bounce_height_m: apex above a bounce mushroom's cap. void_damage_fraction: share of max HP lost on falling out of a room. void_depth_m: metres below the room bottom that counts as out. spike_damage_fraction (story 054): share of max HP lost touching spikes, before returning to safe ground.",
     "wall_slide_max_fall_mps": 3.5,
     "wall_jump_velocity": [7.0, 10.5],
     "wall_jump_lock_s": 0.16,
     "wall_coyote_s": 0.1,
     "bounce_height_m": 6.5,
     "void_damage_fraction": 0.1,
-    "void_depth_m": 3.0
+    "void_depth_m": 3.0,
+    "spike_damage_fraction": 0.2
   },
   "shield_ward": { "_note": "Story 023, decision D-030. The statue beam: height above the statue base, length, damage per tick to a player standing in it unguarded, the reflect angle off Caelan's shield, how long the reflected ray must rest on the crystal, how fast an interrupted charge fades, and the crystal size (w, h).", "beam_height_m": 1.2, "beam_length_m": 40.0, "tick_s": 0.5, "damage": 12, "deflect_angle_deg": 30.0, "reflect_length_m": 20.0, "charge_s": 1.0, "charge_decay_per_s": 0.5, "crystal_size_m": [1.0, 1.5] },
   "root_prison": { "hits": 3, "hurt_size_m": [1.4, 2.2], "_note": "Story 025, addendum zone table: Nyra is freed from the roots in room 8. Three blows cut the roots (one per thick root drawn), then interact frees her." },

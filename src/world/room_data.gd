@@ -25,6 +25,7 @@ extends RefCounted
 ##   R  light-rune door   K  cracked masonry   F  flooded stair (sealed in M2)
 ##   X  rift scar (decor, not solid)
 ##   T  warm light   Y  cool light   (at most 2 per room)
+##   ^  spikes (story 054): touching them costs HP and returns the player to safe ground
 
 const ENEMY_CODES := {
 	"c": "echo_crawler",
@@ -74,6 +75,12 @@ var lights: Array[Dictionary] = []
 var water: Array[Dictionary] = []
 ## Sliding floors (story 043): [{"x": [left, right], "y": [bottom, top], "angle": degrees}].
 var slides: Array[Dictionary] = []
+## Spike strips (story 054): Rect2(x, y, width, height) in room metres, one per run of `^`.
+var spikes: Array[Rect2] = []
+## Rows at the top of the grid that come from the room's upper levels (story 054; WorldData merges
+## data/world/upper/<zone>.json). Things in them are numbered after the base room's, so ids saved
+## before the upper levels existed still match.
+var upper_rows: int = 0
 ## A dark room (story 043): only the player's light, lamps and attack cues show.
 var dark: bool = false
 ## Lamp positions in a dark room (world), from "lamps" [[x, y]] and the room's T/Y lights.
@@ -88,6 +95,7 @@ static func parse(room_id: String, zone_id: String, d: Dictionary, errors: Array
 	r.id = room_id
 	r.zone = zone_id
 	r.raw = d
+	r.upper_rows = int(d.get("upper_rows", 0))
 	r.name_key = str(d.get("name", "ROOM_" + room_id.to_upper()))
 	r.theme = str(d.get("theme", "cavern"))
 	r.music = str(d.get("music", zone_id))
@@ -132,7 +140,15 @@ func _read_cells(cells: Array[PackedStringArray], errors: Array[String]) -> void
 	var pickup_index := 0
 	var event_index := 0
 	var light_count := 0
-	for row in range(rows):
+	spikes = merge_rects(cells, "^", rows)
+	# Base rows first, then the upper levels: their enemies and pickups are numbered after the
+	# base room's (story 054).
+	var order: Array[int] = []
+	for row in range(clampi(upper_rows, 0, rows), rows):
+		order.append(row)
+	for row in range(clampi(upper_rows, 0, rows)):
+		order.append(row)
+	for row in order:
 		for col in range(cols):
 			var c := cells[row][col]
 			var pos := Vector2(float(col) + 0.5, float(rows - 1 - row))
@@ -151,13 +167,15 @@ func _read_cells(cells: Array[PackedStringArray], errors: Array[String]) -> void
 					"ceiling_y": float(rows - row),
 					"spawn_id": "%s:%d" % [id, enemy_index],
 					"elite": tier == "elite" or tier == "boss",
+					"upper": row < upper_rows,
 				})
 				enemy_index += 1
 			elif c == "*":
 				var item := str(item_list[pickup_index]) if pickup_index < item_list.size() else ""
 				if item == "":
 					errors.append("%s: pickup %d has no item" % [id, pickup_index])
-				pickups.append({"item": item, "pos": pos, "pickup_id": "%s:%d" % [id, pickup_index]})
+				pickups.append({"item": item, "pos": pos, "pickup_id": "%s:%d" % [id, pickup_index],
+					"upper": row < upper_rows})
 				pickup_index += 1
 			elif c == "E":
 				var ev: Dictionary = event_list[event_index] if event_index < event_list.size() else {}

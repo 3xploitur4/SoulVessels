@@ -12,6 +12,8 @@ from gamelib import launch, shot, wait  # noqa: E402
 
 OUT = "production/qa/evidence/story-054-look"
 ROOMS = ["z1_02", "z1_05", "z2_03", "z2_08", "z3_02", "z3_08", "z4_02", "z4_11"]
+# Upper levels (story 054): (room, x, y) standing spots.
+UPPER = [("z1_05", 6, 12.05), ("z2_09", 10, 12.05), ("z3_14", 8, 12.05), ("z4_05", 14, 12.05)]
 
 
 def main():
@@ -34,13 +36,14 @@ def main():
             b.call("release", action="move_right")
             wait(b, 0.8)
             shot(b, os.path.join(out, "room-%s.png" % room))
-        b.call("sim_input", action="pause", seconds=0)
-        wait(b, 0.6)
-        try:
-            b.call("ui_press", name="map")
-        except Exception:  # noqa: BLE001
-            pass
-        wait(b, 0.6)
+        for room, x, y in UPPER:
+            b.call("goto", room=room, x=float(x), y=float(y), instant=True)
+            wait(b, 1.0)
+            b.call("kill_all")
+            wait(b, 0.3)
+            shot(b, os.path.join(out, "upper-%s.png" % room))
+        b.call("pause")
+        wait(b, 0.8)
         shot(b, os.path.join(out, "map.png"))
     print("shots in %s" % out)
 

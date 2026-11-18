@@ -46,12 +46,12 @@ func test_walking_into_an_exit_travels_to_the_linked_room() -> void:
 
 func test_spawns_skip_enemies_the_save_says_are_dead() -> void:
 	rooms.enter("z1_03")
-	assert_eq(rooms.enemies().size(), 2)
+	assert_eq(_base(rooms.enemies()).size(), 2)
 	state.killed_commons.append("z1_03:0")
 	rooms.enter("z1_03")
 	await wait_frames(1)
-	assert_eq(rooms.enemies().size(), 1)
-	assert_eq(rooms.enemies()[0].spawn_id, "z1_03:1")
+	assert_eq(_base(rooms.enemies()).size(), 1)
+	assert_eq(_base(rooms.enemies())[0].spawn_id, "z1_03:1")
 
 
 func test_a_kill_is_recorded_by_spawn_id() -> void:
@@ -59,3 +59,10 @@ func test_a_kill_is_recorded_by_spawn_id() -> void:
 	var e := rooms.enemies()[0]
 	GameEvents.enemy_died.emit(e)
 	assert_true(state.killed_commons.has(e.spawn_id))
+
+
+## Story 054: the room's base enemies (the upper levels add their own, numbered after these).
+func _base(list: Array[EnemyBase]) -> Array[EnemyBase]:
+	var base := WorldData.room("z1_03").spawns.filter(func(s: Dictionary) -> bool: return not s["upper"]).map(
+		func(s: Dictionary) -> String: return str(s["spawn_id"]))
+	return list.filter(func(e: EnemyBase) -> bool: return base.has(e.spawn_id))

@@ -13,6 +13,8 @@ signal resume_requested
 signal quit_requested
 
 var state: GameState
+## Where the player stands in the current room (story 054: the map marks it).
+var player_pos: Vector2 = Vector2(-1.0, -1.0)
 
 var _root: Control
 var _content: Control
@@ -103,7 +105,9 @@ func _show_map() -> void:
 		m.current = state.current_room
 		m.lit_altars = state.lit_altars
 		m.echo_room = str(state.echo.get("room", ""))
-	m.custom_minimum_size = Vector2(900, 560)
+		m.flags = state.flags
+	m.player_pos = player_pos
+	m.custom_minimum_size = Vector2(1180, 640)
 	_content.add_child(m)
 
 

@@ -33,7 +33,8 @@ func _pickups() -> Array[Pickup]:
 	var rooms: RoomManager = game.get("rooms")
 	for root: Node in [rooms.features_root, rooms.transient_root]:
 		for c in root.get_children():
-			if c is Pickup and not c.is_queued_for_deletion():
+			# Story 054: the base room's pickups (upper levels add their own, numbered after).
+			if c is Pickup and not c.is_queued_for_deletion() and (c as Pickup).pickup_id in ["z1_05:0", ""]:
 				out.append(c as Pickup)
 	return out
 

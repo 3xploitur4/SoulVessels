@@ -83,6 +83,46 @@ static func reload() -> void:
 	_ensure()
 
 
+## Story 054: stack each room's upper levels (data/world/upper/<zone>.json) on top of it. The upper
+## rows replace the room's old ceiling row; base coordinates (y up from the floor) are unchanged.
+## {"rooms": {id: {"rows": [...top first...], "pickups": [...], "exits": {...}, "lamps": [...]}}}
+static func _merge_upper(zone_id: String, zone_data: Dictionary) -> void:
+	var path := "%s/upper/%s.json" % [ROOT, zone_id]
+	if not FileAccess.file_exists(path):
+		return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary:
+		push_error("WorldData: %s does not parse" % path)
+		return
+	var rooms: Dictionary = zone_data.get("rooms", {})
+	var ups: Dictionary = (parsed as Dictionary).get("rooms", {})
+	for rid: Variant in ups.keys():
+		if not rooms.has(rid):
+			push_error("WorldData: upper level for unknown room %s" % rid)
+			continue
+		var base: Dictionary = rooms[rid]
+		var up: Dictionary = ups[rid]
+		var up_rows: Array = up.get("rows", [])
+		if up_rows.is_empty():
+			continue
+		var grid: Array = []
+		grid.append_array(up_rows)
+		grid.append_array((base.get("grid", []) as Array).slice(1))
+		base["grid"] = grid
+		base["upper_rows"] = up_rows.size()
+		var picks: Array = (base.get("pickups", []) as Array).duplicate()
+		picks.append_array(up.get("pickups", []))
+		if not picks.is_empty():
+			base["pickups"] = picks
+		var exits: Dictionary = (base.get("exits", {}) as Dictionary).duplicate()
+		exits.merge(up.get("exits", {}), true)
+		base["exits"] = exits
+		if up.has("lamps"):
+			var lamps: Array = (base.get("lamps", []) as Array).duplicate()
+			lamps.append_array(up["lamps"])
+			base["lamps"] = lamps
+
+
 static func _ensure() -> void:
 	if not _zones.is_empty():
 		return
@@ -95,6 +135,7 @@ static func _ensure() -> void:
 			push_error("WorldData: %s does not parse" % path)
 			continue
 		_zones[z] = parsed
+		_merge_upper(z, parsed)
 		var rooms: Dictionary = (parsed as Dictionary).get("rooms", {})
 		for k: Variant in rooms.keys():
 			_room_zone[str(k)] = z

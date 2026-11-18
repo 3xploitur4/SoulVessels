@@ -79,7 +79,11 @@ func test_rest_brings_back_commons_not_killed_elites() -> void:
 	game.call("close_altar_menu")
 	rooms.enter("z1_03")
 	await wait_frames(1)
-	assert_eq(rooms.enemies().size(), 2, "both Crawlers are back")
+	# Story 054: the base room's two Crawlers (its upper level has enemies of its own).
+	var base_ids := WorldData.room("z1_03").spawns.filter(func(s: Dictionary) -> bool: return not s["upper"]).map(
+		func(s: Dictionary) -> String: return str(s["spawn_id"]))
+	assert_eq(rooms.enemies().filter(func(e: EnemyBase) -> bool: return base_ids.has(e.spawn_id)).size(), 2,
+		"both Crawlers are back")
 	rooms.enter("z1_12")
 	await wait_frames(1)
 	assert_eq(rooms.enemies().size(), 0, "the Warden stays dead")

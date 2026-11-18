@@ -476,3 +476,8 @@ SIGNATURE_AT,at Affinity %d
 AFFINITY_UNLOCK_SIGNATURE,Signature passive: %s
 WEAPON_IN_HAND,in hand
 WEAPON_TAKE,take up
+MAP_ALTAR,Soul Altar
+MAP_BOSS,Boss
+MAP_ECHO,Your Soul Echo
+MAP_YOU,You
+MAP_SEEN,"Seen, not entered"

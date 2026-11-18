@@ -94,6 +94,7 @@ func _ready() -> void:
 	rooms.camera = camera
 	add_child(rooms)
 	rooms.room_entered.connect(_on_room_entered)
+	rooms.spiked.connect(_on_spiked)
 	register_feature(_build_altar)
 	register_feature(_build_echo)
 	register_feature(_build_pickups)
@@ -706,6 +707,21 @@ func _on_fell_out() -> void:
 	camera.add_trauma(0.3)
 
 
+## Spikes (story 054): a share of max HP, then back to the last safe ground, like a fall.
+func _on_spiked() -> void:
+	if player == null or not playing:
+		return
+	var cost := player.health.max_value * Balance.combat_f("traversal.spike_damage_fraction")
+	GameEvents.hit_fx_requested.emit(player.global_position + Vector3(0.0, 0.6, 0.3), 0.0, true, false)
+	Sfx.play("hit")
+	if player.hurt_by_world(cost):
+		return
+	player.teleport(rooms.last_safe.x, rooms.last_safe.y + 0.05)
+	player.grant_invulnerability(1.0)
+	camera.snap()
+	camera.add_trauma(0.35)
+
+
 # --- Gates (story 023) -----------------------------------------------------------------------
 
 func _build_gates(manager: RoomManager, room: RoomData) -> void:
@@ -979,6 +995,8 @@ func open_pause() -> void:
 	pause_menu = PauseMenu.new()
 	pause_menu.name = "Pause"
 	pause_menu.state = state
+	if player != null:
+		pause_menu.player_pos = Vector2(player.global_position.x, player.global_position.y)
 	pause_menu.resume_requested.connect(close_pause)
 	pause_menu.quit_requested.connect(quit_to_title)
 	add_child(pause_menu)

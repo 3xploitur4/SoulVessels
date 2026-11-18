@@ -17,6 +17,8 @@ signal room_entered(room_id: String)
 signal room_left(room_id: String)
 ## The player fell below the room (story 021). The game scene decides what it costs.
 signal fell_out
+## Story 054: the player touched spikes.
+signal spiked
 ## The player walked into an exit that waits on story flag `flag` (story 024).
 signal exit_blocked(exit: String, flag: String)
 
@@ -41,6 +43,7 @@ var transient_root: Node3D
 var transitioning: bool = false
 ## Last place the player stood on solid ground in this room (Soul Echo spot, void-fall return).
 var last_safe: Vector2 = Vector2.ZERO
+var _spike_cooldown: float = 0.0
 
 var _ignore_exit: String = ""
 var _fell: bool = false
@@ -199,6 +202,15 @@ func _physics_process(_delta: float) -> void:
 	if data == null or player == null or transitioning or not player.is_alive():
 		return
 	var feet := Vector2(player.global_position.x, player.global_position.y)
+	# Spikes first, so standing on them never becomes the safe ground.
+	if not data.spikes.is_empty() and _spike_cooldown <= 0.0:
+		var body := Rect2(feet.x - 0.3, feet.y, 0.6, 1.6)
+		for s in data.spikes:
+			if body.intersects(Rect2(s.position.x + 0.1, s.position.y, s.size.x - 0.2, s.size.y * 0.6)):
+				_spike_cooldown = 0.6
+				spiked.emit()
+				return
+	_spike_cooldown = maxf(_spike_cooldown - _delta, 0.0)
 	if player.is_on_floor() and player.velocity.y <= 0.01 and has_ground(feet):
 		last_safe = feet
 		_fell = false

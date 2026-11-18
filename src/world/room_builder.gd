@@ -43,6 +43,7 @@ func _ready() -> void:
 	_build_oneway()
 	_build_gates()
 	_build_enemy_walls()
+	_build_spikes()
 	RoomDecor.build(self, data, theme, _rng)
 	MeshMerger.merge(self)
 
@@ -61,8 +62,10 @@ func _build_environment() -> void:
 	env.fog_enabled = true
 	env.fog_mode = Environment.FOG_MODE_DEPTH
 	env.fog_light_color = Color(str(theme.get("fog", "#0f1724")))
-	env.fog_depth_begin = float(theme.get("fog_begin", 15.0))
-	env.fog_depth_end = float(theme.get("fog_end", 46.0))
+	# The fog distances were set for an 11.5 m camera; story 054 moved it back, so shift them.
+	var shift := float((PixelLook.config().get("camera", {}) as Dictionary).get("distance", 11.5)) - 11.5
+	env.fog_depth_begin = float(theme.get("fog_begin", 15.0)) + shift
+	env.fog_depth_end = float(theme.get("fog_end", 46.0)) + shift
 	env.fog_depth_curve = 1.2
 	env.glow_enabled = true
 	env.glow_intensity = float(theme.get("glow", 0.45))
@@ -195,6 +198,31 @@ func _build_enemy_walls() -> void:
 
 ## Turn gate `kind` on or off without removing it (arena lock bars: open until the fight starts,
 ## shut while it runs). Off means no collision and not drawn.
+## Story 054: spike strips, iron teeth along the floor with rust-red tips.
+func _build_spikes() -> void:
+	for r: Rect2 in data.spikes:
+		var n := int(r.size.x / 0.25)
+		for i in range(n):
+			var x := r.position.x + 0.125 + 0.25 * float(i)
+			var h := 0.55 + 0.18 * float((i * 7) % 3)
+			var m := MeshInstance3D.new()
+			var p := PrismMesh.new()
+			p.size = Vector3(0.22, h, 0.22)
+			m.mesh = p
+			m.material_override = ArenaMaterials.get_material("iron_dark")
+			m.position = Vector3(x, r.position.y + h * 0.5, 0.15 - 0.12 * float(i % 2))
+			m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(m)
+			var tip := MeshInstance3D.new()
+			var tp := PrismMesh.new()
+			tp.size = Vector3(0.09, 0.18, 0.09)
+			tip.mesh = tp
+			tip.material_override = ArenaMaterials.flat(Color(0.55, 0.12, 0.08), 0.6)
+			tip.position = Vector3(0.0, h * 0.5 - 0.08, 0.0)
+			tip.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			m.add_child(tip)
+
+
 func set_gate_active(kind: String, on: bool) -> void:
 	for b: Node in gate_bodies.get(kind, []):
 		if not is_instance_valid(b):
