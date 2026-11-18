@@ -24,6 +24,11 @@ var _reach: float = 2.0
 var _dagger_user: bool = false
 var _h: float = 1.9
 var _was_air: bool = false
+## Story 053: shards orbiting a point on a part (Seris's Floating Focus); see `weapon.look.orbit`.
+var _orbit: Array[MeshInstance3D] = []
+var _orbit_part: String = ""
+var _orbit_px: Vector2 = Vector2.ZERO
+var _orbit_t: float = 0.0
 
 
 static func build_sprite(vessel_data: Dictionary) -> VesselSpriteVisual:
@@ -57,7 +62,62 @@ static func build_sprite(vessel_data: Dictionary) -> VesselSpriteVisual:
 	v._guard.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	v._guard.position = Vector3(0.55, v._h * 0.5, 0.25)
 	v.add_child(v._guard)
+	# Story 053: a second weapon's look (weapons.json "weapon.look").
+	var look: Dictionary = (vessel_data.get("weapon", {}) as Dictionary).get("look", {})
+	if not look.is_empty() and v.body is RigBody:
+		(v.body as RigBody).apply_look(look)
+		if look.has("slash"):
+			v._slash_color = Color(str(look["slash"]))
+			v.body.trail_color = v._slash_color
+		var orbit: Dictionary = look.get("orbit", {})
+		if not orbit.is_empty():
+			v._build_orbit(orbit)
 	return v
+
+
+func _build_orbit(orbit: Dictionary) -> void:
+	_orbit_part = str(orbit.get("part", ""))
+	var px: Array = orbit.get("px", [0, 0])
+	_orbit_px = Vector2(float(px[0]), float(px[1]))
+	var c := Color(str(orbit.get("color", "#a8e6ff")))
+	for i in range(int(orbit.get("count", 4))):
+		# A thin crystal shard with a soft glow around it.
+		var m := MeshInstance3D.new()
+		var p := PrismMesh.new()
+		p.size = Vector3(0.05, 0.18, 0.03)
+		m.mesh = p
+		m.material_override = ArenaMaterials.flat(c.lerp(Color.WHITE, 0.3), 1.6, true)
+		m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var halo := MeshInstance3D.new()
+		var q := QuadMesh.new()
+		q.size = Vector2(0.32, 0.32)
+		halo.mesh = q
+		var hm := StandardMaterial3D.new()
+		hm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		hm.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		hm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		hm.albedo_texture = SpriteArt.blob()
+		hm.albedo_color = Color(c.r, c.g, c.b, 0.55)
+		halo.material_override = hm
+		halo.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		m.add_child(halo)
+		add_child(m)
+		_orbit.append(m)
+
+
+## Shards circle the hand point, riding the arm as it moves.
+func _tick_orbit(delta: float) -> void:
+	if _orbit.is_empty() or not body is RigBody:
+		return
+	_orbit_t += delta
+	var b: Node3D = (body as RigBody).bone(_orbit_part)
+	if b == null:
+		return
+	var centre: Vector3 = b.to_global((body as RigBody).part_point(_orbit_part, _orbit_px))
+	for i in range(_orbit.size()):
+		var a := _orbit_t * 2.4 + TAU * float(i) / float(_orbit.size())
+		_orbit[i].global_position = centre + Vector3(cos(a) * 0.22, sin(a) * 0.12 + 0.05, sin(a) * 0.15)
+		_orbit[i].rotation.z = a
 
 
 func pose(state: String, progress: float, facing: int, speed: float, delta: float) -> void:
@@ -155,6 +215,7 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	_guard_mat.albedo_color.a = lerpf(_guard_mat.albedo_color.a, 0.75 * guard, minf(delta * 20.0, 1.0))
 	_guard.visible = _guard_mat.albedo_color.a > 0.02
 	b.tick(delta)
+	_tick_orbit(delta)
 
 
 ## The clip for `state` on a rig that has `clips`: a Vessel's own clip when it has one (Seris

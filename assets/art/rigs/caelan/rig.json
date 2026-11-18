@@ -145,6 +145,23 @@
       ]
     },
     {
+      "file": "res://assets/art/rigs/caelan/shield.png",
+      "id": "shield",
+      "offset": [
+        436,
+        174
+      ],
+      "parent": "shield_arm",
+      "pivot": [
+        414.0,
+        142.0
+      ],
+      "size": [
+        109,
+        485
+      ]
+    },
+    {
       "file": "res://assets/art/rigs/caelan/head.png",
       "id": "head",
       "offset": [

@@ -50,6 +50,7 @@ func ability_1_released(player: Player, _held_s: float) -> void:
 	tear.posture = float(a1.get("posture", 4.0))
 	player.fx_parent.add_child(tear)
 	Sfx.play("vanish")
+	_cast_pose(player, key)
 
 
 ## Distortion: the nearest enemy in front is pulled to his blade.
@@ -81,6 +82,19 @@ func ability_2(player: Player) -> void:
 	player.report_hit(best, p)
 	GameEvents.ultimate_fx_requested.emit("slash", best.global_position, 1.0)
 	Sfx.play("shadowstep")
+	_cast_pose(player, key)
+
+
+## Story 053: a short pose for an instant spell, so it reads on screen. It changes nothing in
+## play: it starts only when he is free, keeps full steering, and any input cuts it short.
+func _cast_pose(player: Player, id: String) -> void:
+	if player.action != null:
+		return
+	var a := PlayerAction.new(id, 0.32)
+	a.cancel_after = 0.0
+	a.cancel_into = PackedStringArray(["attack", "dodge", "jump", "ability"])
+	a.steer = 1.0
+	player.start_action(a)
 
 
 ## Null Space: the blink dodge, erasing enemy projectiles along its path.

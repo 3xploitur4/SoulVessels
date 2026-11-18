@@ -179,3 +179,30 @@ func test_sworn_shield_sends_magic_back() -> void:
 	melee.attacker = caster
 	p.loadout.active().kit.on_perfect_parry(p, caster, melee)
 	assert_eq(caster.packets.size(), 1, "a sword is not sent back")
+
+
+## Story 053: the second weapon shows on the rig.
+func _rig(p: Player) -> RigBody:
+	var vis := p.loadout.active().visual as VesselSpriteVisual
+	return vis.body as RigBody if vis != null else null
+
+
+func test_the_greatsword_hides_the_shield_and_grows_the_blade() -> void:
+	var p0 := _player(["caelan"] as Array[String])
+	var r0: RigBody = _rig(p0)
+	assert_not_null(r0, "Caelan has a rig")
+	assert_true(r0.part_visible("shield"), "the shield shows with the first weapon")
+	gs.set_flag("unlock_greatsword")
+	w.equip(gs, "caelan", "greatsword")
+	var r: RigBody = _rig(_player(["caelan"] as Array[String]))
+	assert_false(r.part_visible("shield"), "no shield with the Greatsword")
+	assert_almost(r.bone("sword").scale.x, 1.35, 0.001)
+
+
+func test_the_floating_focus_puts_the_staff_away() -> void:
+	gs.add_item("deep_realm_rune", 1)
+	w.equip(gs, "seris", "floating_focus")
+	var p := _player(["seris"] as Array[String])
+	assert_false(_rig(p).part_visible("sword"), "no staff")
+	var vis := p.loadout.active().visual as VesselSpriteVisual
+	assert_eq(vis.get("_orbit").size(), 4, "four shards circle her hand")

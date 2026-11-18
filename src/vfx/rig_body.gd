@@ -37,6 +37,10 @@ var _lean_bone: String = ""
 var _lean_scale: float = 1.0
 var _angle: Dictionary[String, float] = {}
 var _mats: Array[ShaderMaterial] = []
+## Story 053: each part's material, and the look a second weapon gives single parts.
+var _part_mat: Dictionary[String, ShaderMaterial] = {}
+var _part_tint: Dictionary[ShaderMaterial, Color] = {}
+var _part_glow: Dictionary[ShaderMaterial, float] = {}
 var _root: Node3D
 var _loop_t: float = 0.0
 var _px: float = 0.0
@@ -148,6 +152,34 @@ func pose_now(name: String, t: float) -> void:
 	_apply_squash()
 
 
+## A weapon's look on single parts (story 053): {"hide": [part], "scale": {part: f},
+## "tint": {part: "#rrggbb"}, "glow": {part: f}}. Unknown parts are skipped.
+func apply_look(look: Dictionary) -> void:
+	for pid: Variant in look.get("hide", []):
+		var b: Node3D = _bones.get(str(pid), null)
+		if b != null and b.has_node("Pic"):
+			(b.get_node("Pic") as Node3D).visible = false
+	var sc: Dictionary = look.get("scale", {})
+	for pid: String in sc:
+		var b: Node3D = _bones.get(pid, null)
+		if b != null:
+			b.scale = Vector3(float(sc[pid]), float(sc[pid]), 1.0)
+	var tn: Dictionary = look.get("tint", {})
+	for pid: String in tn:
+		if _part_mat.has(pid):
+			_part_tint[_part_mat[pid]] = Color(str(tn[pid]))
+	var gl: Dictionary = look.get("glow", {})
+	for pid: String in gl:
+		if _part_mat.has(pid):
+			_part_glow[_part_mat[pid]] = float(gl[pid])
+
+
+## True when part `pid` is drawn (tests).
+func part_visible(pid: String) -> bool:
+	var b: Node3D = _bones.get(pid, null)
+	return b != null and b.has_node("Pic") and (b.get_node("Pic") as Node3D).visible
+
+
 ## Current angle of joint `bone` in degrees (for tests and debugging).
 ## The node of part `name` (null when the rig has none); things that ride a part follow it (story 045).
 func bone(name: String) -> Node3D:
@@ -255,6 +287,7 @@ func _build(id: String) -> void:
 		m.material_override = mat
 		_bones[pid].add_child(m)
 		_mats.append(mat)
+		_part_mat[pid] = mat
 	_lean_bone = str(def.get("lean_bone", ""))
 	_lean_scale = float(def.get("lean_scale", 1.0))
 	_secondary = def.get("secondary", {})
@@ -296,7 +329,14 @@ func tick(delta: float) -> void:
 		if v == null:
 			continue
 		for m in _mats:
-			m.set_shader_parameter(name, v)
+			if name == "tint" and _part_tint.has(m):
+				var base_tint := v as Color
+				var part_k := _part_tint[m]
+				m.set_shader_parameter(name, Color(base_tint.r * part_k.r, base_tint.g * part_k.g, base_tint.b * part_k.b, base_tint.a))
+			elif name == "glow" and _part_glow.has(m):
+				m.set_shader_parameter(name, float(v) + _part_glow[m])
+			else:
+				m.set_shader_parameter(name, v)
 
 
 ## "squash" in a pose: positive crouches the whole body down and wide (coiling), negative

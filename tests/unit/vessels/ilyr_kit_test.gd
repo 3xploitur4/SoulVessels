@@ -96,3 +96,13 @@ func test_null_space_erases_projectiles_it_passes() -> void:
 	_kit().erase_projectiles(player, Vector2(0.0, 1.0), Vector2(5.0, 1.0))
 	await wait_frames(2)
 	assert_false(is_instance_valid(orb) and not orb.is_queued_for_deletion(), "the orb was erased")
+
+
+func test_fracture_shows_a_short_cast_pose_any_input_cuts() -> void:
+	_kit().ability_1_released(player, 0.0)
+	assert_not_null(player.action, "a pose starts")
+	assert_eq(player.action.id, "fracture")
+	assert_eq(player.action.cancel_after, 0.0, "cancellable at once")
+	assert_eq(player.action.steer, 1.0, "full steering")
+	assert_true(_kit().data.size() > 0)
+	assert_true(VesselSpriteVisual.clip_for_rig("fracture", {"fracture": {}}) == "fracture", "the rig plays its own clip")

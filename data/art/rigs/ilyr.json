@@ -609,6 +609,73 @@
      {}
     ]
    ]
+  },
+  "fracture": {
+   "blend": 30,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.3,
+     {
+      "torso": -10,
+      "head": -4,
+      "shield_arm": 95,
+      "arm_upper": -20,
+      "arm_fore": 10,
+      "cape": -2.0
+     },
+     "out"
+    ],
+    [
+     0.8,
+     {
+      "torso": -8,
+      "shield_arm": 90,
+      "arm_upper": -18,
+      "cape": -1.5
+     }
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
+  },
+  "distortion": {
+   "blend": 30,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.35,
+     {
+      "torso": -6,
+      "shield_arm": 100,
+      "head": -3
+     },
+     "out"
+    ],
+    [
+     0.75,
+     {
+      "torso": 10,
+      "head": 4,
+      "shield_arm": 35,
+      "arm_upper": 15,
+      "cape": 2.0
+     },
+     "in"
+    ],
+    [
+     1,
+     {}
+    ]
+   ]
   }
  }
 }

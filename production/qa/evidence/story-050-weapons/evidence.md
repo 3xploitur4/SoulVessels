@@ -9,3 +9,5 @@
 
 Unit tests: `tests/unit/progression/weapons_test.gd` 12/12 (unlocks, the save, each patch, each kit hook).
 Full suite 421/421; smoke ok; drive.py 44/44.
+
+Story 053 addition (D-058): 05-10 the second weapons in the world (Caelan's Greatsword without a shield, Nyra's green Venom Blades, Seris's Floating Focus shards); 11 Ilyr's Fracture pose and jagged tear.

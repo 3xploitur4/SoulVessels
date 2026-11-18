@@ -71,6 +71,47 @@ def main():
         b.call("save")
         st = b.call("game_state")["state"]
         check(st.get("weapons", {}).get("caelan") == "greatsword", "the choice is in the save", str(st.get("weapons")))
+
+        # Story 053: the second weapons on the Vessels in the world.
+        b.call("give", item="deep_realm_rune", count=1)
+        b.call("teleport", x=11.6, y=2.05)
+        wait(b, 0.3)
+        b.call("interact")
+        wait(b, 1.2)
+        b.call("ui_press", name="Upgrade")
+        wait(b, 0.4)
+        b.call("ui_press", name="UpgradeNext")
+        wait(b, 0.3)
+        b.call("ui_press", name="Weapon_nyra_venom_blades")
+        wait(b, 0.4)
+        b.call("ui_press", name="UpgradeNext")
+        wait(b, 0.3)
+        b.call("ui_press", name="Weapon_seris_floating_focus")
+        wait(b, 0.4)
+        st = b.call("game_state")["state"]
+        check(st.get("weapons", {}).get("seris") == "floating_focus" and st.get("weapons", {}).get("nyra") == "venom_blades",
+              "Nyra and Seris take up their second weapons", str(st.get("weapons")))
+        b.call("ui_press", name="UpgradeBack")
+        wait(b, 0.3)
+        b.call("ui_press", name="Leave")
+        wait(b, 0.8)
+        b.call("teleport", x=5.0, y=2.05)
+        for n, v in enumerate(["caelan", "nyra", "seris"]):
+            b.call("set_vessel", id=v)
+            wait(b, 1.0)
+            shot(b, OUT + "/%02d-%s-second-weapon.png" % (5 + n, v))
+            b.call("sim_input", action="attack", seconds=0)
+            wait(b, 0.14)
+            shot(b, OUT + "/%02d-%s-second-weapon-attack.png" % (8 + n, v))
+            wait(b, 0.8)
+        # Ilyr's Fracture pose.
+        b.call("awakening")
+        wait(b, 2.0)
+        b.call("sim_input", action="ability_1", seconds=0)
+        wait(b, 0.12)
+        p = b.call("get_state")["player"]
+        check(p.get("state") == "fracture", "Ilyr casts Fracture with a pose", str(p.get("state")))
+        shot(b, OUT + "/11-ilyr-fracture.png")
     log.append("SUMMARY: %d failed" % fails)
     with open(os.path.join(OUT, "run-output.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(log) + "\n")

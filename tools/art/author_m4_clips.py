@@ -116,6 +116,18 @@ ILYR = {
                "leg_l_thigh": 32, "leg_l_shin": -18, "leg_r_thigh": -28, "cape": -3.0}, "out"],
         [0.8, {"torso": -14, "arm_upper": 92, "arm_fore": -4, "sword": -26, "leg_l_thigh": 24, "leg_r_thigh": -20}],
         [1, {}], blend=30),
+    # Fracture: one open hand thrust forward, tearing the air in front of him.
+    "fracture": one_shot(
+        [0, {}],
+        [0.3, {"torso": -10, "head": -4, "shield_arm": 95, "arm_upper": -20, "arm_fore": 10, "cape": -2.0}, "out"],
+        [0.8, {"torso": -8, "shield_arm": 90, "arm_upper": -18, "cape": -1.5}],
+        [1, {}], blend=30),
+    # Distortion: the hand reaches out, then closes and pulls back toward him.
+    "distortion": one_shot(
+        [0, {}],
+        [0.35, {"torso": -6, "shield_arm": 100, "head": -3}, "out"],
+        [0.75, {"torso": 10, "head": 4, "shield_arm": 35, "arm_upper": 15, "cape": 2.0}, "in"],
+        [1, {}], blend=30),
     # Absolute Rupture: both arms raised, tearing the air open.
     "absolute_rupture": one_shot(
         [0, {}],

@@ -40,4 +40,4 @@ Decision D-056. Evidence: `production/qa/evidence/story-050-weapons/` (`weapons_
 - The game applies the weapon and signature patches after ranks and passives, re-binds at Affinity 5, and refreshes unlocks when an altar opens. The Upgrade page shows both weapons and the signature line.
 - The Deep-Realm Rune is a pickup in z4_12.
 - Tests: `tests/unit/progression/weapons_test.gd` (12). 421 tests pass; smoke ok; drive.py 44/44.
-- Not done: weapon art (each second weapon still shows the first weapon's sprite).
+- Weapon looks added later (D-058): see 05-11 in the evidence folder.
