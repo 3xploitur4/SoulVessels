@@ -28,7 +28,7 @@ Double-click one of these in the project folder:
 | Key | Action |
 | --- | --- |
 | A / D or arrows | move |
-| Space | jump (again in the air: double jump) |
+| Space | jump (also off walls while sliding down them) |
 | J | attack (press again to chain the combo) |
 | K | dodge |
 | U | ability 1 (hold for some Vessels) |
@@ -37,8 +37,7 @@ Double-click one of these in the project folder:
 | Q / E | swap to the previous / next Vessel |
 | F | drink a Soul Flask (heal) |
 | W | interact: rest at an altar, free a Vessel, read, enter |
-| Esc | pause menu |
-| Tab | map |
+| Esc | pause menu (map, inventory, lore, settings) |
 | F3 | debug overlay (frame rate and state) |
 
 A gamepad also works: plug it in and press any button; the touch controls hide.
