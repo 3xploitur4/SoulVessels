@@ -1,0 +1,5 @@
+{
+  "_source": "Story 054, decision D-059. How the game is framed and drawn. camera: distance from the play plane in metres (18 shows about 11.4 m of height, so a Vessel is about a sixth of the screen), the height above the feet the camera sits at, and the look-ahead. pixel: the game world (not the HUD or menus) is drawn as pixel art: 'height' virtual pixels tall, colour levels per channel, ordered dither strength (0 = none) and outline darkening. The camera snaps to whole virtual pixels so the picture does not crawl.",
+  "camera": { "distance": 18.0, "height": 2.8, "look_ahead": 2.6 },
+  "pixel": { "enabled": true, "height": 360, "levels": 22.0, "dither": 0.55, "outline": 0.35 }
+}

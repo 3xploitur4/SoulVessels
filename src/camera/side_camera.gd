@@ -31,6 +31,9 @@ var follow_speed: float = 6.0
 var shake_scale: float = 1.0
 ## Extra zoom (0 = none, 1 = 40 % closer), for ultimates.
 var zoom_in: float = 0.0
+## Story 054: rows of the pixel-art grid the screen is divided into (0 = off). The camera moves in
+## whole grid cells so the pixel picture does not crawl as it follows.
+var pixel_rows: float = 0.0
 
 var _trauma: float = 0.0
 var _focus: Vector3 = Vector3.ZERO
@@ -99,6 +102,10 @@ func _update_transform(_delta: float) -> void:
 		cam_y = _clamp_height(cam_y)
 	else:
 		cam_y = maxf(_focus.y, 0.0) + height
+	if pixel_rows > 0.0:
+		var cell := 2.0 * tan(deg_to_rad(fov) * 0.5) * d / pixel_rows
+		x = roundf(x / cell) * cell
+		cam_y = roundf(cam_y / cell) * cell
 	var pos := Vector3(x, cam_y, d)
 	var shake := _trauma * _trauma * shake_scale
 	if shake > 0.0:

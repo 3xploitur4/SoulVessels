@@ -34,7 +34,7 @@ static func radius_for(base: float, per_ratio: float, gauge_ratio: float) -> flo
 
 
 func _ready() -> void:
-	layer = 4
+	layer = 3
 	if config.is_empty():
 		var c: Variant = Balance.combat("darkness")
 		config = c if c is Dictionary else {}

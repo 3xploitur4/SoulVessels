@@ -54,6 +54,8 @@ var ranks: AbilityRanks
 var passives: SyncPassives
 ## Second weapons and Affinity 5 signature passives (story 050).
 var weapons: Weapons
+## The pixel-art pass over the world (story 054).
+var pixel_look: PixelLook
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -79,6 +81,12 @@ func _ready() -> void:
 	camera = SideCamera.new()
 	camera.name = "SideCamera"
 	camera.target = _camera_anchor
+	# Story 054: zoomed out (smaller characters, more of the room), snapped to the pixel grid.
+	var cam_cfg: Dictionary = PixelLook.config().get("camera", {})
+	camera.distance = float(cam_cfg.get("distance", camera.distance))
+	camera.height = float(cam_cfg.get("height", camera.height))
+	camera.look_ahead = float(cam_cfg.get("look_ahead", camera.look_ahead))
+	camera.pixel_rows = PixelLook.virtual_height()
 	add_child(camera)
 	rooms = RoomManager.new()
 	rooms.name = "Rooms"
@@ -114,6 +122,9 @@ func _ready() -> void:
 	var vignette := Vignette.new()
 	vignette.name = "Vignette"
 	add_child(vignette)
+	pixel_look = PixelLook.new()
+	pixel_look.name = "PixelLook"
+	add_child(pixel_look)
 	fader = Fader.new()
 	fader.name = "Fader"
 	add_child(fader)
