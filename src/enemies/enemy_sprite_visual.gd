@@ -12,6 +12,13 @@ var body: SpriteBody
 var _h: float = 1.0
 var _z: float = 0.0
 var _t: float = 0.0
+## Story 054 (D-062): ground dust. Last frame's state (an attack starting kicks dust) and the time
+## to a heavy enemy's next footstep.
+var _last_state: String = ""
+var _step_left: float = 0.0
+## Enemies this tall (m) or taller are heavy: their steps raise dust and their blows throw grit.
+const HEAVY_M := 2.2
+const HEAVY_STEP_S := 0.45
 
 
 static func build_sprite(enemy_data: Dictionary) -> EnemySpriteVisual:
@@ -97,7 +104,32 @@ func animate(state: String, facing: int, speed: float, delta: float) -> void:
 		if move_id != "" and (state == "telegraph" or state == "attack") 				and (b as RigBody).clips.has("%s_%s" % [state, move_id]):
 			clip = "%s_%s" % [state, move_id]
 		(b as RigBody).play(clip)
+	_dust(state, facing, speed, delta)
 	b.tick(delta)
+
+
+## Dust off the ground: an attack starting scuffs it (a heavy enemy throws grit), a knockdown
+## lands in it, and a heavy enemy's steps raise it. Floating enemies raise none.
+func _dust(state: String, facing: int, speed: float, delta: float) -> void:
+	var prev := _last_state
+	_last_state = state
+	if not body.stands():
+		return
+	var heavy := _h >= HEAVY_M
+	var f := float(facing)
+	var size := clampf(_h / 2.0, 0.6, 2.2)
+	if state != prev:
+		if state == "attack":
+			DustFx.spawn(self, "slam" if heavy else "scuff", global_position + Vector3(f * 0.4, 0.0, 0.0), f, size)
+		elif state == "knockdown":
+			body.puff(size)
+	if heavy and state == "approach" and speed > 0.2:
+		_step_left -= delta
+		if _step_left <= 0.0:
+			_step_left = HEAVY_STEP_S
+			DustFx.spawn(self, "step", global_position - Vector3(f * 0.3, 0.0, 0.0), -f, size)
+	else:
+		_step_left = 0.1
 
 
 func dissolve(progress: float) -> void:

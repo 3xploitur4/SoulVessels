@@ -1,5 +1,5 @@
 {
-  "_source": "Stories 015/028. Per-zone look: environment, key light, the materials rooms are built from (ArenaMaterials.PALETTE keys: rock = big masses touching the room edge, ledge = floating platforms, trim = the walkable top), the decor style and the backdrop painting cut from the zone concept sheet (decision D-033). backdrop_tint darkens the painting so the play plane stays the brightest thing on screen. mist, mist_density and shaft colour the ground mist and the light shafts.",
+  "_source": "Stories 015/028. Per-zone look: environment, key light, the materials rooms are built from (ArenaMaterials.PALETTE keys: rock = big masses touching the room edge, ledge = floating platforms, trim = the walkable top), the decor style and the backdrop painting cut from the zone concept sheet (decision D-033). backdrop_tint darkens the painting so the play plane stays the brightest thing on screen. mist, mist_density and shaft colour the ground mist and the light shafts. dust colours the dust and grit kicked off the ground (story 054).",
   "cavern": {
     "background": "#04060a",
     "ambient": "#8791a6",
@@ -24,7 +24,8 @@
     "backdrop_tint": "#8c9bb8",
     "glow": 0.55,
     "mist": "#6f8fb8",
-    "shaft": "#9cc8ff"
+    "shaft": "#9cc8ff",
+    "dust": "#8e99ad"
   },
   "mycelium": {
     "background": "#05040a",
@@ -51,7 +52,8 @@
     "glow": 0.75,
     "mist": "#4fc0b0",
     "shaft": "#7fffd8",
-    "mist_density": 0.6
+    "mist_density": 0.6,
+    "dust": "#79b3a2"
   },
   "palace": {
     "background": "#03070c",
@@ -77,7 +79,8 @@
     "backdrop_tint": "#9fb4c8",
     "glow": 0.6,
     "mist": "#5fa8c0",
-    "shaft": "#a8e6ff"
+    "shaft": "#a8e6ff",
+    "dust": "#a6b2b8"
   },
   "rift": {
     "background": "#030305",
@@ -103,7 +106,8 @@
     "backdrop_tint": "#7c8296",
     "glow": 0.6,
     "mist": "#5a6078",
-    "shaft": "#cfe0ff"
+    "shaft": "#cfe0ff",
+    "dust": "#7a7176"
   },
   "shore": {
     "background": "#030305",
@@ -129,6 +133,7 @@
     "backdrop_tint": "#8a9cb4",
     "glow": 0.6,
     "mist": "#6a8cac",
-    "shaft": "#b8e8ff"
+    "shaft": "#b8e8ff",
+    "dust": "#8796a3"
   }
 }

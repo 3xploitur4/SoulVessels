@@ -34,6 +34,12 @@ var zoom_in: float = 0.0
 ## Story 054: rows of the pixel-art grid the screen is divided into (0 = off). The camera moves in
 ## whole grid cells so the pixel picture does not crawl as it follows.
 var pixel_rows: float = 0.0
+## Story 054 (D-062): metres below the camera the view centre sits. Smaller = flatter, more
+## side-on, so the floor's top shows as a thin strip.
+var look_drop: float = 1.1
+## Metres of ground the view may show under the room's floor (rooms draw their ground deeper
+## than the room, so this never shows a void).
+var ground_below: float = 0.0
 
 var _trauma: float = 0.0
 var _focus: Vector3 = Vector3.ZERO
@@ -111,20 +117,21 @@ func _update_transform(_delta: float) -> void:
 	if shake > 0.0:
 		pos += Vector3(_rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0), 0.0) * 0.35 * shake
 	global_position = pos
-	look_at(Vector3(x, pos.y - 1.1, 0.0), Vector3.UP)
+	look_at(Vector3(x, pos.y - look_drop, 0.0), Vector3.UP)
 	roll_deg = move_toward(roll_deg, _roll_target, _roll_rate * _delta)
 	if roll_deg != 0.0:
 		rotate_object_local(Vector3(0.0, 0.0, 1.0), deg_to_rad(roll_deg))
 
 
-## Keep the visible band inside `v_bounds`. The camera looks 1.1 m below its own height, so the
-## view centre on the play plane is `cam_y - 1.1`, with `half_h` above and below it.
+## Keep the visible band inside `v_bounds` (plus `ground_below` under the floor). The camera
+## looks `look_drop` below its own height, so the view centre on the play plane is
+## `cam_y - look_drop`, with `half_h` above and below it.
 func _clamp_height(cam_y: float) -> float:
 	var half_h := tan(deg_to_rad(fov) * 0.5) * distance
-	var lo := v_bounds.x + half_h + 1.1
-	var hi := v_bounds.y - half_h + 1.1
+	var lo := v_bounds.x - ground_below + half_h + look_drop
+	var hi := v_bounds.y - half_h + look_drop
 	if hi < lo:
-		return (v_bounds.x + v_bounds.y) * 0.5 + 1.1
+		return (v_bounds.x - ground_below + v_bounds.y) * 0.5 + look_drop
 	return clampf(cam_y, lo, hi)
 
 

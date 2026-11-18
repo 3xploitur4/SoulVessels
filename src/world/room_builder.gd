@@ -1,8 +1,9 @@
 class_name RoomBuilder
 extends Node3D
 ## Builds one room's set from its `RoomData` (stories 015 and 028): collision and textured meshes
-## for rock, one-way platforms and gates, a slab cap along every walkable top, the environment,
-## the key light and up to two omni lights, then `RoomDecor` dresses it after the zone painting.
+## for rock, one-way platforms and gates, the environment, the key light and up to two omni
+## lights; `GroundDresser` gives the ground its shape (story 054) and `RoomDecor` dresses it after
+## the zone painting.
 ## Room coordinates are world coordinates (x from 0 at the left edge, y from 0 at the bottom),
 ## so only one room is in the tree at a time.
 ##
@@ -37,6 +38,7 @@ var _rng := RandomNumberGenerator.new()
 func _ready() -> void:
 	theme = WorldData.theme(data.theme)
 	_rng.seed = hash(data.id)
+	DustFx.tint = Color(str(theme.get("dust", "#8e99ad")))
 	_build_environment()
 	_build_lights()
 	_build_rock()
@@ -116,29 +118,17 @@ func _build_lights() -> void:
 func _build_rock() -> void:
 	var rock := str(theme.get("rock", "slate_floor"))
 	var ledge := str(theme.get("ledge", rock))
-	var trim := str(theme.get("trim", "marble"))
 	for r in data.solids:
 		var deep := _touches_edge(r)
 		var body := _body(r, LAYER_WORLD, rock if deep else ledge, BACK_Z if deep else FLOAT_BACK_Z, FRONT_Z)
 		body.name = "Rock"
-	# A slab cap on every walkable top: the bright line the eye follows.
-	for t in data.trims:
-		var back := BACK_Z if _is_deep_at(Vector2(t.position.x + 0.5, t.position.y - 0.5)) else FLOAT_BACK_Z
-		var depth := FRONT_Z + 0.06 - back
-		var cap := _box(Vector3(t.position.x + t.size.x * 0.5, t.position.y + 0.04, back + depth * 0.5),
-			Vector3(t.size.x + 0.06, 0.1, depth), trim)
-		cap.set_meta("cast_shadow", false)
+	# Story 054 (D-062): the walkable slabs, the carved face, rock teeth, the zone accent, the
+	# darkness by depth and the rock around the room.
+	GroundDresser.build(self, data, data.theme, theme, _rng)
 
 
 func _touches_edge(r: Rect2) -> bool:
 	return r.position.x <= 0.0 or r.position.y <= 0.0 or r.end.x >= float(data.cols) or r.end.y >= float(data.rows)
-
-
-func _is_deep_at(p: Vector2) -> bool:
-	for s in data.solids:
-		if s.has_point(p):
-			return _touches_edge(s)
-	return false
 
 
 func _build_oneway() -> void:

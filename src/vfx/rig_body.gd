@@ -201,6 +201,8 @@ func joint_deg(bone: String) -> float:
 
 func _build(id: String) -> void:
 	super._build(id)
+	# Story 054: the clips bob the body in step with the feet; a second bob would drift against it.
+	step_bob = 0.0
 	# The whole painting stays as the afterimage source but is not drawn.
 	_mesh.visible = false
 	var rid := rig_id(id)
@@ -389,8 +391,8 @@ func kick(amount: float) -> void:
 
 
 ## Landing dust also squashes the body.
-func puff() -> void:
-	super.puff()
+func puff(strength: float = 1.0) -> void:
+	super.puff(strength)
 	kick(float(_kicks.get("land", 0.0)))
 
 

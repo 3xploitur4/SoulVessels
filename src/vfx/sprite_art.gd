@@ -12,6 +12,7 @@ const PATH := "res://data/art/sprites.json"
 static var _cfg: Dictionary = {}
 static var _shader: Shader
 static var _blob: Texture2D
+static var _discs: Dictionary[float, Texture2D] = {}
 
 
 static func has(id: String) -> bool:
@@ -58,6 +59,26 @@ static func blob() -> Texture2D:
 		t.height = 64
 		_blob = t
 	return _blob
+
+
+## A round soft disc: solid out to `core` (share of the radius), then fading to clear at the
+## edge (story 054: ground shadows read as a shape, not a faint smudge). Cached per core.
+static func disc(core: float) -> Texture2D:
+	var key := snappedf(core, 0.01)
+	if not _discs.has(key):
+		var g := Gradient.new()
+		g.set_color(0, Color(1, 1, 1, 1))
+		g.set_color(1, Color(1, 1, 1, 0))
+		g.add_point(clampf(key, 0.0, 0.95), Color(1, 1, 1, 1))
+		var t := GradientTexture2D.new()
+		t.gradient = g
+		t.fill = GradientTexture2D.FILL_RADIAL
+		t.fill_from = Vector2(0.5, 0.5)
+		t.fill_to = Vector2(1.0, 0.5)
+		t.width = 64
+		t.height = 64
+		_discs[key] = t
+	return _discs[key]
 
 
 static func _ensure() -> void:

@@ -86,6 +86,8 @@ func _ready() -> void:
 	camera.distance = float(cam_cfg.get("distance", camera.distance))
 	camera.height = float(cam_cfg.get("height", camera.height))
 	camera.look_ahead = float(cam_cfg.get("look_ahead", camera.look_ahead))
+	camera.look_drop = float(cam_cfg.get("look_drop", camera.look_drop))
+	camera.ground_below = float(cam_cfg.get("ground_below_m", camera.ground_below))
 	camera.pixel_rows = PixelLook.virtual_height()
 	add_child(camera)
 	rooms = RoomManager.new()

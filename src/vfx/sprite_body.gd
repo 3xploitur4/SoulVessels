@@ -1,9 +1,10 @@
 class_name SpriteBody
 extends Node3D
 ## One painted character or enemy standing in the 3D world (story 027): the sprite on a bendable
-## quad (see spatial_char_sprite_body.gdshader), a soft ground shadow, and an optional additive glow where the
-## enemy's own tell lives (spine sacs, eye, brand). The owner sets targets (`lean`, `stride`,
-## `crouch`...) and calls `tick`; the body eases toward them so poses blend.
+## quad (see spatial_char_sprite_body.gdshader), a soft shadow cast on the ground under it (story
+## 054), and an optional additive glow where the enemy's own tell lives (spine sacs, eye,
+## brand). The owner sets targets (`lean`, `stride`, `crouch`...) and calls `tick`; the body
+## eases toward them so poses blend.
 ##
 ##     var body := SpriteBody.create("echo_crawler")
 ##     add_child(body)
@@ -23,6 +24,9 @@ var glow: float = 0.0          # extra self-light
 var tell: float = 0.0          # 0..1 strength of the enemy tell glow
 ## Walk cycle speed in radians per second at stride 1.
 var step_rate: float = 11.0
+## Up-and-down bob of the walk cycle (share of half the height). Rigs bob from their own clips
+## (in step with the feet), so a RigBody sets this to 0.
+var step_bob: float = 0.05
 ## While true the body leaves fading afterimages behind it (dashes, lunges, Shadowstep).
 var trailing: bool = false
 ## Colour of the afterimages.
@@ -32,8 +36,15 @@ var trail_color: Color = Color(0.55, 0.7, 1.0)
 const GHOSTS := 5
 const GHOST_EVERY_S := 0.03
 const GHOST_LIFE_S := 0.24
-## Landing dust life.
-const PUFF_S := 0.32
+## Story 054 (D-062): the ground shadow is cast down onto whatever ground is under the body (rock
+## and plank walkways), shrinking and fading with height, so a jump keeps its shadow on the floor.
+const SHADOW_MASK := 1 | (1 << 8)
+const SHADOW_REACH_M := 14.0
+## Opacity of the shadow on the ground, and the height (m) at which it is smallest and faintest.
+const SHADOW_ALPHA := 0.7
+const SHADOW_FADE_M := 7.0
+## Height above the walkable surface (the slabs stand 0.09 proud of the collision).
+const SHADOW_LIFT_M := 0.11
 
 var spec: Dictionary = {}
 var height_m: float = 2.0
@@ -54,8 +65,9 @@ var _ghosts: Array[MeshInstance3D] = []
 var _ghost_left: Array[float] = []
 var _ghost_next: int = 0
 var _ghost_timer: float = 0.0
-var _puff: MeshInstance3D
-var _puff_left: float = 0.0
+var _shadow_mat: StandardMaterial3D
+var _shadow_size: Vector2 = Vector2.ONE
+var _shadow_on: bool = true
 
 
 ## A body for sprite `id` (see data/art/sprites.json). Null when there is no art for it.
@@ -103,10 +115,17 @@ func _build(id: String) -> void:
 	_mesh.material_override = _mat
 	_pivot.add_child(_mesh)
 	if bool(spec.get("shadow", true)):
-		_shadow = _blob_quad(Color(0, 0, 0, 0.55), false)
+		# A dark ellipse flat on the ground. The camera sees the floor almost edge-on, so it is
+		# deep (front to back) to read as an oval under the feet rather than a line.
+		_shadow = _blob_quad(Color(0, 0, 0, SHADOW_ALPHA), false)
+		_shadow_mat = _shadow.material_override as StandardMaterial3D
+		_shadow_mat.albedo_texture = SpriteArt.disc(0.45)
+		var w := clampf(float(spec.get("shadow_w", maxf(height_m * 0.5, width_m * 0.5))), 0.6, 4.5)
+		_shadow_size = Vector2(w, clampf(w * 1.15, 0.9, 1.8))
 		_shadow.rotation_degrees.x = -90.0
-		_shadow.scale = Vector3(width_m * 0.95, width_m * 0.42, 1.0)
-		_shadow.position = Vector3(0.0, 0.03, 0.1)
+		_shadow.scale = Vector3(_shadow_size.x, _shadow_size.y, 1.0)
+		_shadow.top_level = true
+		_shadow.visible = false
 		add_child(_shadow)
 	# Afterimages: copies of the sprite left in the world, additive and fading. They live at
 	# the top level so they stay where they were dropped while the body moves on.
@@ -128,12 +147,6 @@ func _build(id: String) -> void:
 		add_child(g)
 		_ghosts.append(g)
 		_ghost_left.append(0.0)
-	if bool(spec.get("shadow", true)):
-		_puff = _blob_quad(Color(0.8, 0.85, 0.95, 0.0), false)
-		_puff.rotation_degrees.x = -90.0
-		_puff.top_level = true
-		_puff.visible = false
-		add_child(_puff)
 	var t: Dictionary = spec.get("tell", {})
 	if not t.is_empty():
 		_tell_glow = _blob_quad(Color(str(t.get("color", "#ffffff"))), true)
@@ -174,14 +187,12 @@ func flash(color: Color, seconds: float) -> void:
 ## 0..1: burn the body away in soul-light.
 func set_dissolve(progress: float) -> void:
 	_mat.set_shader_parameter("dissolve", clampf(progress, 0.0, 1.0))
-	if _shadow != null:
-		_shadow.visible = progress < 0.3
+	_shadow_on = progress < 0.3
 
 
-## Hide or show the ground shadow (airborne bodies).
-func set_grounded(on: bool) -> void:
-	if _shadow != null:
-		_shadow.visible = on
+## Does the painting stand on its feet (not a floating or centred body)? Only those kick up dust.
+func stands() -> bool:
+	return str(spec.get("anchor", "feet")) != "centre" and float(spec.get("float_m", 0.0)) == 0.0
 
 
 ## Multiply the painting by `c` (stone disguise, variants), on top of the sprite's own tint.
@@ -190,13 +201,32 @@ func set_tint(c: Color) -> void:
 	_mat.set_shader_parameter("tint", Color(base.r * c.r, base.g * c.g, base.b * c.b, 1.0))
 
 
-## A ring of dust at the feet (landing, a heavy step).
-func puff() -> void:
-	if _puff == null:
+## Dust sprayed both ways from the feet (landing, a heavy step); `strength` scales it.
+func puff(strength: float = 1.0) -> void:
+	if stands():
+		DustFx.spawn(self, "land", global_position, 1.0, strength * clampf(height_m / 1.9, 0.7, 2.2))
+
+
+## Lay the shadow on the ground under the body, smaller and fainter the higher the body is.
+func _tick_shadow() -> void:
+	if _shadow == null:
 		return
-	_puff_left = PUFF_S
-	_puff.global_position = global_position + Vector3(0.0, 0.05, 0.2)
-	_puff.visible = true
+	if not _shadow_on or not is_inside_tree() or get_world_3d() == null:
+		_shadow.visible = false
+		return
+	var from := global_position + Vector3(0.0, 0.3, 0.0)
+	var query := PhysicsRayQueryParameters3D.create(from, from - Vector3(0.0, SHADOW_REACH_M, 0.0), SHADOW_MASK)
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		_shadow.visible = false
+		return
+	var ground: Vector3 = hit["position"]
+	var h := maxf(global_position.y - ground.y, 0.0)
+	var k := clampf(h / SHADOW_FADE_M, 0.0, 1.0)
+	_shadow.visible = true
+	_shadow.global_position = Vector3(global_position.x, ground.y + SHADOW_LIFT_M, 0.1)
+	_shadow.scale = Vector3(_shadow_size.x * lerpf(1.0, 0.45, k), _shadow_size.y * lerpf(1.0, 0.45, k), 1.0)
+	_shadow_mat.albedo_color.a = SHADOW_ALPHA * lerpf(1.0, 0.3, k)
 
 
 ## Ease toward the targets and push them to the shader. Call once per frame.
@@ -209,7 +239,7 @@ func tick(delta: float) -> void:
 	_cur["forward"] = lerpf(_cur["forward"], forward, minf(delta * 26.0, 1.0))
 	_cur["step"] = lerpf(_cur["step"], stride, k)
 	_phase += delta * step_rate * maxf(_cur["step"], 0.0)
-	var bob := absf(sin(_phase)) * 0.05 * _cur["step"] * height_m * 0.5
+	var bob := absf(sin(_phase)) * step_bob * _cur["step"] * height_m * 0.5
 	bob += sin(Time.get_ticks_msec() * 0.002) * float(spec.get("float_m", 0.0))
 	_pivot.position = Vector3(_cur["forward"], _centre_y + _cur["lift"] + bob - _cur["crouch"] * height_m * 0.06, 0.0)
 	_pivot.rotation.z = roll
@@ -225,12 +255,7 @@ func tick(delta: float) -> void:
 		_flash_left = maxf(_flash_left - delta, 0.0)
 		_mat.set_shader_parameter("flash", 0.85 * _flash_left / _flash_total)
 	_tick_ghosts(delta)
-	if _puff_left > 0.0:
-		_puff_left = maxf(_puff_left - delta, 0.0)
-		var k_puff := 1.0 - _puff_left / PUFF_S
-		_puff.scale = Vector3(width_m * lerpf(0.6, 2.2, k_puff), width_m * lerpf(0.25, 0.7, k_puff), 1.0)
-		(_puff.material_override as StandardMaterial3D).albedo_color.a = 0.45 * (1.0 - k_puff)
-		_puff.visible = _puff_left > 0.0
+	_tick_shadow()
 	if _tell_glow != null:
 		_tell_glow.visible = tell > 0.02
 		if _tell_glow.visible:

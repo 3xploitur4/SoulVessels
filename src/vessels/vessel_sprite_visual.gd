@@ -24,6 +24,14 @@ var _reach: float = 2.0
 var _dagger_user: bool = false
 var _h: float = 1.9
 var _was_air: bool = false
+## Story 054 (D-062): ground dust. Time in the air (a longer fall lands harder), time to the next
+## footstep puff and wall scrape, and last frame's facing (a turn while running skids).
+var _air_t: float = 0.0
+var _step_left: float = 0.0
+var _scrape_left: float = 0.0
+var _last_facing: int = 0
+## Moves that slam the ground: a burst of dust and grit when they land.
+const SLAMS := ["crushing_blow", "groundbreaker", "meteor_drop", "worldbreaker_override"]
 ## Story 053: shards orbiting a point on a part (Seris's Floating Focus); see `weapon.look.orbit`.
 var _orbit: Array[MeshInstance3D] = []
 var _orbit_part: String = ""
@@ -126,6 +134,7 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	body.position.z = Z_FRONT * float(facing)
 	_arc.position.z = 0.3 * float(facing)
 	_guard.position.z = 0.25 * float(facing)
+	var prev := _last_state
 	if state != _last_state:
 		_last_state = state
 		_struck = false
@@ -139,9 +148,7 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	b.forward = 0.0
 	var guard := 0.0
 	var air := state == "jump" or state == "fall" or state == "air_dash"
-	b.set_grounded(not air)
-	if _was_air and not air and state != "dead":
-		b.puff()
+	_ground_dust(state, prev, air, facing, speed, delta)
 	_was_air = air
 	b.trailing = state in ["dodge", "air_dash", "shadowstep", "oathbreaker_lunge", "severing_arrival", "shadow_counter",
 		"dance_of_shadows"]
@@ -210,12 +217,53 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 		if not _struck:
 			_struck = true
 			b.flash(Color(0.5, 0.95, 1.0), 0.6)
+	elif state in SLAMS and progress >= 0.4 and not _struck:
+		_struck = true
+		DustFx.spawn(self, "slam", global_position, float(facing), 1.2)
 	if b is RigBody:
 		(b as RigBody).play(clip_for_rig(state, (b as RigBody).clips), progress)
 	_guard_mat.albedo_color.a = lerpf(_guard_mat.albedo_color.a, 0.75 * guard, minf(delta * 20.0, 1.0))
 	_guard.visible = _guard_mat.albedo_color.a > 0.02
 	b.tick(delta)
 	_tick_orbit(delta)
+
+
+## Dust off the ground (story 054): a landing (harder after a longer fall), a take-off, a push off
+## the wall, footsteps while running, a skid on a turn or a dodge, and grit scraped off a wall.
+func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: float, delta: float) -> void:
+	var feet := global_position
+	var f := float(facing)
+	if _was_air and not air and state not in ["dead", "swim", "wall_slide"]:
+		body.puff(clampf(0.7 + _air_t * 0.6, 0.7, 1.6))
+	_air_t = _air_t + delta if air else 0.0
+	if state != prev:
+		match state:
+			"jump":
+				if prev == "wall_slide":
+					DustFx.spawn(self, "wall", feet + Vector3(-f * 0.4, 0.4, 0.0), -f, 1.4)
+				elif not _was_air:
+					DustFx.spawn(self, "jump", feet)
+			"dodge":
+				if not _was_air:
+					DustFx.spawn(self, "skid", feet, -f)
+	if state == "run":
+		if _last_facing != 0 and facing != _last_facing:
+			# Turning: the dust carries on the old way.
+			DustFx.spawn(self, "skid", feet, -f, 0.8)
+		_step_left -= delta
+		if _step_left <= 0.0:
+			_step_left = DustFx.step_interval(speed)
+			DustFx.spawn(self, "step", feet - Vector3(f * 0.2, 0.0, 0.0), -f)
+	else:
+		_step_left = 0.06
+	if state == "wall_slide":
+		_scrape_left -= delta
+		if _scrape_left <= 0.0:
+			_scrape_left = 0.12
+			DustFx.spawn(self, "wall", feet + Vector3(f * 0.35, 0.5, 0.0), -f)
+	else:
+		_scrape_left = 0.0
+	_last_facing = facing
 
 
 ## The clip for `state` on a rig that has `clips`: a Vessel's own clip when it has one (Seris
@@ -268,7 +316,13 @@ static func _clip_for(state: String) -> String:
 
 
 ## The weapon arc for combo hit `idx`: swings alternate down and up; the last is the widest.
+## On the ground the front foot scuffs dust forward; the finisher throws grit.
 func _strike(idx: int) -> void:
+	if not _was_air:
+		var fwd := 1.0 if rotation.y == 0.0 else -1.0
+		var last := idx % 4 == 3 or (_dagger_user and idx >= 5)
+		DustFx.spawn(self, "slam" if last else "scuff", global_position + Vector3(fwd * 0.35, 0.0, 0.0), fwd,
+			0.7 if last else 1.0)
 	if _dagger_user:
 		var up := idx % 2 == 0
 		_arc.play(_slash_color, _reach * (1.3 if idx >= 5 else 0.95), 55.0 if up else -55.0, -35.0 if up else 35.0, 0.11)

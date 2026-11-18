@@ -70,6 +70,8 @@ func test_touching_the_echo_returns_the_essence() -> void:
 	await wait_frames(2)
 	assert_not_null(rooms.features_root.get_node_or_null("SoulEcho"), "the echo waits in z1_05")
 	player.teleport(float(state.echo["x"]), float(state.echo["y"]))
-	await wait_frames(3)
+	# The echo checks for the player once a rendered frame; wait for it rather than a fixed count
+	# (a room that builds slowly can run several physics steps inside one frame).
+	await _wait_until(func() -> bool: return state.echo.is_empty(), 60)
 	assert_eq(state.essence, 100)
 	assert_true(state.echo.is_empty())

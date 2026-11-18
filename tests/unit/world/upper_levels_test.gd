@@ -82,4 +82,4 @@ func test_the_world_map_places_every_room_beside_its_neighbours() -> void:
 func test_the_look_settings_load() -> void:
 	var cfg := PixelLook.config()
 	assert_gt(float(cfg["camera"]["distance"]), 11.5, "the camera sits further back")
-	assert_eq(PixelLook.virtual_height(), 360.0)
+	assert_eq(PixelLook.virtual_height(), float(cfg["pixel"]["height"]), "the pixel grid comes from the data")
