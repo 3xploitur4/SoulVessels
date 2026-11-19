@@ -64,6 +64,10 @@ var _scratch: Array[Node3D] = []
 var _buff_left: float = 0.0
 var _buff_mult: float = 1.0
 var _buff_fx: Node3D
+## Story 056 (D-067): how much bigger than its painting's base size this enemy is drawn and hit
+## (data "visual_scale"; bosses tower over the player). Scales the picture, the hurt box, attack
+## reach and beam height together.
+var size_scale: float = 1.0
 
 
 func _ready() -> void:
@@ -71,6 +75,7 @@ func _ready() -> void:
 		data = Balance.enemy(enemy_id)
 	rng.seed = rng_seed
 	tier = str(data.get("tier", "common"))
+	size_scale = float(data.get("visual_scale", 1.0))
 	collision_layer = 1 << 2
 	# World, one-way platforms, veil curtains and the room's enemy-only side walls.
 	collision_mask = 1 | (1 << 8) | (1 << 9) | (1 << 10)
@@ -82,12 +87,13 @@ func _ready() -> void:
 	_preferred_range = float(data.get("preferred_range_m", 2.0)) + rng.randf_range(-0.4, 0.9)
 	var shape := CollisionShape3D.new()
 	shape.shape = _collision_shape()
-	shape.position.y = _hurt_size().y * 0.5
+	shape.position.y = hurt_size().y * 0.5
 	add_child(shape)
 	visual = EnemyVisual.build(data)
 	add_child(visual)
+	visual.scale = Vector3.ONE * size_scale
 	telegraph = Telegraph.new()
-	telegraph.height = _hurt_size().y + 0.7
+	telegraph.height = hurt_size().y + 0.7
 	add_child(telegraph)
 	if world != null:
 		world.register(self)
@@ -103,7 +109,7 @@ func _exit_tree() -> void:
 # --- Combatant interface -------------------------------------------------------------------
 
 func hurt_rect() -> Rect2:
-	var size := _hurt_size()
+	var size := hurt_size()
 	return Rect2(global_position.x - size.x * 0.5, global_position.y + _hurt_offset_y(), size.x, size.y)
 
 
@@ -160,7 +166,7 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	p.was_riposte = riposte
 	if p.element_buildup > 0.0:
 		status.add_buildup(p.element, p.element_buildup)
-	GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, _hurt_size().y * 0.6, 0.5),
+	GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, hurt_size().y * 0.6, 0.5),
 		p.dealt, crit or riposte, shielded)
 	if health.is_dead():
 		_die()
@@ -199,7 +205,7 @@ func receive_reflect(p: DamagePacket) -> void:
 		return
 	var dmg := CombatMath.damage(float(data.get("atk", 10.0)), 1.0, float(data.get("def", 0.0)))
 	health.damage(dmg)
-	GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, _hurt_size().y * 0.6, 0.5), dmg, true, false)
+	GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, hurt_size().y * 0.6, 0.5), dmg, true, false)
 	if p.attacker != null and p.attacker.has_method("report_hit"):
 		var r := p.duplicate_packet()
 		r.result = DamagePacket.Result.KILLED if health.is_dead() else DamagePacket.Result.HIT
@@ -323,7 +329,7 @@ func _tick_buff(delta: float) -> void:
 	_buff_left = maxf(_buff_left - delta, 0.0)
 	var on := _buff_left > 0.0 and is_alive()
 	if on and _buff_fx == null:
-		_buff_fx = VfxShapes.ring(Color(1.0, 0.82, 0.38), _hurt_size().x * 0.75)
+		_buff_fx = VfxShapes.ring(Color(1.0, 0.82, 0.38), hurt_size().x * 0.75)
 		add_child(_buff_fx)
 		_buff_fx.position.y = 0.06
 	if _buff_fx != null:
@@ -352,13 +358,18 @@ func _hurt_size() -> Vector2:
 
 
 ## Rect bottom relative to the body origin (hovering enemies raise it).
+## The hurt box size with this enemy's `size_scale` applied.
+func hurt_size() -> Vector2:
+	return _hurt_size() * size_scale
+
+
 func _hurt_offset_y() -> float:
 	return 0.0
 
 
 func _collision_shape() -> Shape3D:
 	var b := BoxShape3D.new()
-	var s := _hurt_size()
+	var s := hurt_size()
 	b.size = Vector3(s.x * 0.8, s.y, 0.8)
 	return b
 
@@ -366,7 +377,7 @@ func _collision_shape() -> Shape3D:
 ## Pick an attack for the current distance, or {} to keep approaching.
 func _choose_attack(distance: float) -> Dictionary:
 	for a: Dictionary in data.get("attacks", []):
-		if distance <= float(a.get("range_m", 2.0)) and _cooldowns.get(str(a.get("id", "")), 0.0) <= 0.0:
+		if distance <= float(a.get("range_m", 2.0)) * size_scale and _cooldowns.get(str(a.get("id", "")), 0.0) <= 0.0:
 			return a
 	return {}
 
@@ -383,9 +394,9 @@ func _attack_tick(_player: Node3D, delta: float) -> void:
 
 ## The melee hit rect for an attack, or null for attacks that hit their own way (beam).
 func _make_attack_hit(attack: Dictionary) -> ActionHit:
-	var reach := float(attack.get("range_m", 2.0))
+	var reach := float(attack.get("range_m", 2.0)) * size_scale
 	return ActionHit.new(0.0, float(attack.get("active_s", 0.2)) + 0.01,
-		Vector2(reach * 0.5 + 0.2, 0.9), Vector2(reach, 1.6), _make_packet(attack))
+		Vector2(reach * 0.5 + 0.2, 0.9 * size_scale), Vector2(reach, 1.6 * size_scale), _make_packet(attack))
 
 
 ## May a primary hit on a staggered enemy be a Riposte (2x, ends the stagger)? Bosses say no:

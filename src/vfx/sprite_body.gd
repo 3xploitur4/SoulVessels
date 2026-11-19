@@ -204,7 +204,7 @@ func set_tint(c: Color) -> void:
 ## Dust sprayed both ways from the feet (landing, a heavy step); `strength` scales it.
 func puff(strength: float = 1.0) -> void:
 	if stands():
-		DustFx.spawn(self, "land", global_position, 1.0, strength * clampf(height_m / 1.9, 0.7, 2.2))
+		DustFx.spawn(self, "land", global_position, 1.0, strength * clampf(height_m * global_basis.get_scale().y / 1.9, 0.7, 2.6))
 
 
 ## Lay the shadow on the ground under the body, smaller and fainter the higher the body is.
@@ -225,7 +225,9 @@ func _tick_shadow() -> void:
 	var k := clampf(h / SHADOW_FADE_M, 0.0, 1.0)
 	_shadow.visible = true
 	_shadow.global_position = Vector3(global_position.x, ground.y + SHADOW_LIFT_M, 0.1)
-	_shadow.scale = Vector3(_shadow_size.x * lerpf(1.0, 0.45, k), _shadow_size.y * lerpf(1.0, 0.45, k), 1.0)
+	# A body drawn bigger (a boss's visual_scale) throws a bigger shadow.
+	var gs := global_basis.get_scale().y
+	_shadow.scale = Vector3(_shadow_size.x * gs * lerpf(1.0, 0.45, k), _shadow_size.y * minf(gs, 1.4) * lerpf(1.0, 0.45, k), 1.0)
 	_shadow_mat.albedo_color.a = SHADOW_ALPHA * lerpf(1.0, 0.3, k)
 
 

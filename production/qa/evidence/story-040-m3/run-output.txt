@@ -4,12 +4,12 @@ PASS  Seris is freed and joins                           ['caelan', 'nyra', 'ser
 PASS  sequence puzzle solved                             {'door': False, 'lit': 3, 'size': 3, 'solved': True}
 PASS  mirror puzzle solved                               {'door': False, 'lit': 1, 'size': 1, 'solved': True}
 PASS  tide puzzle solved                                 {'door': False, 'lit': 1, 'size': 1, 'solved': True}
-PASS  the Prelate's aura empowers its Crawlers           1 buffed
+PASS  the Prelate's aura empowers its Crawlers           2 buffed
 PASS  Seris's weapon reforged to +1                      {'seris': 1}
 PASS  King's Judgment to rank 2                          {'caelan': {'kings_judgment': 2}}
 PASS  the throne hall locks and her music plays          boss_sovereign
-PASS  phase 2                                            {'attack': 'falling_tears', 'hp': 2581.06557377049, 'phase': 1, 'state': 'recover', 'transition': True}
-PASS  phase 3                                            {'attack': 'drowned_hands', 'hp': 1006.06557377049, 'phase': 2, 'state': 'recover', 'transition': True}
+PASS  phase 2                                            {'attack': 'falling_tears', 'eyes': -1, 'hp': 2581.06557377049, 'phase': 1, 'rocks': 0, 'state': 'recover', 'transition': True}
+PASS  phase 3                                            {'attack': 'tide_charge', 'eyes': -1, 'hp': 1006.06557377049, 'phase': 2, 'rocks': 0, 'state': 'recover', 'transition': True}
 PASS  she falls and it is saved                          True
 PASS  Caelan's goodbye: +1 Affinity                      {'caelan': 1}
 PASS  his goodbye line plays                             Caelan: Rest now, my Queen. I kept the door. I kept it as long as I could.

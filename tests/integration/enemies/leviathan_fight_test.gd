@@ -97,7 +97,8 @@ func test_the_shore_fight_from_eyes_to_the_rift() -> void:
 	assert_true(state.flag("unlock_overdrive"))
 	assert_true(state.flag("rift_open"))
 	assert_almost(Affinity.xp_multiplier(state, "darius"), 1.0, 0.001, "Darius trusts you now")
-	var matrix := false
+	# Story 056: boss drops land beside the player, so it may already be in the bag.
+	var matrix := state.item_count("pure_soul_matrix") > 0
 	for n in rooms.transient_root.get_children():
 		if n is Pickup and (n as Pickup).item == "pure_soul_matrix":
 			matrix = true

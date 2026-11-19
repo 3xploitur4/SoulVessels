@@ -94,7 +94,8 @@ func test_three_phases_the_tilt_and_the_win() -> void:
 	assert_true(state.flag("boss_guardian_below"))
 	assert_true(state.flag("unlock_greatsword"), "Caelan's Greatsword is unlocked")
 	assert_false(rooms.builder.gate_active("lock"), "the bars open")
-	var heart := false
+	# Story 056: boss drops land beside the player, so it may already be in the bag.
+	var heart := state.item_count("heart_of_the_guardian") > 0
 	for n in rooms.transient_root.get_children():
 		if n is Pickup and (n as Pickup).item == "heart_of_the_guardian":
 			heart = true

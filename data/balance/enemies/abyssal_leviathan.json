@@ -1,5 +1,5 @@
 {
-  "_source": "Story 045, decision D-052. Addendum boss table: The Abyssal Leviathan, 12,000 HP, posture 1,200, phases at 65 % / 30 %; 12 eyes of 300 HP each, every 3 destroyed = 5 s stagger; shoreline 40 m. Bible: P1 rises from black water with tail-whips and lunge bites; P2 plunges the arena into darkness with only its 12 glowing eyes visible before blindside strikes; P3 tears open rifts firing energy beams and sonic roars. Drops: Pure Soul Matrix, Abyssal Scale, Primeval Truth (all Legendary); unlocks Overdrive. ATK/DEF not in the addendum. eye_damage_share: share of eye damage that also wounds it. shore_half_m: how far along the shore it may resurface from its spawn. eyes: the painted eyes on its head and neck (sprite pixels mapped to metres at its 5 m height), offsets when facing right. eye_px: each eye's pixel on the painting; the eye rides its rig part (eye_bones) at that point.",
+  "_source": "Story 045, decision D-052. Addendum boss table: The Abyssal Leviathan, 12,000 HP, posture 1,200, phases at 65 % / 30 %; 12 eyes of 300 HP each, every 3 destroyed = 5 s stagger; shoreline 40 m. Bible: P1 rises from black water with tail-whips and lunge bites; P2 plunges the arena into darkness with only its 12 glowing eyes visible before blindside strikes; P3 tears open rifts firing energy beams and sonic roars. Drops: Pure Soul Matrix, Abyssal Scale, Primeval Truth (all Legendary); unlocks Overdrive. ATK/DEF not in the addendum. eye_damage_share: share of eye damage that also wounds it. shore_half_m: how far along the shore it may resurface from its spawn. eyes: the painted eyes on its head and neck (sprite pixels mapped to metres at its 5 m height), offsets when facing right. eye_px: each eye's pixel on the painting; the eye rides its rig part (eye_bones) at that point. visual_scale (story 056, D-067): drawn and hit this much bigger than its painting's base size, so it towers over the player at the zoomed-out camera; attack reach and beam height scale with it.",
   "id": "abyssal_leviathan",
   "name_key": "BOSS_ABYSSAL_LEVIATHAN",
   "tier": "boss",
@@ -343,5 +343,6 @@
       190,
       198
     ]
-  ]
+  ],
+  "visual_scale": 1.4
 }

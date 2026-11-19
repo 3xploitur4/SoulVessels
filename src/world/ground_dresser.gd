@@ -332,8 +332,10 @@ func _masonry() -> void:
 					if x1 - sx > 0.15 and rng.randf() >= missing:
 						var z1 := FRONT_Z + rng.randf_range(float(out[0]), float(out[1]))
 						_stone(b, sx + 0.025, c.x + 0.025, x1 - 0.025, c.y - 0.025, FRONT_Z - 0.15, z1, cut * (1.6 if rough else 1.0), _tint())
-					if embers and rng.randf() < 0.18:
-						_box(Vector3(x1, (c.x + c.y) * 0.5, FRONT_Z + 0.02), Vector3(0.04, (c.y - c.x) * 0.8, 0.05), "vein_orange")
+					if embers and rng.randf() < 0.1:
+						# A short glowing crack low in the joint, not a post the height of the course.
+						var ch := (c.y - c.x) * rng.randf_range(0.2, 0.38)
+						_box(Vector3(x1, c.x + ch * 0.5 + 0.04, FRONT_Z + 0.02), Vector3(0.03, ch, 0.04), "vein_orange")
 					sx = x1
 
 

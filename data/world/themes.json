@@ -85,12 +85,12 @@
   "rift": {
     "background": "#030305",
     "ambient": "#6e7088",
-    "ambient_energy": 0.6,
+    "ambient_energy": 0.85,
     "fog": "#08080e",
     "fog_begin": 12.0,
     "fog_end": 44.0,
     "key_color": "#c9cfe8",
-    "key_energy": 1.05,
+    "key_energy": 1.35,
     "key_rotation": [
       -42.0,
       -24.0,
@@ -103,7 +103,7 @@
     "cool_light": "#b8d8ff",
     "ledge": "z4_ledge",
     "backdrop": "res://assets/art/backdrops/zone4.png",
-    "backdrop_tint": "#7c8296",
+    "backdrop_tint": "#9aa1b8",
     "glow": 0.6,
     "mist": "#5a6078",
     "shaft": "#cfe0ff",
@@ -112,12 +112,12 @@
   "shore": {
     "background": "#030305",
     "ambient": "#7891a8",
-    "ambient_energy": 0.6,
+    "ambient_energy": 0.75,
     "fog": "#06101a",
     "fog_begin": 12.0,
     "fog_end": 56.0,
     "key_color": "#c9cfe8",
-    "key_energy": 1.05,
+    "key_energy": 1.2,
     "key_rotation": [
       -42.0,
       -24.0,

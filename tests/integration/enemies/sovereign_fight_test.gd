@@ -100,7 +100,8 @@ func test_the_fight_runs_through_three_phases_and_is_won() -> void:
 	assert_true(state.flag("boss_weeping_sovereign"))
 	assert_eq(int(state.affinity_bonus.get("caelan", 0)), bonus0 + 1, "Caelan's goodbye: +1 Affinity")
 	assert_true(str((game.get("prompts") as Prompts).subtitle_text()).length() > 0, "his line plays")
-	var crown := false
+	# Story 056: boss drops land beside the player, so it may already be in the bag.
+	var crown := state.item_count("sovereigns_crown_fragment") > 0
 	for n in rooms.transient_root.get_children():
 		if n is Pickup and (n as Pickup).item == "sovereigns_crown_fragment":
 			crown = true

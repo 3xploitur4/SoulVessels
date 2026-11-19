@@ -40,6 +40,12 @@ var look_drop: float = 1.1
 ## Metres of ground the view may show under the room's floor (rooms draw their ground deeper
 ## than the room, so this never shows a void).
 var ground_below: float = 0.0
+## Story 056 (D-067): during a boss fight the view frames both: it sits `boss_bias` of the way
+## from the player to the boss (0 = on the player), never letting the player within
+## `boss_edge_m` of the screen's edge. Null outside a boss fight.
+var boss: Node3D
+var boss_bias: float = 0.42
+var boss_edge_m: float = 3.0
 
 var _trauma: float = 0.0
 var _focus: Vector3 = Vector3.ZERO
@@ -86,8 +92,13 @@ func _process(delta: float) -> void:
 	if target != null and is_instance_valid(target):
 		var t := target.get_global_transform_interpolated().origin
 		var facing: float = float(target.get("facing")) if target.get("facing") != null else 1.0
-		_lead = lerpf(_lead, look_ahead * facing, minf(delta * 2.5, 1.0))
-		_focus.x = lerpf(_focus.x, t.x, minf(delta * follow_speed, 1.0))
+		var goal_x := t.x
+		var lead_goal := look_ahead * facing
+		if boss != null and is_instance_valid(boss) and boss.is_inside_tree():
+			goal_x = framed_x(t.x, boss.global_position.x, _half_view_width())
+			lead_goal = 0.0
+		_lead = lerpf(_lead, lead_goal, minf(delta * 2.5, 1.0))
+		_focus.x = lerpf(_focus.x, goal_x, minf(delta * follow_speed * 0.7, 1.0))
 		if absf(t.y - _focus.y) > vertical_dead_zone:
 			var goal := t.y - signf(t.y - _focus.y) * vertical_dead_zone
 			_focus.y = lerpf(_focus.y, goal, minf(delta * follow_speed, 1.0))
@@ -133,6 +144,13 @@ func _clamp_height(cam_y: float) -> float:
 	if hi < lo:
 		return (v_bounds.x - ground_below + v_bounds.y) * 0.5 + look_drop
 	return clampf(cam_y, lo, hi)
+
+
+## Where the view centres in a boss fight: part way to the boss, the player kept off the edge.
+func framed_x(player_x: float, boss_x: float, half_width: float) -> float:
+	var x := lerpf(player_x, boss_x, boss_bias)
+	var room := maxf(half_width - boss_edge_m, 0.5)
+	return clampf(x, player_x - room, player_x + room)
 
 
 func _half_view_width() -> float:

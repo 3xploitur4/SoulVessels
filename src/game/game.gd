@@ -90,6 +90,9 @@ func _ready() -> void:
 	camera.look_ahead = float(cam_cfg.get("look_ahead", camera.look_ahead))
 	camera.look_drop = float(cam_cfg.get("look_drop", camera.look_drop))
 	camera.ground_below = float(cam_cfg.get("ground_below_m", camera.ground_below))
+	camera.boss_bias = float(cam_cfg.get("boss_bias", camera.boss_bias))
+	camera.boss_edge_m = float(cam_cfg.get("boss_edge_m", camera.boss_edge_m))
+	GameEvents.boss_started.connect(func(b: Node) -> void: camera.boss = b as Node3D)
 	camera.pixel_rows = PixelLook.virtual_height()
 	add_child(camera)
 	rooms = RoomManager.new()
@@ -475,6 +478,7 @@ func was_running() -> bool:
 func _on_room_entered(room_id: String) -> void:
 	if not playing and player == null:
 		return
+	camera.boss = null
 	var zone := WorldData.zone_of(room_id)
 	if zone != _zone:
 		var first := _zone == ""
@@ -617,13 +621,18 @@ func _on_enemy_died(enemy: Node) -> void:
 	_award_xp("elite_kill" if e.tier == "elite" or e.tier == "boss" else "kill")
 	if e.tier == "boss":
 		_on_boss_defeated(e)
+	# Story 056: a boss's drops land beside the player, never out of reach in its water or rock.
+	var at := Vector2(e.global_position.x, e.global_position.y)
+	if e.tier == "boss" and player != null:
+		at = Vector2(player.global_position.x + 1.2 * float(player.facing), player.global_position.y + 0.8)
 	for d: Dictionary in loot.roll(e.data, _zone, loot_rng, state):
-		spawn_pickup(str(d["item"]), int(d["count"]), "", Vector2(e.global_position.x, e.global_position.y))
+		spawn_pickup(str(d["item"]), int(d["count"]), "", at)
 
 
 ## A boss fell (story 034): its flag, Affinity gifts and closing line from data `on_defeat`,
 ## then a save. The Sovereign gives Caelan his goodbye (+1 Affinity).
 func _on_boss_defeated(e: EnemyBase) -> void:
+	camera.boss = null
 	var od: Dictionary = e.data.get("on_defeat", {})
 	if od.has("flag"):
 		state.set_flag(str(od["flag"]))

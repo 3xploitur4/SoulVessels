@@ -40,6 +40,7 @@ func _ready() -> void:
 		z.zone = str(spec.get("zone", "fist"))
 		var r: Array = spec.get("rect", [0, 0, 1, 1])
 		z.offset = Rect2(float(r[0]), float(r[1]), float(r[2]), float(r[3]))
+		z.offset = Rect2(z.offset.position * size_scale, z.offset.size * size_scale)
 		add_child(z)
 		_zones.append(z)
 

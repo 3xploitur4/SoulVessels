@@ -1,5 +1,5 @@
 {
-  "_source": "Story 044, decision D-051. Addendum boss table: The Guardian Below, 8,000 HP, posture 900, phases at 65 % / 30 %; posture only on its fists (P1-P2) and core (P3); arena an elevator 24 m wide that tilts 15 degrees in P2 with rocks sliding every 6 s. Bible: P1 seismic fist slams and a sweeping chest laser; P2 smashes the chains (the tilt); P3 exposes a glowing reactor core, +40 % attack speed, radial shockwaves. Drops: Heart of the Guardian, Greater Soul Shards x3, Caelan's Greatsword. zones: rects relative to its feet when facing right [x, y, w, h].",
+  "_source": "Story 044, decision D-051. Addendum boss table: The Guardian Below, 8,000 HP, posture 900, phases at 65 % / 30 %; posture only on its fists (P1-P2) and core (P3); arena an elevator 24 m wide that tilts 15 degrees in P2 with rocks sliding every 6 s. Bible: P1 seismic fist slams and a sweeping chest laser; P2 smashes the chains (the tilt); P3 exposes a glowing reactor core, +40 % attack speed, radial shockwaves. Drops: Heart of the Guardian, Greater Soul Shards x3, Caelan's Greatsword. zones: rects relative to its feet when facing right [x, y, w, h]. visual_scale (story 056, D-067): drawn and hit this much bigger than its painting's base size, so it towers over the player at the zoomed-out camera; attack reach and beam height scale with it.",
   "id": "guardian_below",
   "name_key": "BOSS_GUARDIAN_BELOW",
   "tier": "boss",
@@ -223,5 +223,6 @@
     "width_m": 2.6,
     "primary_color": "#6b6458",
     "accent_color": "#ff9a3a"
-  }
+  },
+  "visual_scale": 1.6
 }

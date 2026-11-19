@@ -62,7 +62,7 @@ func receive_hit(p: DamagePacket) -> DamagePacket.Result:
 	if not is_alive():
 		return DamagePacket.Result.IGNORED
 	if in_transition():
-		GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, _hurt_size().y * 0.6, 0.5), 0.0, false, true)
+		GameEvents.hit_fx_requested.emit(global_position + Vector3(0.0, hurt_size().y * 0.6, 0.5), 0.0, false, true)
 		return DamagePacket.Result.IGNORED
 	if posture.is_staggered():
 		p.motion *= float(data.get("vulnerable_damage_mult", 2.0))
@@ -155,7 +155,7 @@ func _choose_attack(distance: float) -> Dictionary:
 		var phases: Array = a.get("phases", [0, 1, 2])
 		if not (phases.has(phase) or phases.has(float(phase))):
 			continue
-		if distance > float(a.get("range_m", 2.0)) or _cooldowns.get(str(a.get("id", "")), 0.0) > 0.0:
+		if distance > float(a.get("range_m", 2.0)) * size_scale or _cooldowns.get(str(a.get("id", "")), 0.0) > 0.0:
 			continue
 		options.append(a)
 	if options.is_empty() or _cooldowns.get("_any", 0.0) > 0.0:
@@ -214,7 +214,7 @@ func _make_attack_hit(attack: Dictionary) -> ActionHit:
 			return null
 		"dash":
 			return ActionHit.new(0.0, float(attack.get("active_s", 0.4)) + 0.01, Vector2(0.6, 0.0),
-				Vector2(_hurt_size().x + 0.6, _hurt_size().y), _make_packet(attack))
+				Vector2(hurt_size().x + 0.6, hurt_size().y), _make_packet(attack))
 	return super(attack)
 
 
@@ -251,7 +251,7 @@ func _fire_orbs(rain: bool) -> void:
 			origin = Vector2(px + t * float(current_attack.get("rain_spread_m", 5.0)), py + 7.0)
 			v = Vector2(0.0, -speed)
 		else:
-			origin = Vector2(global_position.x + 0.8 * facing, global_position.y + _hurt_size().y * 0.7)
+			origin = Vector2(global_position.x + 0.8 * facing, global_position.y + hurt_size().y * 0.7)
 			var aim := (Vector2(px, py + 1.0) - origin).normalized()
 			v = aim.rotated(t * deg_to_rad(float(current_attack.get("orb_spread_deg", 18.0)))) * speed
 		var proj := Projectile.spawn(get_parent(), world, _make_packet(current_attack), origin, v, Vector2(0.5, 0.5),
@@ -274,7 +274,7 @@ func _attack_color() -> Color:
 ## A fast, thin magic beam from the chest toward the player (the Guardian's chest laser).
 func _fire_beam() -> void:
 	var speed := float(current_attack.get("speed_mps", 24.0))
-	var y := global_position.y + float(current_attack.get("height_m", 2.6))
+	var y := global_position.y + float(current_attack.get("height_m", 2.6)) * size_scale
 	var player := _target()
 	var dy := 0.0
 	if player != null:

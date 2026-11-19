@@ -1,4 +1,6 @@
 {
+  "visual_scale": 1.8,
+  "_visual_scale": "Story 056, D-067: drawn and hit this much bigger than her painting's base size, so she towers over the player at the zoomed-out camera; attack reach and beam height scale with it.",
   "_source": "Story 034, decision D-043. Addendum boss table: The Weeping Sovereign, Zone Boss, 4,500 HP, posture 500, phases at 60 % / 25 %, each full posture break 4 s vulnerable at 2x damage, throne hall 30 m, water rises 1.5 m in P2 (Frost freezes it into platforms); every phase has at least 2 parryable, 2 unblockable and 1 magic attack; target 3-5 min on Normal. ATK and DEF are not in the addendum: chosen so a parried fight lasts about 4 minutes. attack styles: melee, dash, wave (ground wave), orbs (aimed), rain (falling on the player). Phase 3 attacks carry Ember (Burn on the player).",
   "id": "weeping_sovereign",
   "name_key": "BOSS_WEEPING_SOVEREIGN",

@@ -1,18 +1,18 @@
 PASS  the Breach leads into the Rift, Track 09             zone4
 PASS  Darius is freed and joins                            ['caelan', 'nyra', 'darius']
 PASS  Crushing Blow breaks the masonry                     
-PASS  the Basalt Chute slides you down                     6.1 -> 10.3
+PASS  the Basalt Chute slides you down                     6.0 -> 10.0
 PASS  the lift locks and Track 10 plays                    boss_guardian
 PASS  the Guardian, phase 1                                {'attack': 'chest_laser', 'eyes': -1, 'hp': 8000.0, 'phase': 0, 'rocks': 0, 'state': 'recover', 'transition': False}
 PASS  phase 2: the lift tilts                              {'attack': 'chest_laser', 'eyes': -1, 'hp': 5043.07692307692, 'phase': 1, 'rocks': 0, 'state': 'recover', 'transition': True}
 PASS  boulders roll down the lift                          1
-PASS  phase 3: the core opens                              {'attack': 'seismic_wave', 'eyes': -1, 'hp': 2220.0, 'phase': 2, 'rocks': 1, 'state': 'recover', 'transition': True}
+PASS  phase 3: the core opens                              {'attack': 'fist_slam', 'eyes': -1, 'hp': 2220.0, 'phase': 2, 'rocks': 1, 'state': 'recover', 'transition': True}
 PASS  the Guardian falls; the Greatsword unlocks           
 PASS  the Starless Shore, Track 12                         zone4_shore
 PASS  the shore locks and Track 13 plays                   boss_leviathan
-PASS  the Leviathan, phase 1                               {'attack': 'sonar_orbs', 'eyes': 12, 'hp': 12000.0, 'phase': 0, 'rocks': 0, 'state': 'attack', 'transition': False}
+PASS  the Leviathan, phase 1                               {'attack': 'sonar_orbs', 'eyes': 12, 'hp': 12000.0, 'phase': 0, 'rocks': 0, 'state': 'recover', 'transition': False}
 PASS  phase 2: the dark                                    {'attack': 'sonar_orbs', 'eyes': 12, 'hp': 7605.37313432836, 'phase': 1, 'rocks': 0, 'state': 'recover', 'transition': True}
-PASS  phase 3                                              {'attack': 'blindside_bite', 'eyes': 12, 'hp': 3382.98507462687, 'phase': 2, 'rocks': 0, 'state': 'recover', 'transition': True}
+PASS  phase 3                                              {'attack': 'breaker_wave', 'eyes': 12, 'hp': 3405.37313432836, 'phase': 2, 'rocks': 0, 'state': 'recover', 'transition': True}
 PASS  it falls: Overdrive unlocks, the rift opens          
 PASS  the Primeval Truth is found                          ['parchment_01', 'memory_darius', 'truth_01']
 PASS  Overdrive: two Ultimates with a free swap            ['darius', 'caelan']
@@ -20,5 +20,5 @@ PASS  the rift offers Enter                                UI_ENTER
 PASS  beyond the rift the Intruder is Ilyr                 ilyr
 PASS  the four echoes                                      ['echo_caelan', 'echo_nyra', 'echo_seris', 'echo_darius']
 PASS  the chapter-end screen                               ['ToTitle']
-PASS  the title offers Abyssal                             ['Difficulty_story', 'Difficulty_normal', 'Difficulty_abyssal', '@Button@2407', 'ToTitle']
+PASS  the title offers Abyssal                             ['Difficulty_story', 'Difficulty_normal', 'Difficulty_abyssal', '@Button@6238']
 SUMMARY: 0 failed
