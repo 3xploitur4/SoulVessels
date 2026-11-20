@@ -161,11 +161,11 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	b.lift = 0.0
 	b.forward = 0.0
 	var guard := 0.0
-	var air := state == "jump" or state == "fall" or state == "air_dash"
+	var air := _airborne(state)
 	_ground_dust(state, prev, air, facing, speed, delta)
 	_was_air = air
 	b.trailing = state in ["dodge", "air_dash", "shadowstep", "oathbreaker_lunge", "severing_arrival", "shadow_counter",
-		"dance_of_shadows"]
+		"dance_of_shadows", "slash_dash"]
 	if state == "run":
 		b.stride = clampf(speed, 0.4, 1.3)
 		b.lean = 0.07 * _h
@@ -184,18 +184,29 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	elif state == "fall":
 		b.crouch = -0.3
 		b.lean = -0.03 * _h
-	elif state.begins_with("primary"):
-		var idx := int(state.get_slice("_", 1))
+	elif state.begins_with("primary") or state.begins_with("slash_"):
+		var idx := int(state.get_slice("_", 1)) if state.begins_with("primary") else -1
+		var move := state.substr(6) if idx < 0 else ""
 		if progress < STRIKE_AT:
 			b.lean = -0.07 * _h
-			b.crouch = 0.35
+			b.crouch = 0.35 if not move.begins_with("air") else 0.05
 		else:
 			var out := clampf((progress - STRIKE_AT) / 0.25, 0.0, 1.0)
 			b.lean = 0.16 * _h * (1.0 - out * 0.5)
 			b.forward = 0.28 * (1.0 - out)
+			if move == "dash":
+				b.forward = 0.45 * (1.0 - out)
+				b.stretch = 0.4 * (1.0 - out)
+			elif move == "up":
+				b.lean = -0.04 * _h
+				b.lift = 0.12 * (1.0 - out)
 			if not _struck:
 				_struck = true
-				_strike(idx)
+				_strike(idx, move)
+		# The finisher spins: the body turns away and back while the wide arc goes round.
+		if _is_spin(idx) and progress > STRIKE_AT + 0.02 and progress < STRIKE_AT + 0.16:
+			rotation.y += PI
+			body.position.z = -body.position.z
 	elif state in ["counterstrike", "oathbreaker_lunge", "severing_arrival", "shadow_counter", "kings_judgment",
 			"phantom_blades"]:
 		b.lean = 0.2 * _h
@@ -304,6 +315,15 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 	_last_facing = facing
 
 
+## Is the body off the ground? Asked of the player's body when there is one (an attack in the
+## air is not a landing, story 057); else read from the state.
+func _airborne(state: String) -> bool:
+	var p := get_parent()
+	if p is CharacterBody3D and p.is_inside_tree():
+		return not (p as CharacterBody3D).is_on_floor() and state != "swim" and state != "dead"
+	return state == "jump" or state == "fall" or state == "air_dash" or state.begins_with("slash_air")
+
+
 ## The clip for `state` on a rig that has `clips`: a Vessel's own clip when it has one (Seris
 ## casts her bolts with "bolt", plants Frost Binding with "frost", swims with "swim"; story 039),
 ## else the shared clip from `_clip_for`.
@@ -333,6 +353,11 @@ static func clip_for_rig(state: String, clips: Dictionary) -> String:
 static func _clip_for(state: String) -> String:
 	if state.begins_with("primary"):
 		return "attack_%d" % (int(state.get_slice("_", 1)) % 4)
+	# Story 057: the combo moves.
+	if state.begins_with("slash_air"):
+		return "attack_air_%d" % (int(state.get_slice("_", 2)) % 2)
+	if state == "slash_dash" or state == "slash_up":
+		return "attack_" + state.substr(6)
 	match state:
 		"run", "jump", "fall", "wall_slide", "block", "dodge", "hurt", "rooted", "dead":
 			return state
@@ -353,30 +378,53 @@ static func _clip_for(state: String) -> String:
 	return "idle"
 
 
-## The weapon arc for combo hit `idx`: swings alternate down and up; the last is the widest.
-## On the ground the front foot scuffs dust forward; the finisher throws grit.
-func _strike(idx: int) -> void:
+## The swing for combo hit `idx` (or combo move `move`: "air_0", "air_1", "dash", "up"), story
+## 057 (D-068): horizontal cuts drawn as flat arcs passing in front of the body, a backhand going
+## the other way, a rising diagonal, and a spinning finisher whose arc goes all the way round. On
+## the ground the front foot scuffs dust forward; the finisher throws grit.
+func _strike(idx: int, move: String = "") -> void:
+	var last := _is_spin(idx)
 	if _blade:
-		var heavy := idx % 4 == 3 or (_dagger_user and idx >= 5)
-		Sfx.play("slash_heavy" if heavy else "slash", randf_range(0.92, 1.08) * (1.15 if _dagger_user else 1.0))
+		Sfx.play("slash_heavy" if last or move == "dash" else "slash", randf_range(0.92, 1.08) * (1.15 if _dagger_user else 1.0))
 	if not _was_air:
 		var fwd := 1.0 if rotation.y == 0.0 else -1.0
-		var last := idx % 4 == 3 or (_dagger_user and idx >= 5)
-		DustFx.spawn(self, "slam" if last else "scuff", global_position + Vector3(fwd * 0.35, 0.0, 0.0), fwd,
-			0.7 if last else 1.0)
-	if _dagger_user:
-		var up := idx % 2 == 0
-		_arc.play(_slash_color, _reach * (1.3 if idx >= 5 else 0.95), 55.0 if up else -55.0, -35.0 if up else 35.0, 0.11)
-		return
+		DustFx.spawn(self, "slam" if last else ("skid" if move == "dash" else "scuff"),
+			global_position + Vector3(fwd * 0.35, 0.0, 0.0), fwd if move != "dash" else -fwd, 0.7 if last else 1.0)
+	_arc.position.y = _h * (0.8 if move == "up" else 0.55)
+	var a: Array = swing(idx, move, _dagger_user)
+	_arc.play(_slash_color, _reach * float(a[0]), float(a[1]), float(a[2]), float(a[3]), float(a[4]), float(a[5]))
+
+
+## The arc of a swing: [reach share, from degrees, to degrees, seconds, flatness, tilt degrees].
+static func swing(idx: int, move: String, daggers: bool) -> Array:
+	match move:
+		"air_0":
+			return [1.0, 160.0, -30.0, 0.15, 0.32, -10.0]
+		"air_1":
+			return [1.1, 200.0, -60.0, 0.17, 0.42, -22.0]
+		"dash":
+			return [1.3, 130.0, -10.0, 0.16, 0.18, -3.0]
+		"up":
+			return [1.0, -70.0, 140.0, 0.17, 1.0, 0.0]
+	if daggers:
+		if idx >= 5:
+			return [1.3, 200.0, -200.0, 0.24, 0.28, 0.0]
+		return [0.95, 150.0, -20.0, 0.11, 0.3, -6.0] if idx % 2 == 0 else [0.95, -20.0, 150.0, 0.11, 0.3, 8.0]
 	match idx % 4:
 		0:
-			_arc.play(_slash_color, _reach, 80.0, -40.0, 0.15)
+			return [1.0, 165.0, -25.0, 0.15, 0.3, -4.0]
 		1:
-			_arc.play(_slash_color, _reach, -60.0, 45.0, 0.15)
+			return [1.0, -15.0, 170.0, 0.15, 0.3, 6.0]
 		2:
-			_arc.play(_slash_color, _reach * 1.1, 95.0, -55.0, 0.17)
-		_:
-			_arc.play(_slash_color, _reach * 1.35, 120.0, -70.0, 0.22)
+			return [1.1, -150.0, 70.0, 0.17, 0.55, 30.0]
+	return [1.35, 200.0, -200.0, 0.26, 0.28, 0.0]
+
+
+## Is combo hit `idx` the spinning finisher?
+func _is_spin(idx: int) -> bool:
+	if idx < 0:
+		return false
+	return idx >= 5 if _dagger_user else idx % 4 == 3
 
 
 func set_hidden_look(hidden_on: bool) -> void:

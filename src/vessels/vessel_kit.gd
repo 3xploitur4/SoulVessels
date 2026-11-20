@@ -51,25 +51,72 @@ func primary_action(player: Player, index: int) -> PlayerAction:
 	if hits.is_empty():
 		return null
 	var h: Dictionary = hits[clampi(index, 0, hits.size() - 1)]
+	var reach := float(h.get("range_m", 2.0))
+	var a := _hit_action(player, h, "primary_%d" % index, Vector2(reach * 0.5 + 0.15, 1.0), Vector2(reach, 1.7))
+	a.data["combo_index"] = index
+	return a
+
+
+## Story 057 (decision D-068): a combo move from the Vessel's data `primary.<kind>`:
+## "air" (a list, chained while airborne: horizontal cuts that hold you up a little), "dash" (out
+## of a dodge: a lunging cut that carries you forward), "up" (up + attack: a rising cut over the
+## head, for things above). Null when the Vessel has none, so it uses its plain chain.
+func special_action(player: Player, kind: String, index: int = 0) -> PlayerAction:
+	var spec: Variant = (data.get("primary", {}) as Dictionary).get(kind)
+	var h: Dictionary = {}
+	var name := "slash_%s" % kind
+	if spec is Array and not (spec as Array).is_empty():
+		var i := index % (spec as Array).size()
+		h = (spec as Array)[i]
+		name = "slash_%s_%d" % [kind, i]
+	elif spec is Dictionary:
+		h = spec
+	if h.is_empty():
+		return null
+	var reach := float(h.get("range_m", 2.0))
+	var a: PlayerAction
+	match kind:
+		"up":
+			a = _hit_action(player, h, name, Vector2(0.35, 2.2), Vector2(reach * 1.1, float(h.get("height_m", 2.4))))
+			a.set_velocity(0.6, 0.0, float(a.data["windup"]))
+		"dash":
+			a = _hit_action(player, h, name, Vector2(reach * 0.5 + 0.2, 1.0), Vector2(reach * 1.1, 1.7))
+			a.set_velocity(float(h.get("dash_mps", 10.0)), 0.0, float(a.data["windup"]) + float(a.data["active"]))
+		_:
+			a = _hit_action(player, h, name, Vector2(reach * 0.5 + 0.1, 0.9), Vector2(reach * 1.1, 2.0))
+			a.gravity_scale = float(h.get("gravity_scale", 0.35))
+	a.data["special"] = kind
+	a.hyper_armor = bool(data.get("primary", {}).get("hyper_armor", false))
+	return a
+
+
+## How many moves `kind` chains (the air list's length; 1 for a single move, 0 for none).
+func special_count(kind: String) -> int:
+	var spec: Variant = (data.get("primary", {}) as Dictionary).get(kind)
+	if spec is Array:
+		return (spec as Array).size()
+	return 1 if spec is Dictionary else 0
+
+
+## One attack from hit data `h`: wind-up, active and recovery scaled by attack speed, a hit box at
+## `offset` (centre, forward and up from the feet) of `size`.
+func _hit_action(player: Player, h: Dictionary, name: String, offset: Vector2, size: Vector2) -> PlayerAction:
 	var speed := maxf(player.stat("attack_speed"), 0.1)
 	var windup := float(h.get("windup_s", 0.12)) / speed
 	var active := float(h.get("active_s", 0.1)) / speed
 	var recover := float(h.get("recover_s", 0.2)) / speed
-	var reach := float(h.get("range_m", 2.0))
-	var a := PlayerAction.new("primary_%d" % index, windup + active + recover)
+	var a := PlayerAction.new(name, windup + active + recover)
 	a.cancel_after = windup + active
 	a.cancel_into = PackedStringArray(["attack", "dodge", "jump", "ability"])
 	a.set_velocity(1.6, 0.0, windup + active)
 	a.gravity_scale = 0.55
-	a.data["combo_index"] = index
 	a.data["windup"] = windup
 	a.data["active"] = active
 	var p := player.make_packet(float(h.get("motion", 1.0)), float(h.get("posture", 10.0)))
 	p.is_primary = true
 	p.heavy = bool(h.get("heavy", false))
 	primary_element(p, h)
-	a.add_hit(ActionHit.new(windup, windup + active, Vector2(reach * 0.5 + 0.15, 1.0),
-		Vector2(reach, 1.7), p))
+	a.add_hit(ActionHit.new(windup, windup + active, offset, size, p))
 	if p.heavy:
 		a.on_start = func(pl: Player, _act: PlayerAction) -> void:
 			var slot := pl.loadout.active()

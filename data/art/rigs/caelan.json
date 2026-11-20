@@ -614,7 +614,7 @@
    ]
   }
  ],
- "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own). Story 054 (D-063): idle is a burdened stance (head bowed, shoulders loaded, a slow heavy breath); fall keeps the arms down and the knees ready, dragged rather than flailing. kicks.jump squashes the body for a push-off as it leaves the ground. Story 055 (D-066): dodge is a fast low step, not a roll: a dip, then a lunge sliding along the ground (front leg out, back knee down, cape trailing), held, then rising out of it.",
+ "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own). Story 054 (D-063): idle is a burdened stance (head bowed, shoulders loaded, a slow heavy breath); fall keeps the arms down and the knees ready, dragged rather than flailing. kicks.jump squashes the body for a push-off as it leaves the ground. Story 055 (D-066): dodge is a fast low step, not a roll: a dip, then a lunge sliding along the ground (front leg out, back knee down, cape trailing), held, then rising out of it. Story 057 (D-068): the combo is horizontal: attack_0 a forward cut swung from behind, attack_1 the backhand return, attack_2 a rising diagonal out of a crouch, attack_3 a wide spinning finisher; attack_air_0/1 cut with the legs tucked, attack_dash lunges out of a dodge, attack_up rises over the head. Every hit has a wind-up ('out'), a committed strike ('in') with a step and a weight shift, and a follow-through.",
  "lean_bone": "torso",
  "lean_scale": 0.4,
  "clips": {
@@ -823,76 +823,66 @@
      {}
     ],
     [
-     0.12,
-     {
-      "torso": 4,
-      "arm_upper": 40,
-      "arm_fore": 20,
-      "sword": 10
-     },
-     "out"
-    ],
-    [
-     0.28,
+     0.22,
      {
       "torso": 10,
-      "head": 5,
-      "arm_upper": 135,
-      "arm_fore": 45,
-      "sword": 25,
-      "shield_arm": -8,
-      "leg_l_thigh": -8,
-      "leg_r_thigh": 8,
-      "root_y": 0.03
+      "head": -4.0,
+      "arm_upper": -55,
+      "arm_fore": 35,
+      "sword": 40,
+      "shield_arm": 20,
+      "leg_l_thigh": 18,
+      "leg_r_thigh": -12,
+      "root_y": -0.04,
+      "squash": 0.03
      },
      "out"
     ],
     [
-     0.42,
+     0.36,
      {
-      "torso": -18,
-      "head": -7,
-      "arm_upper": 45,
-      "arm_fore": -5,
-      "sword": -15,
-      "shield_arm": 12,
-      "leg_l_thigh": 22,
-      "leg_l_shin": -18,
-      "leg_r_thigh": -16,
-      "root_y": -0.05
+      "torso": -16,
+      "head": 6.0,
+      "arm_upper": 92,
+      "arm_fore": 0,
+      "sword": -28,
+      "shield_arm": -10,
+      "leg_l_thigh": 30,
+      "leg_l_shin": -10,
+      "leg_r_thigh": -22,
+      "leg_r_shin": -20,
+      "root_y": -0.08,
+      "squash": 0.04
      },
      "in"
     ],
     [
-     0.52,
+     0.56,
      {
-      "torso": -21,
-      "head": -8,
-      "arm_upper": 38,
-      "arm_fore": -8,
-      "sword": -18,
-      "shield_arm": 12,
-      "leg_l_thigh": 22,
-      "leg_l_shin": -18,
-      "leg_r_thigh": -16,
-      "root_y": -0.06
-     },
-     "out"
-    ],
-    [
-     0.8,
-     {
-      "torso": -8,
-      "arm_upper": 22,
-      "arm_fore": -4,
-      "sword": -8,
-      "leg_l_thigh": 10,
-      "leg_r_thigh": -8
+      "torso": -20,
+      "head": 6.0,
+      "arm_upper": 110,
+      "arm_fore": 30,
+      "sword": -66,
+      "shield_arm": -14,
+      "leg_l_thigh": 30,
+      "leg_l_shin": -10,
+      "leg_r_thigh": -22,
+      "leg_r_shin": -20,
+      "root_y": -0.08,
+      "squash": 0.02
      }
     ],
     [
      1,
-     {}
+     {
+      "torso": -4,
+      "arm_upper": 10,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": 2,
+      "head": 0.0
+     }
     ]
    ]
   },
@@ -901,71 +891,69 @@
    "keys": [
     [
      0,
-     {}
-    ],
-    [
-     0.12,
      {
-      "torso": -4,
-      "arm_upper": -10,
+      "torso": -18,
+      "arm_upper": 118,
+      "arm_fore": 30,
       "sword": -10
-     },
-     "out"
+     }
     ],
     [
-     0.28,
+     0.2,
      {
-      "torso": -10,
-      "head": -4,
-      "arm_upper": -30,
-      "arm_fore": -25,
-      "sword": -35,
-      "leg_l_thigh": 14,
-      "leg_l_shin": -28,
+      "torso": -12,
+      "head": 4.0,
+      "arm_upper": 128,
+      "arm_fore": 72,
+      "sword": 32,
+      "shield_arm": -8,
+      "leg_l_thigh": 24,
+      "leg_r_thigh": -16,
       "root_y": -0.05
      },
      "out"
     ],
     [
-     0.42,
+     0.34,
      {
-      "torso": 10,
-      "head": 6,
-      "arm_upper": 125,
-      "arm_fore": 30,
-      "sword": 30,
-      "shield_arm": -10,
-      "leg_r_thigh": -14,
-      "root_y": 0.03
+      "torso": -4,
+      "head": 2.0,
+      "arm_upper": 70,
+      "arm_fore": 0,
+      "sword": -30,
+      "shield_arm": 6,
+      "leg_l_thigh": 10,
+      "leg_r_thigh": 10,
+      "root_y": -0.06,
+      "squash": 0.03
      },
      "in"
     ],
     [
-     0.52,
+     0.56,
      {
-      "torso": 12,
-      "head": 7,
-      "arm_upper": 140,
-      "arm_fore": 35,
+      "torso": 8,
+      "head": -2.0,
+      "arm_upper": -22,
+      "arm_fore": 24,
       "sword": 34,
-      "shield_arm": -10,
-      "leg_r_thigh": -14,
-      "root_y": 0.03
-     },
-     "out"
-    ],
-    [
-     0.8,
-     {
-      "torso": 4,
-      "arm_upper": 90,
-      "arm_fore": 20,
-      "sword": 15
+      "shield_arm": 14,
+      "leg_l_thigh": -14,
+      "leg_r_thigh": 26,
+      "leg_r_shin": -14,
+      "root_y": -0.06
      }
     ],
     [
      1,
-     {}
+     {
+      "torso": -4,
+      "arm_upper": 10,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": 2,
+      "head": 0.0
+     }
     ]
    ]
   },
@@ -977,71 +965,67 @@
      {}
     ],
     [
-     0.12,
+     0.24,
      {
-      "torso": 4,
-      "arm_upper": 30,
-      "arm_fore": 30,
-      "sword": 20
+      "torso": -10,
+      "head": -2.0,
+      "arm_upper": -35,
+      "arm_fore": 20,
+      "sword": -40,
+      "shield_arm": 16,
+      "leg_l_thigh": 35,
+      "leg_l_shin": -50,
+      "leg_r_thigh": -25,
+      "leg_r_shin": -40,
+      "root_y": -0.14,
+      "squash": 0.05
      },
      "out"
     ],
     [
-     0.28,
+     0.38,
      {
-      "torso": 12,
-      "head": 3,
-      "arm_upper": 70,
-      "arm_fore": 75,
-      "sword": 62,
-      "shield_arm": -12,
-      "leg_r_thigh": 10
-     },
-     "out"
-    ],
-    [
-     0.42,
-     {
-      "torso": -20,
-      "head": -6,
-      "arm_upper": 88,
-      "arm_fore": -5,
-      "sword": -36,
-      "shield_arm": 12,
-      "leg_l_thigh": 26,
+      "torso": 8,
+      "head": 6.0,
+      "arm_upper": 150,
+      "arm_fore": 15,
+      "sword": 10,
+      "shield_arm": -6,
+      "leg_l_thigh": 20,
       "leg_l_shin": -10,
-      "leg_r_thigh": -20
+      "leg_r_thigh": -30,
+      "leg_r_shin": -5,
+      "root_y": 0.06,
+      "squash": -0.03
      },
      "in"
     ],
     [
-     0.52,
+     0.58,
      {
-      "torso": -23,
-      "head": -7,
-      "arm_upper": 92,
-      "arm_fore": -8,
-      "sword": -38,
-      "shield_arm": 12,
-      "leg_l_thigh": 28,
+      "torso": 10,
+      "head": 6.0,
+      "arm_upper": 165,
+      "arm_fore": 26,
+      "sword": 20,
+      "shield_arm": -8,
+      "leg_l_thigh": 18,
       "leg_l_shin": -10,
-      "leg_r_thigh": -20
-     },
-     "out"
-    ],
-    [
-     0.8,
-     {
-      "torso": -10,
-      "arm_upper": 60,
-      "sword": -20,
-      "leg_l_thigh": 12,
-      "leg_r_thigh": -8
+      "leg_r_thigh": -26,
+      "leg_r_shin": -8,
+      "root_y": 0.07
      }
     ],
     [
      1,
-     {}
+     {
+      "torso": -4,
+      "arm_upper": 10,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": 2,
+      "head": 0.0
+     }
     ]
    ]
   },
@@ -1053,81 +1037,68 @@
      {}
     ],
     [
-     0.12,
-     {
-      "torso": 5,
-      "arm_upper": 50,
-      "arm_fore": 25,
-      "sword": 10
-     },
-     "out"
-    ],
-    [
-     0.3,
+     0.25,
      {
       "torso": 14,
-      "head": 6,
-      "arm_upper": 145,
-      "arm_fore": 45,
-      "sword": 25,
-      "shield_arm": -10,
-      "leg_l_thigh": -10,
-      "root_y": 0.07
+      "head": -6.0,
+      "arm_upper": -70,
+      "arm_fore": 30,
+      "sword": 50,
+      "shield_arm": 24,
+      "leg_l_thigh": 35,
+      "leg_l_shin": -30,
+      "leg_r_thigh": -35,
+      "leg_r_shin": -20,
+      "root_y": -0.08,
+      "squash": 0.05
      },
      "out"
     ],
     [
-     0.44,
+     0.4,
      {
-      "torso": -24,
-      "head": -9,
-      "arm_upper": 45,
-      "arm_fore": -8,
-      "sword": -15,
-      "shield_arm": 14,
-      "root_y": -0.1,
-      "leg_l_thigh": 32,
-      "leg_l_shin": -32,
-      "leg_r_thigh": -22,
-      "leg_r_shin": -22
+      "torso": -22,
+      "head": 8.0,
+      "arm_upper": 95,
+      "arm_fore": 0,
+      "sword": -28,
+      "shield_arm": -12,
+      "leg_l_thigh": 42,
+      "leg_l_shin": -12,
+      "leg_r_thigh": -40,
+      "leg_r_shin": -30,
+      "root_y": -0.12,
+      "squash": 0.06
      },
      "in"
     ],
     [
-     0.55,
+     0.62,
      {
-      "torso": -26,
-      "head": -10,
-      "arm_upper": 38,
-      "arm_fore": -10,
-      "sword": -20,
-      "shield_arm": 14,
-      "root_y": -0.11,
-      "leg_l_thigh": 32,
-      "leg_l_shin": -32,
-      "leg_r_thigh": -22,
-      "leg_r_shin": -22
-     },
-     "out"
-    ],
-    [
-     0.85,
-     {
-      "torso": -14,
-      "head": -5,
-      "arm_upper": 25,
-      "arm_fore": -6,
-      "sword": -10,
-      "root_y": -0.05,
-      "leg_l_thigh": 16,
-      "leg_l_shin": -16,
-      "leg_r_thigh": -11,
-      "leg_r_shin": -11
+      "torso": -24,
+      "head": 8.0,
+      "arm_upper": 120,
+      "arm_fore": 20,
+      "sword": -70,
+      "shield_arm": -14,
+      "leg_l_thigh": 42,
+      "leg_l_shin": -12,
+      "leg_r_thigh": -40,
+      "leg_r_shin": -30,
+      "root_y": -0.12,
+      "squash": 0.03
      }
     ],
     [
      1,
-     {}
+     {
+      "torso": -4,
+      "arm_upper": 10,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": 2,
+      "head": 0.0
+     }
     ]
    ]
   },
@@ -1413,6 +1384,290 @@
       "leg_r_shin": -70,
       "cape": 6,
       "root_y": -0.42
+     }
+    ]
+   ]
+  },
+  "attack_air_0": {
+   "blend": 50,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     }
+    ],
+    [
+     0.22,
+     {
+      "torso": 8,
+      "arm_upper": -50,
+      "arm_fore": 34,
+      "sword": 40,
+      "shield_arm": 18,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     },
+     "out"
+    ],
+    [
+     0.36,
+     {
+      "torso": -14,
+      "head": 5.0,
+      "arm_upper": 92,
+      "arm_fore": 0,
+      "sword": -28,
+      "shield_arm": -10,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     },
+     "in"
+    ],
+    [
+     0.6,
+     {
+      "torso": -16,
+      "arm_upper": 108,
+      "arm_fore": 28,
+      "sword": -62,
+      "shield_arm": -12,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     }
+    ],
+    [
+     1,
+     {
+      "torso": -4,
+      "arm_upper": 20,
+      "arm_fore": 10,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     }
+    ]
+   ]
+  },
+  "attack_air_1": {
+   "blend": 50,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     }
+    ],
+    [
+     0.22,
+     {
+      "torso": 10,
+      "head": 6.0,
+      "arm_upper": 165,
+      "arm_fore": 20,
+      "sword": 30,
+      "shield_arm": 10,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     },
+     "out"
+    ],
+    [
+     0.38,
+     {
+      "torso": -18,
+      "head": -4.0,
+      "arm_upper": 55,
+      "arm_fore": -5,
+      "sword": -42,
+      "shield_arm": -8,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     },
+     "in"
+    ],
+    [
+     0.6,
+     {
+      "torso": -20,
+      "arm_upper": 20,
+      "arm_fore": 10,
+      "sword": -30,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     }
+    ],
+    [
+     1,
+     {
+      "torso": -6,
+      "arm_upper": 12,
+      "arm_fore": 10,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -70,
+      "leg_r_thigh": 10,
+      "leg_r_shin": -60
+     }
+    ]
+   ]
+  },
+  "attack_dash": {
+   "blend": 55,
+   "keys": [
+    [
+     0,
+     {
+      "torso": -10,
+      "root_y": -0.1
+     }
+    ],
+    [
+     0.15,
+     {
+      "torso": -15,
+      "arm_upper": 20,
+      "arm_fore": 80,
+      "sword": -60,
+      "shield_arm": 14,
+      "leg_l_thigh": 40,
+      "leg_l_shin": -20,
+      "leg_r_thigh": -30,
+      "leg_r_shin": -45,
+      "root_y": -0.15
+     },
+     "out"
+    ],
+    [
+     0.3,
+     {
+      "torso": -28,
+      "head": 10.0,
+      "arm_upper": 88,
+      "arm_fore": -5,
+      "sword": -20,
+      "shield_arm": -12,
+      "cape": -10.0,
+      "leg_l_thigh": 60,
+      "leg_l_shin": -5,
+      "leg_r_thigh": -45,
+      "leg_r_shin": -50,
+      "root_y": -0.22,
+      "squash": 0.03
+     },
+     "in"
+    ],
+    [
+     0.6,
+     {
+      "torso": -26,
+      "head": 9.0,
+      "arm_upper": 92,
+      "arm_fore": 0,
+      "sword": -22,
+      "shield_arm": -12,
+      "cape": -8.0,
+      "leg_l_thigh": 55,
+      "leg_l_shin": -6,
+      "leg_r_thigh": -42,
+      "leg_r_shin": -48,
+      "root_y": -0.2
+     }
+    ],
+    [
+     1,
+     {
+      "torso": -4,
+      "arm_upper": 10,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": 2,
+      "head": 0.0
+     }
+    ]
+   ]
+  },
+  "attack_up": {
+   "blend": 50,
+   "keys": [
+    [
+     0,
+     {}
+    ],
+    [
+     0.22,
+     {
+      "torso": -8,
+      "arm_upper": -20,
+      "arm_fore": 30,
+      "sword": -30,
+      "shield_arm": 10,
+      "leg_l_thigh": 30,
+      "leg_l_shin": -45,
+      "leg_r_thigh": -20,
+      "leg_r_shin": -40,
+      "root_y": -0.12,
+      "squash": 0.05
+     },
+     "out"
+    ],
+    [
+     0.38,
+     {
+      "torso": 10,
+      "head": 12.0,
+      "arm_upper": 160,
+      "arm_fore": 0,
+      "sword": 0,
+      "shield_arm": -10,
+      "leg_l_thigh": 12,
+      "leg_l_shin": -6,
+      "leg_r_thigh": -14,
+      "leg_r_shin": -4,
+      "root_y": 0.1,
+      "squash": -0.04
+     },
+     "in"
+    ],
+    [
+     0.6,
+     {
+      "torso": 12,
+      "head": 12.0,
+      "arm_upper": 165,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": -10,
+      "root_y": 0.08
+     }
+    ],
+    [
+     1,
+     {
+      "torso": -4,
+      "arm_upper": 10,
+      "arm_fore": 10,
+      "sword": 0,
+      "shield_arm": 2,
+      "head": 0.0
      }
     ]
    ]

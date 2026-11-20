@@ -96,6 +96,10 @@ var _shield_fx: Node3D
 
 var _combo_index: int = 0
 var _combo_timer: float = 0.0
+## Story 057 (D-068): the air chain's next move, and seconds since the last dodge began (an
+## attack soon after one is a dash slash).
+var _air_combo: int = 0
+var _since_dodge: float = 99.0
 var _air_dash_ready: bool = true
 var _coyote_left: float = 0.0
 var _jump_buffer_left: float = 0.0
@@ -848,6 +852,9 @@ func _read_buttons(delta: float) -> void:
 	_combo_timer = maxf(_combo_timer - delta, 0.0)
 	if _combo_timer <= 0.0 and action == null:
 		_combo_index = 0
+	_since_dodge += delta
+	if is_on_floor():
+		_air_combo = 0
 	if controls.just_pressed("attack") and _can_start("attack"):
 		_start_primary()
 	if controls.just_pressed("dodge") and _can_start("dodge"):
@@ -863,6 +870,19 @@ func _can_start(kind: String) -> bool:
 
 func _start_primary() -> void:
 	var kit := loadout.active().kit
+	# Story 057: out of a dodge a dash slash, up + attack a rising cut, in the air the air chain.
+	var special := combo_move()
+	var sa: PlayerAction = null
+	if special != "":
+		sa = kit.special_action(self, special, _air_combo if special == "air" else 0)
+	if sa != null:
+		if special == "air":
+			_air_combo += 1
+		if _move_axis.x != 0.0:
+			set_facing(int(signf(_move_axis.x)))
+		_combo_index = 0
+		start_action(sa)
+		return
 	var a := kit.primary_action(self, _combo_index)
 	if a == null:
 		return
@@ -871,6 +891,19 @@ func _start_primary() -> void:
 	if _move_axis.x != 0.0:
 		set_facing(int(signf(_move_axis.x)))
 	start_action(a)
+
+
+## Which combo move an attack press makes now: "dash" (during or just after a dodge), "up" (up
+## held), "air" (airborne), or "" (the ground chain).
+func combo_move() -> String:
+	var window := Balance.combat_f("dodge.roll_s") + Balance.combat_f("primary_moves.dash_slash_window_s")
+	if _since_dodge <= window:
+		return "dash"
+	if _move_axis.y < -0.5:
+		return "up"
+	if not is_on_floor() and not is_swimming():
+		return "air"
+	return ""
 
 
 func _start_dodge() -> void:
@@ -889,6 +922,8 @@ func _start_dodge() -> void:
 			_air_dash_ready = false
 	if a != null:
 		a.data["started_at"] = time
+		if a.id != "air_dash":
+			_since_dodge = 0.0
 		start_action(a)
 
 

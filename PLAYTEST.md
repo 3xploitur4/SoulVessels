@@ -29,7 +29,10 @@ Double-click one of these in the project folder:
 | --- | --- |
 | A / D or arrows | move |
 | Space | jump (also off walls while sliding down them) |
-| J | attack (press again to chain the combo) |
+| J | attack: press again to chain the combo (cut, backhand, rising cut, spinning finisher) |
+| W + J | rising cut, for things above you |
+| K then J | dash slash: attack during or just after a dodge |
+| J in the air | air cuts (two in a row) |
 | K | dodge |
 | U | ability 1 (hold for some Vessels) |
 | I | ability 2 |

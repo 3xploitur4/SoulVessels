@@ -14,6 +14,10 @@
     "exhausted_s": 1.5,
     "inactive_regen_multiplier": 2.0
   },
+  "primary_moves": {
+    "_note": "Story 057, decision D-068. An attack pressed during a dodge's cancel window or up to dash_slash_window_s after it ends is the Vessel's dash slash (data primary.dash); up + attack is the rising cut (primary.up); attacks in the air chain through primary.air. Vessels without these keys use their plain chain.",
+    "dash_slash_window_s": 0.25
+  },
   "dodge": {
     "roll_s": 0.45,
     "iframe_start_s": 0.05,

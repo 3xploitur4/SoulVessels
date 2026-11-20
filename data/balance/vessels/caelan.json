@@ -22,6 +22,12 @@
       { "motion": 1.2, "windup_s": 0.16, "active_s": 0.12, "recover_s": 0.24, "range_m": 2.2, "posture": 16 },
       { "motion": 1.6, "windup_s": 0.22, "active_s": 0.14, "recover_s": 0.34, "range_m": 2.4, "posture": 28, "heavy": true }
     ],
+    "air": [
+      { "motion": 0.9, "windup_s": 0.09, "active_s": 0.12, "recover_s": 0.16, "range_m": 2.2, "posture": 10 },
+      { "motion": 1.2, "windup_s": 0.12, "active_s": 0.12, "recover_s": 0.24, "range_m": 2.3, "posture": 16 }
+    ],
+    "dash": { "motion": 1.4, "windup_s": 0.06, "active_s": 0.14, "recover_s": 0.28, "range_m": 2.6, "posture": 22, "dash_mps": 11.0 },
+    "up": { "motion": 1.1, "windup_s": 0.12, "active_s": 0.12, "recover_s": 0.26, "range_m": 1.8, "height_m": 2.6, "posture": 14 },
     "combo_reset_s": 0.6
   },
   "ability_1": {
