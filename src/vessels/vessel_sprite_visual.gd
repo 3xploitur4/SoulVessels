@@ -204,7 +204,9 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 				_struck = true
 				_strike(idx, move)
 		# The finisher spins: the body turns away and back while the wide arc goes round.
-		if _is_spin(idx) and progress > STRIKE_AT + 0.02 and progress < STRIKE_AT + 0.16:
+		# (Drawn frames carry their own turn, story 058.)
+		var drawn := b is RigBody and (b as RigBody).has_frames(clip_for_rig(state, (b as RigBody).clips))
+		if _is_spin(idx) and not drawn and progress > STRIKE_AT + 0.02 and progress < STRIKE_AT + 0.16:
 			rotation.y += PI
 			body.position.z = -body.position.z
 	elif state in ["counterstrike", "oathbreaker_lunge", "severing_arrival", "shadow_counter", "kings_judgment",

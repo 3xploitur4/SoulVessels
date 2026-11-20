@@ -59,6 +59,21 @@ var _secondary: Dictionary = {}
 var _sec_angle: Dictionary[String, float] = {}
 var _sec_vel: Dictionary[String, float] = {}
 var _last_pos: Vector3 = Vector3.INF
+## Story 058 (D-069): drawn frames that replace the parts for some clips (data/art/
+## attack_frames.json): clip -> [[progress, frame, mirrored?], ...], each frame's size and feet
+## anchor, its texture, metres per frame pixel, and the quad they are shown on.
+const FRAMES_PATH := "res://data/art/attack_frames.json"
+## False when a second weapon's look changes the parts (the drawings show the first weapon).
+var frames_enabled: bool = true
+var _frames: Dictionary = {}
+var _frame_meta: Dictionary = {}
+var _frame_tex: Dictionary = {}
+var _frame_nudge: Dictionary = {}
+var _frame_folder: String = ""
+var _frame_px: float = 0.01
+var _frame_quad: MeshInstance3D
+var _frame_mat: ShaderMaterial
+var _frame_shown: String = ""
 
 
 ## True when `id` has a cut rig and clips (its own, or the one named by `rig` in sprites.json).
@@ -150,11 +165,14 @@ func pose_now(name: String, t: float) -> void:
 	_root.position.y = float(pose.get("root_y", 0.0))
 	_squash = float(pose.get("squash", 0.0))
 	_apply_squash()
+	_show_frame(name, t)
 
 
 ## A weapon's look on single parts (story 053): {"hide": [part], "scale": {part: f},
 ## "tint": {part: "#rrggbb"}, "glow": {part: f}}. Unknown parts are skipped.
 func apply_look(look: Dictionary) -> void:
+	if not look.is_empty():
+		frames_enabled = false
 	for pid: Variant in look.get("hide", []):
 		var b: Node3D = _bones.get(str(pid), null)
 		if b != null and b.has_node("Pic"):
@@ -297,6 +315,7 @@ func _build(id: String) -> void:
 	for j: String in _secondary.keys():
 		_sec_angle[j] = 0.0
 		_sec_vel[j] = 0.0
+	_load_frames(id)
 
 
 func tick(delta: float) -> void:
@@ -313,6 +332,7 @@ func tick(delta: float) -> void:
 	# mirror the depth back so the front-most part stays nearest the camera.
 	_root.scale.z = -1.0 if _pivot.global_basis.z.z < 0.0 else 1.0
 	var pose := sample(clip, t)
+	_show_frame(clip, t)
 	# Attacks blend fast so the snap of the blow survives; idle poses drift in softly.
 	var k := minf(delta * float(c.get("blend", BLEND_RATE)), 1.0)
 	_tick_secondary(delta)
@@ -421,3 +441,108 @@ func _pose_angle(pose: Dictionary, j: String) -> float:
 	if pose.has(j) and not _channel.has(j):
 		return float(pose[j])
 	return float(pose.get(_channel.get(j, j), 0.0)) * _channel_scale.get(j, 1.0)
+
+
+# --- Drawn frames (story 058) ----------------------------------------------------------------
+
+## Does clip `name` play as drawn frames on this body?
+func has_frames(name: String) -> bool:
+	return frames_enabled and _frames.has(name)
+
+
+## The drawn frame showing now ("" while the parts are drawn).
+func frame_shown() -> String:
+	return _frame_shown
+
+
+## The frame of clip `name` at progress `t`: [frame, mirrored].
+func frame_at(name: String, t: float) -> Array:
+	var keys: Array = _frames.get(name, [])
+	var out: Array = ["", false]
+	for k: Array in keys:
+		if t + 0.0001 >= float(k[0]):
+			out = [str(k[1]), k.size() > 2 and bool(k[2])]
+	return out
+
+
+func _load_frames(id: String) -> void:
+	if not FileAccess.file_exists(FRAMES_PATH):
+		return
+	var all: Variant = JSON.parse_string(FileAccess.get_file_as_string(FRAMES_PATH))
+	if not all is Dictionary or not (all as Dictionary).has(id):
+		return
+	var cfg: Dictionary = all[id]
+	_frame_folder = str(cfg.get("folder", ""))
+	var meta_path := _frame_folder + "frames.json"
+	if not FileAccess.file_exists(meta_path):
+		return
+	var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(meta_path))
+	_frame_meta = meta.get("frames", {})
+	var ref: Dictionary = _frame_meta.get(str(meta.get("ref", "")), {})
+	if ref.is_empty():
+		return
+	_frame_px = height_m / float(ref["h"])
+	_frames = cfg.get("clips", {})
+	_frame_nudge = cfg.get("nudge", {})
+	var q := QuadMesh.new()
+	q.size = Vector2.ONE
+	_frame_quad = MeshInstance3D.new()
+	_frame_quad.name = "Frame"
+	_frame_quad.mesh = q
+	_frame_quad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_frame_mat = ShaderMaterial.new()
+	_frame_mat.shader = SpriteArt.shader()
+	_frame_mat.set_shader_parameter("emission_amount", float(spec.get("emission", SpriteArt.num("emission", 0.62))))
+	_frame_mat.set_shader_parameter("step_amount", 0.0)
+	_frame_mat.set_shader_parameter("lean", 0.0)
+	_frame_mat.set_shader_parameter("wind", 0.0)
+	if spec.has("tint"):
+		_frame_mat.set_shader_parameter("tint", Color(str(spec["tint"])))
+	_frame_quad.material_override = _frame_mat
+	_frame_quad.visible = false
+	_pivot.add_child(_frame_quad)
+	_mats.append(_frame_mat)
+
+
+## Show the drawn frame clip `name` has at `t`, or the parts when it has none.
+func _show_frame(name: String, t: float) -> void:
+	if _frame_quad == null:
+		return
+	var f: Array = frame_at(name, t) if has_frames(name) else ["", false]
+	var frame := str(f[0])
+	if frame == "" or not _frame_meta.has(frame):
+		if _frame_shown != "":
+			_frame_shown = ""
+			_frame_quad.visible = false
+			_root.visible = true
+		return
+	var flip := bool(f[1])
+	var key := frame + ("~" if flip else "")
+	if key != _frame_shown:
+		_frame_shown = key
+		var m: Dictionary = _frame_meta[frame]
+		var w := float(m["w"])
+		var h := float(m["h"])
+		var a: Array = m["anchor"]
+		if not _frame_tex.has(frame):
+			_frame_tex[frame] = TexBank.get_tex(_frame_folder + frame + ".png")
+		_frame_mat.set_shader_parameter("tex", _frame_tex[frame])
+		_frame_mat.set_shader_parameter("height_m", h * _frame_px)
+		(_frame_quad.mesh as QuadMesh).size = Vector2(w * _frame_px, h * _frame_px)
+		var cx := w * 0.5 - float(a[0])
+		if flip:
+			cx = -cx
+		cx += float(_frame_nudge.get(frame, 0.0))
+		_frame_quad.position = Vector3(cx * _frame_px, (float(a[1]) - h * 0.5) * _frame_px - _centre_y, 0.02)
+		_frame_quad.scale.x = -1.0 if flip else 1.0
+	_frame_quad.visible = true
+	_root.visible = false
+
+
+func _drop_ghost(g: MeshInstance3D) -> void:
+	if _frame_shown == "" or _frame_quad == null:
+		super._drop_ghost(g)
+		return
+	g.global_transform = _frame_quad.global_transform
+	(g.mesh as QuadMesh).size = (_frame_quad.mesh as QuadMesh).size
+	(g.material_override as StandardMaterial3D).albedo_texture = _frame_tex.get(_frame_shown.trim_suffix("~"))

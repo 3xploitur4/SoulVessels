@@ -120,8 +120,9 @@ static func _emitter(parent: Node, at: Vector3, side: float, k: Dictionary, coun
 	p.mesh = q
 	p.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	parent.add_child(p)
-	# Just in front of the feet so the puffs read over the slabs.
-	p.global_position = at + Vector3(0.0, 0.12, 0.35)
+	# Just in front of the feet so the puffs read over the slabs, close enough to the body plane
+	# not to cover the legs (story 058).
+	p.global_position = at + Vector3(0.0, 0.1, 0.12)
 	p.emitting = true
 	p.finished.connect(p.queue_free)
 	return p

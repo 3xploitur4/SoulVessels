@@ -68,6 +68,8 @@ var _ghost_timer: float = 0.0
 var _shadow_mat: StandardMaterial3D
 var _shadow_size: Vector2 = Vector2.ONE
 var _shadow_on: bool = true
+## The whole painting (afterimages are drawn from it).
+var _tex: Texture2D
 
 
 ## A body for sprite `id` (see data/art/sprites.json). Null when there is no art for it.
@@ -84,6 +86,7 @@ static func create(id: String) -> SpriteBody:
 
 func _build(id: String) -> void:
 	var tex := SpriteArt.texture(id)
+	_tex = tex
 	height_m = float(spec.get("height_m", 2.0))
 	width_m = height_m * float(tex.get_width()) / float(tex.get_height())
 	var centred := str(spec.get("anchor", "feet")) == "centre"
@@ -266,6 +269,14 @@ func tick(delta: float) -> void:
 			_tell_mat.albedo_color.a = clampf(0.35 + tell, 0.0, 1.0)
 
 
+## Leave afterimage `g` where the body is drawn now (a RigBody showing drawn frames leaves the
+## frame instead, story 058).
+func _drop_ghost(g: MeshInstance3D) -> void:
+	g.global_transform = _mesh.global_transform
+	(g.mesh as QuadMesh).size = Vector2(width_m, height_m)
+	(g.material_override as StandardMaterial3D).albedo_texture = _tex
+
+
 func _tick_ghosts(delta: float) -> void:
 	if trailing:
 		_ghost_timer -= delta
@@ -274,7 +285,7 @@ func _tick_ghosts(delta: float) -> void:
 			var g := _ghosts[_ghost_next]
 			_ghost_left[_ghost_next] = GHOST_LIFE_S
 			_ghost_next = (_ghost_next + 1) % GHOSTS
-			g.global_transform = _mesh.global_transform
+			_drop_ghost(g)
 			g.visible = true
 	else:
 		_ghost_timer = 0.0

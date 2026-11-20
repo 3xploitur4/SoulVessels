@@ -1,0 +1,17 @@
+{
+  "_source": "Story 058, decision D-069. Frame sheets cut by tools/art/slice_frames.gd: one sheet of poses of one character (a single image, plain flat background), cut into one trimmed RGBA PNG per pose in reading order (rows top to bottom, left to right) as f01, f02... plus frames.json with each frame's size and its anchor (the middle of the feet at the feet line, in pixels). range: how far (0-1 per channel) a pixel may be from the background colour and still count as background when reached from the border; pocket: tighter limit for enclosed background (between legs, sword and body); soft: width of the soft edge; min_area: smaller pieces are attached to the nearest pose within attach_px, or dropped. height_m: the character's height in metres; ref: the standing frame whose height is that.",
+  "sheets": [
+    {
+      "id": "caelan",
+      "file": "docs/design/concept-art/attacks/Caelan_attack.jpg",
+      "out": "assets/art/frames/caelan",
+      "range": 0.1,
+      "pocket": 0.05,
+      "soft": 0.1,
+      "min_area": 2500,
+      "attach_px": 26,
+      "height_m": 1.95,
+      "ref": "f08"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "_source": "Story 058, decision D-069. Drawn frames that replace the cut-out rig for some clips, per character (the body's own sprite id, so a Vessel borrowing another's rig clips never borrows its drawings). Frames come from tools/art/slice_frames.gd (folder, frames.json with each frame's size and feet anchor). clips: for a rig clip name, the frames in order as [progress, frame] or [progress, frame, true] for a frame drawn the other way round (mirrored); a frame shows from its progress until the next. A clip with no entry here plays on the rig as before. nudge: pixels to move a frame sideways after anchoring (+ = forward), where the drawing's stance makes the feet anchor sit off the body.",
+  "caelan": {
+    "folder": "res://assets/art/frames/caelan/",
+    "nudge": {},
+    "clips": {
+      "attack_0": [[0.0, "f01"], [0.3, "f10"], [0.62, "f09"], [0.86, "f08"]],
+      "attack_1": [[0.0, "f09"], [0.16, "f03"], [0.32, "f11"], [0.6, "f13"], [0.86, "f08"]],
+      "attack_2": [[0.0, "f13"], [0.26, "f05"], [0.46, "f06"], [0.86, "f08"]],
+      "attack_3": [[0.0, "f02"], [0.2, "f04"], [0.34, "f12"], [0.48, "f10"], [0.7, "f09"], [0.88, "f08"]],
+      "attack_air_0": [[0.0, "f07"], [0.3, "f05"]],
+      "attack_air_1": [[0.0, "f04"], [0.3, "f10"], [0.7, "f09"]],
+      "attack_dash": [[0.0, "f11"], [0.2, "f12", true], [0.72, "f09"]],
+      "attack_up": [[0.0, "f09"], [0.24, "f05"], [0.4, "f06"], [0.86, "f08"]],
+      "lunge": [[0.0, "f11"], [0.2, "f12", true], [0.72, "f09"]],
+      "block": [[0.0, "f14"]],
+      "hurt": [[0.0, "f15"], [0.7, "f08"]]
+    }
+  }
+}
