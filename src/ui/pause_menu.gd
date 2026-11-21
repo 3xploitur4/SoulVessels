@@ -1,8 +1,9 @@
 class_name PauseMenu
 extends CanvasLayer
-## Pause (story 016): Resume, Map, Inventory, Lore, Quit to title. Pauses the tree while open;
-## reads the game state to show it and never changes it (`ui-code` rule): Resume and Quit are
-## requests the game scene carries out.
+## Pause (story 016): Resume, Map, Inventory, Lore, Settings (story 059: volumes and this game's
+## difficulty), Quit to title. Pauses the tree while open; reads the game state to show it and never
+## changes it (`ui-code` rule): Resume, Quit and a new difficulty are requests the game scene
+## carries out.
 ##
 ##     var pm := PauseMenu.new()
 ##     pm.state = game_state
@@ -11,10 +12,13 @@ extends CanvasLayer
 
 signal resume_requested
 signal quit_requested
+signal difficulty_requested(difficulty: String)
 
 var state: GameState
 ## Where the player stands in the current room (story 054: the map marks it).
 var player_pos: Vector2 = Vector2(-1.0, -1.0)
+## May this game's difficulty be set to Abyssal (Chapter I finished once)?
+var abyssal_unlocked: bool = false
 
 var _root: Control
 var _content: Control
@@ -47,7 +51,7 @@ func _ready() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	left.add_child(title)
 	var pages := [["UI_RESUME", "resume"], ["UI_MAP", "map"], ["UI_INVENTORY", "inventory"],
-		["UI_LORE", "lore"], ["UI_QUIT_TO_TITLE", "quit"]]
+		["UI_LORE", "lore"], ["UI_SETTINGS", "settings"], ["UI_QUIT_TO_TITLE", "quit"]]
 	for p: Array in pages:
 		var b := UiKit.button(tr(str(p[0])), 360.0)
 		b.name = "Tab_" + str(p[1])
@@ -72,6 +76,8 @@ func _on_focus(page: String) -> void:
 			_show_inventory()
 		"lore":
 			_show_lore()
+		"settings":
+			_show_settings()
 
 
 func _on_tab(page: String) -> void:
@@ -80,11 +86,21 @@ func _on_tab(page: String) -> void:
 			resume_requested.emit()
 		"quit":
 			quit_requested.emit()
+		"settings":
+			_show_settings()
+			# Pressing the tab (or a gamepad's confirm) steps into the page.
+			_settings_panel().focus_first()
 		_:
 			_on_focus(page)
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Back inside the settings page returns to its tab; anywhere else it closes the menu.
+	var focus := _root.get_viewport().gui_get_focus_owner()
+	if event.is_action_pressed("ui_cancel") and focus != null and _content.is_ancestor_of(focus):
+		(_root.find_child("Tab_settings", true, false) as Control).grab_focus()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
 		resume_requested.emit()
 		get_viewport().set_input_as_handled()
@@ -144,3 +160,23 @@ func _show_lore() -> void:
 	for id in state.lore_found:
 		v.add_child(UiKit.label(tr(LoreDb.title_key(id)), 28, UiKit.COL_GOLD, HORIZONTAL_ALIGNMENT_LEFT))
 		v.add_child(UiKit.label(tr(LoreDb.body_key(id)), 22, UiKit.COL_TEXT, HORIZONTAL_ALIGNMENT_LEFT))
+
+
+func _show_settings() -> void:
+	if _settings_panel() != null:
+		return
+	_clear()
+	var p := SettingsPanel.new()
+	p.name = "Settings"
+	p.difficulty = state.difficulty if state != null else "normal"
+	p.abyssal_unlocked = abyssal_unlocked
+	p.difficulty_requested.connect(func(d: String) -> void: difficulty_requested.emit(d))
+	_content.add_child(p)
+
+
+## The settings page when it is showing (null otherwise).
+func _settings_panel() -> SettingsPanel:
+	for c in _content.get_children():
+		if c is SettingsPanel and not c.is_queued_for_deletion():
+			return c as SettingsPanel
+	return null

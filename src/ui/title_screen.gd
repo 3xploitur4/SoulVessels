@@ -1,8 +1,9 @@
 class_name TitleScreen
 extends CanvasLayer
 ## Title screen (story 016): the game's name, three save-slot cards, and per-slot pages: New Game
-## with a difficulty choice for an empty slot; Continue or Delete (with a confirm) for a used one.
-## Display only: it emits requests and the game scene acts on them (`ui-code` rule).
+## with a difficulty choice for an empty slot; Continue or Delete (with a confirm) for a used one;
+## Settings (story 059: the volumes). Display only: it emits requests and the game scene acts on
+## them (`ui-code` rule).
 ##
 ##     var t := TitleScreen.new()
 ##     t.summaries = [saves.summary(0), saves.summary(1), saves.summary(2)]
@@ -59,7 +60,30 @@ func show_slots() -> void:
 		b.pressed.connect(_on_slot.bind(i))
 		col.add_child(b)
 		buttons.append(b)
+	var settings := UiKit.button(tr("UI_SETTINGS"), 760.0)
+	settings.name = "Settings"
+	settings.pressed.connect(show_settings)
+	col.add_child(settings)
+	buttons.append(settings)
 	UiKit.link_focus(buttons)
+
+
+## The settings page (story 059): the volumes, then Back.
+func show_settings() -> void:
+	var col := _new_page()
+	var panel := PanelContainer.new()
+	col.add_child(panel)
+	var p := SettingsPanel.new()
+	p.name = "SettingsPanel"
+	panel.add_child(p)
+	var back := UiKit.button(tr("UI_BACK"), 560.0)
+	back.name = "Back"
+	back.pressed.connect(show_slots)
+	col.add_child(back)
+	p.focus_first()
+	var last := p.sliders["ambience"]
+	last.focus_neighbor_bottom = last.get_path_to(back)
+	back.focus_neighbor_top = back.get_path_to(last)
 
 
 func _slot_text(i: int) -> String:

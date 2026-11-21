@@ -481,3 +481,10 @@ MAP_BOSS,Boss
 MAP_ECHO,Your Soul Echo
 MAP_YOU,You
 MAP_SEEN,"Seen, not entered"
+SET_MASTER,Volume
+SET_MUSIC,Music
+SET_EFFECTS,Sound effects
+SET_AMBIENCE,Ambience
+SET_DIFFICULTY,Difficulty
+SET_DIFFICULTY_HINT,The difficulty is chosen when you start a game. You can change it at any time from the pause menu.
+SET_DIFFICULTY_CHANGED,Difficulty: %s

@@ -40,7 +40,7 @@ Double-click one of these in the project folder:
 | Q / E | swap to the previous / next Vessel |
 | F | drink a Soul Flask (heal) |
 | W | interact: rest at an altar, free a Vessel, read, enter |
-| Esc | pause menu (map, inventory, lore, settings) |
+| Esc | pause menu (map, inventory, lore, settings: volumes and difficulty) |
 | F3 | debug overlay (frame rate and state) |
 
 A gamepad also works: plug it in and press any button; the touch controls hide.

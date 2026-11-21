@@ -69,6 +69,8 @@ var _features: Array[Callable] = []
 
 
 func _ready() -> void:
+	# Story 059: the player's volumes, before any sound plays.
+	GameSettings.load_and_apply()
 	var args := OS.get_cmdline_user_args()
 	saves = SaveSystem.new(save_dir if save_dir != "" else _arg(args, "--save-dir", "user://saves"))
 	input_router = InputRouter.new()
@@ -439,6 +441,25 @@ func save_now(resume: bool = false) -> bool:
 	if resume:
 		state.resume = {}
 	return ok
+
+
+## Change this game's difficulty (story 059, from the pause menu's settings): the save, the
+## player's windows and damage taken, and every enemy in the room (their damage and attack pace);
+## enemies met later spawn with it. Saved at once.
+func set_difficulty(d: String) -> void:
+	if state == null or Balance.combat("difficulty.%s" % d) == null:
+		return
+	if d == "abyssal" and not saves.chapter_complete():
+		return
+	state.difficulty = d
+	if player != null:
+		player.difficulty = d
+	for e in rooms.enemies():
+		e.damage_scale = float(Balance.combat("difficulty.%s.enemy_damage" % d))
+		var cd: Variant = Balance.combat("difficulty.%s.enemy_cooldown" % d)
+		e.cooldown_scale = float(cd) if cd != null else 1.0
+	prompts.toast(tr("SET_DIFFICULTY_CHANGED") % tr("DIFFICULTY_" + d.to_upper()), UiKit.COL_GOLD)
+	save_now()
 
 
 func quit_to_title() -> void:
@@ -1019,6 +1040,8 @@ func open_pause() -> void:
 		pause_menu.player_pos = Vector2(player.global_position.x, player.global_position.y)
 	pause_menu.resume_requested.connect(close_pause)
 	pause_menu.quit_requested.connect(quit_to_title)
+	pause_menu.abyssal_unlocked = saves.chapter_complete()
+	pause_menu.difficulty_requested.connect(set_difficulty)
 	add_child(pause_menu)
 	prompts.show_interact("")
 	get_tree().paused = true

@@ -4,7 +4,7 @@ extends Node
 ## rumble in the cavern, glints in the forest, lapping water in the palace, embers in the rift,
 ## waves on the shore) and one-shots now and then (a distant bell, chains, drips, falling stones,
 ## a far choir, a wooden creak), picked by weight, near or far. Changing theme crossfades. Plays
-## on the SFX bus under the music. Settings in data/audio/ambience.json.
+## on its own Ambience bus under the music. Settings in data/audio/ambience.json.
 ##
 ##     var amb := Ambience.new()
 ##     add_child(amb)
@@ -31,7 +31,9 @@ func _ready() -> void:
 		var d: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 		if d is Dictionary:
 			_cfg = d
-	var bus := "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
+	# Story 059: its own bus, so the settings can set ambience apart from the effects.
+	GameSettings.ensure_bus("Ambience")
+	var bus := "Ambience"
 	for i in range(2):
 		var p := AudioStreamPlayer.new()
 		p.bus = bus

@@ -87,8 +87,39 @@ static func theme() -> Theme:
 	t.set_stylebox("panel", "PanelContainer", _box(COL_PANEL, Color(0.55, 0.45, 0.25, 0.7), 2, 14))
 	t.set_constant("separation", "VBoxContainer", 14)
 	t.set_constant("separation", "HBoxContainer", 14)
+	# Story 059: sliders (settings): a dark track with a worn-gold edge, a gold fill, a gold
+	# diamond grabber; focus lights the edge.
+	var track := _box(Color(0.03, 0.035, 0.06, 0.95), Color(0.55, 0.45, 0.25, 0.8), 2, 0)
+	track.content_margin_top = 7
+	track.content_margin_bottom = 7
+	t.set_stylebox("slider", "HSlider", track)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color(0.78, 0.6, 0.26)
+	fill.content_margin_top = 7
+	fill.content_margin_bottom = 7
+	t.set_stylebox("grabber_area", "HSlider", fill)
+	var fill_hi := fill.duplicate() as StyleBoxFlat
+	fill_hi.bg_color = COL_GOLD
+	t.set_stylebox("grabber_area_highlight", "HSlider", fill_hi)
+	t.set_stylebox("focus", "HSlider", _box(Color(0, 0, 0, 0), Color(1.0, 0.84, 0.45), 2, 0))
+	t.set_icon("grabber", "HSlider", _diamond(30, COL_GOLD))
+	t.set_icon("grabber_highlight", "HSlider", _diamond(30, Color(1.0, 0.92, 0.7)))
+	t.set_icon("grabber_disabled", "HSlider", _diamond(30, Color(0.4, 0.4, 0.45)))
 	_theme = t
 	return t
+
+
+## A filled diamond icon `size` pixels across with a dark rim (slider grabbers).
+static func _diamond(size: int, color: Color) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var c := float(size - 1) * 0.5
+	for y in range(size):
+		for x in range(size):
+			var d := absf(float(x) - c) + absf(float(y) - c)
+			if d <= c:
+				img.set_pixel(x, y, color if d <= c - 2.5 else Color(0.08, 0.06, 0.03))
+	return ImageTexture.create_from_image(img)
 
 
 static func _box(bg: Color, border: Color, width: int, pad: int = 10) -> StyleBoxFlat:
