@@ -15,6 +15,8 @@ const BUSES := {"master": ["Master"], "music": ["Music"], "effects": ["SFX", "Te
 const KEYS: Array[String] = ["master", "music", "effects", "ambience"]
 
 static var volumes: Dictionary = {"master": 1.0, "music": 1.0, "effects": 1.0, "ambience": 1.0}
+## Story 060: conversation lines read aloud by the device's voice (off: a murmur plays instead).
+static var spoken: bool = true
 ## Each bus's own level from the bus layout (the Telegraph bus sits 2 dB up), so a setting scales
 ## it rather than replacing it.
 static var _base_db: Dictionary = {}
@@ -32,6 +34,7 @@ static func load_and_apply() -> void:
 			for k in KEYS:
 				if v.has(k):
 					volumes[k] = clampf(float(v[k]), 0.0, 1.0)
+			spoken = bool((d as Dictionary).get("spoken", true))
 	apply()
 
 
@@ -41,6 +44,12 @@ static func set_volume(key: String, value: float) -> void:
 		return
 	volumes[key] = clampf(value, 0.0, 1.0)
 	apply()
+	save()
+
+
+## Turn spoken voices on or off and save.
+static func set_spoken(on: bool) -> void:
+	spoken = on
 	save()
 
 
@@ -73,7 +82,7 @@ static func bus_db(v: float) -> float:
 static func save() -> void:
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f != null:
-		f.store_string(JSON.stringify({"volumes": volumes}, "  "))
+		f.store_string(JSON.stringify({"volumes": volumes, "spoken": spoken}, "  "))
 
 
 ## Make bus `bus_name` (sending to Master) when the layout has none. Returns its index.

@@ -14,6 +14,8 @@ const SUBTITLE_S := 4.5
 const MAX_TOASTS := 4
 
 ## Used to name controls in tutorial text.
+## Story 060: where spoken lines are shown when set (the conversation box).
+var dialogue: DialogueBox
 var router: InputRouter
 
 var _root: Control
@@ -145,6 +147,10 @@ func title_card(text: String) -> void:
 
 
 func subtitle(speaker: String, text: String, color: Color) -> void:
+	# Story 060: spoken lines go to the conversation box (portrait, voice) when the game has one.
+	if dialogue != null:
+		dialogue.say(speaker, text, color)
+		return
 	_subtitle.text = "%s: %s" % [speaker, text] if speaker != "" else text
 	_subtitle.add_theme_color_override("font_color", color)
 	_subtitle_left = SUBTITLE_S
@@ -152,6 +158,8 @@ func subtitle(speaker: String, text: String, color: Color) -> void:
 
 
 func subtitle_text() -> String:
+	if dialogue != null:
+		return dialogue.current_line()
 	return _subtitle.text if _subtitle.visible else ""
 
 

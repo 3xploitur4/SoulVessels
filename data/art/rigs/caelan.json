@@ -614,7 +614,7 @@
    ]
   }
  ],
- "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own). Story 054 (D-063): idle is a burdened stance (head bowed, shoulders loaded, a slow heavy breath); fall keeps the arms down and the knees ready, dragged rather than flailing. kicks.jump squashes the body for a push-off as it leaves the ground. Story 055 (D-066): dodge is a fast low step, not a roll: a dip, then a lunge sliding along the ground (front leg out, back knee down, cape trailing), held, then rising out of it. Story 057 (D-068): the combo is horizontal: attack_0 a forward cut swung from behind, attack_1 the backhand return, attack_2 a rising diagonal out of a crouch, attack_3 a wide spinning finisher; attack_air_0/1 cut with the legs tucked, attack_dash lunges out of a dodge, attack_up rises over the head. Every hit has a wind-up ('out'), a committed strike ('in') with a step and a weight shift, and a follow-through.",
+ "_clips": "Joint angles in degrees (positive turns the part counter-clockwise as seen by the camera when the character faces right: a hanging arm or leg swings forward). root_y: metres the whole body rises. loop clips run on their own clock (length_s seconds, faster with the run speed when stride_scaled); the others are posed by how far through its action the character is (0..1). Single-key clips are held poses; the body blends into them. lean_bone takes the body's lean, scaled by lean_scale. A key may carry a third entry, the easing into it: in (accelerate, for a blow landing), out (decelerate, for a wind-up or overshoot), linear; default eases both ends. blend: how fast the body moves into the clip (per second, default 18). squash: positive coils the body down and wide, negative stretches it. secondary: bones that swing on their own from the body's movement (a spring: degrees per m/s forward and falling, limits, stiffness, damping). kicks: squash given on landing and on turning round (sprung, settles on its own). Story 054 (D-063): idle is a burdened stance (head bowed, shoulders loaded, a slow heavy breath); fall keeps the arms down and the knees ready, dragged rather than flailing. kicks.jump squashes the body for a push-off as it leaves the ground. Story 055 (D-066): dodge is a fast low step, not a roll: a dip, then a lunge sliding along the ground (front leg out, back knee down, cape trailing), held, then rising out of it. Story 057 (D-068): the combo is horizontal: attack_0 a forward cut swung from behind, attack_1 the backhand return, attack_2 a rising diagonal out of a crouch, attack_3 a wide spinning finisher; attack_air_0/1 cut with the legs tucked, attack_dash lunges out of a dodge, attack_up rises over the head. Every hit has a wind-up ('out'), a committed strike ('in') with a step and a weight shift, and a follow-through. Story 060: the run's arms swing against the legs again (sword arm +/-18, shield arm +/-8, the elbow pumping, the blade trailing) and the torso dips at each footfall; the earlier stiffness came from a doubled bob and a whole-body squash, both gone. Story 060: walk is a calm stride (legs and arms about half the run's); crouch is a low guard (knees deep, blade forward, shield up) with a slow breath; crouch_walk shuffles in it.",
  "lean_bone": "torso",
  "lean_scale": 0.4,
  "clips": {
@@ -672,15 +672,15 @@
       "leg_l_shin": -8,
       "leg_r_thigh": -26,
       "leg_r_shin": -40,
-      "arm_upper": -6,
-      "arm_fore": 13,
-      "shield_arm": 3,
-      "torso": -4.5,
-      "cape": -3.0,
+      "arm_upper": 18,
+      "arm_fore": 30,
+      "shield_arm": -8,
+      "torso": -7.5,
+      "cape": -4.0,
       "squash": 0.012,
-      "root_y": -0.015,
-      "head": 3.0,
-      "sword": 3.0
+      "root_y": -0.02,
+      "head": 4.0,
+      "sword": -14
      }
     ],
     [
@@ -690,15 +690,15 @@
       "leg_l_shin": -5,
       "leg_r_thigh": 10,
       "leg_r_shin": -75,
-      "arm_upper": 0,
-      "arm_fore": 15,
+      "arm_upper": 2,
+      "arm_fore": 22,
       "shield_arm": 0,
-      "torso": -3.5,
-      "cape": -3.0,
+      "torso": -5.0,
+      "cape": -2.0,
       "squash": -0.006,
-      "root_y": 0.045,
+      "root_y": 0.05,
       "head": 2.5,
-      "sword": -2.0
+      "sword": -4
      }
     ],
     [
@@ -708,15 +708,15 @@
       "leg_l_shin": -40,
       "leg_r_thigh": 28,
       "leg_r_shin": -8,
-      "arm_upper": 6,
-      "arm_fore": 17,
-      "shield_arm": -3,
-      "torso": -4.5,
-      "cape": -2.5,
+      "arm_upper": -18,
+      "arm_fore": 18,
+      "shield_arm": 8,
+      "torso": -7.5,
+      "cape": -4.0,
       "squash": 0.012,
-      "root_y": -0.015,
-      "head": 3.0,
-      "sword": -7.0
+      "root_y": -0.02,
+      "head": 4.0,
+      "sword": 10
      }
     ],
     [
@@ -726,15 +726,15 @@
       "leg_l_shin": -75,
       "leg_r_thigh": 0,
       "leg_r_shin": -5,
-      "arm_upper": 0,
-      "arm_fore": 15,
+      "arm_upper": 2,
+      "arm_fore": 22,
       "shield_arm": 0,
-      "torso": -3.5,
-      "cape": -3.0,
+      "torso": -5.0,
+      "cape": -2.0,
       "squash": -0.006,
-      "root_y": 0.045,
+      "root_y": 0.05,
       "head": 2.5,
-      "sword": -2.0
+      "sword": -4
      }
     ],
     [
@@ -744,15 +744,15 @@
       "leg_l_shin": -8,
       "leg_r_thigh": -26,
       "leg_r_shin": -40,
-      "arm_upper": -6,
-      "arm_fore": 13,
-      "shield_arm": 3,
-      "torso": -4.5,
-      "cape": -3.0,
+      "arm_upper": 18,
+      "arm_fore": 30,
+      "shield_arm": -8,
+      "torso": -7.5,
+      "cape": -4.0,
       "squash": 0.012,
-      "root_y": -0.015,
-      "head": 3.0,
-      "sword": 3.0
+      "root_y": -0.02,
+      "head": 4.0,
+      "sword": -14
      }
     ]
    ]
@@ -1668,6 +1668,208 @@
       "sword": 0,
       "shield_arm": 2,
       "head": 0.0
+     }
+    ]
+   ]
+  },
+  "walk": {
+   "loop": true,
+   "length_s": 1.05,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": 16,
+      "leg_l_shin": -4,
+      "leg_r_thigh": -14,
+      "leg_r_shin": -18,
+      "arm_upper": 8,
+      "arm_fore": 16,
+      "sword": -6,
+      "shield_arm": -4,
+      "torso": -2.5,
+      "head": 1.0,
+      "root_y": -0.01
+     }
+    ],
+    [
+     0.25,
+     {
+      "leg_l_thigh": 2,
+      "leg_l_shin": -3,
+      "leg_r_thigh": 6,
+      "leg_r_shin": -40,
+      "arm_upper": 0,
+      "arm_fore": 14,
+      "sword": -2,
+      "shield_arm": 0,
+      "torso": -2.0,
+      "head": 1.0,
+      "root_y": 0.025
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_l_thigh": -14,
+      "leg_l_shin": -18,
+      "leg_r_thigh": 16,
+      "leg_r_shin": -4,
+      "arm_upper": -8,
+      "arm_fore": 12,
+      "sword": 4,
+      "shield_arm": 4,
+      "torso": -2.5,
+      "head": 1.0,
+      "root_y": -0.01
+     }
+    ],
+    [
+     0.75,
+     {
+      "leg_l_thigh": 6,
+      "leg_l_shin": -40,
+      "leg_r_thigh": 2,
+      "leg_r_shin": -3,
+      "arm_upper": 0,
+      "arm_fore": 14,
+      "sword": -2,
+      "shield_arm": 0,
+      "torso": -2.0,
+      "head": 1.0,
+      "root_y": 0.025
+     }
+    ],
+    [
+     1,
+     {
+      "leg_l_thigh": 16,
+      "leg_l_shin": -4,
+      "leg_r_thigh": -14,
+      "leg_r_shin": -18,
+      "arm_upper": 8,
+      "arm_fore": 16,
+      "sword": -6,
+      "shield_arm": -4,
+      "torso": -2.5,
+      "head": 1.0,
+      "root_y": -0.01
+     }
+    ]
+   ]
+  },
+  "crouch": {
+   "loop": true,
+   "length_s": 2.4,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": 38,
+      "leg_l_shin": -82,
+      "leg_r_thigh": -24,
+      "leg_r_shin": -72,
+      "torso": -14,
+      "head": 8.0,
+      "arm_upper": 30,
+      "arm_fore": 45,
+      "sword": -40,
+      "shield_arm": 22,
+      "cape": -6.0,
+      "root_y": -0.31
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_l_thigh": 38,
+      "leg_l_shin": -82,
+      "leg_r_thigh": -24,
+      "leg_r_shin": -72,
+      "torso": -15,
+      "head": 8.5,
+      "arm_upper": 30,
+      "arm_fore": 45,
+      "sword": -40,
+      "shield_arm": 22,
+      "cape": -6.0,
+      "root_y": -0.31
+     }
+    ],
+    [
+     1,
+     {
+      "leg_l_thigh": 38,
+      "leg_l_shin": -82,
+      "leg_r_thigh": -24,
+      "leg_r_shin": -72,
+      "torso": -14,
+      "head": 8.0,
+      "arm_upper": 30,
+      "arm_fore": 45,
+      "sword": -40,
+      "shield_arm": 22,
+      "cape": -6.0,
+      "root_y": -0.31
+     }
+    ]
+   ]
+  },
+  "crouch_walk": {
+   "loop": true,
+   "length_s": 0.9,
+   "stride_scaled": true,
+   "keys": [
+    [
+     0,
+     {
+      "leg_l_thigh": 44,
+      "leg_l_shin": -82,
+      "leg_r_thigh": -18,
+      "leg_r_shin": -72,
+      "torso": -14,
+      "head": 8.0,
+      "arm_upper": 30,
+      "arm_fore": 45,
+      "sword": -40,
+      "shield_arm": 22,
+      "cape": -6.0,
+      "root_y": -0.3
+     }
+    ],
+    [
+     0.5,
+     {
+      "leg_l_thigh": 32,
+      "leg_l_shin": -82,
+      "leg_r_thigh": -30,
+      "leg_r_shin": -72,
+      "torso": -15,
+      "head": 8.0,
+      "arm_upper": 30,
+      "arm_fore": 45,
+      "sword": -40,
+      "shield_arm": 22,
+      "cape": -6.0,
+      "root_y": -0.3
+     }
+    ],
+    [
+     1,
+     {
+      "leg_l_thigh": 44,
+      "leg_l_shin": -82,
+      "leg_r_thigh": -18,
+      "leg_r_shin": -72,
+      "torso": -14,
+      "head": 8.0,
+      "arm_upper": 30,
+      "arm_fore": 45,
+      "sword": -40,
+      "shield_arm": 22,
+      "cape": -6.0,
+      "root_y": -0.3
      }
     ]
    ]

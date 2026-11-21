@@ -253,7 +253,7 @@ func _spawn_enemies() -> void:
 func _place_player(exit: String, at: Vector2) -> void:
 	if player == null:
 		return
-	var pos := Vector2(float(data.cols) * 0.5, 1.0)
+	var pos := data.fallback_spawn()
 	var boost := false
 	if exit != "" and data.exits.has(exit):
 		pos = data.exits[exit]["arrive"]

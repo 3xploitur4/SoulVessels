@@ -11,7 +11,7 @@ game's dark keys and leitmotif and splits the two moods by state:
   elite   elites    rage: a bright detuned bell synth arp, saturated
   boss p1-p3        rage escalating: 808s and bells, then trap drums, then everything driven
 
-Also the SFX the user asked for (a new jump, sword slashes, hits, kills, footsteps, landings,
+Also (story 060) the murmured voices under a conversation's text, and the SFX the user asked for (a new jump, sword slashes, hits, kills, footsteps, landings,
 dodges) and the exploration ambience: a loop per zone theme plus one-shots (a distant bell,
 chains, drips, wind, falling stones, a far choir, a wooden creak).
 
@@ -447,6 +447,50 @@ def sfx_bank():
     return s
 
 
+# ---- Voices (story 060): the murmur under a conversation's text ------------------------------
+
+def vowel(f0, dur, formants, breath=0.0, rough=0.0):
+    """A sung syllable: harmonics of `f0` weighted by vowel resonances (formants, [(hz, width)]),
+    a quick swell and fall, a little breath noise and roughness."""
+    partials = []
+    k = 1
+    while f0 * k < 5000 and k < 40:
+        f = f0 * k
+        amp = sum(math.exp(-((f - fc) / bw) ** 2) for fc, bw in formants) / k ** 0.6
+        if amp > 0.01:
+            partials.append((k, amp))
+        k += 1
+    s = S.additive(f0, dur, partials, attack=0.012, release=dur * 0.6, vibrato=0.01 + rough * 0.04,
+                   vib_rate=6.0 + rough * 30.0)
+    if breath > 0.0:
+        nz = bandsweep(S.noise(dur, 0.0), formants[0][0], formants[-1][0], 1.2)
+        env_shape(nz, 0.25)
+        for i in range(len(s)):
+            s[i] += nz[i] * breath
+    return s
+
+
+def voice_bank():
+    v = {}
+    v["voice_male"] = vowel(120.0, 0.075, [(650, 160), (1100, 220)], breath=0.15)
+    v["voice_female"] = vowel(215.0, 0.07, [(800, 180), (1350, 260)], breath=0.2)
+    v["voice_deep"] = sat(vowel(85.0, 0.09, [(500, 150), (900, 200)], breath=0.1, rough=0.4), 1.6)
+    v["voice_echo"] = vowel(160.0, 0.11, [(700, 200), (1500, 300)], breath=0.3)
+    echo = buf_of(len(v["voice_echo"]) + int(0.09 * SR))
+    for i in range(len(v["voice_echo"])):
+        echo[i] += v["voice_echo"][i]
+        echo[i + int(0.09 * SR)] += v["voice_echo"][i] * 0.4
+    v["voice_echo"] = echo
+    whisper = bandsweep(S.noise(0.1, 0.0), 1800.0, 900.0, 1.4)
+    v["voice_whisper"] = env_shape(whisper, 0.3)
+    stone = sat(vowel(55.0, 0.12, [(300, 120), (700, 200)], breath=0.3, rough=1.0), 2.5)
+    for i in range(len(stone)):
+        stone[i] += random.uniform(-1, 1) * 0.15 * math.exp(-i / SR * 20.0)
+    v["voice_stone"] = stone
+    v["voice_beast"] = sat(vowel(48.0, 0.16, [(250, 120), (520, 180)], breath=0.5, rough=0.8), 2.2)
+    return v
+
+
 # ---- Ambience --------------------------------------------------------------------------------
 
 AMB_S = 20.0
@@ -592,6 +636,11 @@ def main():
             S.write_wav(os.path.join(args.out, "music", track, name + ".wav"), buf)
             print("%-15s %-7s %.2f s" % (track, name, len(buf) / SR), flush=True)
     S.configure(*tracks["zone1"])
+    if not only or "voices" in only:
+        for name, buf in voice_bank().items():
+            S.normalise(buf, 0.8)
+            S.write_wav(os.path.join(args.out, "sfx", name + ".wav"), buf)
+            print("voice %-14s %.2f s" % (name, len(buf) / SR), flush=True)
     if not only or "sfx" in only or any(k in only for k in ("jump", "slash", "hit", "kill")):
         for name, buf in sfx_bank().items():
             S.normalise(buf, 0.85)

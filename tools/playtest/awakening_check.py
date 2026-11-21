@@ -61,8 +61,8 @@ def main():
         check(seen == ["echo_caelan", "echo_nyra", "echo_seris", "echo_darius"], "the four echoes come in order", str(seen))
         wait(b, 1.0)
         shot(b, OUT + "/06-ilyr-line.png")
-        sub = b.call("game_state").get("subtitle", "")
-        check("worn this face" in sub, "Ilyr speaks", sub)
+        said = [l for l in b.call("game_state").get("lines", []) if "worn this face" in l]
+        check(len(said) > 0, "Ilyr speaks", (said or [""])[-1][:80])
         wait(b, 6.0)
         shot(b, OUT + "/07-chapter-end.png")
         btns = b.call("ui_buttons").get("buttons", [])

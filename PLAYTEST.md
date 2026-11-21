@@ -28,6 +28,8 @@ Double-click one of these in the project folder:
 | Key | Action |
 | --- | --- |
 | A / D or arrows | move |
+| Shift (held) + move | walk slowly (a stick pushed only part way walks too) |
+| S or down (held) | crouch: low and slow, chest-high attacks pass over (S + Space drops through a thin ledge) |
 | Space | jump (also off walls while sliding down them) |
 | J | attack: press again to chain the combo (cut, backhand, rising cut, spinning finisher) |
 | W + J | rising cut, for things above you |
@@ -40,7 +42,8 @@ Double-click one of these in the project folder:
 | Q / E | swap to the previous / next Vessel |
 | F | drink a Soul Flask (heal) |
 | W | interact: rest at an altar, free a Vessel, read, enter |
-| Esc | pause menu (map, inventory, lore, settings: volumes and difficulty) |
+| Esc | pause menu (map, inventory with item icons, lore, settings: volumes, spoken voices, difficulty) |
+| J, Space or W in a conversation | the rest of the line, then the next line (a tap on the box works too); Esc skips it |
 | F3 | debug overlay (frame rate and state) |
 
 A gamepad also works: plug it in and press any button; the touch controls hide.

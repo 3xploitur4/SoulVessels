@@ -81,7 +81,7 @@ func show_settings() -> void:
 	back.pressed.connect(show_slots)
 	col.add_child(back)
 	p.focus_first()
-	var last := p.sliders["ambience"]
+	var last: Control = p.spoken_button
 	last.focus_neighbor_bottom = last.get_path_to(back)
 	back.focus_neighbor_top = back.get_path_to(last)
 

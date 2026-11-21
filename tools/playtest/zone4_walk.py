@@ -89,7 +89,8 @@ def main():
         b.call("goto", room="z4_03", x=10.6, y=2.05, instant=True)
         wait(b, 1.2)
         gs = b.call("game_state")
-        check("Darius" in gs.get("subtitle", ""), "Darius distrusts the Intruder", gs.get("subtitle"))
+        said = [l for l in gs.get("lines", []) if l.startswith("Darius")]
+        check(len(said) > 0, "Darius distrusts the Intruder", (said or [""])[-1][:80])
         shot(b, OUT + "/04-darius-under-rubble.png")
         b.call("teleport", x=11.8, y=2.05)
         face(b, 1)
@@ -98,12 +99,14 @@ def main():
             wait(b, 0.55)
         gs = b.call("game_state")
         check(gs.get("interact") == "UI_FREE", "the rubble breaks and Free is offered", gs.get("prompt"))
+        before = gs.get("lines", [])
         b.call("interact")
         wait(b, 0.8)
         gs = b.call("game_state")
         check("darius" in gs.get("state", {}).get("loadout", []), "Darius joins the loadout",
               str(gs.get("state", {}).get("loadout")))
-        check("Darius" in gs.get("subtitle", ""), "Darius speaks as he joins", gs.get("subtitle"))
+        said = [l for l in gs.get("lines", []) if l.startswith("Darius") and l not in before]
+        check(len(said) > 0, "Darius speaks as he joins", (said or [""])[-1][:80])
         shot(b, OUT + "/05-darius-joins.png")
         b.call("set_vessel", id="darius")
         wait(b, 1.0)

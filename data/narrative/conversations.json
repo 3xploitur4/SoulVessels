@@ -1,0 +1,66 @@
+{
+  "_source": "Story 060, decision D-071. Conversations played by DialogueBox when a new character is met (once per save; the save remembers flag 'met_<id>'). on: what starts it (possessed:<vessel>, freed:<vessel>, awakened:<vessel>, boss:<enemy id>). lines: in order, each a speaker (a text key) and a line (a text key), or 'lore': <lore id> to have the memory read by the narrating voice (its title, then its text). A story line in a room whose key is used here is not shown again on its own. Portraits and voices: data/narrative/portraits.json.",
+  "conversations": {
+    "caelan": {
+      "on": "possessed:caelan",
+      "lines": [
+        { "speaker": "SPEAKER_MEMORY", "line": "CONV_CAELAN_1" },
+        { "speaker": "SPEAKER_VOICE", "line": "SOV_Z1_KNIGHT" },
+        { "lore": "memory_caelan" }
+      ]
+    },
+    "nyra": {
+      "on": "freed:nyra",
+      "lines": [
+        { "speaker": "VESSEL_NYRA", "line": "NYRA_FREED" },
+        { "speaker": "VESSEL_NYRA", "line": "CONV_NYRA_2" },
+        { "lore": "memory_nyra" }
+      ]
+    },
+    "seris": {
+      "on": "freed:seris",
+      "lines": [
+        { "speaker": "VESSEL_SERIS", "line": "SERIS_FREED" },
+        { "speaker": "VESSEL_SERIS", "line": "CONV_SERIS_2" },
+        { "lore": "memory_seris" }
+      ]
+    },
+    "darius": {
+      "on": "freed:darius",
+      "lines": [
+        { "speaker": "VESSEL_DARIUS", "line": "DARIUS_JOINS" },
+        { "speaker": "VESSEL_DARIUS", "line": "CONV_DARIUS_2" },
+        { "lore": "memory_darius" }
+      ]
+    },
+    "ilyr": {
+      "on": "awakened:ilyr",
+      "lines": [
+        { "speaker": "VESSEL_ILYR", "line": "ILYR_WAKES" },
+        { "speaker": "VESSEL_ILYR", "line": "CONV_ILYR_2" },
+        { "speaker": "SPEAKER_MEMORY", "line": "CONV_ILYR_3" }
+      ]
+    },
+    "sovereign": {
+      "on": "boss:weeping_sovereign",
+      "lines": [
+        { "speaker": "BOSS_WEEPING_SOVEREIGN", "line": "CONV_SOV_1" },
+        { "speaker": "BOSS_WEEPING_SOVEREIGN", "line": "CONV_SOV_2" }
+      ]
+    },
+    "guardian": {
+      "on": "boss:guardian_below",
+      "lines": [
+        { "speaker": "SPEAKER_MEMORY", "line": "CONV_GUARDIAN_1" },
+        { "speaker": "BOSS_GUARDIAN_BELOW", "line": "CONV_GUARDIAN_2" }
+      ]
+    },
+    "leviathan": {
+      "on": "boss:abyssal_leviathan",
+      "lines": [
+        { "speaker": "SPEAKER_MEMORY", "line": "CONV_LEVIATHAN_1" },
+        { "speaker": "BOSS_ABYSSAL_LEVIATHAN", "line": "CONV_LEVIATHAN_2" }
+      ]
+    }
+  }
+}

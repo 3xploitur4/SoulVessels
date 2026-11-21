@@ -1,0 +1,23 @@
+{
+  "_source": "Story 060, decision D-071. The icon of every item in the inventory, from the four painted item icons (assets/art/props/item_<art>.png: core, parchment, relic, shard). tint recolours the painting while keeping its light and shade (#ffffff = as painted); amount is how far (0-1); glow is the colour of the soft light behind it in its slot. An item missing here shows its kind's painting as painted.",
+  "icons": {
+    "lesser_soul_shard": { "art": "shard", "tint": "#b8d4ff", "amount": 0.35, "glow": "#8fb8ff" },
+    "standard_soul_shard": { "art": "shard", "tint": "#5fe0ff", "amount": 0.55, "glow": "#4fd8ff" },
+    "greater_soul_shard": { "art": "shard", "tint": "#b37bff", "amount": 0.7, "glow": "#a060ff" },
+    "pure_soul_matrix": { "art": "shard", "tint": "#ffe9a8", "amount": 0.6, "glow": "#ffd970" },
+    "tarnished_censer_shard": { "art": "shard", "tint": "#c98d4a", "amount": 0.75, "glow": "#b07a40" },
+    "abyssal_scale": { "art": "shard", "tint": "#2fb7a8", "amount": 0.8, "glow": "#1c8f86" },
+    "sovereigns_crown_fragment": { "art": "shard", "tint": "#e8c76a", "amount": 0.7, "glow": "#e8b84a" },
+    "crude_stone": { "art": "core", "tint": "#9a9a9a", "amount": 0.9, "glow": "#6a6a6a" },
+    "polished_basalt_core": { "art": "core", "tint": "#ffffff", "amount": 0.0, "glow": "#ff7a30" },
+    "luminous_root_resin": { "art": "core", "tint": "#5fe0a8", "amount": 0.75, "glow": "#40d090" },
+    "censer_core": { "art": "core", "tint": "#e0a850", "amount": 0.65, "glow": "#e09a40" },
+    "heart_of_the_guardian": { "art": "core", "tint": "#ff5a30", "amount": 0.55, "glow": "#ff5020" },
+    "elemental_coating": { "art": "relic", "tint": "#b06cff", "amount": 0.6, "glow": "#9a50ff" },
+    "deep_realm_rune": { "art": "relic", "tint": "#5fd8ff", "amount": 0.7, "glow": "#40c8ff" },
+    "echoing_relic": { "art": "relic", "tint": "#ffffff", "amount": 0.0, "glow": "#ffcf70" },
+    "faded_parchment": { "art": "parchment", "tint": "#ffffff", "amount": 0.0, "glow": "#c8a870" },
+    "weapon_schematic": { "art": "parchment", "tint": "#8fb4e0", "amount": 0.6, "glow": "#6f9ad0" },
+    "primeval_truth": { "art": "parchment", "tint": "#d0a8ff", "amount": 0.55, "glow": "#c090ff" }
+  }
+}

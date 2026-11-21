@@ -29,7 +29,8 @@ def launch(user_args=(), scene=None, port=9181, log_name="game"):
     cmd = [GODOT, "--path", ROOT, "--windowed", "--resolution", "1280x720"]
     if scene:
         cmd.append(scene)
-    cmd += ["--"] + list(user_args)
+    # Story 060: conversations play through on their own (nobody presses on in a playtest).
+    cmd += ["--"] + list(user_args) + ["--auto-dialogue"]
     proc = subprocess.Popen(cmd, env=env, stdout=log, stderr=subprocess.STDOUT)
     try:
         ready, why = wait_ready(port, 90, alive=lambda: proc.poll() is None)

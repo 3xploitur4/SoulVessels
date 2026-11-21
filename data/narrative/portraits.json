@@ -1,0 +1,16 @@
+{
+  "_source": "Story 060, decision D-071. How each speaker looks and sounds in the conversation box. sprite: the painting the portrait is cut from (assets/art/sprites/<sprite>.png, or an item icon 'icon:<name>' from assets/art/props/item_<name>.png); region: the head in that painting as shares of its width and height [x, y, w, h]; ghost: drawn pale and dim, as a voice without a body; color: the name plate's colour. voice: the murmur played as the text appears (assets/audio/sfx/<voice>.wav) and its pitch; tts: how a spoken voice reads the line when spoken voices are on (pitch and rate, 1 = normal; female picks a woman's voice when the system has one).",
+  "speakers": {
+    "VESSEL_CAELAN": { "sprite": "caelan", "region": [0.47, 0.0, 0.3, 0.178], "color": "#9fb8e8", "voice": "voice_male", "pitch": 0.95, "tts": { "pitch": 0.85, "rate": 0.95 } },
+    "VESSEL_NYRA": { "sprite": "nyra", "region": [0.38, 0.0, 0.28, 0.173], "color": "#c9a8ff", "voice": "voice_female", "pitch": 1.05, "tts": { "pitch": 1.1, "rate": 1.05, "female": true } },
+    "VESSEL_SERIS": { "sprite": "seris", "region": [0.41, 0.0, 0.28, 0.158], "color": "#a8e6ff", "voice": "voice_female", "pitch": 1.2, "tts": { "pitch": 1.2, "rate": 0.9, "female": true } },
+    "VESSEL_DARIUS": { "sprite": "darius", "region": [0.42, 0.0, 0.26, 0.172], "color": "#ffb070", "voice": "voice_deep", "pitch": 0.85, "tts": { "pitch": 0.6, "rate": 0.9 } },
+    "VESSEL_ILYR": { "sprite": "ilyr", "region": [0.36, 0.0, 0.28, 0.16], "color": "#e8e0c0", "voice": "voice_echo", "pitch": 1.0, "tts": { "pitch": 1.0, "rate": 0.85 } },
+    "BOSS_WEEPING_SOVEREIGN": { "sprite": "weeping_sovereign", "region": [0.42, 0.0, 0.16, 0.213], "color": "#bcd8ff", "voice": "voice_whisper", "pitch": 1.0, "tts": { "pitch": 0.9, "rate": 0.8, "female": true } },
+    "SPEAKER_VOICE": { "sprite": "weeping_sovereign", "region": [0.42, 0.0, 0.16, 0.213], "ghost": true, "color": "#b8d4ff", "voice": "voice_whisper", "pitch": 0.9, "tts": { "pitch": 0.75, "rate": 0.8, "female": true } },
+    "BOSS_GUARDIAN_BELOW": { "sprite": "guardian_below", "region": [0.4, 0.0, 0.3, 0.218], "color": "#ffb060", "voice": "voice_stone", "pitch": 0.8, "tts": { "pitch": 0.3, "rate": 0.7 } },
+    "BOSS_ABYSSAL_LEVIATHAN": { "sprite": "abyssal_leviathan", "region": [0.0, 0.0, 0.16, 0.228], "color": "#7fe8ff", "voice": "voice_beast", "pitch": 0.8, "tts": { "pitch": 0.3, "rate": 0.65 } },
+    "SPEAKER_MEMORY": { "sprite": "icon:relic", "region": [0.0, 0.0, 1.0, 1.0], "color": "#e8c880", "voice": "voice_echo", "pitch": 0.75, "tts": { "pitch": 0.7, "rate": 0.85 } },
+    "SPEAKER_CAELAN": { "sprite": "caelan", "region": [0.47, 0.0, 0.3, 0.178], "color": "#9fb8e8", "voice": "voice_male", "pitch": 0.95, "tts": { "pitch": 0.85, "rate": 0.95 } }
+  }
+}

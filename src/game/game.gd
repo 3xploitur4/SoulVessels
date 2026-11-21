@@ -58,6 +58,8 @@ var weapons: Weapons
 var pixel_look: PixelLook
 ## Story 055: wind, drips, bells and chains under the music, by room theme.
 var ambience: Ambience
+## Story 060: the conversation box.
+var dialogue: DialogueBox
 ## Loot rolls (story 019) and the run's random source for them.
 var loot: LootTable
 var loot_rng := RandomNumberGenerator.new()
@@ -94,7 +96,10 @@ func _ready() -> void:
 	camera.ground_below = float(cam_cfg.get("ground_below_m", camera.ground_below))
 	camera.boss_bias = float(cam_cfg.get("boss_bias", camera.boss_bias))
 	camera.boss_edge_m = float(cam_cfg.get("boss_edge_m", camera.boss_edge_m))
-	GameEvents.boss_started.connect(func(b: Node) -> void: camera.boss = b as Node3D)
+	GameEvents.boss_started.connect(func(b: Node) -> void:
+		camera.boss = b as Node3D
+		if b is EnemyBase:
+			meet("boss:" + (b as EnemyBase).enemy_id))
 	camera.pixel_rows = PixelLook.virtual_height()
 	add_child(camera)
 	rooms = RoomManager.new()
@@ -138,6 +143,11 @@ func _ready() -> void:
 	ambience = Ambience.new()
 	ambience.name = "Ambience"
 	add_child(ambience)
+	# Story 060: conversations and spoken lines. Nobody presses on in tests and playtests.
+	dialogue = DialogueBox.new()
+	dialogue.name = "Dialogue"
+	dialogue.auto_advance = DisplayServer.get_name() == "headless" or OS.get_cmdline_user_args().has("--auto-dialogue")
+	add_child(dialogue)
 	fader = Fader.new()
 	fader.name = "Fader"
 	add_child(fader)
@@ -145,6 +155,7 @@ func _ready() -> void:
 	prompts = Prompts.new()
 	prompts.name = "Prompts"
 	prompts.router = input_router
+	prompts.dialogue = dialogue
 	add_child(prompts)
 	debug_hud = DebugHud.new()
 	debug_hud.name = "DebugHud"
@@ -460,6 +471,18 @@ func set_difficulty(d: String) -> void:
 		e.cooldown_scale = float(cd) if cd != null else 1.0
 	prompts.toast(tr("SET_DIFFICULTY_CHANGED") % tr("DIFFICULTY_" + d.to_upper()), UiKit.COL_GOLD)
 	save_now()
+
+
+## Meet a character (story 060): the conversation `trigger` starts ("possessed:caelan",
+## "freed:nyra", "awakened:ilyr", "boss:guardian_below"), once per save.
+func meet(trigger: String) -> void:
+	if state == null or dialogue == null:
+		return
+	var id := DialogueBox.conversation_for(trigger)
+	if id == "" or state.flag("met_" + id):
+		return
+	state.set_flag("met_" + id)
+	dialogue.play(id)
 
 
 func quit_to_title() -> void:
@@ -874,6 +897,7 @@ func possess(vessel: String, body: Node3D = null) -> void:
 		body.queue_free()
 	prompts.hide_tutorial()
 	prompts.toast(tr("POSSESSED") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+	meet("possessed:" + vessel)
 	if story != null:
 		story.event("possessed")
 	save_now()
@@ -903,6 +927,7 @@ func free_vessel(vessel: String, prison: Node3D = null) -> void:
 		prison.queue_free()
 	prompts.hide_tutorial()
 	prompts.toast(tr("FREED") % tr("VESSEL_" + vessel.to_upper()), UiKit.COL_GOLD)
+	meet("freed:" + vessel)
 	if story != null:
 		story.event("freed")
 	save_now()
@@ -913,6 +938,9 @@ func _on_story(e: Dictionary) -> void:
 	if str(e.get("kind", "")) == "tutorial":
 		prompts.tutorial(tr(key))
 	else:
+		# Story 060: a line a meeting's conversation already says is not said again.
+		if DialogueBox.used_keys().has(key):
+			return
 		var speaker := str(e.get("speaker", "SPEAKER_VOICE"))
 		prompts.subtitle(tr(speaker), tr(key), Color(str(e.get("color", "#b8d4ff"))))
 
@@ -970,6 +998,9 @@ func collect_item(item: String, count: int) -> void:
 			else:
 				state.lore_found.append(lore_id)
 				prompts.toast(tr("LORE_FOUND") % tr(LoreDb.title_key(lore_id)), ItemDb.color(item))
+				# Story 060: the piece is read aloud as it is found.
+				if dialogue != null:
+					dialogue.read_lore(lore_id)
 		Sfx.play("pickup")
 		return
 	state.add_item(item, count)
@@ -1170,6 +1201,7 @@ func bridge_game_state(_args: Dictionary) -> Dictionary:
 		"prompt": prompts.interact_text(),
 		"tutorial": prompts.tutorial_text(),
 		"subtitle": prompts.subtitle_text(),
+		"lines": dialogue.said.duplicate() if dialogue != null else [],
 		"toasts": prompts.toast_texts(),
 		"title": title != null,
 		"pause": pause_menu != null,
@@ -1216,6 +1248,22 @@ func bridge_affinity(args: Dictionary) -> Dictionary:
 func bridge_give(args: Dictionary) -> Dictionary:
 	collect_item(str(args.get("item", "")), int(args.get("count", 1)))
 	return {"inventory": state.inventory, "lore": state.lore_found}
+
+
+## {"id", "wait"}: play a conversation now (playtests), heard before or not; "wait" makes it wait
+## for presses even in a run with --auto-dialogue.
+func bridge_conversation(args: Dictionary) -> Dictionary:
+	var keep := dialogue.auto_advance
+	dialogue.auto_advance = not bool(args.get("wait", false))
+	var ok := dialogue.play(str(args.get("id", "")))
+	dialogue.auto_advance = keep
+	return {"playing": ok, "speaker": dialogue.current_speaker(), "text": dialogue.current_text()}
+
+
+## A press on the conversation box (playtests): the rest of the line, or the next line.
+func bridge_dialogue_next(_args: Dictionary) -> Dictionary:
+	dialogue._advance()
+	return {"open": dialogue.is_open(), "speaker": dialogue.current_speaker(), "text": dialogue.current_text()}
 
 
 func bridge_pause(_args: Dictionary) -> Dictionary:

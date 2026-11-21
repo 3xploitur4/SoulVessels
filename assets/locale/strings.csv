@@ -488,3 +488,21 @@ SET_AMBIENCE,Ambience
 SET_DIFFICULTY,Difficulty
 SET_DIFFICULTY_HINT,The difficulty is chosen when you start a game. You can change it at any time from the pause menu.
 SET_DIFFICULTY_CHANGED,Difficulty: %s
+SPEAKER_MEMORY,A memory
+CONV_CAELAN_1,"The body is still warm. Somewhere inside it, an oath is still being kept."
+CONV_NYRA_2,"The Wardens walked them down, street by street. I watched from the roots. I didn't make a sound. I'm good at that."
+CONV_SERIS_2,"She drowned the palace rather than let it end, and I helped her write the spell. That is the worst thing I know about myself."
+CONV_DARIUS_2,"...You fight like they did. Like Hale did. I don't like that. I don't like that at all."
+CONV_ILYR_2,"I remember a city falling upward. I remember you. That should frighten us both."
+CONV_ILYR_3,"Five bodies. One thief. And something below that has been waiting for all of you to come home."
+CONV_SOV_1,"So the thief comes to my throne at last, wearing my knight like a coat."
+CONV_SOV_2,"I drowned my city to keep it. I will drown you to keep him."
+CONV_GUARDIAN_1,"Three hundred years it has held this lift. It does not know the city above is dead."
+CONV_GUARDIAN_2,"...Descent... sealed... none... pass..."
+CONV_LEVIATHAN_1,"Twelve eyes open in the black water. Every one of them has seen your faces before."
+CONV_LEVIATHAN_2,"(a sound like a sea breathing in)"
+SET_SPOKEN,Spoken voices
+SET_SPOKEN_HINT,"Characters' lines are read aloud by your device's voice. Off: a murmur plays instead."
+UI_ON,On
+UI_OFF,Off
+DIALOGUE_CONTINUE,Continue

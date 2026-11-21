@@ -90,6 +90,11 @@ func _on_tab(page: String) -> void:
 			_show_settings()
 			# Pressing the tab (or a gamepad's confirm) steps into the page.
 			_settings_panel().focus_first()
+		"inventory":
+			_show_inventory()
+			var inv := _content.get_node_or_null("Inventory") as InventoryView
+			if inv != null:
+				inv.focus_first()
 		_:
 			_on_focus(page)
 
@@ -98,7 +103,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Back inside the settings page returns to its tab; anywhere else it closes the menu.
 	var focus := _root.get_viewport().gui_get_focus_owner()
 	if event.is_action_pressed("ui_cancel") and focus != null and _content.is_ancestor_of(focus):
-		(_root.find_child("Tab_settings", true, false) as Control).grab_focus()
+		var page := "Tab_inventory" if _content.get_node_or_null("Inventory") != null else "Tab_settings"
+		(_root.find_child(page, true, false) as Control).grab_focus()
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
@@ -129,21 +135,11 @@ func _show_map() -> void:
 
 func _show_inventory() -> void:
 	_clear()
-	var v := VBoxContainer.new()
+	# Story 060: icon tiles with counts, the selected item large beside them.
+	var v := InventoryView.new()
+	v.name = "Inventory"
+	v.state = state
 	_content.add_child(v)
-	v.add_child(UiKit.label("%s   %d" % [tr("HUD_ESSENCE"), state.essence if state != null else 0], 30,
-		UiKit.COL_ACCENT, HORIZONTAL_ALIGNMENT_LEFT))
-	var any := false
-	for id in ItemDb.ids():
-		var n := state.item_count(id) if state != null else 0
-		if n <= 0:
-			continue
-		any = true
-		v.add_child(UiKit.label("%s  x%d   (%s)" % [tr(ItemDb.name_key(id)), n, tr("RARITY_" + ItemDb.rarity(id).to_upper())],
-			28, ItemDb.color(id), HORIZONTAL_ALIGNMENT_LEFT))
-		v.add_child(UiKit.label(tr(ItemDb.desc_key(id)), 20, UiKit.COL_DIM, HORIZONTAL_ALIGNMENT_LEFT))
-	if not any:
-		v.add_child(UiKit.label(tr("UI_INVENTORY_EMPTY"), 26, UiKit.COL_DIM, HORIZONTAL_ALIGNMENT_LEFT))
 
 
 func _show_lore() -> void:

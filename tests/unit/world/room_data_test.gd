@@ -88,3 +88,19 @@ func test_errors_reported_for_bad_rows_and_missing_targets() -> void:
 	var errors: Array[String] = []
 	RoomData.parse("bad", "zone1", {"grid": ["###", "0.", "###"]}, errors)
 	assert_gt(errors.size(), 1, "row length and the exit without a target")
+
+
+func test_a_room_without_a_start_spawns_on_its_floor_not_inside_it() -> void:
+	# Story 060: --room z1_02 put the player inside its two-row floor and they fell out of the world.
+	var r := _room([
+		"########",
+		"#......#",
+		"0..#...1",
+		"########",
+		"########",
+	])
+	var p := r.fallback_spawn()
+	assert_almost(p.y, 2.0, 0.001, "on top of the two floor rows")
+	for s in r.solids:
+		assert_false(s.has_point(p + Vector2(0.0, 0.05)), "not inside %s" % s)
+		assert_false(s.intersects(Rect2(p.x - 0.4, p.y + 0.01, 0.8, 1.6)), "the body fits clear of %s" % s)

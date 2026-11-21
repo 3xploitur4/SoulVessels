@@ -192,7 +192,8 @@ def main():
               str(st["state"].get("flags", {}).get("boss_weeping_sovereign")))
         check(int(st["state"].get("affinity_bonus", {}).get("caelan", 0)) == bonus0 + 1, "Caelan's goodbye: +1 Affinity",
               str(st["state"].get("affinity_bonus")))
-        check("Caelan" in st.get("subtitle", ""), "his goodbye line plays", st.get("subtitle", "")[:80])
+        said = [l for l in st.get("lines", []) if l.startswith("Caelan")]
+        check(len(said) > 0, "his goodbye line plays", (said or [""])[-1][:80])
         shot(b, OUT + "/08-fallen.png")
         b.call("press", action="move_right")
         wait(b, 1.5)

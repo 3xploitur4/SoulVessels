@@ -47,3 +47,17 @@ func test_ground_cuts_are_flat_and_the_finisher_goes_all_the_way_round() -> void
 	assert_gt(absf(float(spin[2]) - float(spin[1])), 359.0, "the finisher spins")
 	var up: Array = VesselSpriteVisual.swing(-1, "up", false)
 	assert_almost(float(up[4]), 1.0, 0.001, "the rising cut is a round vertical arc")
+
+
+## Story 060 regression: mashing the rising cut restarts the same move; every restart is a swing.
+func test_a_move_started_again_under_the_same_name_swings_again() -> void:
+	var v := VesselVisual.build(Balance.vessel("caelan")) as VesselSpriteVisual
+	add_node(v)
+	v.pose("slash_up", 0.5, 1, 0.0, 1.0 / 60.0)
+	assert_true(v._arc.playing(), "the first swing")
+	for i in range(30):
+		v._arc._process(1.0 / 60.0)
+	assert_false(v._arc.playing(), "the arc has faded")
+	v.pose("slash_up", 0.02, 1, 0.0, 1.0 / 60.0)
+	v.pose("slash_up", 0.5, 1, 0.0, 1.0 / 60.0)
+	assert_true(v._arc.playing(), "the second swing shows too")

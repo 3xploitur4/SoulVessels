@@ -254,6 +254,27 @@ func arrival_point(rect: Rect2) -> Vector2:
 	return Vector2(centre_x, rect.end.y + 0.2)
 
 
+## Where the player stands in a room entered with no exit, save point or start marker (playtests
+## with --room): the middle column's cell, on the first open floor up from the bottom.
+func fallback_spawn() -> Vector2:
+	var x := floorf(float(cols) * 0.5) + 0.5
+	return Vector2(x, floor_at(x))
+
+
+## The top of the floor under column `x` (metres): climbs out of every solid stacked from the
+## bottom of the room.
+func floor_at(x: float) -> float:
+	var y := 0.0
+	var grew := true
+	while grew:
+		grew = false
+		for r in solids:
+			if x >= r.position.x and x < r.end.x and r.position.y <= y + 0.001 and r.end.y > y + 0.001:
+				y = r.end.y
+				grew = true
+	return y
+
+
 ## The exit whose cells contain room point `p`, or "".
 func exit_at(p: Vector2) -> String:
 	for digit: String in exits.keys():

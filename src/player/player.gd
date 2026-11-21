@@ -100,6 +100,12 @@ var _combo_timer: float = 0.0
 ## attack soon after one is a dash slash).
 var _air_combo: int = 0
 var _since_dodge: float = 99.0
+## Seconds an attack press waits for the current swing to allow the next (story 060).
+var _attack_buffer: float = 0.0
+## Story 060: crouching (down held on the ground: slow, and chest-high attacks pass over) and the
+## slow walk (Shift held, or a stick pushed only part way).
+var crouching: bool = false
+var walking: bool = false
 var _air_dash_ready: bool = true
 var _coyote_left: float = 0.0
 var _jump_buffer_left: float = 0.0
@@ -191,7 +197,16 @@ func _exit_tree() -> void:
 # --- Combatant interface -------------------------------------------------------------------
 
 func hurt_rect() -> Rect2:
-	return Rect2(global_position.x - HURT_RECT.x * 0.5, global_position.y, HURT_RECT.x, HURT_RECT.y)
+	var h := HURT_RECT.y * (float(_move.get("crouch_hurt_share", 0.55)) if crouching else 1.0)
+	return Rect2(global_position.x - HURT_RECT.x * 0.5, global_position.y, HURT_RECT.x, h)
+
+
+## Crouch while down is held on the ground (not swimming, not in an action); walk while the walk
+## key is held or a stick is pushed only part way (story 060).
+func _update_stance() -> void:
+	crouching = input_enabled and is_on_floor() and not is_swimming() and _move_axis.y > 0.5
+	var push := absf(_move_axis.x)
+	walking = not crouching and push > 0.1 and (controls.pressed("walk") or push < float(_move.get("walk_axis_threshold", 0.55)))
 
 
 func is_alive() -> bool:
@@ -299,6 +314,9 @@ func make_packet(motion: float, posture: float) -> DamagePacket:
 func start_action(a: PlayerAction) -> void:
 	if a == null:
 		return
+	# An action stands you up (story 060).
+	crouching = false
+	walking = false
 	if action != null:
 		action.finish(self, true)
 	action = a
@@ -855,8 +873,14 @@ func _read_buttons(delta: float) -> void:
 	_since_dodge += delta
 	if is_on_floor():
 		_air_combo = 0
-	if controls.just_pressed("attack") and _can_start("attack"):
+	# Story 060: a press during a swing is kept for a moment and starts the next one when the swing
+	# allows, so mashing chains instead of dropping presses.
+	if controls.just_pressed("attack"):
+		_attack_buffer = Balance.combat_f("primary_moves.attack_buffer_s")
+	if _attack_buffer > 0.0 and _can_start("attack"):
+		_attack_buffer = 0.0
 		_start_primary()
+	_attack_buffer = maxf(_attack_buffer - delta, 0.0)
 	if controls.just_pressed("dodge") and _can_start("dodge"):
 		_start_dodge()
 
@@ -956,6 +980,11 @@ func _run_action(delta: float) -> void:
 
 func _free_move(delta: float) -> void:
 	var speed := stat("move_speed")
+	_update_stance()
+	if crouching:
+		speed *= float(_move.get("crouch_mult", 0.3))
+	elif walking:
+		speed *= float(_move.get("walk_mult", 0.4))
 	if is_swimming():
 		speed *= float(_water_cfg.get("move_mult", 0.6))
 	var slope := slide_angle()
@@ -1279,7 +1308,12 @@ func _update_state_name() -> void:
 			state = action.id
 		return
 	if is_on_floor():
-		state = "run" if absf(velocity.x) > 0.3 else "idle"
+		if crouching:
+			state = "crouch_walk" if absf(velocity.x) > 0.3 else "crouch"
+		elif absf(velocity.x) > 0.3:
+			state = "walk" if walking else "run"
+		else:
+			state = "idle"
 	elif _wall_sliding:
 		state = "wall_slide"
 	elif is_swimming():

@@ -32,6 +32,7 @@ var _air_t: float = 0.0
 var _step_left: float = 0.0
 var _scrape_left: float = 0.0
 var _last_facing: int = 0
+var _last_progress: float = 0.0
 ## Story 054 (D-063): weight. Seconds left of the crouch after a landing and of the lean back
 ## against the old momentum after a turn, and how deep that landing was.
 var _land_left: float = 0.0
@@ -149,9 +150,13 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	_arc.position.z = 0.3 * float(facing)
 	_guard.position.z = 0.25 * float(facing)
 	var prev := _last_state
-	if state != _last_state:
+	# A move started again under the same name (spamming the rising cut) is a new swing too: its
+	# progress jumps back to the start (story 060).
+	var restarted := state == _last_state and progress + 0.25 < _last_progress
+	if state != _last_state or restarted:
 		_last_state = state
 		_struck = false
+	_last_progress = progress
 	var b := body
 	b.lean = 0.0
 	b.stride = 0.0
@@ -169,6 +174,12 @@ func pose(state: String, progress: float, facing: int, speed: float, delta: floa
 	if state == "run":
 		b.stride = clampf(speed, 0.4, 1.3)
 		b.lean = 0.07 * _h
+	elif state == "walk":
+		# Story 060: the slow walk.
+		b.stride = clampf(speed * 2.0, 0.4, 0.9)
+		b.lean = 0.02 * _h
+	elif state == "crouch" or state == "crouch_walk":
+		b.stride = clampf(speed * 3.0, 0.5, 1.0) if state == "crouch_walk" else 0.0
 	elif state == "jump":
 		b.stretch = -0.25
 		b.lean = 0.04 * _h
@@ -295,16 +306,18 @@ func _ground_dust(state: String, prev: String, air: bool, facing: int, speed: fl
 				Sfx.play("dodge", randf_range(0.95, 1.08))
 				if not _was_air:
 					DustFx.spawn(self, "skid", feet, -f)
-	if state == "run":
-		if _last_facing != 0 and facing != _last_facing:
+	if state == "run" or state == "walk" or state == "crouch_walk":
+		var soft := state != "run"
+		if not soft and _last_facing != 0 and facing != _last_facing:
 			# Turning: the dust carries on the old way and the body leans back against it.
 			DustFx.spawn(self, "skid", feet, -f, 0.8)
 			_turn_left = TURN_LEAN_S
 		_step_left -= delta
 		if _step_left <= 0.0:
-			_step_left = DustFx.step_interval(speed)
-			DustFx.spawn(self, "step", feet - Vector3(f * 0.2, 0.0, 0.0), -f)
-			Sfx.play("step", randf_range(0.85, 1.15), STEP_DB)
+			# A walk steps slower and softer than a run.
+			_step_left = DustFx.step_interval(speed) * (2.0 if soft else 1.0)
+			DustFx.spawn(self, "step", feet - Vector3(f * 0.2, 0.0, 0.0), -f, 0.6 if soft else 1.0)
+			Sfx.play("step", randf_range(0.85, 1.15), STEP_DB - (5.0 if soft else 0.0))
 	else:
 		_step_left = 0.06
 	if state == "wall_slide":
@@ -348,6 +361,11 @@ static func clip_for_rig(state: String, clips: Dictionary) -> String:
 		return own
 	if state == "swim":
 		return "fall"
+	# Story 060: a rig without the walk or crouch clips borrows the nearest it has.
+	if state == "walk" and not clips.has("walk"):
+		return "run"
+	if state == "crouch_walk" and not clips.has("crouch_walk"):
+		return "crouch" if clips.has("crouch") else "idle"
 	return _clip_for(state)
 
 
@@ -361,7 +379,7 @@ static func _clip_for(state: String) -> String:
 	if state == "slash_dash" or state == "slash_up":
 		return "attack_" + state.substr(6)
 	match state:
-		"run", "jump", "fall", "wall_slide", "block", "dodge", "hurt", "rooted", "dead":
+		"run", "jump", "fall", "wall_slide", "block", "dodge", "hurt", "rooted", "dead", "walk", "crouch", "crouch_walk":
 			return state
 		"sync_guard":
 			return "block"

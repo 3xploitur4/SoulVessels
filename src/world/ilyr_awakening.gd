@@ -40,9 +40,13 @@ func _ready() -> void:
 	_saved_vessels = player.vessel_ids.duplicate()
 	player.equip(["ilyr"] as Array[String], {"ilyr": 0})
 	GameEvents.vessel_swapped.emit("ilyr", 0)
-	var prompts: Prompts = game.get("prompts")
-	if prompts != null:
-		prompts.subtitle(tr("VESSEL_ILYR"), tr("ILYR_WAKES"), Color(0.92, 0.88, 0.7))
+	# Story 060: meeting Ilyr is a conversation (its first line is his waking line).
+	if game.has_method("meet"):
+		game.call("meet", "awakened:ilyr")
+	else:
+		var prompts: Prompts = game.get("prompts")
+		if prompts != null:
+			prompts.subtitle(tr("VESSEL_ILYR"), tr("ILYR_WAKES"), Color(0.92, 0.88, 0.7))
 	if MusicDirector.has_zone("finale_short"):
 		MusicDirector.start_zone("finale_short")
 	_gap_left = 1.5

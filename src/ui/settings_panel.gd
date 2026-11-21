@@ -26,6 +26,7 @@ var difficulty: String = ""
 var abyssal_unlocked: bool = false
 
 var sliders: Dictionary[String, HSlider] = {}
+var spoken_button: Button
 var difficulty_buttons: Dictionary[String, Button] = {}
 var _values: Dictionary[String, Label] = {}
 var _desc: Label
@@ -38,6 +39,20 @@ func _ready() -> void:
 	add_child(UiKit.label(tr("UI_SETTINGS"), 36, UiKit.COL_GOLD, HORIZONTAL_ALIGNMENT_LEFT))
 	for row: Array in ROWS:
 		_slider_row(str(row[0]), tr(str(row[1])))
+	# Story 060: spoken voices in conversations.
+	var voices := HBoxContainer.new()
+	add_child(voices)
+	var vl := UiKit.label(tr("SET_SPOKEN"), 28, UiKit.COL_TEXT, HORIZONTAL_ALIGNMENT_LEFT)
+	vl.custom_minimum_size.x = 300.0
+	vl.autowrap_mode = TextServer.AUTOWRAP_OFF
+	voices.add_child(vl)
+	spoken_button = UiKit.button(tr("UI_ON") if GameSettings.spoken else tr("UI_OFF"), 160.0)
+	spoken_button.name = "Spoken"
+	spoken_button.pressed.connect(_toggle_spoken)
+	voices.add_child(spoken_button)
+	var vh := UiKit.label(tr("SET_SPOKEN_HINT"), 20, UiKit.COL_DIM, HORIZONTAL_ALIGNMENT_LEFT)
+	vh.custom_minimum_size.x = 760.0
+	add_child(vh)
 	if difficulty != "":
 		add_child(_spacer(10))
 		add_child(UiKit.label(tr("SET_DIFFICULTY"), 30, UiKit.COL_GOLD, HORIZONTAL_ALIGNMENT_LEFT))
@@ -118,6 +133,11 @@ func _on_volume(v: float, key: String) -> void:
 		_sample_left = 0.25
 
 
+func _toggle_spoken() -> void:
+	GameSettings.set_spoken(not GameSettings.spoken)
+	spoken_button.text = tr("UI_ON") if GameSettings.spoken else tr("UI_OFF")
+
+
 func _on_difficulty(d: String) -> void:
 	if d == difficulty:
 		_show_difficulty(d)
@@ -144,6 +164,7 @@ func _link_focus() -> void:
 	for d in DIFFICULTIES:
 		if difficulty_buttons.has(d) and not difficulty_buttons[d].disabled:
 			diff.append(difficulty_buttons[d])
+	rows.append(spoken_button)
 	for i in range(rows.size()):
 		var c := rows[i]
 		var up: Control = rows[i - 1] if i > 0 else c
